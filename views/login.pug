@@ -1,0 +1,34 @@
+extends layout
+
+block content
+  body.body_login
+    div.containerLogin  
+      div.containerBlue
+        img(src="/img/logos/logo-consultarqaiBLANCO.png")
+        p 2020 ©ConsultarQ
+      div.containerWhite
+        div.containerInfo
+          img.img_logoIniciar(src="/img/logos/logo-consultarqai.png")
+          p.txt-iniciar Iniciar sesión
+          hr
+          p.txt-etiquetasLogin Correo electrónico
+          input.input_login(type="email")
+          p.txt-etiquetasLogin Contraseña
+          input.input_login(type="password")
+          p.txt-alertCredenciales Las credenciales no coinciden
+          button.btn_login Iniciar sesión
+
+          p(class="txt-poweredBy txt-footerR") 2020 ©ConsultarQ
+          p(class="txt-poweredBy txt-footerR") Desarrollado por&nbsp;
+            a(href="#") DragonWare
+            img(src="/img/logos/dragonWare.png")
+
+        div.containerFooter
+          |¿Olvidate tu contraseña?&nbsp;
+          a(href="#") Clic aquí
+    p(class="txt-poweredBy cpRes") 2020 ©ConsultarQ
+    p.txt-poweredBy Desarrollado por&nbsp;
+      a(href="#") DragonWare
+      img(src="/img/logos/dragonWare.png")
+
+
