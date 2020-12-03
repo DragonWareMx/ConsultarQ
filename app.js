@@ -1,43 +1,58 @@
-var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const morgan = require('morgan');
+const path = require('path');
+const session = require('express-session');
+var validator = require('express-validator');
+const passport = require('passport');
+const flash = require('connect-flash');
+const MySQLStore = require('express-mysql-session')(session);
+const bodyParser = require('body-parser');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var authRouter = require('./routes/authentication');
+const { database } = require('./keys');
 
+// Intializations
 var app = express();
+require('./lib/passport');
 
-// view engine setup
+// Settings
+app.set('port', process.env.PORT || 4000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// Middlewares
+app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
-app.use(indexRouter);
-app.use(authRouter);
-app.use('/users', usersRouter);
+app.use(session({
+  secret: 'faztmysqlnodemysql',
+  resave: false,
+  saveUninitialized: false,
+  store: new MySQLStore(database)
+}));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(validator());
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+// Global variables
+app.use((req, res, next) => {
+  app.locals.messages = req.flash('message');
+  app.locals.successes = req.flash('success');
+  app.locals.user = req.user;
+  next();
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// Routes
+app.use(require('./routes/index'));
+app.use(require('./routes/authentication'));
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+// Public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Starting
+app.listen(app.get('port'), () => {
+  console.log('Server is in port', app.get('port'));
 });
 
 module.exports = app;

@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-const pool = require('../database');
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  //res.render('index', { title: 'Express' });
+  res.redirect("/inicio");
 });
 
 module.exports = router;

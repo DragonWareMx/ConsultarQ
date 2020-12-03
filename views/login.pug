@@ -16,7 +16,9 @@ block content
             input.input_login(type="email",name="email")
             p.txt-etiquetasLogin Contraseña
             input.input_login(type="password",name="password")
-            p.txt-alertCredenciales Las credenciales no coinciden
+            if messages
+              for message, i in messages
+                p.txt-alertCredenciales #{ message }
             button.btn_login Iniciar sesión
 
           p(class="txt-poweredBy txt-footerR") 2020 ©ConsultarQ
@@ -31,5 +33,7 @@ block content
     p.txt-poweredBy Desarrollado por&nbsp;
       a(href="#") DragonWare
       img(src="/img/logos/dragonWare.png")
-
+  if successes
+    for success in successes
+      div.alert.alert-success #{ success }
 

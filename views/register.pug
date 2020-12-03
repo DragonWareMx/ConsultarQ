@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  body.body_login
+    div.containerLogin  
+      div.containerBlue
+        img(src="/img/logos/logo-consultarqaiBLANCO.png")
+        p 2020 ©ConsultarQ
+      div.containerWhite
+        div.containerInfo
+          img.img_logoIniciar(src="/img/logos/logo-consultarqai.png")
+          p.txt-iniciar Registro
+          hr
+          form(method='post', action='/register')
+            p.txt-etiquetasLogin Nombre
+            input.input_login(type="text",name="name")
+            p.txt-etiquetasLogin Correo electrónico
+            input.input_login(type="email",name="email")
+            p.txt-etiquetasLogin Contraseña
+            input.input_login(type="password",name="password")
+            if messages
+              for message, i in messages
+                p.txt-alertCredenciales #{ message }
+            button.btn_login Registrarse
+
+          p(class="txt-poweredBy txt-footerR") 2020 ©ConsultarQ
+          p(class="txt-poweredBy txt-footerR") Desarrollado por&nbsp;
+            a(href="#") DragonWare
+            img(src="/img/logos/dragonWare.png")
+
+        div.containerFooter
+          |¿Olvidate tu contraseña?&nbsp;
+          a(href="#") Clic aquí
+    p(class="txt-poweredBy cpRes") 2020 ©ConsultarQ
+    p.txt-poweredBy Desarrollado por&nbsp;
+      a(href="#") DragonWare
+      img(src="/img/logos/dragonWare.png")
+  if successes
+    for success in successes
+      div.alert.alert-success #{ success }
