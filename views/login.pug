@@ -11,12 +11,13 @@ block content
           img.img_logoIniciar(src="/img/logos/logo-consultarqai.png")
           p.txt-iniciar Iniciar sesión
           hr
-          p.txt-etiquetasLogin Correo electrónico
-          input.input_login(type="email")
-          p.txt-etiquetasLogin Contraseña
-          input.input_login(type="password")
-          p.txt-alertCredenciales Las credenciales no coinciden
-          button.btn_login Iniciar sesión
+          form(method='post', action='/login')
+            p.txt-etiquetasLogin Correo electrónico
+            input.input_login(type="email",name="email")
+            p.txt-etiquetasLogin Contraseña
+            input.input_login(type="password",name="password")
+            p.txt-alertCredenciales Las credenciales no coinciden
+            button.btn_login Iniciar sesión
 
           p(class="txt-poweredBy txt-footerR") 2020 ©ConsultarQ
           p(class="txt-poweredBy txt-footerR") Desarrollado por&nbsp;
