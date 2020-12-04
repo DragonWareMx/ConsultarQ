@@ -1,13 +1,13 @@
 const express = require('express');
 const passport = require('passport');
 const router = express.Router();
-const {isLoggedIn} = require('../lib/auth');
+const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
 
-router.get('/login',(req,res,next) => {
+router.get('/login' , isNotLoggedIn ,(req,res,next) => {
     res.render('login', { title: 'Iniciar sesión' });
 });
 
-router.post('/login',(req, res, next) =>{
+router.post('/login', isNotLoggedIn ,(req, res, next) =>{
     passport.authenticate('local.signin',{
         successRedirect: '/inicio',
         failureRedirect: '/login',
@@ -15,11 +15,11 @@ router.post('/login',(req, res, next) =>{
     })(req, res, next);
 });
 
-router.get('/register',(req,res,next) => {
+router.get('/register', isNotLoggedIn ,(req,res,next) => {
     res.render('register', { title: 'Registrarse' });
 });
 
-router.post('/register',(req, res, next) =>{
+router.post('/register', isNotLoggedIn,(req, res, next) =>{
     passport.authenticate('local.signup',{
         successRedirect: '/inicio',
         failureRedirect: '/register',
