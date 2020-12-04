@@ -11,7 +11,7 @@ block content
           img.img_logoIniciar(src="/img/logos/logo-consultarqai.png")
           p.txt-iniciar Iniciar sesión
           hr
-          form(method='post', action='/login')
+          form(class="formulario",method='post', action='/login')
             p.txt-etiquetasLogin Correo electrónico
             input.input_login(type="email",name="email")
             p.txt-etiquetasLogin Contraseña
@@ -19,7 +19,7 @@ block content
             if messages
               for message, i in messages
                 p.txt-alertCredenciales #{ message }
-            button.btn_login Iniciar sesión
+            button.btn_login(type="button") Iniciar sesión
 
           p(class="txt-poweredBy txt-footerR") 2020 ©ConsultarQ
           p(class="txt-poweredBy txt-footerR") Desarrollado por&nbsp;
