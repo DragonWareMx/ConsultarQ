@@ -9,7 +9,7 @@
 
 .txt-poweredBy{
     font-style:      normal;
-    font-weight:     normal;
+    font-weight:     normal; 
     font-size:       13px;
     line-height:     16px;
     color:           #6B6B72;
@@ -38,9 +38,12 @@
     margin-right: auto;
     /* margin-top:   15px; */
 }
-
+.containerLogin_closed{
+    width:300px !important;
+    transition:ease-in all 0.4s;
+}
 .containerBlue{
-    width:             40%;
+    width:             300px;
     background:        url(/img/fondo5-1.png);
     background-size:   cover;
     background-repeat: no-repeat;
@@ -49,7 +52,10 @@
     justify-content:   space-between;
     padding:           0% !important;
 }
-
+.containerBlue_closed{
+    width: 300px !important;
+    transition: ease-in all 0.4s;
+}
 .containerBlue img{
     margin-top:   200px !important;
     width:        194.74px;
@@ -75,11 +81,17 @@
     width:            60%;
     background-color: white;
 }
+.containerWhite_closed{
+    width: 0px !important;
+    transition: ease-in all 0.4s;
+}
 
 .containerInfo{
     padding: 8%;
 }
-
+.containerInfo_closed{
+    display: none !important;
+}
 .txt-iniciar{
     font-style:    normal;
     font-weight:   600;
@@ -170,7 +182,9 @@
     color:            #6B6B72;
     background-color: #DBDBDC;
 }
-
+.containerFooter_closed{
+    display: none !important;
+}
 .img_logoIniciar{
     display: none;
 }
