@@ -17,9 +17,12 @@
     "express-validator": "^5.3.1",
     "http-errors": "~1.6.3",
     "morgan": "^1.9.1",
+    "mysql2": "^2.2.5",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pug": "^3.0.0",
+    "sequelize": "^6.3.5",
+    "sequelize-cli": "^6.2.0",
     "sql": "^0.78.0",
     "uikit": "^3.5.10-dev.aab2b26c6"
   }
