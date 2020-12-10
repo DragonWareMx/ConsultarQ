@@ -10,10 +10,109 @@ html
         script(src="/uikit/js/uikit.min.js")
         script(src="/uikit/js/uikit-icons.min.js")
     body
-        //- parte izquierda
         div(class="main_layout")
+            //- parte izquierda
             div(class="left_main")
+                //- perfil
+                div(class="profile_container")
+                    img(src="/img/logos/dragonWare.png" class="profile_image")
+                    div(class="profile_info")
+                        b(class="profile_name") María Flores Escobedo
+                        br
+                        a(href="#") Cerrar sesión
+                //- listado de categorias
+                div(class="categories_container")
+                    ul(class="uk-list")
+                        li(class="category") CONSULTARQ
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
+                                li(class="category_item")
+                                    a(href="#") Inicio
+                                li(class="category_item")
+                                    a(href="#") Perfil
+                                li(class="uk-parent category_item")
+                                    a(href="#") Administrar usuarios
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Usuario
+                                        li(class="category_item")
+                                            a(href="#") Roles
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar usuario
+                                        li(class="category_item")
+                                            a(href="#") Agregar rol
+                                li(class="uk-parent category_item")
+                                    a(href="#") Caja chica
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver caja chica
+                                        li(class="category_item")
+                                            a(href="#") Ingresos
+                                        li(class="category_item")
+                                            a(href="#") Egresos
+                                        li(class="category_item")
+                                            a(href="#") Deducibles
+                                        li(class="category_item")
+                                            a(href="#") Historial
+                                        li(class="category_item")
+                                            span(class="category_subdivider") OTROS
+                                            a(href="#") Conceptos
+                                        li(class="category_item")
+                                            a(href="#") Tipos de pago
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar movimiento
+                        li(class="category") SERVICIOS
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
+                                li(class="uk-parent category_item")
+                                    a(href="#") Cartera de servicios
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver cartera de servicios
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar servicio
+                                li(class="uk-parent category_item")
+                                    a(href="#") Proyectos
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver proyectos
+                                        li(class="category_item")
+                                            a(href="#") Documentación
+                                        li(class="category_item")
+                                            a(href="#") Activos
+                                        li(class="category_item")
+                                            a(href="#") Inactivos
+                                        li(class="category_item")
+                                            a(href="#") Roles de proyecto
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar proyecto
+                        li(class="category") EXTERNOS
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
+                                li(class="uk-parent category_item")
+                                    a(href="#") Directorio de clientes
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver directorio
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Generar cotización
+                                        li(class="category_item")
+                                            a(href="#") Agregar clientes
+                                li(class="uk-parent category_item")
+                                    a(href="#") Prestadores externos
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver prestadores
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar prestador        
                 
+                //- logotipo
+                div(class="logo_container")
+                    img(src="/img/logos/logo-consultarqaiGRIS.png" class="logo_image")
+
             //- parte derecha
             div(class="right_content")
                 div(class="header_main")
@@ -25,82 +124,4 @@ html
                     div(class="footer_content")
                         p Desarrollado por DragonWare.
                             img(src="/img/logos/dragonWare.png" class="footer_image")
-        
-        //- div(class="uk-flex")
-            
-        //-     div(class="uk-flex-inline")
-        //-         div(class="uk-height-large" uk-height-viewport="expand: true")
-        //-             div(class="uk-light uk-background-secondary uk-padding uk-height-1-1 uk-with-1-4")
-        //-                 div(class="uk-width-1-2@s uk-width-2-5@m")
-        //-                  ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
-        //-                      li(class="uk-active")
-        //-                          a(href="#") Active
-        //-                      li(class="uk-parent")
-        //-                          a(href="#") Parent
-        //-                          ul(class="uk-nav-sub")
-        //-                              li
-        //-                                  a(href="#") Sub item
-        //-                              li
-        //-                                  a(href="#") Sub item
-        //-                                  ul
-        //-                                      li
-        //-                                          a(href="#") Sub item
-        //-                                      li
-        //-                                          a(href="#") Sub item
-        //-                      li(class="uk-parent")
-        //-                          a(href="#") Parent
-        //-                          ul(class="uk-nav-sub")
-        //-                              li
-        //-                                  a(href="#") Sub item
-        //-                              li
-        //-                                  a(href="#") Sub item
-
-        //-     div(class="uk-flex-row")
-        //-         nav(class="uk-flexuk-navbar uk-navbar-container uk-margin")
-        //-             div(class="uk-navbar-left")
-        //-                 a(class="uk-navbar-toggle" uk-navbar-toggle-icon href="#")
-        
-        //- div
-        //-     div(class="uk-card uk-card-primary uk-card-body")
-        //-         h3(class="uk-card-title") Primary
-        //-         p Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            
-        //-     br
-        //-     br
-
-        //-     div(class="uk-width-1-2@s uk-width-2-5@m")
-        //-         ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
-        //-             li(class="uk-active")
-        //-                 a(href="#") Active
-        //-             li(class="uk-parent")
-        //-                 a(href="#") Parent
-        //-                 ul(class="uk-nav-sub")
-        //-                     li
-        //-                         a(href="#") Sub item
-        //-                     li
-        //-                         a(href="#") Sub item
-        //-                         ul
-        //-                             li
-        //-                                 a(href="#") Sub item
-        //-                             li
-        //-                                 a(href="#") Sub item
-        //-             li(class="uk-parent")
-        //-                 a(href="#") Parent
-        //-                 ul(class="uk-nav-sub")
-        //-                     li
-        //-                         a(href="#") Sub item
-        //-                     li
-        //-                         a(href="#") Sub item
-
-        //-     br
-        //-     br
-
-        //-     footer
-        //-         p DragonWare
-        //-         //img(src="/img/logos/dragonWare.png")
-    
-            
-                
-                
-
-
+                            

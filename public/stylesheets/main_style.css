@@ -35,11 +35,13 @@ html, body {
 .main_icon{
     color: #3B86D9;
 }
+
 .main_logo{
     width:213px;
     height: 13px;
     margin-right: 34px;
 }
+
 .main_footer{
     width: 100%;
     height: 41px;
@@ -57,13 +59,103 @@ html, body {
     justify-content: center;
     align-items: center;
 }
+
 .footer_image {
     width: 20px;
     height: 14px;
     margin-left: 5px;
 }
+
 .footer_content {
     display:flex;
     margin-top: 20px;
     margin-left: -40px;
+}
+
+.profile_container {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile_image {
+    width: 42px;
+    height: 42px;
+    margin-left: 5px;
+}
+
+.profile_info {
+    width: 151px;
+    height: 32px;
+
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 13px;
+    line-height: 16px;
+
+    color: #3B86D9;
+}
+
+.profile_name {
+    font-weight: 600;
+}
+
+.categories_container {
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+}
+
+.category_label {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+}
+
+.category {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+    
+    color: #222238;
+}
+
+.category_item {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    
+    color: #6B6B72;
+}
+
+.category_subdivider {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 11px;
+
+    color: #3B86D9;
+}
+
+.logo_container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo_image {
+    width: 101px;
+    height: 37px;
 }
