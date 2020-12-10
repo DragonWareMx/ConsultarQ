@@ -11,13 +11,20 @@ html
         script(src="/uikit/js/uikit-icons.min.js")
     body
         //- parte izquierda
-        div(class="left_main")
-            p Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptas officiis ab incidunt facilis nobis laudantium, ipsam, eaque voluptates, tempora iure deleniti. Expedita nostrum reiciendis veniam quaerat repellendus quasi fuga recusandae.
-
-        //- parte derecha
-        div(class="right_content")
-            
-            
+        div(class="main_layout")
+            div(class="left_main")
+                
+            //- parte derecha
+            div(class="right_content")
+                div(class="header_main")
+                    a(href="#" uk-icon='icon:more-vertical; ratio: 1.5' class="main_icon")
+                    img(src="/img/logos/logo-consultarqaiHZT.png" class="main_logo")
+                div(class="main_container")
+                    block content
+                div(class="main_footer")
+                    div(class="footer_content")
+                        p Desarrollado por DragonWare.
+                            img(src="/img/logos/dragonWare.png" class="footer_image")
         
         //- div(class="uk-flex")
             
