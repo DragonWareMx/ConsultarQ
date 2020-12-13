@@ -8,14 +8,12 @@ const flash = require('connect-flash');
 const MySQLStore = require('express-mysql-session')(session);
 const bodyParser = require('body-parser');
 
-const { database } = require('./keys');
-
 // Intializations
 var app = express();
 require('./lib/passport');
 
 // Settings
-app.set('port', process.env.PORT || 4000);
+//app.set('port', process.env.PORT || 4000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -23,12 +21,11 @@ app.set('view engine', 'pug');
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
+  //autenticacion
 app.use(session({
-  secret: 'faztmysqlnodemysql',
+  secret: 'consultarq',
   resave: false,
   saveUninitialized: false,
-  store: new MySQLStore(database)
 }));
 app.use(flash());
 app.use(passport.initialize());
@@ -46,13 +43,14 @@ app.use((req, res, next) => {
 // Routes
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
+app.use('/usuarios',require('./routes/users'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Starting
-app.listen(app.get('port'), () => {
+/*app.listen(app.get('port'), () => {
   console.log('Server is in port', app.get('port'));
-});
+});*/
 
 module.exports = app;

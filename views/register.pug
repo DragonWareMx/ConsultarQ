@@ -11,13 +11,13 @@ block content
           img.img_logoIniciar(src="/img/logos/logo-consultarqai.png")
           p.txt-iniciar Registro
           hr
-          form(method='post', action='/register')
+          form(method='post', action='/usuarios/nuevo')
             p.txt-etiquetasLogin Nombre
-            input.input_login(type="text",name="name")
+            input.input_login(type="text",name="name",id="name")
             p.txt-etiquetasLogin Correo electrónico
-            input.input_login(type="email",name="email")
+            input.input_login(type="email",name="email",id="email")
             p.txt-etiquetasLogin Contraseña
-            input.input_login(type="password",name="password")
+            input.input_login(type="password",name="password",id="password")
             if messages
               for message, i in messages
                 p.txt-alertCredenciales #{ message }
