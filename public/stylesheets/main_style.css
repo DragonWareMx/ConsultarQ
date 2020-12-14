@@ -1,6 +1,6 @@
 html, body {
     width: 100%;
-    height:100%;
+    min-height:100%;
     display: flex;
     flex-direction: row;
 }
@@ -11,11 +11,19 @@ html, body {
     display:flex;
 }
 .left_main {
-    width: 235px;
+    width: 260px;
     height: 100%;
     background: #FFFFFF;
     border: 1px solid #E3E3E3;
     box-sizing: border-box;
+    position: fixed;
+    overflow: auto;
+    scrollbar-width: none;  /* Firefox */
+    z-index: 1000;
+}
+
+.left_main::-webkit-scrollbar {
+    display: none;
 }
 
 .right_content {
@@ -30,16 +38,27 @@ html, body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    margin-left: 260px;
 }
 
 .main_icon{
+    width: 31px;
+    height: 31px;
     color: #3B86D9;
+    cursor: pointer;
 }
 
 .main_logo{
     width:213px;
     height: 13px;
-    margin-right: 34px;
+    margin-right: 280px;
+}
+
+.main_container {
+    padding-top: 65px;
+    padding-left: 265px;
+    padding-bottom: 50px;
 }
 
 .main_footer{
@@ -58,6 +77,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 999;
 }
 
 .footer_image {
@@ -69,7 +89,7 @@ html, body {
 .footer_content {
     display:flex;
     margin-top: 20px;
-    margin-left: -40px;
+    margin-left: 200px;
 }
 
 .profile_container {
@@ -83,20 +103,20 @@ html, body {
 .profile_image {
     width: 42px;
     height: 42px;
-    margin-left: 5px;
+    margin-left: 10px;
+    margin-right: 12px;
+    border-radius: 50%;
 }
 
 .profile_info {
     width: 151px;
-    height: 32px;
-
     font-family: Montserrat;
     font-style: normal;
     font-weight: 200;
     font-size: 13px;
     line-height: 16px;
-
     color: #3B86D9;
+    margin-right: 10px;
 }
 
 .profile_name {
@@ -106,7 +126,7 @@ html, body {
 .categories_container {
     width: 100%;
     height: auto;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .category_label {
@@ -123,8 +143,9 @@ html, body {
     font-weight: 600;
     font-size: 13px;
     line-height: 16px;
-    
     color: #222238;
+    margin-left: 18px;
+    margin-right: 15px;
 }
 
 .category_item {
@@ -133,18 +154,35 @@ html, body {
     font-weight: 500;
     font-size: 13px;
     line-height: 16px;
-    
     color: #6B6B72;
+    margin-bottom: 10px;
+}
+
+.category_icon {
+    width: 15px;
+    height: 15px;
+    float: left;
+    color: #3B86D9;
+    margin-top: 2.5px;
+    margin-right: 8px;
+}
+
+.category_text {
+    width: 85%;
+    height: 20px;
+    float: right;
 }
 
 .category_subdivider {
+    height: 11px;
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
     font-size: 9px;
     line-height: 11px;
-
     color: #3B86D9;
+    margin-bottom: 5px;
+    display: flex;
 }
 
 .logo_container {
@@ -158,4 +196,6 @@ html, body {
 .logo_image {
     width: 101px;
     height: 37px;
+    margin-top: 10px;
+    margin-bottom: 50px;
 }

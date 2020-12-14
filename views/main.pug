@@ -24,13 +24,16 @@ html
                 div(class="categories_container")
                     ul(class="uk-list")
                         li(class="category") CONSULTARQ
-                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="category_item")
-                                    a(href="#") Inicio
+                                    img(src="icons/house.png" class="category_icon")
+                                    a(href="#" ) Inicio
                                 li(class="category_item")
-                                    a(href="#") Perfil
+                                    img(src="icons/user.png" class="category_icon")
+                                    a(href="#" ) Perfil
                                 li(class="uk-parent category_item")
-                                    a(href="#") Administrar usuarios
+                                    img(src="icons/users-logo.png" class="category_icon")
+                                    a(href="#" ) Administrar usuarios
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Usuario
@@ -42,6 +45,7 @@ html
                                         li(class="category_item")
                                             a(href="#") Agregar rol
                                 li(class="uk-parent category_item")
+                                    img(src="icons/coin.png" class="category_icon")
                                     a(href="#") Caja chica
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
@@ -63,8 +67,9 @@ html
                                             span(class="category_subdivider") ACCESOS DIRECTOS
                                             a(href="#") Agregar movimiento
                         li(class="category") SERVICIOS
-                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="uk-parent category_item")
+                                    img(src="icons/package.png" class="category_icon")
                                     a(href="#") Cartera de servicios
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
@@ -73,6 +78,7 @@ html
                                             span(class="category_subdivider") ACCESOS DIRECTOS
                                             a(href="#") Agregar servicio
                                 li(class="uk-parent category_item")
+                                    img(src="icons/checklist.png" class="category_icon")
                                     a(href="#") Proyectos
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
@@ -88,9 +94,10 @@ html
                                         li(class="category_item")
                                             span(class="category_subdivider") ACCESOS DIRECTOS
                                             a(href="#") Agregar proyecto
-                        li(class="category") EXTERNOS
-                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: true")
+                        li(class="category") CLIENTES Y PROVEEDORES
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="uk-parent category_item")
+                                    img(src="icons/userStar.png" class="category_icon")
                                     a(href="#") Directorio de clientes
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
@@ -101,6 +108,7 @@ html
                                         li(class="category_item")
                                             a(href="#") Agregar clientes
                                 li(class="uk-parent category_item")
+                                    img(src="icons/userHand.png" class="category_icon")
                                     a(href="#") Prestadores externos
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
@@ -116,7 +124,7 @@ html
             //- parte derecha
             div(class="right_content")
                 div(class="header_main")
-                    a(href="#" uk-icon='icon:more-vertical; ratio: 1.5' class="main_icon")
+                    img(src="icons/dots.png" class="main_icon")
                     img(src="/img/logos/logo-consultarqaiHZT.png" class="main_logo")
                 div(class="main_container")
                     block content
