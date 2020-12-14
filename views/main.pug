@@ -1,0 +1,237 @@
+doctype html
+html
+    head
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(rel="icon" href="/img/logos/favicon.png")
+        link(rel="stylesheet" href="/uikit/css/uikit.min.css")
+        link(rel="stylesheet" href="/stylesheets/main_style.css")
+        link(rel='preconnect', href='https://fonts.gstatic.com')
+        link(rel='stylesheet', href='https://fonts.googleapis.com/css2?family=Montserrat&display=swap')
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
+        script(src="/uikit/js/uikit.min.js")
+        script(src="/uikit/js/uikit-icons.min.js")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+        script(src="/javascripts/menu.js")
+        block head
+    body
+        div(class="main_layout")
+            //- parte izquierda
+            div(class="left_main")
+                //- perfil
+                div(class="profile_container")
+                    img(src="/img/logos/dragonWare.png" class="profile_image")
+                    div(class="profile_info")
+                        b(class="profile_name") María Flores Escobedo
+                        br
+                        a(href="#") Cerrar sesión
+                //- listado de categorias
+                div(class="categories_container")
+                    ul(class="uk-list")
+                        li(class="category") CONSULTARQ
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
+                                li(class="category_item")
+                                    a(href="#" ) Inicio
+                                        img(src="icons/house.png" class="category_icon")
+                                li(class="category_item")
+                                    a(href="#" ) Perfil
+                                        img(src="icons/user.png" class="category_icon")
+                                li(class="uk-parent category_item")
+                                    a(href="#" ) Administrar usuarios
+                                        img(src="icons/users-logo.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Usuario
+                                        li(class="category_item")
+                                            a(href="#") Roles
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar usuario
+                                        li(class="category_item")
+                                            a(href="#") Agregar rol
+                                li(class="uk-parent category_item")
+                                    a(href="#") Caja chica
+                                        img(src="icons/coin.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver caja chica
+                                        li(class="category_item")
+                                            a(href="#") Ingresos
+                                        li(class="category_item")
+                                            a(href="#") Egresos
+                                        li(class="category_item")
+                                            a(href="#") Deducibles
+                                        li(class="category_item")
+                                            a(href="#") Historial
+                                        li(class="category_item")
+                                            span(class="category_subdivider") OTROS
+                                            a(href="#") Conceptos
+                                        li(class="category_item")
+                                            a(href="#") Tipos de pago
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar movimiento
+                        li(class="category") SERVICIOS
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
+                                li(class="uk-parent category_item")
+                                    a(href="#") Cartera de servicios
+                                        img(src="icons/package.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver cartera de servicios
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar servicio
+                                li(class="uk-parent category_item")
+                                    a(href="#") Proyectos
+                                        img(src="icons/checklist.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver proyectos
+                                        li(class="category_item")
+                                            a(href="#") Documentación
+                                        li(class="category_item")
+                                            a(href="#") Activos
+                                        li(class="category_item")
+                                            a(href="#") Inactivos
+                                        li(class="category_item")
+                                            a(href="#") Roles de proyecto
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar proyecto
+                        li(class="category") CLIENTES Y PROVEEDORES
+                            ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
+                                li(class="uk-parent category_item")
+                                    a(href="#") Directorio de clientes
+                                        img(src="icons/userStar.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver directorio
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Generar cotización
+                                        li(class="category_item")
+                                            a(href="#") Agregar clientes
+                                li(class="uk-parent category_item")
+                                    a(href="#") Prestadores externos
+                                        img(src="icons/userHand.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="#") Ver prestadores
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="#") Agregar prestador        
+                
+                div(class="categories_dropdown")
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a(href="/ey-que-tranza-gente")
+                            img(src="icons/house.png" class="category_icon")
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a(href="/ey-que-tranza-gente")
+                            img(src="icons/user.png" class="category_icon")
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/users-logo.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="#") Usuarios
+                                li(class="category_item")
+                                    a(href="#") Roles
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="#") Agregar usuario
+                                li(class="category_item")
+                                    a(href="#") Agregar rol
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/coin.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="#") Ver caja chica
+                                li(class="category_item")
+                                    a(href="#") Ingresos
+                                li(class="category_item")
+                                    a(href="#") Egresos
+                                li(class="category_item")
+                                    a(href="#") Deducibles
+                                li(class="category_item")
+                                    a(href="#") Historial
+                                li(class="uk-nav-header category_subdivider") OTROS
+                                li(class="category_item")
+                                    a(href="#") Conceptos
+                                li(class="category_item")
+                                    a(href="#") Tipo de pago
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="#") Agregar movimiento
+                
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/package.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="#") Ver cartera de servicios
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="#") Agregar servicio
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/checklist.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="#") Ver proyectos
+                                li(class="category_item")
+                                    a(href="#") Documentación
+                                li(class="category_item")
+                                    a(href="#") Activos
+                                li(class="category_item")
+                                    a(href="#") Inactivos
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="#") Agregar proyecto
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/userStar.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="#") Ver directorio
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="#") Generar cotización
+                                li(class="category_item")
+                                    a(href="#") Generar clientes
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/userHand.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="#") Ver prestadores
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="#") Agregar prestador
+                    div(style="width:100%;display:flex;justify-content:center;margin-top:30px")
+                        a(href="/ey-que-tranza-gente")
+                            img(src="icons/out.png" class="category_icon")
+                                    
+                                    
+                //- logotipo
+                div(class="logo_container")
+                    img(src="/img/logos/logo-consultarqaiGRIS.png" class="logo_image")
+
+            //- parte derecha
+            div(class="right_content")
+                div(class="header_main")
+                    img(src="icons/dots.png" class="main_icon")
+                    img(src="/img/logos/logo-consultarqaiHZT.png" class="main_logo")
+                div(class="main_container")
+                    block content
+                div(class="main_footer")
+                    div(class="footer_content")
+                        p Desarrollado por DragonWare.
+                            img(src="/img/logos/dragonWare.png" class="footer_image")
+                            

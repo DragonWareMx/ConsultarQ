@@ -1,0 +1,295 @@
+html, body {
+    width: 100%;
+    min-height:100%;
+    display: flex;
+    flex-direction: row;
+}
+.main_layout {
+    width: 100%;
+    height: 100%;
+    background-color: #F8FAFB;
+    display:flex;
+}
+.left_main {
+    width: 260px;
+    height: 100%;
+    background: #FFFFFF;
+    border: 1px solid #E3E3E3;
+    box-sizing: border-box;
+    position: fixed;
+    overflow-y: auto;
+    scrollbar-width: none;  /* Firefox */
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.left_main.hide {
+    width: 70px;
+    transition: all 0.3s;
+    overflow: initial !important;
+}
+
+.left_main.hide .profile_container .profile_info{
+    display: none;
+}
+
+.left_main.hide .categories_container{
+    display: none;
+}
+
+.main_container.hide{
+    padding-left: 75px !important;
+    transition: all 0.3s;
+}
+
+.footer_content.hide{
+    margin-left: 70px !important;
+    transition: all 0.3s;
+}
+
+.categories_dropdown{
+    width: 100%;
+    height: auto;
+    margin-top: 20px;  
+    display: none; 
+}
+
+.categories_dropdown .category_icon{
+    width: 25px;
+    height: 25px;
+    color: #3B86D9;
+    margin: 10px 5px;
+}
+
+.categories_dropdown.hide{
+    /* display: block !important; */
+    display: flex !important;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.left_main.hide .logo_image{
+    width: 33.66px;
+    height: 12.33px;
+}
+
+.header_main.hide{
+    margin-left: 70px !important;
+    transition: all 0.3s;   
+}
+
+.header_main.hide .main_logo{
+    margin-right: 90px !important;
+    transition: all 0.3s; 
+}
+
+
+
+.left_main::-webkit-scrollbar {
+    display: none;
+}
+
+.right_content {
+    width: 100%;
+}
+
+.header_main{
+    width: 100%;
+    height: 60px;
+    background: #FFFFFF;
+    border-bottom: 1px solid #E3E3E3;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    margin-left: 260px;
+
+    transition: all 0.3s;
+}
+
+.main_icon{
+    width: 31px;
+    height: 31px;
+    color: #3B86D9;
+    cursor: pointer;
+}
+
+.main_logo{
+    width:213px;
+    height: 13px;
+    margin-right: 280px;
+
+    transition: all 0.3s; 
+}
+
+.main_container {
+    padding-top: 65px;
+    padding-left: 265px;
+    padding-bottom: 50px;
+    transition: all 0.3s;
+}
+
+.main_footer{
+    width: 100%;
+    height: 41px;
+    position: fixed;
+    bottom:0;
+    background: #FFFFFF;
+    border-top: 1px solid #E3E3E3;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #6B6B72;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.footer_image {
+    width: 20px;
+    height: 14px;
+    margin-left: 5px;
+}
+
+.footer_content {
+    display:flex;
+    margin-top: 20px;
+    margin-left: 200px;
+    transition: all 0.3s;
+}
+
+.profile_container {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile_image {
+    width: 42px;
+    height: 42px;
+    margin-left: 10px;
+    margin-right: 12px;
+    border-radius: 50%;
+}
+
+.profile_info {
+    width: 151px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 200;
+    font-size: 13px;
+    line-height: 16px;
+    color: #3B86D9;
+    margin-right: 10px;
+}
+
+.profile_name {
+    font-weight: 600;
+}
+
+.categories_container {
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.category_label {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+}
+
+.category {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 16px;
+    color: #222238;
+    margin-left: 18px;
+    margin-right: 15px;
+}
+
+.category_item {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 16px;
+    color: #6B6B72;
+    margin-bottom: 10px;
+}
+
+.category_icon {
+    width: 15px;
+    height: 15px;
+    float: left;
+    color: #3B86D9;
+    margin-right: 8px;
+}
+
+.category_text {
+    width: 85%;
+    height: 20px;
+    float: right;
+}
+
+.category_subdivider {
+    height: 11px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 9px;
+    line-height: 11px;
+    color: #3B86D9 !important;
+    margin-bottom: 5px;
+    display: flex;
+}
+
+.logo_container {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo_image {
+    width: 101px;
+    height: 37px;
+    margin-top: 10px;
+    margin-bottom: 50px;
+}
+
+/* Aqui va la parte del cel */
+.left_main.mobile{
+    margin-left: -70px;
+    transition: all 0.3s;
+}
+
+.header_main.mobile{
+    margin-left: 0px !important;
+    transition: all 0.3s; 
+}
+
+.header_main.mobile .main_logo{
+    margin-right: 20px !important;
+    transition: all 0.3s; 
+}
+
+.main_container.mobile{
+    padding-left: 5px !important;
+    transition: all 0.3s;
+}
+
+.footer_content.mobile{
+    margin-left: 0px !important;
+    transition: all 0.3s;
+}

@@ -7,4 +7,10 @@ router.get('/', function(req, res, next) {
   res.redirect("/inicio");
 });
 
+/* prueba */
+router.get('/menu', function(req, res, next) {
+  res.render('main', { title: 'Express' });
+  //res.redirect("/inicio");
+});
+
 module.exports = router;
