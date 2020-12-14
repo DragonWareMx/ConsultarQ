@@ -2,6 +2,7 @@ doctype html
 html
     head
         title= title
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(rel="stylesheet" href="/uikit/css/uikit.min.css")
         link(rel="stylesheet" href="/stylesheets/main_style.css")
         link(rel='preconnect', href='https://fonts.gstatic.com')
@@ -9,6 +10,8 @@ html
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
         script(src="/uikit/js/uikit.min.js")
         script(src="/uikit/js/uikit-icons.min.js")
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
+        script(src="/javascripts/menu.js")
     body
         div(class="main_layout")
             //- parte izquierda
@@ -26,14 +29,14 @@ html
                         li(class="category") CONSULTARQ
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="category_item")
-                                    img(src="icons/house.png" class="category_icon")
                                     a(href="#" ) Inicio
+                                        img(src="icons/house.png" class="category_icon")
                                 li(class="category_item")
-                                    img(src="icons/user.png" class="category_icon")
                                     a(href="#" ) Perfil
+                                        img(src="icons/user.png" class="category_icon")
                                 li(class="uk-parent category_item")
-                                    img(src="icons/users-logo.png" class="category_icon")
                                     a(href="#" ) Administrar usuarios
+                                        img(src="icons/users-logo.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Usuario
@@ -45,8 +48,8 @@ html
                                         li(class="category_item")
                                             a(href="#") Agregar rol
                                 li(class="uk-parent category_item")
-                                    img(src="icons/coin.png" class="category_icon")
                                     a(href="#") Caja chica
+                                        img(src="icons/coin.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Ver caja chica
@@ -69,8 +72,8 @@ html
                         li(class="category") SERVICIOS
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="uk-parent category_item")
-                                    img(src="icons/package.png" class="category_icon")
                                     a(href="#") Cartera de servicios
+                                        img(src="icons/package.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Ver cartera de servicios
@@ -78,8 +81,8 @@ html
                                             span(class="category_subdivider") ACCESOS DIRECTOS
                                             a(href="#") Agregar servicio
                                 li(class="uk-parent category_item")
-                                    img(src="icons/checklist.png" class="category_icon")
                                     a(href="#") Proyectos
+                                        img(src="icons/checklist.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Ver proyectos
@@ -97,8 +100,8 @@ html
                         li(class="category") CLIENTES Y PROVEEDORES
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="uk-parent category_item")
-                                    img(src="icons/userStar.png" class="category_icon")
                                     a(href="#") Directorio de clientes
+                                        img(src="icons/userStar.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Ver directorio
@@ -108,8 +111,8 @@ html
                                         li(class="category_item")
                                             a(href="#") Agregar clientes
                                 li(class="uk-parent category_item")
-                                    img(src="icons/userHand.png" class="category_icon")
                                     a(href="#") Prestadores externos
+                                        img(src="icons/userHand.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="#") Ver prestadores
@@ -117,6 +120,101 @@ html
                                             span(class="category_subdivider") ACCESOS DIRECTOS
                                             a(href="#") Agregar prestador        
                 
+                div(class="categories_dropdown")
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a(href="/ey-que-tranza-gente")
+                            img(src="icons/house.png" class="category_icon")
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a(href="/ey-que-tranza-gente")
+                            img(src="icons/user.png" class="category_icon")
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/users-logo.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li()
+                                    a(href="#") Usuarios
+                                li()
+                                    a(href="#") Roles
+                                li(class="uk-nav-header") ACCESOS DIRECTOS
+                                li()
+                                    a(href="#") Agregar usuario
+                                li()
+                                    a(href="#") Agregar rol
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/coin.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li()
+                                    a(href="#") Ver caja chica
+                                li()
+                                    a(href="#") Ingresos
+                                li()
+                                    a(href="#") Egresos
+                                li()
+                                    a(href="#") Deducibles
+                                li()
+                                    a(href="#") Historial
+                                li(class="uk-nav-header") OTROS
+                                li()
+                                    a(href="#") Conceptos
+                                li()
+                                    a(href="#") Tipo de pago
+                                li(class="uk-nav-header") ACCESOS DIRECTOS
+                                li()
+                                    a(href="#") Agregar movimiento
+                
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/package.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li()
+                                    a(href="#") Ver cartera de servicios
+                                li(class="uk-nav-header") ACCESOS DIRECTOS
+                                li()
+                                    a(href="#") Agregar servicio
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/checklist.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li()
+                                    a(href="#") Ver proyectos
+                                li()
+                                    a(href="#") Documentación
+                                li()
+                                    a(href="#") Activos
+                                li()
+                                    a(href="#") Inactivos
+                                li(class="uk-nav-header") ACCESOS DIRECTOS
+                                li()
+                                    a(href="#") Agregar proyecto
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/userStar.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li()
+                                    a(href="#") Ver directorio
+                                li(class="uk-nav-header") ACCESOS DIRECTOS
+                                li()
+                                    a(href="#") Generar cotización
+                                li()
+                                    a(href="#") Generar clientes
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a()
+                            img(src="icons/userHand.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li()
+                                    a(href="#") Ver prestadores
+                                li(class="uk-nav-header") ACCESOS DIRECTOS
+                                li()
+                                    a(href="#") Agregar prestador
+                                    
+                                    
                 //- logotipo
                 div(class="logo_container")
                     img(src="/img/logos/logo-consultarqaiGRIS.png" class="logo_image")
@@ -128,6 +226,23 @@ html
                     img(src="/img/logos/logo-consultarqaiHZT.png" class="main_logo")
                 div(class="main_container")
                     block content
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
+                    img(src="icons/dots.png")
                 div(class="main_footer")
                     div(class="footer_content")
                         p Desarrollado por DragonWare.
