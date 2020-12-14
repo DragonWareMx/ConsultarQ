@@ -28,7 +28,7 @@ router.post(
       check('password')
       .isLength({ min:6 })
     ],
-    isLoggedIn,
+    isNotLoggedIn,
     function(req, res, next) {
       //maneja los errores de la validacion
       const errors = validationResult(req);
