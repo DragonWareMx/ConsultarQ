@@ -1,8 +1,8 @@
 doctype html
 html
     head
-        title= holi
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(rel="icon" href="/img/logos/favicon.png")
         link(rel="stylesheet" href="/uikit/css/uikit.min.css")
         link(rel="stylesheet" href="/stylesheets/main_style.css")
         link(rel='preconnect', href='https://fonts.gstatic.com')
@@ -12,6 +12,7 @@ html
         script(src="/uikit/js/uikit-icons.min.js")
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js")
         script(src="/javascripts/menu.js")
+        block head
     body
         div(class="main_layout")
             //- parte izquierda
