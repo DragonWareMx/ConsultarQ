@@ -248,7 +248,7 @@ html, body {
     font-weight: 500;
     font-size: 9px;
     line-height: 11px;
-    color: #3B86D9;
+    color: #3B86D9 !important;
     margin-bottom: 5px;
     display: flex;
 }
@@ -266,4 +266,30 @@ html, body {
     height: 37px;
     margin-top: 10px;
     margin-bottom: 50px;
+}
+
+/* Aqui va la parte del cel */
+.left_main.mobile{
+    margin-left: -70px;
+    transition: all 0.3s;
+}
+
+.header_main.mobile{
+    margin-left: 0px !important;
+    transition: all 0.3s; 
+}
+
+.header_main.mobile .main_logo{
+    margin-right: 20px !important;
+    transition: all 0.3s; 
+}
+
+.main_container.mobile{
+    padding-left: 5px !important;
+    transition: all 0.3s;
+}
+
+.footer_content.mobile{
+    margin-left: 0px !important;
+    transition: all 0.3s;
 }

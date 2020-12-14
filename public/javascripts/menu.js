@@ -6,6 +6,13 @@ jQuery('document').ready(function($){
         container=$('.main_container'),
         dropdown=$('.categories_dropdown');
     var ancho=$(window).width();
+    if(ancho<800){
+        left.addClass('hide');
+        top.addClass('hide');
+        footer.addClass('hide');
+        dropdown.addClass('hide');
+        container.addClass('hide');
+    }
     menuBtn.click(function(){
         if(ancho>=800){
             if(left.hasClass('hide')){
