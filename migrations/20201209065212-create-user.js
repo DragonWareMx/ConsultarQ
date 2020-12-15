@@ -11,7 +11,7 @@ module.exports = {
       email: {
         allowNull: false,
         unique: true,
-        type: Sequelize.STRING
+        type: Sequelize.STRING(320)
       },
       name: {
         allowNull: false,
@@ -20,6 +20,19 @@ module.exports = {
       password: {
         allowNull: false,
         type: Sequelize.STRING
+      },
+      status: {
+        type: Sequelize.ENUM('active', 'inactive'),
+        defaultValue: 'active'
+      },
+      employee_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Employees',
+          key: 'id',
+          onDelete: 'CASCADE'
+        },
+        allowNull: false
       },
       createdAt: {
         allowNull: false,

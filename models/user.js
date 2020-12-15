@@ -14,9 +14,23 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   User.init({
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    name: DataTypes.STRING
+    email: {
+      allowNull: false,
+      unique: true,
+      type: DataTypes.STRING(320)
+    },
+    password: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    status: {
+      type: DataTypes.ENUM('active', 'inactive'),
+      defaultValue: 'active'
+    }
   }, {
     sequelize,
     modelName: 'User',
