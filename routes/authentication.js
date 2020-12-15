@@ -35,7 +35,7 @@ router.get('/logout', (req, res) => {
 
 router.get('/inicio', isLoggedIn, function(req, res, next) {
     //res.render('index', { title: 'Express' });
-    res.render("test");
+    res.render("inicio");
 });
   
 module.exports = router;
