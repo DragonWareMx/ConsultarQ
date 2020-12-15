@@ -21,9 +21,9 @@ html
                 div(class="profile_container")
                     img(src="/img/logos/dragonWare.png" class="profile_image")
                     div(class="profile_info")
-                        b(class="profile_name") María Flores Escobedo
+                        b(class="profile_name") #{ user.name }
                         br
-                        a(href="#") Cerrar sesión
+                        a(href="/logout") Cerrar sesión
                 //- listado de categorias
                 div(class="categories_container")
                     ul(class="uk-list")
@@ -215,7 +215,7 @@ html
                                 li(class="category_item")
                                     a(href="#") Agregar prestador
                     div(style="width:100%;display:flex;justify-content:center;margin-top:30px")
-                        a(href="/ey-que-tranza-gente")
+                        a(href="/logout")
                             img(src="icons/out.png" class="category_icon")
                                     
                                     
