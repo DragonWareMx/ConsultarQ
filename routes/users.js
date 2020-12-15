@@ -18,6 +18,10 @@ router.get('/', isLoggedIn,function(req, res, next) {
 });
 
 //AGREGAR USUARIO
+router.get('/nuevo', isLoggedIn,function(req, res, next) {
+    res.render('nuevoUsuario')
+});
+
 router.post(
     '/nuevo', 
     //validacion backend
