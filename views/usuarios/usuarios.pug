@@ -5,9 +5,45 @@ block head
 
 block content
     div(class="uk-container")
-        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Administrar usuarios
-            div(class="uk-animation-toggle" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
-                    img(src="/icons/more.png" style="width:20px;height:20px" class="uk-margin-small-right")
-                    div(class="uk-text-primary") Agregar usuario
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar usuarios
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake")
+                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Agregar usuario
+        div(class="uk-child-width-1-2@s" uk-grid)
+            each usuario in usuarios
+                div
+                    div(class="uk-card uk-card-default uk-width-1")
+                        div(class="uk-card-body uk-flex uk-flex-top uk-padding-small")
+                            div(class="uk-width-auto")
+                                img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                            div(class="uk-width-expand uk-margin-small-left")
+                                div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
+                                    div #{usuario.name}
+                                    div(class="uk-animation-toggle" tabindex="0")
+                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left" href="/usuarios/editar/"+usuario.id)
+                                        img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                        div(class="uk-text-small") Editar
+                                div(class="uk-text-small uk-margin-remove-top" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
+                                div(class="uk-text-small uk-margin-remove-top" style="margin-bottom:5px") 4433998915
+                                div(class="uk-flex uk-margin-top uk-flex-middle uk-flex-wrap uk-margin-remove-top")
+                                    div(class="uk-text-small uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Estatus:
+                                    span(class=(usuario.status === "active" ? "uk-label uk-label-success" : "uk-label uk-label-danger"))
+                                        if usuario.status === "active"
+                                            | Activo
+                                        else
+                                            | Inactivo
+                        div(class="uk-card-footer uk-flex uk-flex-top uk-padding-small uk-padding-remove-right")
+                            div(class="uk-width-auto")
+                                div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Proyecto:
+                            div(class="uk-width-expand uk-margin-small-left")
+                                div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap" style="margin-bottom:5px")
+                                    div(class="uk-text-small uk-text-default") Colegio Novel
+                                    div(class="uk-text-small uk-text-muted") Estatus:
+                                div
+                                    progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+                            div(class="uk-width-auto uk-flex uk-flex-center uk-flex-wrap")
+                                  span(class="uk-label uk-label-success uk-text-small") Activo
+                                  div(style="flex-basis:100%")
+                                  div(class="uk-text-small") Progreso 60%
