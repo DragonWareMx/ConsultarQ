@@ -5,7 +5,7 @@ block head
 
 block content
     div(class="uk-container")
-        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Perfil
             a( href="#" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading")
                 img(src="/img/iconos/netGray.png" style="width:20px;height:20px" class="uk-margin-small-right") 
@@ -13,23 +13,24 @@ block content
 
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
             //- CONTENIDO GENERAL
-            div(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap uk-padding-small") 
+            div(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap uk-padding-small uk-grid-divider" uk-grid) 
                 //- Foto y nombre
-                div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom")
+                div(class="uk-width-1-3@l uk-flex uk-flex-center")
                     div(class="uk-width-1-3 uk-margin-small-right")
                         img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
-                    div(class="uk-width-2-3")
-                        p(class="uk-width-1-1 uk-text-emphasis uk-text-bold") María Flores Escobedo 
-                        p(class="uk-width-1-1 uk-text-emphasis") Arquitecto de base
-                        p Activo
-                div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical uk-divider-vertical")
+                    div(class="uk-width-2-3 uk-flex uk-flex-middle")
+                        div()
+                            div(class="uk-width-1-1 uk-text-emphasis uk-text-bold") María Flores Escobedo 
+                            div(class="uk-width-1-1 uk-text-emphasis") Arquitecto de base
+                            div Activo
+                div(class="uk-width-1-3@l uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
                         <span uk-icon="receiver" class="uk-margin-small-right"></span>+5244444444
                     div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
                         <span uk-icon="location" class="uk-margin-small-right"></span>Col. centro, calle Victoria, #754
                     div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
                         <span uk-icon="mail" class="uk-margin-small-right"></span>correo@ejemplo.com
-                div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical uk-divider-vertical")
+                div(class="uk-width-1-3@l uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-3-5@l")
                             p(class="uk-text-muted") Proyectos completados
@@ -45,6 +46,36 @@ block content
                             p(class="uk-text-muted") Ingresos
                         div(class="uk-width-2-5@l")
                             p(class="uk-text-emphasis") $12,350.00
+
+        //- ESTO ES LO MIO XD
+        div(class="uk-card uk-card-default uk-align-center uk-margin-top")
+            div(class="uk-child-width-1-3@l uk-grid-divider" uk-grid)
+                div(class="uk-flex")
+                    div(class="uk-margin-auto uk-flex uk-flex-wrap")
+                        div(class="uk-width-auto")
+                            img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                        div(class="uk-width-auto")
+                            div(class="uk-align-center")
+                                div(class="uk-text-emphasis uk-text-bold") María Flores Escobedo 
+                                div(class="uk-text-emphasis") Arquitecto de base
+                                div(class="uk-text-emphasis") Activo
+                div(class="")
+                    div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
+                        <span uk-icon="receiver" class="uk-margin-small-right"></span>+5244444444
+                    div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
+                        <span uk-icon="location" class="uk-margin-small-right"></span>Col. centro, calle Victoria, #754
+                    div(class="uk-width-1-1 uk-text-emphasis")
+                        <span uk-icon="mail" class="uk-margin-small-right"></span>correo@ejemplo.com
+                div(class="")
+                    div(class="uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
+                        div(class="uk-width-3-5@l uk-text-muted") Proyectos completados
+                        div(class="uk-width-2-5@l uk-text-emphasis") 12
+                    div(class="uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
+                        div(class="uk-width-3-5@l uk-text-muted") Proyectos terminados
+                        div(class="uk-width-2-5@l uk-text-emphasis") 3
+                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
+                        div(class="uk-width-3-5@l uk-text-muted") Ingresos
+                        div(class="uk-width-2-5@l uk-text-emphasis") $12,350.00
         div(class=".uk-width-1-1 uk-flex uk-flex-wrap")                   
             div(class="uk-card uk-card-default uk-width-2-5@m uk-margin-small-right")
                 div(class="uk-card-body uk-flex uk-flex-wrap uk-padding-small") 
