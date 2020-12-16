@@ -38,7 +38,9 @@ db.Sequelize = Sequelize;
 db.users = require("./user.js")(sequelize, Sequelize);
 db.employees = require("./employee.js")(sequelize, Sequelize);
 
-db.employees.hasOne(db.users);
+db.employees.hasOne(db.users, {
+  as: 'user'
+});
 db.users.belongsTo(db.employees, {
   foreignKey: 'employee_id',
   as: 'employee'
