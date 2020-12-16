@@ -65,10 +65,24 @@ router.get('/:id', isLoggedIn, function (req, res, next) {
     let id = req.params.id
     models.User
         .findOne({
-            where: { id: id }
+            where: { id: id },
         })
         .then(user => {
             res.send(user)
+        })
+});
+
+router.get('/editar/:id', isLoggedIn, function (req, res, next) {
+    let id = req.params.id
+    models.User
+        .findOne({
+            where: { id: id },
+        })
+        .then(user => {
+            if(!user){
+               return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR 
+            }
+            res.render('editarUsuario',{user})
         })
 });
 
