@@ -6,6 +6,7 @@ var validator = require('express-validator');
 const passport = require('passport');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
+const MySQLStore = require('express-mysql-session')(session);
 
 // Intializations
 var app = express();
@@ -18,6 +19,13 @@ app.set('views', [path.join(__dirname, 'views'),
 );
 app.set('view engine', 'pug');
 
+var database = {
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME
+};
+
 // Middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -27,6 +35,7 @@ app.use(session({
   secret: 'consultarq',
   resave: false,
   saveUninitialized: false,
+  store: new MySQLStore(database)
 }));
 app.use(flash());
 app.use(passport.initialize());

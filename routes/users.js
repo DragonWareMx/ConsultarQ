@@ -23,7 +23,7 @@ router.get('/nuevo', isLoggedIn,function(req, res, next) {
 });
 
 router.post(
-    '/nuevo', 
+    '/nuevo',
     //validacion backend
     [
       check('email')
@@ -32,7 +32,7 @@ router.post(
       check('password')
       .isLength({ min:6 })
     ],
-    isNotLoggedIn,
+    isLoggedIn,
     function(req, res, next) {
       //maneja los errores de la validacion
       const errors = validationResult(req);
@@ -43,9 +43,10 @@ router.post(
 
       //autenticacion e insercion en la bd
       passport.authenticate('local.signup',{
-        successRedirect: '/inicio',
-        failureRedirect: '/register',
-        failureFlash: true
+        successRedirect: '/usuarios',
+        failureRedirect: '/inicio',
+        failureFlash: true,
+        session: false
       })(req, res, next);
     }
 );
