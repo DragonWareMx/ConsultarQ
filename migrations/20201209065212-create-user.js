@@ -25,7 +25,7 @@ module.exports = {
         type: Sequelize.ENUM('active', 'inactive'),
         defaultValue: 'active'
       },
-      employee_id: {
+      EmployeeId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Employees',
