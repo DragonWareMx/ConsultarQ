@@ -1,0 +1,10 @@
+.btn-status-active{
+    background-color:#86DDAE; 
+    color:#129326; 
+    font-size:8px; 
+    font-weight: bold;
+    width:63px !important; 
+    padding: 6px;
+    border-radius: 5%;
+    text-align:center !important;
+}
