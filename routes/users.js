@@ -30,7 +30,7 @@ router.post(
       .isEmail()
       .normalizeEmail(),
       check('password')
-      .isLength({ min:6 })
+      .isLength({ min:8, max:24 })
     ],
     isLoggedIn,
     function(req, res, next) {
@@ -40,6 +40,10 @@ router.post(
           console.log(errors);
           return res.status(422).json({ errors:errors.array() });
       }
+
+      //validar contrasenas iguales
+
+      console.log(req.body)
 
       //autenticacion e insercion en la bd
       passport.authenticate('local.signup',{
