@@ -19,7 +19,10 @@ const models = require('../models/index');
 });*/
 
 router.get('/', isLoggedIn, function (req, res, next) {
-    res.render('usuarios')
+    models.User.findAll({
+    }).then(usuarios => {
+        res.render('usuarios', { usuarios })
+    });
 });
 
 //AGREGAR USUARIO
@@ -31,11 +34,11 @@ router.post(
     '/nuevo',
     //validacion backend
     [
-      check('email')
-      .isEmail()
-      .normalizeEmail(),
-      check('password')
-      .isLength({ min:8, max:24 })
+        check('email')
+            .isEmail()
+            .normalizeEmail(),
+        check('password')
+            .isLength({ min: 8, max: 24 })
     ],
     isLoggedIn,
     function (req, res, next) {
@@ -46,17 +49,17 @@ router.post(
             return res.status(422).json({ errors: errors.array() });
         }
 
-      //validar contrasenas iguales
+        //validar contrasenas iguales
 
-      console.log(req.body)
+        console.log(req.body)
 
-      //autenticacion e insercion en la bd
-      passport.authenticate('local.signup',{
-        successRedirect: '/usuarios',
-        failureRedirect: '/inicio',
-        failureFlash: true,
-        session: false
-      })(req, res, next);
+        //autenticacion e insercion en la bd
+        passport.authenticate('local.signup', {
+            successRedirect: '/usuarios',
+            failureRedirect: '/inicio',
+            failureFlash: true,
+            session: false
+        })(req, res, next);
     }
 );
 
