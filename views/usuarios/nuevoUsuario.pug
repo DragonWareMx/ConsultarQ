@@ -7,80 +7,147 @@ block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar usuario
-            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading")
-                img(src="/img/iconos/netGray.png" style="width:20px;height:20px" class="uk-margin-small-right") 
-                div Regresar
+            div(class="uk-animation-toggle" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
+                    img(src="/img/iconos/netGray.png" style="width:20px;height:20px" class="uk-margin-small-right") 
+                    div Regresar
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
-            form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" action="" method="")
-                div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom") 
-                    img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
+            form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" action="/usuarios/nuevo" method="POST")
+                div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom uk-flex-wrap uk-flex-column uk-flex-top") 
+                    img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
+                    a(href="#modal-example" uk-toggle class="uk-flex uk-flex-center uk-flex-middle uk-width-1")
+                        img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
+                        div() Agregar foto 
                 div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Nombre
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Nombre completo")
+                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Teléfono
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="10 dígitos")
+                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" type="number" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Ciudad
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Ciudad")
+                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Estado
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Estado")
+                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Colonia
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Colonia")
+                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Calle
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Calle")
+                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Interior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Interior")
+                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Exterior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Interior")
+                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number")
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Correo electrónico
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email")
+                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Contraseña
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="password" placeholder="Mínimo 8 caracteres" autocomplete="off")
+                            input(class="uk-input uk-form-small" type="password" placeholder="Mínimo 8 caracteres" autocomplete="off" id="password" required)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Confirmar contraseña
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="password" autocomplete="off")
+                            input(class="uk-input uk-form-small" type="password" autocomplete="off" id="password-confirm" required)
                 div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-text-left uk-text-primary uk-margin-bottom") CONSULTARQ
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Puesto
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Arquitecto de base")
+                            input(class="uk-input uk-form-small" placeholder="Arquitecto de base" id="job" /*required*/)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Rol
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            select(class="uk-select uk-form-small" placeholder="Arquitecto")
+                            select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" /*required*/)
                                 option(value="" disabled hidden selected ) Seleccionar
                                 option(value="arquitecto" ) Arquitecto
                                 option(value="adminisrador" ) Administrador
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Salario
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="$0")
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Fecha de contratación
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="date")
+                            input(class="uk-input uk-form-small" type="date" id="hiring_date")
                 div(class="uk-width-1 uk-flex-right uk-flex")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Agregar
+                div(id="modal-example" uk-modal)
+                    div(class="uk-modal-dialog uk-modal-body")
+                        div(class="js-upload uk-placeholder uk-text-center")
+                            span(uk-icon="icon: cloud-upload")
+                            span(class="uk-text-middle" id="texto1") Agrega una imagen arrastrándola aquí o&nbsp;
+                            div(uk-form-custom)
+                                input(type="file" id="profile_picture")
+                                span(class="uk-link" id="texto2") selecciona una
+                        progress(id="js-progressbar" class="uk-progress" value="0" max="100" hidden)
+
+    script.
+        var bar = document.getElementById('js-progressbar');
+        UIkit.upload('.js-upload', {
+            url: '',
+            multiple: true,
+            beforeSend: function () {
+                console.log('beforeSend', arguments);
+            },
+            beforeAll: function () {
+                console.log('beforeAll', arguments);
+            },
+            load: function () {
+                console.log('load', arguments);
+            },
+            error: function () {
+                console.log('error', arguments);
+            },
+            complete: function () {
+                console.log('complete', arguments);
+            },
+            loadStart: function (e) {
+                console.log('loadStart', arguments);
+
+                bar.removeAttribute('hidden');
+                bar.max = e.total;
+                bar.value = e.loaded;
+            },
+            progress: function (e) {
+                console.log('progress', arguments);
+
+                bar.max = e.total;
+                bar.value = e.loaded;
+            },
+            loadEnd: function (e) {
+                console.log('loadEnd', arguments);
+
+                bar.max = e.total;
+                bar.value = e.loaded;
+            },
+            completeAll: function () {
+                console.log('completeAll', arguments);
+
+                setTimeout(function () {
+                    bar.setAttribute('hidden', 'hidden');
+                }, 1000);
+
+                setTimeout(function () {
+                    texto1=document.getElementById('texto1');
+                    texto2=document.getElementById('texto2');
+                    texto1.innerHTML=' Imagen cargada con éxito.';
+                    texto2.innerHTML='';
+                    alert('Se ha cargado tu imagen correctamente.');
+                }, 1000);
+
+            }
+        });
+
