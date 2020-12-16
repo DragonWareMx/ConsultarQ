@@ -19,7 +19,7 @@ const models = require('../models/index');
 });*/
 
 router.get('/', isLoggedIn, function (req, res, next) {
-    res.render('usuarios', { usuarios })
+    res.render('usuarios')
 });
 
 //AGREGAR USUARIO

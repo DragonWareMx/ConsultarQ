@@ -40,7 +40,8 @@ db.employees = require("./employee.js")(sequelize, Sequelize);
 
 db.employees.hasOne(db.users);
 db.users.belongsTo(db.employees, {
-  foreignKey: 'employee_id'
+  foreignKey: 'employee_id',
+  as: 'employee'
 });
 
 module.exports = db;
