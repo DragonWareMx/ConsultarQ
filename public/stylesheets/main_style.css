@@ -103,6 +103,7 @@ html, body {
     align-items: center;
     position: fixed;
     margin-left: 260px;
+    z-index: 999;
 
     transition: all 0.3s;
 }
