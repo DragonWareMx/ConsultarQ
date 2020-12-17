@@ -100,7 +100,6 @@ router.get('/editar/:id', isLoggedIn, function (req, res, next) {
             if (!usuario) {
                 return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR
             }
-            console.log(usuario.Employee)
             res.render('editarUsuario', { usuario })
         })
 });

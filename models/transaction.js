@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Transaction.init({
-    T_type: DataTypes.ENUM,
+    T_type: DataTypes.ENUM('ingreso','egreso'),
     date: DataTypes.DATEONLY,
     amount: DataTypes.DECIMAL,
     description: DataTypes.STRING,
