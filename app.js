@@ -20,6 +20,7 @@ require('./lib/passport');
 app.set('views', [path.join(__dirname, 'views'),
                   path.join(__dirname, 'views/usuarios'),
                   path.join(__dirname, 'views/profile'),
+                  path.join(__dirname, 'views/servicios'),
                 ]
 );
 app.set('view engine', 'pug');
@@ -74,6 +75,7 @@ app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
 app.use('/usuarios',require('./routes/users'));
 app.use('/perfil',require('./routes/perfil'));
+app.use('/servicios',require('./routes/servicios'));
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
 
