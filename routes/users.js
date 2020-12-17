@@ -132,13 +132,13 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
 });
 
 
-router.post('/nuevo', upload.single('fileField'),
+router.post('/nuevo', isLoggedIn, upload.single('fileField'),
     [
         check('email')
-            .isEmail()
+            .isEmail().withMessage('Correo electrónico no válido.')
             .normalizeEmail(),
         check('password')
-            .isLength({ min: 8, max: 24 })
+            .isLength({ min: 8, max: 24 }).withMessage('La contraseña debe tener minimo 8 caracteres y máximo 24 caracteres.')
     ]
     , (req, res, next) => {
         // console.log('BODY -----------------------------', req.body);
@@ -151,13 +151,15 @@ router.post('/nuevo', upload.single('fileField'),
         //Validacion
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors);
-            return res.status(422).json({ errors: errors.array() });
+            console.log(errors.array());
+            return res.render("nuevoUsuario", {
+                messages: errors.array()
+            });
         }
         //autenticacion e insercion en la bd
         passport.authenticate('local.signup', {
             successRedirect: '/usuarios',
-            failureRedirect: '/inicio',
+            failureRedirect: '/usuarios/nuevo',
             failureFlash: true,
             session: false
         })(req, res, next);
