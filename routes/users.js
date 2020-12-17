@@ -132,7 +132,7 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
 });
 
 
-router.post('/save', upload.single('fileField2'), (req, res) => {
+router.post('/save', upload.single('fileField'), (req, res) => {
     console.log('BODY -----------------------------', req.body);
     console.log('FILES--------------------------', req.files);
     console.log('PARAMS------------------------', req.params);
