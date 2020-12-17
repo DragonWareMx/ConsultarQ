@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(10)
     },
     ext_number: DataTypes.STRING(10),
-    hiring_date: DataTypes.DATE
+    hiring_date: DataTypes.DATEONLY
   }, {
     sequelize,
     modelName: 'Employee',

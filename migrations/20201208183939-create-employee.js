@@ -40,7 +40,7 @@ module.exports = {
         type: Sequelize.STRING(10)
       },
       hiring_date: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       UserId: {
         type: Sequelize.INTEGER,
