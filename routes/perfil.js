@@ -12,4 +12,8 @@ router.get('/', isLoggedIn, function(req, res, next) {
     res.render('perfil')
 });
 
+router.get('/editar', isLoggedIn,function(req, res, next) {
+    res.render('editarPerfil')
+});
+
 module.exports = router;
