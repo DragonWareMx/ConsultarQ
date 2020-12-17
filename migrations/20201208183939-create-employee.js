@@ -44,11 +44,11 @@ module.exports = {
       },
       UserId: {
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'Users',
           key: 'id',
         },
-        onDelete: 'CASCADE',
         allowNull: true
       },
       createdAt: {
