@@ -9,7 +9,7 @@ const passport = require('passport');
 const models = require('../models/index');
 
 //AGREGAR USUARIO
-router.get('/nuevo', function(req, res, next) {
+router.get('/nuevo', isLoggedIn,function(req, res, next) {
     res.render('crearRol')
 });
 

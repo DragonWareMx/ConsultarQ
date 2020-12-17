@@ -79,12 +79,14 @@ router.get('/editar/:id', isLoggedIn, function (req, res, next) {
     models.User
         .findOne({
             where: { id: id },
+            include:['Employee']
         })
-        .then(user => {
-            if(!user){
+        .then(usuario => {
+            if(!usuario){
                return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR 
             }
-            res.render('editarUsuario',{user})
+            console.log(usuario.Employee)
+            res.render('editarUsuario',{usuario})
         })
 });
 
