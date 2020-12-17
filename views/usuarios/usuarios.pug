@@ -1,7 +1,7 @@
 extends ../main
 
 block head
-    title ConsultarQ - Crear Usuario
+    title ConsultarQ - Usuarios
 
 block content
     div(class="uk-container")
@@ -17,7 +17,10 @@ block content
                     div(class="uk-card uk-card-default uk-width-1")
                         div(class="uk-card-body uk-flex uk-flex-top uk-padding-small")
                             div(class="uk-width-auto")
-                                img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                                if usuario.picture
+                                     img(src="/uploads/"+usuario.picture alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                                else
+                                    img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                             div(class="uk-width-expand uk-margin-small-left")
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
                                     div #{usuario.Employee.name}

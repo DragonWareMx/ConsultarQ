@@ -50,8 +50,8 @@ html, body {
 .categories_dropdown{
     width: 100%;
     height: auto;
-    margin-top: 20px;  
-    display: none; 
+    margin-top: 20px;
+    display: none;
 }
 
 .categories_dropdown .category_icon{
@@ -75,12 +75,12 @@ html, body {
 
 .header_main.hide{
     margin-left: 70px !important;
-    transition: all 0.3s;   
+    transition: all 0.3s;
 }
 
 .header_main.hide .main_logo{
     margin-right: 90px !important;
-    transition: all 0.3s; 
+    transition: all 0.3s;
 }
 
 
@@ -120,7 +120,7 @@ html, body {
     height: 13px;
     margin-right: 280px;
 
-    transition: all 0.3s; 
+    transition: all 0.3s;
 }
 
 .main_container {
@@ -176,6 +176,7 @@ html, body {
     margin-left: 10px;
     margin-right: 12px;
     border-radius: 50%;
+    object-fit: cover;
 }
 
 .profile_info {
@@ -277,12 +278,12 @@ html, body {
 
 .header_main.mobile{
     margin-left: 0px !important;
-    transition: all 0.3s; 
+    transition: all 0.3s;
 }
 
 .header_main.mobile .main_logo{
     margin-right: 20px !important;
-    transition: all 0.3s; 
+    transition: all 0.3s;
 }
 
 .main_container.mobile{

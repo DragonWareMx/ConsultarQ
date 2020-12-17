@@ -46,36 +46,36 @@ router.get('/nuevo', isLoggedIn, function (req, res, next) {
     res.render('nuevoUsuario')
 });
 
-router.post(
-    '/nuevo',
-    //validacion backend
-    [
-        check('email')
-            .isEmail()
-            .normalizeEmail(),
-        check('password')
-            .isLength({ min: 8, max: 24 })
-    ], upload.single('file'),
-    isLoggedIn,
-    function (req, res, next) {
-        //maneja los errores de la validacion
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            console.log(errors);
-            return res.status(422).json({ errors: errors.array() });
-        }
+// router.post(
+//     '/nuevo',
+//     //validacion backend
+//     [
+//         check('email')
+//             .isEmail()
+//             .normalizeEmail(),
+//         check('password')
+//             .isLength({ min: 8, max: 24 })
+//     ], upload.single('file'),
+//     isLoggedIn,
+//     function (req, res, next) {
+//         //maneja los errores de la validacion
+//         const errors = validationResult(req);
+//         if (!errors.isEmpty()) {
+//             console.log(errors);
+//             return res.status(422).json({ errors: errors.array() });
+//         }
 
-        //validar contrasenas iguales
-        console.log('Got body:', req.body);
-        //autenticacion e insercion en la bd
-        passport.authenticate('local.signup', {
-            successRedirect: '/usuarios',
-            failureRedirect: '/inicio',
-            failureFlash: true,
-            session: false
-        })(req, res, next);
-    }
-);
+//         //validar contrasenas iguales
+//         console.log('Got body:', req.body);
+//         //autenticacion e insercion en la bd
+//         passport.authenticate('local.signup', {
+//             successRedirect: '/usuarios',
+//             failureRedirect: '/inicio',
+//             failureFlash: true,
+//             session: false
+//         })(req, res, next);
+//     }
+// );
 
 //VER USUARIO ID
 router.get('/:id', isLoggedIn, function (req, res, next) {
@@ -132,11 +132,36 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
 });
 
 
-router.post('/save', upload.single('fileField'), (req, res) => {
-    console.log('BODY -----------------------------', req.body);
-    console.log('FILES--------------------------', req.files);
-    console.log('PARAMS------------------------', req.params);
-    res.sendStatus(200);
-});
+router.post('/nuevo', upload.single('fileField'),
+    [
+        check('email')
+            .isEmail()
+            .normalizeEmail(),
+        check('password')
+            .isLength({ min: 8, max: 24 })
+    ]
+    , (req, res, next) => {
+        // console.log('BODY -----------------------------', req.body);
+        // console.log('FILES--------------------------', req.files);
+        // if (req.file) {
+        //     var filename = res.req.file.filename;
+        //     console.log('AQUI ESTA EL FILE NAME ----------------------------', filename);
+        // }
+        // console.log('PARAMS------------------------', req.params);
+        //Validacion
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            console.log(errors);
+            return res.status(422).json({ errors: errors.array() });
+        }
+        //autenticacion e insercion en la bd
+        passport.authenticate('local.signup', {
+            successRedirect: '/usuarios',
+            failureRedirect: '/inicio',
+            failureFlash: true,
+            session: false
+        })(req, res, next);
+    }
+);
 
 module.exports = router;
