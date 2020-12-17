@@ -18,7 +18,10 @@ html
             div(class="left_main")
                 //- perfil
                 div(class="profile_container")
-                    img(src="/img/logos/dragonWare.png" class="profile_image")
+                    if user.picture
+                        img(src="/uploads/"+user.picture class="profile_image")
+                    else
+                        img(src="/img/iconos/default.png" class="profile_image")
                     div(class="profile_info")
                         b(class="profile_name") #{ user.Employee.name }
                         br
