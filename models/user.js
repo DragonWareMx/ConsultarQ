@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasOne(models.Employee);
     }
   };
   User.init({
@@ -23,10 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
-    name: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
     status: {
       type: DataTypes.ENUM('active', 'inactive'),
       defaultValue: 'active'
@@ -35,5 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
+
   return User;
 };

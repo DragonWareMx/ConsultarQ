@@ -1,0 +1,90 @@
+extends ../main
+
+block head
+    title ConsultarQ - Crear Usuario
+
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar rol
+            div(class="uk-animation-toggle" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
+                    img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
+                    div Regresar
+        div(class="uk-card uk-card-default uk-align-center uk-margin-top")
+            form(class="uk-card-body" action="/roles/nuevo" method="POST")
+                div(class="uk-margin-small-top uk-margin-small-bottom") Nombre del rol
+                input(class="uk-input uk-form-small uk-width-1-4@m" autocomplete="off" placeholder="Nombre del rol" id="name" name="role" required)
+                div(class="uk-overflow-auto uk-margin-top")   
+                    table(class="uk-table uk-table-small uk-table-divider")
+                        thead
+                            tr
+                                th(class="uk-table-spand uk-table-shrink@m") Permisos
+                                th(class="uk-table-shrink") Lectura
+                                th(class="uk-table-shrink") Edición
+                                th(class="uk-table-shrink") Crear
+                                th(class="uk-table-shrink") Eliminar
+                        tbody
+                            tr
+                                td Usuarios
+                                td(class="uk-text-center") 
+                                    input(type="checkbox" class="uk-checkbox" name="ur")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="uu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="uc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ud")
+                            tr
+                                td Caja chica
+                                td(class="uk-text-center") 
+                                    input(type="checkbox" class="uk-checkbox" name="cr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cc") 
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cd")
+                            tr
+                                td Cartera de servicios
+                                td(class="uk-text-center") 
+                                    input(type="checkbox" class="uk-checkbox" name="sr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="su")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="sc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="sd")
+                            tr
+                                td Proyectos
+                                td(class="uk-text-center") 
+                                    input(type="checkbox" class="uk-checkbox" name="pr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pd")
+                            tr
+                                td Directorio de clientes
+                                td(class="uk-text-center") 
+                                    input(type="checkbox" class="uk-checkbox" name="dr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="du")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="dc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="dd")
+                            tr
+                                td Prestadores externos
+                                td(class="uk-text-center") 
+                                    input(type="checkbox" class="uk-checkbox" name="er")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="eu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ec")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ed")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-large-top")
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize") Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Guardar

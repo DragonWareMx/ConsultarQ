@@ -12,7 +12,7 @@ block content
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
-            form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+            form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" action="/usuarios/nuevo" method="POST")
                 div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom uk-flex-wrap uk-flex-column uk-flex-top")
                     img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
                     a(href="#modal-example" uk-toggle class="uk-flex uk-flex-center uk-flex-middle uk-width-1")
@@ -23,39 +23,39 @@ block content
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Nombre
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required)
+                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required value=`${usuario.Employee.name}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Teléfono
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required)
+                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required value=`${usuario.Employee.phone_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Ciudad
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required)
+                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required  value=`${usuario.Employee.city}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Estado
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required)
+                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required  value=`${usuario.Employee.state}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Colonia
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required)
+                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required  value=`${usuario.Employee.suburb}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Calle
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required)
+                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required  value=`${usuario.Employee.street}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Interior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number")
+                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number" required  value=`${usuario.Employee.int_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Exterior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" required)
+                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" value=`${usuario.Employee.ext_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Correo electrónico
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required)
+                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required value=usuario.email)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Contraseña
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
@@ -69,14 +69,14 @@ block content
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Rol
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" name="role" /*required*/)
+                            select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" name="role" /*required*/) 
                                 option(value="" disabled hidden selected ) Seleccionar
                                 option(value="arquitecto" ) Arquitecto
-                                option(value="adminisrador" ) Administrador
+                                option(value="adminisrador") Administrador
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Fecha de contratación
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date")
+                            input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date" value=usuario.Employee.hiring_date)
                 div(class="uk-width-1 uk-flex-right uk-flex")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Agregar

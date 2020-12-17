@@ -1,0 +1,261 @@
+extends ../main
+
+block head
+    title Prestadores Externos
+
+block content
+    div(class="uk-container")
+        //- titulo y boton de agregar
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Prestadores externos
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="/prestadores/nuevo")
+                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Agregar prestador
+        //- barra de busqueda
+        form(class="uk-flex")
+            div(class="uk-search uk-search-default uk-width-expand")
+                a(href="#" uk-search-icon)
+                input(class="uk-search-input" type="search" placeholder="Buscar...")
+            //- boton de filtrar
+            button(class="uk-button uk-button-primary uk-width-auto" href="#")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+            div(uk-dropdown="mode: click")
+                ul(class="uk-list")
+                    li() sugerencia 1
+                    li() sugerencia 2
+                    li() sugerencia 3
+        //- contenido
+        div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
+            //- tabla
+            div(class="uk-card uk-card-default uk-width-3-5@l uk-margin-right uk-margin-top")
+                div(class="uk-card-body uk-text-center")
+                    table(class="uk-table uk-table-divider")
+                        thead
+                            tr
+                                th(class="uk-text-center") ID
+                                th(class="uk-text-center") Nombre
+                                th(class="uk-text-center") ÁREA
+                                th(class="uk-text-center") TELÉFONO
+                        tbody
+                            tr
+                                td 1
+                                td Jose Adolfo Lemus Magana
+                                td Plomeria
+                                td 4433123456
+                            tr
+                                td 2
+                                td Dulce Gabriela Marin Rendon
+                                td Carpinteria
+                                td 4433123456
+                            tr
+                                td 3
+                                td Oscar Andre Huerta Garcia
+                                td Carpinteria
+                                td 4433123456
+                            tr
+                                td 4
+                                td Leonardo Danien Lopez Lopez
+                                td Electrisista
+                                td 4433123456
+                            tr
+                                td 5
+                                td Jose Agustin Aguilar Solorzano
+                                td Herreria
+                                td 4433123456
+                            tr
+                                td 6
+                                td Fernando Adrian Garcia Sanchez
+                                td Herreria
+                                td 4433123456
+                            tr
+                                td 6
+                                td Fernando Adrian Garcia Sanchez
+                                td Herreria
+                                td 4433123456
+                            tr
+                                td 6
+                                td Fernando Adrian Garcia Sanchez
+                                td Herreria
+                                td 4433123456
+                            tr
+                                td 6
+                                td Fernando Adrian Garcia Sanchez
+                                td Herreria
+                                td 4433123456
+                            tr
+                                td 6
+                                td Fernando Adrian Garcia Sanchez
+                                td Herreria
+                                td 4433123456
+            //- informacion completa
+            div(class="uk-card uk-card-default uk-width-expand uk-margin-top" )
+                div(class="uk-container uk-margin-top uk-margin-left uk-margin-right")
+                    div(class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap")
+                        div(class="uk-text-left uk-text-primary uk-margin-bottom") INFORMACIÓN COMPLETA
+                        div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="/prestadores/editar")
+                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Editar
+                div(class="uk-flex uk-flex-wrap-reverse uk-container uk-margin-left uk-margin-right")
+                    form()
+                        div(class="uk-column-1-2")
+                            div()
+                                | ID
+                            label() 
+                                | 1
+                            div()
+                                | Estatus
+                            span(class="uk-label uk-label-success")
+                                | Activo
+                        div(class="uk-margin-top")
+                            | Nombre
+                        label()
+                            | Jose Adolfo Lemus Magana
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div
+                                | Área
+                            label() 
+                                | area del prestador
+                            div()
+                                | Teléfono
+                            label()
+                                | 4444444444
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div
+                                | Correo
+                            label() 
+                                | correo@ejemplo.com
+                            div()
+                                | RFC
+                            label()
+                                | 123456789ASWR
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div()
+                                | Cédula
+                            label() 
+                                | 123456789ASWR
+                            div()
+                                | Número de DRO
+                            label()
+                                | 1111111
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div()
+                                | Número de cuenta
+                            label() 
+                                | 1234567891258796
+                            div()
+                                | Fecha de registro
+                            label()
+                                | 02 de Enero de 2020
+            //- agregar prestador externo
+            div(class="uk-card uk-card-default uk-width-expand uk-margin-top" style="display:none")
+                div(class="uk-container uk-margin-top uk-margin-left uk-margin-right")
+                    div(class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap")
+                        div(class="uk-text-left uk-text-primary uk-margin-bottom") AGREGAR PRESTADOR EXTERNO
+                div(class="uk-flex uk-flex-wrap-reverse uk-container uk-margin-left uk-margin-right")
+                    form()
+                        div(class="uk-width-1-2")
+                            div()
+                                | Estatus
+                            select(class="uk-select")
+                                option(value="") Activo
+                                option(value="") Inactivo
+                        div(class="uk-margin-top")
+                            div()
+                                | Nombre
+                            input(type="text" class="uk-input" placeholder="Nombre completo")
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div
+                                | Área
+                            input(type="text" class="uk-input" placeholder="Área")
+                            div()
+                                | Teléfono
+                            input(type="text" class="uk-input" placeholder="Teléfono")
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div
+                                | Correo
+                            input(type="text" class="uk-input" placeholder="correo@ejemplo.com")
+                            div()
+                                | RFC
+                            input(type="text" class="uk-input" placeholder="13 dígitos")
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div()
+                                | Cédula
+                            input(type="text" class="uk-input" placeholder="7-8 dígitos")
+                            div()
+                                | Número de DRO
+                            input(type="text" class="uk-input" placeholder="7-8 dígitos")
+                        div(class="uk-width-1-2 uk-margin-top uk-margin-bottom")
+                            div()
+                                | Número de cuenta
+                            input(type="text" class="uk-input" placeholder="16 dígitos")
+                        div(class="uk-align-right margin-top")
+                            a(class="uk-text-primary uk-flex-inline uk-flex uk-flex-middle uk-link-heading" href="#") Cancelar
+                            button(class="uk-button uk-button-default uk-flex-inline uk-flex uk-flex-middle uk-margin-left") Guardar
+            //- editar prestador externo
+            div(class="uk-card uk-card-default uk-width-expand uk-margin-top" style="display:none")
+                div(class="uk-container uk-margin-top uk-margin-left uk-margin-right")
+                    div(class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap")
+                        div(class="uk-text-left uk-text-primary uk-margin-bottom") EDITAR INFORMACIÓN
+                        div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading" href="/prestadores/editar")
+                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Eliminar
+                div(class="uk-flex uk-flex-wrap-reverse uk-container uk-margin-left uk-margin-right")
+                    form()
+                        div(class="uk-column-1-2")
+                            div()
+                                | ID
+                            label() 
+                                | 1
+                            div()
+                                | Estatus
+                            select(class="uk-select")
+                                option(value="") Activo
+                                option(value="") Inactivo
+                        div(class="uk-margin-top")
+                            div()
+                                | Nombre
+                            input(type="text" class="uk-input" placeholder="Nombre completo")
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div
+                                | Área
+                            input(type="text" class="uk-input" placeholder="Área")
+                            div()
+                                | Teléfono
+                            input(type="text" class="uk-input" placeholder="Teléfono")
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div
+                                | Correo
+                            input(type="text" class="uk-input" placeholder="correo@ejemplo.com")
+                            div()
+                                | RFC
+                            input(type="text" class="uk-input" placeholder="13 dígitos")
+                        div(class="uk-column-1-2 uk-margin-top")
+                            div()
+                                | Cédula
+                            input(type="text" class="uk-input" placeholder="7-8 dígitos")
+                            div()
+                                | Número de DRO
+                            input(type="text" class="uk-input" placeholder="7-8 dígitos")
+                        div(class="uk-column-1-2 uk-margin-top uk-margin-bottom")
+                            div()
+                                | Número de cuenta
+                            input(type="text" class="uk-input" placeholder="16 dígitos")
+                            div()
+                                | Fecha de registro
+                            input(type="text" class="uk-input" placeholder="Fecha de registro")
+                        div(class="uk-align-right margin-top")
+                            a(class="uk-text-primary uk-flex-inline uk-flex uk-flex-middle uk-link-heading" href="#") Cancelar
+                            button(class="uk-button uk-button-default uk-flex-inline uk-flex uk-flex-middle uk-margin-left") Guardar
+        //- paginacion
+        div(class="uk-width-3-5")
+            ul(class="uk-pagination uk-margin-top")
+                li()
+                    a(href="#")
+                        span(class="uk-margin-small-right" uk-pagination-previous) 
+                        | Anterior
+                li(class="uk-margin-auto-left")
+                    a(href="#") Siguiente
+                        span(class="uk-margin-small-left" uk-pagination-next)
