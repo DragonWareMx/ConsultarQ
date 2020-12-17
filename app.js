@@ -62,9 +62,6 @@ app.use( async (req, res, next) => {
     console.log(error)
     app.locals.user = req.user
   }
-
-  console.log(app.locals.user)
-
   next();
 });
 
