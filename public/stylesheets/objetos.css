@@ -8,6 +8,23 @@
     border-radius: 5%;
     text-align:center !important;
 }
+#div-edit{
+    display: none;
+}
+.div-compartir-service{
+    border-left:solid 1px #EEEEEE; 
+    padding-left:10px
+}
+.a-edit-service{
+    margin-top: 10px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+}
+.a-block-ser{
+    display: none;
+    margin-top: 5px;
+}
 
 @media(max-width:1340px){
     .div-foto-perfil{
@@ -23,5 +40,29 @@
     .btn-status-perfil{
         margin-left: auto !important;
         margin-right: auto !important;
+    }
+}
+@media(max-width:1200px){
+    .div-service-res{
+        width: 100%;
+    }
+    .div-service-res-wrap{
+        display: flex;
+        flex-wrap: wrap-reverse !important;
+    }
+    .div-compartir-service{
+        border: none;
+        padding-left: 0%;
+        border-bottom:solid 1px #EEEEEE; 
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+}
+@media(max-width:900px){
+    .a-hidden-ser{
+        display: none;
+    }
+    .a-block-ser{
+        display: block;
     }
 }

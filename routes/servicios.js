@@ -9,11 +9,8 @@ const passport = require('passport');
 const models = require('../models/index');
 
 router.get('/', isLoggedIn, function(req, res, next) {
-    res.render('perfil')
+    res.render('carteraServicios')
 });
 
-router.get('/editar', isLoggedIn,function(req, res, next) {
-    res.render('editarPerfil')
-});
 
 module.exports = router;

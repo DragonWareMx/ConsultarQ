@@ -21,7 +21,9 @@ app.set('views', [path.join(__dirname, 'views'),
                   path.join(__dirname, 'views/usuarios'),
                   path.join(__dirname, 'views/profile'),
                   path.join(__dirname, 'views/roles'),
-                  path.join(__dirname, 'views/clientes')]
+                  path.join(__dirname, 'views/clientes'),
+                  path.join(__dirname, 'views/servicios'),
+                ]
 );
 app.set('view engine', 'pug');
 
@@ -77,6 +79,7 @@ app.use('/usuarios',require('./routes/users'));
 app.use('/perfil',require('./routes/perfil'));
 app.use('/roles',require('./routes/roles'));
 app.use('/clientes',require('./routes/clientes'));
+app.use('/servicios',require('./routes/servicios'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
