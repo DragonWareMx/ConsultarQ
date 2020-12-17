@@ -2,7 +2,7 @@ extends ../main
 
 block head
     title ConsultarQ - Crear Usuario
-
+    link(rel="stylesheet" href="/stylesheets/others.css")
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
@@ -14,7 +14,7 @@ block content
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
             form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
                 div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom uk-flex-wrap uk-flex-column uk-flex-top")
-                    img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
+                    img(src="/img/iconos/default.png" alt="" id="blah" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
                     a(href="#modal-example" uk-toggle class="uk-flex uk-flex-center uk-flex-middle uk-width-1")
                         img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
                         div() Agregar foto
@@ -77,72 +77,40 @@ block content
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Fecha de contratación
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
                             input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date")
+                        input(name="fileField2" type="file" id="fileField2")
                 div(class="uk-width-1 uk-flex-right uk-flex")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Agregar
                 div(id="modal-example" uk-modal)
                     div(class="uk-modal-dialog uk-modal-body")
-                        div(class="js-upload uk-placeholder uk-text-center")
-                            span(uk-icon="icon: cloud-upload")
-                            span(class="uk-text-middle" id="texto1") Agrega una imagen arrastrándola aquí o&nbsp;
-                            div(uk-form-custom)
-                                input(type="file" id="profile_picture" name="profile_picture")
-                                span(class="uk-link" id="texto2") selecciona una
-                        progress(id="js-progressbar" class="uk-progress" value="0" max="100" hidden)
-
+                        //- input(type='file' onchange="readURL(this);")
+                        div(class="form-group")
+                            label(for="fileField" class="attachment")
+                                div(class="row btn-file")
+                                    div(class="btn-file__preview")
+                                    div(class="btn-file__actions")
+                                        div(class="btn-file__actions__item uk-text-center" )
+                                            div(class="btn-file__actions__item--shadow")
+                                                i(class="fa fa-plus fa-lg fa-fw" aria-hidden="true")
+                                                div(class="visible-xs-block" style="margin: auto auto")
+                                                    |Selecciona una imagen
+                                input(name="fileField" type="file" id="fileField")
     script.
-        var bar = document.getElementById('js-progressbar');
-        UIkit.upload('.js-upload', {
-            url: '',
-            multiple: true,
-            beforeSend: function () {
-                console.log('beforeSend', arguments);
-            },
-            beforeAll: function () {
-                console.log('beforeAll', arguments);
-            },
-            load: function () {
-                console.log('load', arguments);
-            },
-            error: function () {
-                console.log('error', arguments);
-            },
-            complete: function () {
-                console.log('complete', arguments);
-            },
-            loadStart: function (e) {
-                console.log('loadStart', arguments);
-
-                bar.removeAttribute('hidden');
-                bar.max = e.total;
-                bar.value = e.loaded;
-            },
-            progress: function (e) {
-                console.log('progress', arguments);
-
-                bar.max = e.total;
-                bar.value = e.loaded;
-            },
-            loadEnd: function (e) {
-                console.log('loadEnd', arguments);
-
-                bar.max = e.total;
-                bar.value = e.loaded;
-            },
-            completeAll: function () {
-                console.log('completeAll', arguments);
-
-                setTimeout(function () {
-                    bar.setAttribute('hidden', 'hidden');
-                }, 1000);
-
-                setTimeout(function () {
-                    texto1=document.getElementById('texto1');
-                    texto2=document.getElementById('texto2');
-                    texto1.innerHTML=' Imagen cargada con éxito.';
-                    texto2.innerHTML='';
-                    alert('Se ha cargado tu imagen correctamente.');
-                }, 1000);
-
-            }
+        jQuery(($) => {
+            $('.attachment input[type="file"]')
+                .on('change', (event) => {
+                let el = $(event.target).closest('.attachment').find('.btn-file');
+                el
+                .find('.btn-file__actions__item')
+                .css({
+                    'padding': '135px 0px'
+                });
+                $('.visible-xs-block').text("Carga completada");
+                el
+                .find('.btn-file__preview')
+                .css({
+                    'background-image': 'url(' + window.URL.createObjectURL(event.target.files[0]) + ')'
+                });
+                $('#blah').attr("src",window.URL.createObjectURL(event.target.files[0]));
+            });
         });

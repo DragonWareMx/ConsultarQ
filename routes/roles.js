@@ -13,4 +13,19 @@ router.get('/nuevo', isLoggedIn,function(req, res, next) {
     res.render('crearRol')
 });
 
+router.get('/', isLoggedIn,function(req, res, next) {
+    models.Role.findAll({
+        include: ["Users"]
+      }).then(roles => {
+        res.render('roles', { roles })
+    });
+    /*
+    models.Role.findAll({
+        include: { all:true}
+    }).then(roles => {
+        console.log(roles)
+        res.render('roles', { roles })
+    });*/
+});
+
 module.exports = router;

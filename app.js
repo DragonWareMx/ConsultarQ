@@ -28,17 +28,17 @@ app.set('views', [path.join(__dirname, 'views'),
 app.set('view engine', 'pug');
 
 var database = {
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_NAME
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 };
 
 // Middlewares
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-  //autenticacion
+//autenticacion
 app.use(session({
   secret: 'consultarq',
   resave: false,
@@ -51,24 +51,21 @@ app.use(passport.session());
 app.use(validator());
 
 // Global variables
-app.use( async (req, res, next) => {
+app.use(async (req, res, next) => {
   app.locals.messages = req.flash('message');
   app.locals.successes = req.flash('success');
 
-  try{
+  try {
     var usuario = await models.User.findOne({
       where: { id: req.user.id }, include: ["Employee"]
     });
 
     app.locals.user = usuario;
   }
-  catch(error){
+  catch (error) {
     console.log(error)
     app.locals.user = req.user
   }
-
-  console.log(app.locals.user)
-
   next();
 });
 

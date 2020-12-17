@@ -8,6 +8,20 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
+//subir archivos
+var multer = require('multer');
+var path = require('path')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+    }
+})
+var upload = multer({ storage: storage });
+
+
 /* GET users listing. */
 //TODOS LOS USUARIOS
 /*router.get('/', isLoggedIn, function (req, res, next) {
@@ -20,8 +34,9 @@ const models = require('../models/index');
 
 router.get('/', isLoggedIn, function (req, res, next) {
     models.User.findAll({
-      include: ["Employee"]
+        include: ["Employee"]
     }).then(usuarios => {
+        console.log(usuarios);
         res.render('usuarios', { usuarios })
     });
 });
@@ -40,7 +55,7 @@ router.post(
             .normalizeEmail(),
         check('password')
             .isLength({ min: 8, max: 24 })
-    ],
+    ], upload.single('file'),
     isLoggedIn,
     function (req, res, next) {
         //maneja los errores de la validacion
@@ -51,7 +66,7 @@ router.post(
         }
 
         //validar contrasenas iguales
-
+        console.log('Got body:', req.body);
         //autenticacion e insercion en la bd
         passport.authenticate('local.signup', {
             successRedirect: '/usuarios',
@@ -79,14 +94,13 @@ router.get('/editar/:id', isLoggedIn, function (req, res, next) {
     models.User
         .findOne({
             where: { id: id },
-            include:['Employee']
+            include: ['Employee']
         })
         .then(usuario => {
-            if(!usuario){
-               return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR 
+            if (!usuario) {
+                return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR
             }
-            console.log(usuario.Employee)
-            res.render('editarUsuario',{usuario})
+            res.render('editarUsuario', { usuario })
         })
 });
 
@@ -115,6 +129,14 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
     }).then(() => {
         res.send('Persona eliminada')
     })
+});
+
+
+router.post('/save', upload.single('fileField2'), (req, res) => {
+    console.log('BODY -----------------------------', req.body);
+    console.log('FILES--------------------------', req.files);
+    console.log('PARAMS------------------------', req.params);
+    res.sendStatus(200);
 });
 
 module.exports = router;
