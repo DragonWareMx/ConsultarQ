@@ -8,7 +8,7 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar usuario
             div(class="uk-animation-toggle" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast" onclick="window.history.go(-1); return false;")
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
@@ -78,7 +78,7 @@ block content
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
                             input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date")
                 div(class="uk-width-1 uk-flex-right uk-flex")
-                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize") Cancelar
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Agregar
                 div(id="modal-example" uk-modal="container: false")
                     div(class="uk-modal-dialog uk-modal-body")
