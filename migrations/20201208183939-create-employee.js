@@ -33,10 +33,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       int_number: {
-        allowNull: false,
         type: Sequelize.STRING(10)
       },
       ext_number: {
+        allowNull: false,
         type: Sequelize.STRING(10)
       },
       hiring_date: {

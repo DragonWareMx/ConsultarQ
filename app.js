@@ -8,6 +8,9 @@ const flash = require('connect-flash');
 const bodyParser = require('body-parser');
 const MySQLStore = require('express-mysql-session')(session);
 
+//sequelize models
+const models = require('./models/index');
+
 // Intializations
 var app = express();
 require('./lib/passport');
@@ -43,10 +46,17 @@ app.use(passport.session());
 app.use(validator());
 
 // Global variables
-app.use((req, res, next) => {
+app.use( async (req, res, next) => {
   app.locals.messages = req.flash('message');
   app.locals.successes = req.flash('success');
-  app.locals.user = req.user;
+
+  var usuario = await models.User.findOne({
+    where: { id: req.user.id }, include: ["Employee"]
+  });
+
+  console.log(usuario)
+
+  app.locals.user = usuario;
   next();
 });
 

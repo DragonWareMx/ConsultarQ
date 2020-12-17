@@ -13,10 +13,6 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING(320)
       },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
       password: {
         allowNull: false,
         type: Sequelize.STRING
@@ -30,8 +26,8 @@ module.exports = {
         references: {
           model: 'Employees',
           key: 'id',
-          onDelete: 'CASCADE'
         },
+        onDelete: 'CASCADE',
         allowNull: true
       },
       createdAt: {
