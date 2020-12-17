@@ -8,3 +8,20 @@
     border-radius: 5%;
     text-align:center !important;
 }
+
+@media(max-width:1340px){
+    .div-foto-perfil{
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    .div-datos-perfil{
+        width: 100%;
+        text-align: center;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+    .btn-status-perfil{
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
