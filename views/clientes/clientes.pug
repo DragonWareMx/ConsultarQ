@@ -38,27 +38,39 @@ block content
                                 img(src="/icons/edit.png" style="width:15px;height:15px;margin-top:3px" class="uk-margin-small-right")
                                 div Editar
                         div(id="row2")
-                            div(id="cotizacion" class="uk-flex uk-flex-inline uk-flex-middle") 
-                                div(class="uk-text-bold") Cotización
-                                div(class="uk-padding uk-text-small") cotizacion.pdf &nbsp;
+                            div(id="cotizacion" class="uk-flex uk-flex-top") 
+                                div(class="uk-text-bold uk-margin-right") Cotización
+                                div(class="uk-text-small uk-margin-left") cotizacion.pdf &nbsp;
                                     img(width="10" src="/icons/pdf.png")
-                            div(id="contratos" class="uk-flex uk-flex-inline uk-flex-middle") 
-                                div(class="uk-text-bold") Contratos
-                                div(class="uk-padding uk-text-small") contratonumero.pdf &nbsp;
+                            div(id="contratos" class="uk-flex uk-flex-top") 
+                                div(class="uk-text-bold uk-margin-right") Contratos
+                                div(class="uk-text-small uk-margin-left") contratonumero.pdf &nbsp;
                                     img(width="10" src="/icons/pdf.png")
-                    div(class="uk-card-footer uk-flex uk-flex-top uk-padding-small")
-                        div(class="uk-width-auto uk-margin-small-top")
-                            div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Proyecto:
-                        div(class="uk-width-expand uk-margin-small-left")
-                            div(class="uk-width-1 uk-margin-remove-top uk-flex  uk-flex-wrap" style="margin-bottom:5px")
-                                div(class="uk-width-3-4@l uk-margin-small-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
-                                    div(class="uk-text-small uk-text-default") Colegio Novel
-                                    div(class="uk-text-small uk-text-muted") Estatus:
-                                div(class="uk-width-1-4@l uk-flex uk-flex-center uk-flex-wrap")
-                                    span(class="uk-label uk-label-success uk-text-small") Activo
-                                    div(style="flex-basis:100%")
-                                    div(class="uk-text-small") Progreso 60%
-                            progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+                    div(class="uk-card-footer uk-padding-small ")
+                        div(class="uk-flex uk-flex-row")
+                            div(class="uk-width-3-4 uk-flex-inline")
+                                div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Proyecto
+                                div(class="uk-text-small uk-text-default") Colegio Novel
+                            div(class="uk-flex uk-flex-inline uk-flex-middle uk-width-1-4")
+                                div(class="uk-text-small uk-text-muted") Estatus:
+                                span(class="uk-label uk-label-success uk-text-small uk-margin-left") Activo
+                        div(style="uk-flex-inline uk-grid")
+                            progress( id="js-progressbar" class="uk-progress uk-width-expand" value="98" max="100")
+                            div(class="uk-width-auto uk-text-small") Progreso 60%                
+                                    //-     div(class="uk-text-small") Progreso 60%
+                                    //-     
+                                    //- div(class="uk-width-1-4@l uk-flex uk-flex-row")
+                                    //-     div(class="uk-text-small uk-text-muted") Estatus:
+                                    //-     span(class="uk-label uk-label-success uk-text-small") Activo
+                                    //-     div(style="flex-basis:100%")
+                                    //-     
+                                    //-     progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+                        div
+                            div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Miembros del proyecto
+                        div(class="uk-flex uk-flex-inline")
+                            img(class="uk-border-circle uk uk-margin-right" width="35" height="35" src="/img/iconos/default.png")
+                            img(class="uk-border-circle uk uk-margin-right" width="35" height="35" src="/img/iconos/default.png")
+
 
 
 
