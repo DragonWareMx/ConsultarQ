@@ -33,14 +33,23 @@ module.exports = {
         type: Sequelize.STRING
       },
       int_number: {
-        allowNull: false,
         type: Sequelize.STRING(10)
       },
       ext_number: {
+        allowNull: false,
         type: Sequelize.STRING(10)
       },
       hiring_date: {
         type: Sequelize.DATE
+      },
+      UserId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        allowNull: true
       },
       createdAt: {
         allowNull: false,

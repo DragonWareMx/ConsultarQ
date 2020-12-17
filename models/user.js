@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsTo(models.Employee, { foreignKey: 'employee_id'});
+      User.hasOne(models.Employee);
     }
   };
   User.init({
@@ -21,10 +21,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(320)
     },
     password: {
-      allowNull: false,
-      type: DataTypes.STRING
-    },
-    name: {
       allowNull: false,
       type: DataTypes.STRING
     },

@@ -20,6 +20,7 @@ const models = require('../models/index');
 
 router.get('/', isLoggedIn, function (req, res, next) {
     models.User.findAll({
+      include: ["Employee"]
     }).then(usuarios => {
         res.render('usuarios', { usuarios })
     });
@@ -50,8 +51,6 @@ router.post(
         }
 
         //validar contrasenas iguales
-
-        console.log(req.body)
 
         //autenticacion e insercion en la bd
         passport.authenticate('local.signup', {
