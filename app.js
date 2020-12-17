@@ -50,13 +50,20 @@ app.use( async (req, res, next) => {
   app.locals.messages = req.flash('message');
   app.locals.successes = req.flash('success');
 
-  var usuario = await models.User.findOne({
-    where: { id: req.user.id }, include: ["Employee"]
-  });
+  try{
+    var usuario = await models.User.findOne({
+      where: { id: req.user.id }, include: ["Employee"]
+    });
 
-  console.log(usuario)
+    app.locals.user = usuario;
+  }
+  catch(error){
+    console.log(error)
+    app.locals.user = req.user
+  }
 
-  app.locals.user = usuario;
+  console.log(app.locals.user)
+
   next();
 });
 

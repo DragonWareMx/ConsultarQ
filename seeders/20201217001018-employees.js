@@ -21,7 +21,8 @@ module.exports = {
       street: "Sierra nevada",
       int_number: "301",
       ext_number: "55",
-      hiring_date: "12-12-2020"
+      hiring_date: "12-12-2020",
+      UserId: 1
     }], {});
   },
 

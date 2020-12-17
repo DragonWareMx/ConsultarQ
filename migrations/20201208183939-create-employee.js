@@ -42,6 +42,15 @@ module.exports = {
       hiring_date: {
         type: Sequelize.DATE
       },
+      UserId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+        allowNull: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
