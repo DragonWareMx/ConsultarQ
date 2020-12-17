@@ -60,31 +60,16 @@ block content
                         div(class="uk-flex uk-flex-wrap uk-flex-middle")
                             div(class="uk-width-1-2@l uk-text-muted") Fecha de contratación
                             div(class="uk-width-1-2@l uk-text-emphasis") 02 de Enero de 2020
-            div(class="uk-card uk-card-default uk-width-1-2@m")
+            div(class="uk-card uk-card-default uk-width-expand uk-margin-small-right uk-margin-bottom")
                 div(class="uk-card-body uk-flex uk-flex-wrap uk-padding-small") 
-                    p(class="uk-text-muted") Últimos proyectos
-                    p(class="uk-text-emphasis") Nombre del proyecto
-                    <progress class="uk-progress" value="" max=""></progress>
-
-
-
-            //- <script>
-
-            //-     UIkit.util.ready(function () {
-
-            //-         var bar = document.getElementById('js-progressbar');
-
-            //-         var animate = setInterval(function () {
-
-            //-             bar.value += 10;
-
-            //-             if (bar.value >= bar.max) {
-            //-                 clearInterval(animate);
-            //-             }
-
-            //-         }, 1000);
-
-            //-     });
-
-            //- </script>
-                
+                    div(class="uk-text-muted uk-width-1-1") Últimos proyectos
+                    div(class="uk-width-1-1 uk-margin-small-left")
+                        div(class="uk-width-1 uk-margin-remove-top uk-flex  uk-flex-wrap" style="margin-bottom:5px")
+                            div(class="uk-width-3-4@l uk-margin-small-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
+                                div(class="uk-text-small uk-text-default") Colegio Novel
+                                div(class="uk-text-small uk-text-muted") Estatus:
+                            div(class="uk-width-1-4@l uk-flex uk-flex-center uk-flex-wrap")
+                                div(class="btn-status-active") ACTIVO
+                                div(style="flex-basis:100%")
+                                div(class="uk-text-small") Progreso 60%
+                        progress( id="js-progressbar" class="uk-progress" value="60" max="100")
