@@ -23,39 +23,39 @@ block content
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Nombre
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required)
+                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required value=`${user.name}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Teléfono
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required)
+                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required value=`${user.phone_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Ciudad
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required)
+                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required  value=`${user.city}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Estado
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required)
+                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required  value=`${user.state}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Colonia
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required)
+                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required  value=`${user.suburb}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Calle
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required)
+                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required  value=`${user.street}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Interior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number")
+                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number" required  value=`${user.int_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Exterior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" required)
+                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" value=`${user.ext_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Correo electrónico
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required)
+                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required value=`${user.email}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Contraseña
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
@@ -69,7 +69,7 @@ block content
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Rol
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" name="role" /*required*/)
+                            select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" name="role" /*required*/) 
                                 option(value="" disabled hidden selected ) Seleccionar
                                 option(value="arquitecto" ) Arquitecto
                                 option(value="adminisrador" ) Administrador

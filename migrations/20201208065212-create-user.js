@@ -13,10 +13,6 @@ module.exports = {
         unique: true,
         type: Sequelize.STRING(320)
       },
-      name: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
       password: {
         allowNull: false,
         type: Sequelize.STRING
@@ -24,15 +20,6 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('active', 'inactive'),
         defaultValue: 'active'
-      },
-      employee_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Employees',
-          key: 'id',
-          onDelete: 'CASCADE'
-        },
-        allowNull: true
       },
       createdAt: {
         allowNull: false,

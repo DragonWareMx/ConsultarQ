@@ -6,6 +6,10 @@ var validator = require('express-validator');
 const passport = require('passport');
 const flash = require('connect-flash');
 const bodyParser = require('body-parser');
+const MySQLStore = require('express-mysql-session')(session);
+
+//sequelize models
+const models = require('./models/index');
 
 // Intializations
 var app = express();
@@ -20,6 +24,13 @@ app.set('views', [path.join(__dirname, 'views'),
 );
 app.set('view engine', 'pug');
 
+var database = {
+	host: process.env.DB_HOST,
+	user: process.env.DB_USER,
+	password: process.env.DB_PASSWORD,
+	database: process.env.DB_NAME
+};
+
 // Middlewares
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
@@ -29,6 +40,7 @@ app.use(session({
   secret: 'consultarq',
   resave: false,
   saveUninitialized: false,
+  store: new MySQLStore(database)
 }));
 app.use(flash());
 app.use(passport.initialize());
@@ -36,10 +48,24 @@ app.use(passport.session());
 app.use(validator());
 
 // Global variables
-app.use((req, res, next) => {
+app.use( async (req, res, next) => {
   app.locals.messages = req.flash('message');
   app.locals.successes = req.flash('success');
-  app.locals.user = req.user;
+
+  try{
+    var usuario = await models.User.findOne({
+      where: { id: req.user.id }, include: ["Employee"]
+    });
+
+    app.locals.user = usuario;
+  }
+  catch(error){
+    console.log(error)
+    app.locals.user = req.user
+  }
+
+  console.log(app.locals.user)
+
   next();
 });
 
