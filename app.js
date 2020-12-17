@@ -18,7 +18,8 @@ require('./lib/passport');
 // Settings
 //app.set('port', process.env.PORT || 4000);
 app.set('views', [path.join(__dirname, 'views'),
-                  path.join(__dirname, 'views/usuarios')]
+                  path.join(__dirname, 'views/usuarios'),
+                  path.join(__dirname, 'views/roles')]
 );
 app.set('view engine', 'pug');
 
@@ -71,6 +72,7 @@ app.use( async (req, res, next) => {
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
 app.use('/usuarios',require('./routes/users'));
+app.use('/roles',require('./routes/roles'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));

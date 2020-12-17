@@ -23,39 +23,39 @@ block content
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Nombre
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required value=`${user.name}`)
+                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required value=`${usuario.Employee.name}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Teléfono
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required value=`${user.phone_number}`)
+                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required value=`${usuario.Employee.phone_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Ciudad
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required  value=`${user.city}`)
+                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required  value=`${usuario.Employee.city}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Estado
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required  value=`${user.state}`)
+                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required  value=`${usuario.Employee.state}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Colonia
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required  value=`${user.suburb}`)
+                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required  value=`${usuario.Employee.suburb}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Calle
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required  value=`${user.street}`)
+                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required  value=`${usuario.Employee.street}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Interior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number" required  value=`${user.int_number}`)
+                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number" required  value=`${usuario.Employee.int_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") No. Exterior
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" value=`${user.ext_number}`)
+                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" value=`${usuario.Employee.ext_number}`)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Correo electrónico
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required value=`${user.email}`)
+                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required value=usuario.email)
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Contraseña
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
@@ -72,11 +72,11 @@ block content
                             select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" name="role" /*required*/) 
                                 option(value="" disabled hidden selected ) Seleccionar
                                 option(value="arquitecto" ) Arquitecto
-                                option(value="adminisrador" ) Administrador
+                                option(value="adminisrador") Administrador
                     div(class="uk-flex uk-flex-wrap uk-flex-middle")
                         div(class="uk-width-2-5@l uk-margin-small-bottom") Fecha de contratación
                         div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date")
+                            input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date" value=usuario.Employee.hiring_date)
                 div(class="uk-width-1 uk-flex-right uk-flex")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Agregar
