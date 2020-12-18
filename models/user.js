@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       User.hasOne(models.Employee);
+      User.belongsTo(models.Role);
     }
   };
   User.init({
@@ -22,6 +23,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     password: {
       allowNull: false,
+      type: DataTypes.STRING
+    },
+    picture: {
       type: DataTypes.STRING
     },
     status: {

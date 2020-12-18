@@ -17,9 +17,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      picture: {
+        type: Sequelize.STRING
+      },
       status: {
         type: Sequelize.ENUM('active', 'inactive'),
         defaultValue: 'active'
+      },
+      RoleId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Roles',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,

@@ -1,7 +1,7 @@
 extends ../main
 
 block head
-    title ConsultarQ - Crear Usuario
+    title ConsultarQ - Usuarios
 
 block content
     div(class="uk-container")
@@ -10,14 +10,17 @@ block content
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="/usuarios/nuevo")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Agregar usuario
+                    div Usuarios
         div(class="uk-child-width-1-2@s" uk-grid)
             each usuario in usuarios
                 div
                     div(class="uk-card uk-card-default uk-width-1")
                         div(class="uk-card-body uk-flex uk-flex-top uk-padding-small")
                             div(class="uk-width-auto")
-                                img(src="/img/iconos/default.png" alt=":c" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                                if usuario.picture
+                                     img(src="/uploads/"+usuario.picture alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                                else
+                                    img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                             div(class="uk-width-expand uk-margin-small-left")
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
                                     div #{usuario.Employee.name}

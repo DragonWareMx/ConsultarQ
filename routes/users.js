@@ -8,6 +8,20 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
+//subir archivos
+var multer = require('multer');
+var path = require('path')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+    }
+})
+var upload = multer({ storage: storage });
+
+
 /* GET users listing. */
 //TODOS LOS USUARIOS
 /*router.get('/', isLoggedIn, function (req, res, next) {
@@ -20,8 +34,9 @@ const models = require('../models/index');
 
 router.get('/', isLoggedIn, function (req, res, next) {
     models.User.findAll({
-      include: ["Employee"]
+        include: ["Employee"]
     }).then(usuarios => {
+        console.log(usuarios);
         res.render('usuarios', { usuarios })
     });
 });
@@ -31,36 +46,36 @@ router.get('/nuevo', isLoggedIn, function (req, res, next) {
     res.render('nuevoUsuario')
 });
 
-router.post(
-    '/nuevo',
-    //validacion backend
-    [
-        check('email')
-            .isEmail()
-            .normalizeEmail(),
-        check('password')
-            .isLength({ min: 8, max: 24 })
-    ],
-    isLoggedIn,
-    function (req, res, next) {
-        //maneja los errores de la validacion
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            console.log(errors);
-            return res.status(422).json({ errors: errors.array() });
-        }
+// router.post(
+//     '/nuevo',
+//     //validacion backend
+//     [
+//         check('email')
+//             .isEmail()
+//             .normalizeEmail(),
+//         check('password')
+//             .isLength({ min: 8, max: 24 })
+//     ], upload.single('file'),
+//     isLoggedIn,
+//     function (req, res, next) {
+//         //maneja los errores de la validacion
+//         const errors = validationResult(req);
+//         if (!errors.isEmpty()) {
+//             console.log(errors);
+//             return res.status(422).json({ errors: errors.array() });
+//         }
 
-        //validar contrasenas iguales
-
-        //autenticacion e insercion en la bd
-        passport.authenticate('local.signup', {
-            successRedirect: '/usuarios',
-            failureRedirect: '/inicio',
-            failureFlash: true,
-            session: false
-        })(req, res, next);
-    }
-);
+//         //validar contrasenas iguales
+//         console.log('Got body:', req.body);
+//         //autenticacion e insercion en la bd
+//         passport.authenticate('local.signup', {
+//             successRedirect: '/usuarios',
+//             failureRedirect: '/inicio',
+//             failureFlash: true,
+//             session: false
+//         })(req, res, next);
+//     }
+// );
 
 //VER USUARIO ID
 router.get('/:id', isLoggedIn, function (req, res, next) {
@@ -79,14 +94,13 @@ router.get('/editar/:id', isLoggedIn, function (req, res, next) {
     models.User
         .findOne({
             where: { id: id },
-            include:['Employee']
+            include: ['Employee']
         })
         .then(usuario => {
-            if(!usuario){
-               return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR 
+            if (!usuario) {
+                return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR
             }
-            console.log(usuario.Employee)
-            res.render('editarUsuario',{usuario})
+            res.render('editarUsuario', { usuario })
         })
 });
 
@@ -116,5 +130,40 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
         res.send('Persona eliminada')
     })
 });
+
+
+router.post('/nuevo', isLoggedIn, upload.single('fileField'),
+    [
+        check('email')
+            .isEmail().withMessage('Correo electrónico no válido.')
+            .normalizeEmail(),
+        check('password')
+            .isLength({ min: 8, max: 24 }).withMessage('La contraseña debe tener minimo 8 caracteres y máximo 24 caracteres.')
+    ]
+    , (req, res, next) => {
+        // console.log('BODY -----------------------------', req.body);
+        // console.log('FILES--------------------------', req.files);
+        // if (req.file) {
+        //     var filename = res.req.file.filename;
+        //     console.log('AQUI ESTA EL FILE NAME ----------------------------', filename);
+        // }
+        // console.log('PARAMS------------------------', req.params);
+        //Validacion
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            console.log(errors.array());
+            return res.render("nuevoUsuario", {
+                messages: errors.array()
+            });
+        }
+        //autenticacion e insercion en la bd
+        passport.authenticate('local.signup', {
+            successRedirect: '/usuarios',
+            failureRedirect: '/usuarios/nuevo',
+            failureFlash: true,
+            session: false
+        })(req, res, next);
+    }
+);
 
 module.exports = router;

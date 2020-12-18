@@ -1,0 +1,85 @@
+extends ../main
+
+block head
+    title ConsultarQ - Crear Usuario
+
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Directorio de clientes
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake")
+                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Agregar cliente
+    
+        div(class="uk-child-width-1-2 uk-grid")
+            div(id="card-conteiner" class="uk-padding-small") 
+                div(class="uk-card uk-card-default ")
+                    div(class="uk-card-body uk-padding-small")
+                        div(id="row1" class="uk-flex")
+                            div(id="img" class="uk-padding-small")
+                                img(class="uk-border-circle uk" width="100" height="100" src="/img/iconos/default.png")
+                            div(id="datosClient" class="uk-flex uk-flex-column uk-padding-small") 
+                                div(id="name" class="uk-text-bold uk-text-large")
+                                    |Oscar Quevedo  &nbsp;
+                                    span(class="uk-label uk-label-success uk-text-small") Activo
+                                div(id="phone") 
+                                    img(width="15" height="15" src="/icons/phone.png") 
+                                    |&nbsp;4325980444
+                                div(id="mail")
+                                    img(width="15" height="15" src="/icons/mail.png") 
+                                    |&nbsp;oskiq@micasa.mx
+                                div(id="date-area") 
+                                    img(class="uk-padding-right-small" width="15" height="15" src="/icons/dateGray.png")
+                                    |&nbsp;16/12/2020 &nbsp;
+                                    img(class="uk-padding-rigth-small" width="10" height="10" src="/icons/card.png")
+                                    |&nbsp;Área
+                            a(class="uk-text-right uk-margin-auto-left uk-margin-remove-right uk-flex-inline uk-flex uk-text-primary uk-link-heading uk-animation-shake")
+                                img(src="/icons/edit.png" style="width:15px;height:15px;margin-top:3px" class="uk-margin-small-right")
+                                div Editar
+                        div(id="row2")
+                            div(id="cotizacion" class="uk-flex uk-flex-top") 
+                                div(class="uk-text-bold uk-margin-right") Cotización
+                                div(class="uk-text-small uk-margin-left") cotizacion.pdf &nbsp;
+                                    img(width="10" src="/icons/pdf.png")
+                            div(id="contratos" class="uk-flex uk-flex-top") 
+                                div(class="uk-text-bold uk-margin-right") Contratos
+                                div(class="uk-text-small uk-margin-left") contratonumero.pdf &nbsp;
+                                    img(width="10" src="/icons/pdf.png")
+                    div(class="uk-card-footer uk-padding-small ")
+                        div(class="uk-flex uk-flex-row")
+                            div(class="uk-width-3-4 uk-flex-inline")
+                                div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Proyecto
+                                div(class="uk-text-small uk-text-default") Colegio Novel
+                            div(class="uk-flex uk-flex-inline uk-flex-middle uk-width-1-4")
+                                div(class="uk-text-small uk-text-muted") Estatus:
+                                span(class="uk-label uk-label-success uk-text-small uk-margin-left") Activo
+                        div(style="uk-flex-inline uk-grid")
+                            progress( id="js-progressbar" class="uk-progress uk-width-expand" value="98" max="100")
+                            div(class="uk-width-auto uk-text-small") Progreso 60%                
+                                    //-     div(class="uk-text-small") Progreso 60%
+                                    //-     
+                                    //- div(class="uk-width-1-4@l uk-flex uk-flex-row")
+                                    //-     div(class="uk-text-small uk-text-muted") Estatus:
+                                    //-     span(class="uk-label uk-label-success uk-text-small") Activo
+                                    //-     div(style="flex-basis:100%")
+                                    //-     
+                                    //-     progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+                        div
+                            div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Miembros del proyecto
+                        div(class="uk-flex uk-flex-inline")
+                            img(class="uk-border-circle uk uk-margin-right" width="35" height="35" src="/img/iconos/default.png")
+                            img(class="uk-border-circle uk uk-margin-right" width="35" height="35" src="/img/iconos/default.png")
+
+
+
+
+            
+
+        //- each usuario in usuarios
+        //- uk-grid (papá) e hijos uk-width-n-n
+        //- uk-width-auto
+        //- uk-width-expand
+        //- para responsivo al width al final @s/m/l/xl
+        //- Oscar ya tiene un modal en agregar usuario
+        //- Leo tiene madrecita de avance en usuarios o ver usuarios

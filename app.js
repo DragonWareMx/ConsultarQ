@@ -19,22 +19,29 @@ require('./lib/passport');
 //app.set('port', process.env.PORT || 4000);
 app.set('views', [path.join(__dirname, 'views'),
                   path.join(__dirname, 'views/usuarios'),
-                  path.join(__dirname, 'views/roles')]
+                  path.join(__dirname, 'views/profile'),
+                  path.join(__dirname, 'views/roles'),
+                  path.join(__dirname, 'views/clientes'),
+                  path.join(__dirname, 'views/servicios'),
+                ]
 );
 app.set('view engine', 'pug');
 
 var database = {
-	host: process.env.DB_HOST,
-	user: process.env.DB_USER,
-	password: process.env.DB_PASSWORD,
-	database: process.env.DB_NAME
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  checkExpirationInterval: 1800000,
+  clearExpired: true,
+  expiration: 1800000
 };
 
 // Middlewares
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-  //autenticacion
+//autenticacion
 app.use(session({
   secret: 'consultarq',
   resave: false,
@@ -47,24 +54,21 @@ app.use(passport.session());
 app.use(validator());
 
 // Global variables
-app.use( async (req, res, next) => {
+app.use(async (req, res, next) => {
   app.locals.messages = req.flash('message');
   app.locals.successes = req.flash('success');
 
-  try{
+  try {
     var usuario = await models.User.findOne({
       where: { id: req.user.id }, include: ["Employee"]
     });
 
     app.locals.user = usuario;
   }
-  catch(error){
+  catch (error) {
     console.log(error)
     app.locals.user = req.user
   }
-
-  console.log(app.locals.user)
-
   next();
 });
 
@@ -72,7 +76,10 @@ app.use( async (req, res, next) => {
 app.use(require('./routes/index'));
 app.use(require('./routes/authentication'));
 app.use('/usuarios',require('./routes/users'));
+app.use('/perfil',require('./routes/perfil'));
 app.use('/roles',require('./routes/roles'));
+app.use('/clientes',require('./routes/clientes'));
+app.use('/servicios',require('./routes/servicios'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));

@@ -1,0 +1,89 @@
+extends ../main
+
+block head
+    title ConsultarQ - Servicios
+
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Cartera de servicios
+            div(class="uk-animation-toggle" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-animation-fast")
+                    img(src="/img/iconos/more.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
+                    div Agregar servicio
+        div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top" uk-grid)
+            div
+                div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
+                    div(class="uk-card-header uk-card-primary" style="padding:8px") COMPARTIR CARTERA DE SERVICIOS
+                    div(class="uk-width-1-1 uk-flex flex-wrap div-service-res-wrap" style="padding:10px")    
+                        div(class="uk-width-3-5@l uk-flex uk-flex-wrap div-service-res") 
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;")
+                                img(src="/img/iconos/pdfGray.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                                |ConsultarQ_Servicios.pdf
+                            div(class="uk-width-1-2 uk-flex uk-flex-middle uk-text-small")
+                                a(href="#")
+                                    img(src="/img/iconos/edit.png" style="width:10px;height:10px;" class="uk-margin-small-right") 
+                                    |Editar pdf
+                        div(class="uk-width-2-5@l uk-flex uk-flex-wrap div-compartir-service div-service-res")
+                            div(class="uk-width-1-1 uk-text-mute uk-text-bold") Compartir en:
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;") 
+                                img(src="/img/iconos/whats.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                                |WhatsApp
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;")
+                                img(src="/img/iconos/mssg.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                                |Messenger
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;")
+                                img(src="/img/iconos/gmail.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                                |Correo electrónico
+            div
+                div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
+                    div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px;") 
+                        img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
+                        |Supervisión de la obra
+                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                            img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                            |Editar
+                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
+                            img(src="/img/iconos/edit.png" style="width:15px;height:15px;") 
+                    div(class="uk-width-1-1 uk-flex flex-wrap " style="padding:10px; padding-left:40px; padding-bottom:0px")
+                        div(class="uk-width-1-1 uk-text-mute uk-text-bold") Elaboración de:
+                            ul(class="uk-text-normal")
+                                li Revisión y análisis de la documentación contractual
+                                li Revisón del proyecto ejecutivo
+                                li Manejo de bitácora
+                                li Control de estimaciones de obra...
+            div
+                div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
+                    div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px") 
+                        img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
+                        |Ingeniería de costos
+                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                            img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                            |Editar
+                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
+                            img(src="/img/iconos/edit.png" style="width:15px;height:15px;") 
+                    div(class="uk-width-1-1 uk-flex flex-wrap " style="padding:10px; padding-left:40px; padding-bottom:0px")
+                        div(class="uk-width-1-1 uk-text-mute uk-text-bold") Elaboración de:
+                            ul(class="uk-text-normal")
+                                li Catálogo de conceptos
+                                li Presupuesto base
+                                li Cuantificación de proyectos de contrucción
+                                li Licitaciones de obra pública y privada...
+            div
+                div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
+                    div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px") 
+                        img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
+                        |Gestión urbana asistida
+                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                            img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                            |Editar
+                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
+                            img(src="/img/iconos/edit.png" style="width:15px;height:15px;") 
+                    div(class="uk-width-1-1 uk-flex flex-wrap " style="padding:10px; padding-left:40px; padding-bottom:0px")
+                        div(class="uk-width-1-1 uk-text-mute uk-text-bold") Elaboración de:
+                            ul(class="uk-text-normal")
+                                li Regulación urbana
+                                li Licencias de construcción
+                                li Fraccionamientos y nomenclatura
+                                li Estudios técnicos y justificativos...
+            
