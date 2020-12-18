@@ -135,8 +135,8 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
 router.post('/nuevo', isLoggedIn, upload.single('fileField'),
     [
         check('email')
-            .isEmail().withMessage('Correo electrónico no válido.')
-            .normalizeEmail(),
+            .isEmail()
+            .normalizeEmail().withMessage('Correo electrónico no válido.'),
         check('password')
             .isLength({ min: 8, max: 24 }).withMessage('La contraseña debe tener minimo 8 caracteres y máximo 24 caracteres.')
     ]
@@ -151,19 +151,28 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
         //Validacion
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors.array());
-            return res.render("nuevoUsuario", {
-                messages: errors.array()
-            });
+            return res.status(422).send( errors.array() );
+            // return res.render("nuevoUsuario", {
+            //     messages: errors.array()
+            // });
         }
         //autenticacion e insercion en la bd
-        passport.authenticate('local.signup', {
-            successRedirect: '/usuarios',
-            failureRedirect: '/usuarios/nuevo',
-            failureFlash: true,
-            session: false
+    //     passport.authenticate('local.signup', {
+    //         successRedirect: '/usuarios',
+    //         failureFlash: true,
+    //         session: false
+    //     })(req, res, next);
+    // }
+    //);
+    passport.authenticate('local.signup', function(error, user, info) {
+            if(error) {
+                return res.status(500).json([{msg: 'Ocurrió un error al intentar registrar el usuario.'}]);
+            }
+            if(!user) {
+                return res.status(401).json(info);
+            }
+            res.json(user);
         })(req, res, next);
-    }
-);
+    });
 
 module.exports = router;

@@ -66,7 +66,6 @@ app.use(async (req, res, next) => {
     app.locals.user = usuario;
   }
   catch (error) {
-    console.log(error)
     app.locals.user = req.user
   }
   next();
