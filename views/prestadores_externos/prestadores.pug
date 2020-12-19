@@ -303,3 +303,8 @@ block content
                 li(class="uk-margin-auto-left")
                     a(href="#") Siguiente
                         span(class="uk-margin-small-left" uk-pagination-next)
+        div(class="uk-width-1-1")
+            each prestador in prestadores
+                ul
+                    li #{prestador.name}
+                    li #{prestador.id}
