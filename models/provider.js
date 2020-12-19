@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Provider.belongsTo(models.Provider_Area)
     }
   };
   Provider.init({
