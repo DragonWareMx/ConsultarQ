@@ -165,6 +165,7 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors').css('display', 'block');
+                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors');
                         errorsContainer.innerHTML = '';
