@@ -11,14 +11,16 @@ block content
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast" onclick="window.history.go(-1); return false;")
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
-        if messages
-              for message, i in messages
-                div(class="uk-alert-danger" uk-alert) 
-                    a(class="uk-alert-close" uk-close)
-                    p #{ message.msg }
+        //- if messages
+        //-       for message, i in messages
+        //-         div(class="uk-alert-danger" uk-alert) 
+        //-             a(class="uk-alert-close" uk-close)
+        //-             p #{ message.msg }
+
+        div(id="errors")
 
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
-            form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+            form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" id="formulario" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
                 div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom uk-flex-wrap uk-flex-column uk-flex-top")
                     img(src="/img/iconos/default.png" alt="" id="blah" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
                     a(href="#modal-example" uk-toggle class="uk-flex uk-flex-center uk-flex-middle uk-width-1")
@@ -85,7 +87,7 @@ block content
                             input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date")
                 div(class="uk-width-1 uk-flex-right uk-flex")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
-                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Agregar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
                 div(id="modal-example" uk-modal="container: false")
                     div(class="uk-modal-dialog uk-modal-body")
                         //- input(type='file' onchange="readURL(this);")
@@ -117,5 +119,67 @@ block content
                     'background-image': 'url(' + window.URL.createObjectURL(event.target.files[0]) + ')'
                 });
                 $('#blah').attr("src",window.URL.createObjectURL(event.target.files[0]));
+            });
+        });
+        
+        $(document).ready(function () {
+
+            $("#formulario").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        alert('Usuario registrado');
+                        window.location.href = window.location.origin + '/usuarios'
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
             });
         });

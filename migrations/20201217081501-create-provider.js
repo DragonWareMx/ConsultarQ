@@ -20,6 +20,15 @@ module.exports = {
       phone_number: {
         type: Sequelize.STRING
       },
+      Provider_AreaId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Provider_Areas',
+          key: 'id',
+        },
+        allowNull: true
+      },
       status: {
         type: Sequelize.ENUM('active','inactive')
       },
