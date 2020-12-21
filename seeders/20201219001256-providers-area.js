@@ -11,20 +11,24 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Provider_areas', [
+    await queryInterface.bulkInsert('Provider_Areas', [
       {
+        id: 1,
         name: 'Plomeria',
         description: "Descripcion del area de plomeria"
       },
       {
+        id: 3,
         name: 'Materiales',
         description: "Descripcion del area de materiales"
       },
       {
+        id: 2,
         name: 'Herreria',
         description: "Descripcion del area de herreria"
       },
       {
+        id: 4,
         name: 'Carpinteria',
         description: "Descripcion del area de carpinteria"
       }

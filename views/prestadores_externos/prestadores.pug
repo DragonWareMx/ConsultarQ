@@ -2,6 +2,7 @@ extends ../main
 
 block head
     title Prestadores Externos
+    script(src="javascripts/prestadores.js")
 
 block content
     div(class="uk-container")
@@ -39,60 +40,12 @@ block content
                                     th(class="uk-text-center") ÁREA
                                     th(class="uk-text-center") TELÉFONO
                             tbody
-                                tr
-                                    td 
-                                        a(href="#modal-info" uk-toggle) 1
-                                    td
-                                        a(href="#modal-info" uk-toggle) Jose Adolfo Lemus Magana
-                                    td
-                                        a(href="#modal-info" uk-toggle) Plomeria
-                                    td
-                                        a(href="#modal-info" uk-toggle) 4433123456
-                                tr
-                                    td 2
-                                    td Dulce Gabriela Marin Rendon
-                                    td Carpinteria
-                                    td 4433123456
-                                tr
-                                    td 3
-                                    td Oscar Andre Huerta Garcia
-                                    td Carpinteria
-                                    td 4433123456
-                                tr
-                                    td 4
-                                    td Leonardo Danien Lopez Lopez
-                                    td Electrisista
-                                    td 4433123456
-                                tr
-                                    td 5
-                                    td Jose Agustin Aguilar Solorzano
-                                    td Herreria
-                                    td 4433123456
-                                tr
-                                    td 6
-                                    td Fernando Adrian Garcia Sanchez
-                                    td Herreria
-                                    td 4433123456
-                                tr
-                                    td 6
-                                    td Fernando Adrian Garcia Sanchez
-                                    td Herreria
-                                    td 4433123456
-                                tr
-                                    td 6
-                                    td Fernando Adrian Garcia Sanchez
-                                    td Herreria
-                                    td 4433123456
-                                tr
-                                    td 6
-                                    td Fernando Adrian Garcia Sanchez
-                                    td Herreria
-                                    td 4433123456
-                                tr
-                                    td 6
-                                    td Fernando Adrian Garcia Sanchez
-                                    td Herreria
-                                    td 4433123456
+                                each prestador in prestadores
+                                    tr(href="#modal-info" uk-toggle)
+                                        td #{prestador.id}
+                                        td #{prestador.name}
+                                        td #{prestador.Provider_Area.name}
+                                        td #{prestador.phone_number}
             //- informacion completa
             div(id="modal-info" class="uk-flex-top" uk-modal)
                 div(class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical")
@@ -110,7 +63,7 @@ block content
                                 div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
                                     div()
                                         | ID
-                                    label() 
+                                    label()
                                         | 1
                                 div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
                                     div()
@@ -303,8 +256,8 @@ block content
                 li(class="uk-margin-auto-left")
                     a(href="#") Siguiente
                         span(class="uk-margin-small-left" uk-pagination-next)
+    //-
         div(class="uk-width-1-1")
             each prestador in prestadores
-                ul
-                    li #{prestador.name}
-                    li #{prestador.id}
+                p #{prestador}
+                    

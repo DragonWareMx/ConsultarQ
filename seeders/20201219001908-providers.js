@@ -17,6 +17,7 @@ module.exports = {
           dro: "12345678",
           email: "adolfo@ejemplo.com",
           phone_number: "4455667788",
+          ProviderAreaId: 1,
           status: 'active'
         },
         {
@@ -24,6 +25,7 @@ module.exports = {
           dro: "23456789",
           email: "oscar@ejemplo.com",
           phone_number: "5566778899",
+          ProviderAreaId: 2,
           status: 'active'
         },
         {
@@ -31,6 +33,7 @@ module.exports = {
           dro: "34567890",
           email: "leo@ejemplo.com",
           phone_number: "9955667788",
+          ProviderAreaId: 4,
           status: 'inactive'
         }
       ], {});
