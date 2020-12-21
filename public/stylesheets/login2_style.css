@@ -1,0 +1,11 @@
+.div-blue-logo{
+    background:        url(/img/fondo5-1.png);
+    background-size:   cover;
+    background-repeat: no-repeat;
+    display:           flex;
+    height: 470px;
+}
+.img-logo-q{
+    width: 194px;
+    height: 70px;
+}

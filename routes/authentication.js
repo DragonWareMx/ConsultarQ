@@ -11,6 +11,10 @@ router.get('/login' , isNotLoggedIn ,(req,res,next) => {
     res.render('login', { title: 'Iniciar sesión' });
 });
 
+router.get('/login2' , isNotLoggedIn ,(req,res,next) => {
+    res.render('login2', { title: 'Iniciar sesión' });
+});
+
 router.post('/login', isNotLoggedIn ,(req, res, next) =>{
     passport.authenticate('local.signin',{
         successRedirect: '/inicio',
