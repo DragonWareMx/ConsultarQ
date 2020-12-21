@@ -19,19 +19,19 @@ var storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
     }
 })
-var upload = multer({ storage: storage });
+var upload = multer({ storage: storage, fileFilter:  (req, file, cb) => {
+    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
+      cb(null, true);
+    } else {
+      cb(null, false);
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+    }
+  }
+});
 
 
 /* GET users listing. */
 //TODOS LOS USUARIOS
-/*router.get('/', isLoggedIn, function (req, res, next) {
-    models.User.findAll({
-        include: ["employee"],
-    }).then(usuarios => {
-        res.send(usuarios)
-    });
-});*/
-
 router.get('/', isLoggedIn, function (req, res, next) {
     models.User.findAll({
         include: ["Employee"]
@@ -45,37 +45,6 @@ router.get('/', isLoggedIn, function (req, res, next) {
 router.get('/nuevo', isLoggedIn, function (req, res, next) {
     res.render('nuevoUsuario')
 });
-
-// router.post(
-//     '/nuevo',
-//     //validacion backend
-//     [
-//         check('email')
-//             .isEmail()
-//             .normalizeEmail(),
-//         check('password')
-//             .isLength({ min: 8, max: 24 })
-//     ], upload.single('file'),
-//     isLoggedIn,
-//     function (req, res, next) {
-//         //maneja los errores de la validacion
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//             console.log(errors);
-//             return res.status(422).json({ errors: errors.array() });
-//         }
-
-//         //validar contrasenas iguales
-//         console.log('Got body:', req.body);
-//         //autenticacion e insercion en la bd
-//         passport.authenticate('local.signup', {
-//             successRedirect: '/usuarios',
-//             failureRedirect: '/inicio',
-//             failureFlash: true,
-//             session: false
-//         })(req, res, next);
-//     }
-// );
 
 //VER USUARIO ID
 router.get('/:id', isLoggedIn, function (req, res, next) {
@@ -135,35 +104,25 @@ router.delete('/:id', isLoggedIn, function (req, res, next) {
 router.post('/nuevo', isLoggedIn, upload.single('fileField'),
     [
         check('email')
-            .isEmail().withMessage('Correo electrónico no válido.')
-            .normalizeEmail(),
+            .isEmail()
+            .normalizeEmail().withMessage('Correo electrónico no válido.'),
         check('password')
             .isLength({ min: 8, max: 24 }).withMessage('La contraseña debe tener minimo 8 caracteres y máximo 24 caracteres.')
     ]
     , (req, res, next) => {
-        // console.log('BODY -----------------------------', req.body);
-        // console.log('FILES--------------------------', req.files);
-        // if (req.file) {
-        //     var filename = res.req.file.filename;
-        //     console.log('AQUI ESTA EL FILE NAME ----------------------------', filename);
-        // }
-        // console.log('PARAMS------------------------', req.params);
-        //Validacion
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            console.log(errors.array());
-            return res.render("nuevoUsuario", {
-                messages: errors.array()
-            });
+            return res.status(422).send( errors.array() );
         }
-        //autenticacion e insercion en la bd
-        passport.authenticate('local.signup', {
-            successRedirect: '/usuarios',
-            failureRedirect: '/usuarios/nuevo',
-            failureFlash: true,
-            session: false
+        passport.authenticate('local.signup', function(error, user, info) {
+            if(error) {
+                return res.status(500).json([{msg: 'Ocurrió un error al intentar registrar el usuario.'}]);
+            }
+            if(!user) {
+                return res.status(401).json(info);
+            }
+            res.json(user);
         })(req, res, next);
-    }
-);
+    });
 
 module.exports = router;
