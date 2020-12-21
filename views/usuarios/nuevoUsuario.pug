@@ -13,7 +13,7 @@ block content
                     div Regresar
         //- if messages
         //-       for message, i in messages
-        //-         div(class="uk-alert-danger" uk-alert) 
+        //-         div(class="uk-alert-danger" uk-alert)
         //-             a(class="uk-alert-close" uk-close)
         //-             p #{ message.msg }
 
@@ -28,64 +28,51 @@ block content
                         div() Agregar foto
                 div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Nombre
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Nombre completo" id="name" name="name" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Teléfono
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="10 dígitos" id="phone_number" name="phone_number" type="number" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Ciudad
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Ciudad"  id="city" name="city" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Estado
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Estado" id="state" name="state" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Colonia
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Colonia" id="suburb" name="suburb" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Calle
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="Calle" id="street" name="street" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") No. Interior
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Interior" id="int_number" name="int_number")
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") No. Exterior
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="No. Exterior" id="ext_number" name="ext_number" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Correo electrónico
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" placeholder="correo@ejemplo.com" autocomplete="off" type="email" id="email" name="email" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Contraseña
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="password" placeholder="Mínimo 8 caracteres" autocomplete="off" id="password" name="password" required)
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Confirmar contraseña
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="password" autocomplete="off" id="password-confirm" name="password-confirm" required)
+                    .field
+                        input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='name' title='Nombre Completo' data-title='Nombre Completo')
+                    .field
+                        input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
+                    .field
+                        input(type='text' autocomplete='on' id="city" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='city' title='Ciudad' data-title='Ciudad')
+                    .field
+                        input(type='text' autocomplete='on' id="state" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='state' title='Estado' data-title='Estado')
+                    .field
+                       input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                       label(for='suburb' title='Colonia' data-title='Colonia')
+                    .field
+                        input(type='text' autocomplete='on'  id="street" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='street' title='Calle' data-title='Calle')
+                    .field
+                        input(type='text' autocomplete='on'  id="ext_number" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='ext_number' title='No. Exterior' data-title='No. Exterior')
+                    .field
+                        input(type='text' autocomplete='on'  id="int_number" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
+                        label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
+                    .field
+                        input(type='email' autocomplete='on'  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                    .field
+                        input(type='password' autocomplete='off'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                    .field
+                        input(type='password' autocomplete='off'  id="password-confirm" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
                 div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-text-left uk-text-primary uk-margin-bottom") CONSULTARQ
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Rol
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            select(class="uk-select uk-form-small" placeholder="Arquitecto" id="role" name="role" /*required*/)
-                                option(value="" disabled hidden selected ) Seleccionar
-                                option(value="arquitecto" ) Arquitecto
-                                option(value="adminisrador" ) Administrador
-                    div(class="uk-flex uk-flex-wrap uk-flex-middle")
-                        div(class="uk-width-2-5@l uk-margin-small-bottom") Fecha de contratación
-                        div(class="uk-width-3-5@l uk-margin-small-bottom")
-                            input(class="uk-input uk-form-small" type="date" id="hiring_date" name="hiring_date")
-                div(class="uk-width-1 uk-flex-right uk-flex")
+                    .field
+                        select(id="role" name="role" autocomplete='off' value='' /*required*/)
+                            option(value="" disabled hidden selected ) Seleccionar
+                            option(value="arquitecto" ) Arquitecto
+                            option(value="adminisrador" ) Administrador
+                        label(for='role' title='Rol' data-title='Rol')
+                    .field
+                        input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
+                div(class="uk-width-1 uk-flex-right uk-flex uk-padding-small uk-padding-remove-vertical")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
                 div(id="modal-example" uk-modal="container: false")
@@ -121,9 +108,13 @@ block content
                 $('#blah').attr("src",window.URL.createObjectURL(event.target.files[0]));
             });
         });
-        
-        $(document).ready(function () {
 
+        function labelclick(name){
+            input = document.getElementById(name);
+            input.click();
+        }
+
+        $(document).ready(function () {
             $("#formulario").bind("submit",function(){
                 // Capturamnos el boton de envío
                 var btnEnviar = $("#btnEnviar");
