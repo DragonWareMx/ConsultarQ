@@ -19,6 +19,7 @@ block content
 
         div(id="errors")
 
+        
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
             form(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap" id="formulario" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
                 div(class="uk-width-auto@m uk-flex uk-flex-center uk-margin-small-bottom uk-flex-wrap uk-flex-column uk-flex-top")
@@ -28,48 +29,48 @@ block content
                         div() Agregar foto
                 div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
-                    .field
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='name' title='Nombre Completo' data-title='Nombre Completo')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='on' id="city" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='city' title='Ciudad' data-title='Ciudad')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='on' id="state" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='state' title='Estado' data-title='Estado')
-                    .field
-                       input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                       label(for='suburb' title='Colonia' data-title='Colonia')
-                    .field
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='suburb' title='Colonia' data-title='Colonia')
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='on'  id="street" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='street' title='Calle' data-title='Calle')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='on'  id="ext_number" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='ext_number' title='No. Exterior' data-title='No. Exterior')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='text' autocomplete='on'  id="int_number" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
                         label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='email' autocomplete='on'  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='email' title='Correo electrónico' data-title='Correo electrónico')
-                    .field
-                        input(type='password' autocomplete='off'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                    .field.uk-margin-bottom
+                        input(type='password' autocomplete='new-password'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='password' autocomplete='off'  id="password-confirm" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
                         label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
                 div(class="uk-width-expand@m uk-padding-small uk-padding-remove-vertical")
                     div(class="uk-text-left uk-text-primary uk-margin-bottom") CONSULTARQ
-                    .field
+                    .field.uk-margin-bottom
                         select(id="role" name="role" autocomplete='off' value='' /*required*/)
                             option(value="" disabled hidden selected ) Seleccionar
                             option(value="arquitecto" ) Arquitecto
                             option(value="adminisrador" ) Administrador
                         label(for='role' title='Rol' data-title='Rol')
-                    .field
+                    .field.uk-margin-bottom
                         input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
                         label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
                 div(class="uk-width-1 uk-flex-right uk-flex uk-padding-small uk-padding-remove-vertical")
@@ -89,6 +90,78 @@ block content
                                                 div(class="visible-xs-block" style="margin: auto auto")
                                                     |Selecciona una imagen
                                 input(name="fileField" type="file" id="fileField")
+        //-
+            div(class="uk-card uk-card-default uk-align-center uk-margin-top uk-width-1-2@l")
+                form(class="uk-card-body" id="formulario" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-bottom") FOTO DE PERFIL
+                        div(class="form-group uk-margin-bottom uk-border-circle")
+                                            label(for="fileField" class="attachment")
+                                                div(class="row btn-file uk-margin-auto")
+                                                    div(class="btn-file__preview")
+                                                    div(class="btn-file__actions")
+                                                        div(class="btn-file__actions__item uk-text-center" )
+                                                            div(class="btn-file__actions__item--shadow")
+                                                                i(class="fa fa-plus fa-lg fa-fw" aria-hidden="true")
+                                                                div(class="visible-xs-block" style="margin: auto auto")
+                                                                    |Selecciona una imagen
+                                                input(name="fileField" type="file" id="fileField")
+                    div(class="uk-child-width-1-1 uk-grid")
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name' title='Nombre Completo' data-title='Nombre Completo')
+                            .field.uk-margin-bottom
+                                input(type='email' autocomplete="nope"  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                            .field.uk-margin-bottom
+                                input(type='password' autocomplete='new-password'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                            .field.uk-margin-bottom
+                                input(type='password' autocomplete='new-password'  id="password-confirm" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                            .field.uk-margin-bottom
+                                select(id="role" name="role" autocomplete='off' value='' /*required*/)
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="arquitecto" ) Arquitecto
+                                    option(value="adminisrador" ) Administrador
+                                label(for='role' title='Rol' data-title='Rol')
+                            .field.uk-margin-bottom
+                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
+                            div(class="uk-grid")
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="city" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='city' title='Ciudad' data-title='Ciudad')
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="state" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='state' title='Estado' data-title='Estado')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='suburb' title='Colonia' data-title='Colonia')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="street" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='street' title='Calle' data-title='Calle')
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="ext_number" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='ext_number' title='No. Exterior' data-title='No. Exterior')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="int_number" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
+                                        label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
+                            div(class="uk-width-1 uk-flex-right uk-flex")
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
+                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+
     script.
         jQuery(($) => {
             $('.attachment input[type="file"]')
@@ -97,7 +170,7 @@ block content
                 el
                 .find('.btn-file__actions__item')
                 .css({
-                    'padding': '135px 0px'
+                    'padding': '80px 0px'
                 });
                 $('.visible-xs-block').text("Carga completada");
                 el

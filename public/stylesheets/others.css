@@ -3,6 +3,8 @@
   padding: 0;
   position: relative;
   z-index: 1;
+  width: 200px;
+  height: 200px;
 }
 .btn-file__actions {
   margin: 0;
@@ -19,12 +21,10 @@
   border-bottom: 3px dashed #d3e0e9;
 }
 .btn-file__actions__item:first-child {
-  border-top-left-radius: 35px;
-  border-bottom-left-radius: 35px;
+  border-radius: 50%;
 }
 .btn-file__actions__item:last-child {
-  border-top-right-radius: 35px;
-  border-bottom-right-radius: 35px;
+  border-radius: 50%;
   border-right: 3px dashed #d3e0e9;
 }
 .btn-file__actions__item:hover,
@@ -59,7 +59,7 @@
   right: 0;
   position: absolute;
   z-index: -1;
-  border-radius: 35px;
+  border-radius: 50%;
   background-size: cover;
   background-position: center;
 }
@@ -91,7 +91,6 @@ label{
 .field {
   width: 100%;
   position: relative;
-  margin-bottom: 15px;
 }
 .field label::before {
   content: attr(title);
