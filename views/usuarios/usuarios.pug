@@ -25,7 +25,7 @@ block content
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
                                     div #{usuario.Employee.name}
                                     div(class="uk-animation-toggle" tabindex="0")
-                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left" href="/usuarios/editar/"+usuario.id)
+                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
                                         img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
                                         div(class="uk-text-small") Editar
                                 div(class="uk-text-small uk-margin-remove-top" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
@@ -50,6 +50,7 @@ block content
                                         div(style="flex-basis:100%")
                                         div(class="uk-text-small") Progreso 60%
                                 progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+        //Form para agregar usuario
         div(id="user-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar usuario
@@ -119,6 +120,80 @@ block content
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+    //form para editar usuario
+    div(id="edit-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-edit")
+                form(class="uk-card-body uk-padding-small" id="form-edit-user" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-bottom") FOTO DE PERFIL
+                        div(class="form-group uk-margin-top uk-border-circle")
+                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
+                            a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
+                                img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
+                                div() Agregar foto
+                            input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;width:2px")
+                    div(class="uk-child-width-1-1 uk-grid")
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name-edit" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
+                            .field.uk-margin-bottom
+                                input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
+                            a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-bottom")
+                                img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
+                                div() Editar contraseña
+                            div(style="display:none" id="pass-div")
+                                .field.uk-margin-bottom
+                                    input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value);" )
+                                    label(for='password-edit' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                                .field.uk-margin-bottom
+                                    input(type='password' autocomplete='new-password'  id="password-confirm-edit" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
+                                    label(for='password-confirm-edit' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                            .field.uk-margin-bottom
+                                select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="arquitecto" ) Arquitecto
+                                    option(value="adminisrador" ) Administrador
+                                label(for='role-edit' title='Rol' data-title='Rol')
+                            .field.uk-margin-bottom
+                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='hiring_date-edit' title='Fecha de contratación' data-title='Fecha de contratación')
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='tel' id="phone_number-edit" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_number-edit' title='Número telefónico' data-title='Número telefónico')
+                            div(class="uk-grid")
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="city-edit" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='city-edit' title='Ciudad' data-title='Ciudad')
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="state-edit" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='state-edit' title='Estado' data-title='Estado')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="suburb-edit" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='suburb-edit' title='Colonia' data-title='Colonia')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="street-edit" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='street-edit' title='Calle' data-title='Calle')
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="ext_number-edit" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='ext_number-edit' title='No. Exterior' data-title='No. Exterior')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
+                                        label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
+                            div(class="uk-width-1 uk-flex-right uk-flex")
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
+                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Agregar
 
     script.
          jQuery(($) => {
@@ -141,8 +216,48 @@ block content
             $("#fileField").change(function() {
                 readURL(this);
             });
-        });
 
+            $('#pass').on('click', function() {
+                 if ($("#pass-div").is(':visible')) {
+                    $("#pass-div").hide();
+                }
+                else{
+                    $("#pass-div").show();
+                }
+            });
+
+             $('.editar').on('click', function() {
+                var userID = $(this).data('id');
+                var users=!{ JSON.stringify(usuarios) };
+                console.log(users);
+                for(var key in users){
+                    var obj=users[key];
+                    if(obj["id"] == userID){
+                        console.log(obj);
+                        break;
+                    }
+                }
+                //Aqui empieza a llenarse el modal
+                if(obj["picture"]!=null){
+                    $('#avatar-edit').attr('src', "/uploads/"+obj["picture"]);
+                }else{
+                    $('#avatar-edit').attr('src',"/img/iconos/default.png");
+                }
+                $('#name-edit').val(obj["Employee"]["name"]).change();
+                $('#email-edit').val(obj["email"]).change();
+                //aqui va el rol xd
+                $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                //aqui empiezan los datos de contacto
+                $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
+                $('#city-edit').val(obj["Employee"]["city"]).change();
+                $('#state-edit').val(obj["Employee"]["state"]).change();
+                $('#suburb-edit').val(obj["Employee"]["suburb"]).change();
+                $('#street-edit').val(obj["Employee"]["street"]).change();
+                $('#ext_number-edit').val(obj["Employee"]["ext_number"]).change();
+                $('#int_number-edit').val(obj["Employee"]["int_number"]).change();
+
+            });
+        });
 
         $(document).ready(function () {
             $("#form-new-user").bind("submit",function(){
