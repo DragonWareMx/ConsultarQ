@@ -5,6 +5,7 @@ const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
 
+
 //sequelize models
 const models = require('../models/index');
 
@@ -49,53 +50,81 @@ router.get('/', isLoggedIn, function (req, res, next) {
 });
 
 //AGREGAR USUARIO
-router.get('/nuevo', isLoggedIn, function (req, res, next) {
-    res.render('nuevoUsuario')
-});
+// router.get('/nuevo', isLoggedIn, function (req, res, next) {
+//     res.render('nuevoUsuario')
+// });
 
 //VER USUARIO ID
-router.get('/:id', isLoggedIn, function (req, res, next) {
-    let id = req.params.id
-    models.User
-        .findOne({
-            where: { id: id },
-        })
-        .then(user => {
-            res.send(user)
-        })
-});
+// router.get('/:id', isLoggedIn, function (req, res, next) {
+//     let id = req.params.id
+//     models.User
+//         .findOne({
+//             where: { id: id },
+//         })
+//         .then(user => {
+//             res.send(user)
+//         })
+// });
 
-router.get('/editar/:id', isLoggedIn, function (req, res, next) {
-    let id = req.params.id
-    models.User
-        .findOne({
-            where: { id: id },
-            include: ['Employee']
-        })
-        .then(usuario => {
-            if (!usuario) {
-                return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR
-            }
-            res.render('editarUsuario', { usuario })
-        })
-});
+// router.get('/editar/:id', isLoggedIn, function (req, res, next) {
+//     let id = req.params.id
+//     models.User
+//         .findOne({
+//             where: { id: id },
+//             include: ['Employee']
+//         })
+//         .then(usuario => {
+//             if (!usuario) {
+//                 return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR
+//             }
+//             res.render('editarUsuario', { usuario })
+//         })
+// });
 
 //UPDATE USUARIO ID
-router.put('edit/:id', isLoggedIn, function (req, res, next) {
-    let id = req.params.id
-    let nuevosDatos = req.body
-    console.log("estos son los datos que llegan xddddd: ", nuevosDatos);
-    // models.User
-    //     .findOne({
-    //         where: { id: id }
-    //     })
-    //     .then(user => {
-    //         user.update(nuevosDatos)
-    //             .then(newUser => {
-    //                 res.send(newUser)
-    //             })
-    //     })
-});
+router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
+    function (req, res, next) {
+        let id = req.params.id
+        let nuevosDatos = req.body
+        console.log("estos son los datos que llegan xddddd: ", nuevosDatos);
+        var dataUser = {
+            email: req.body.email,
+            RoleId: req.body.role,
+        };
+        if (req.file) {
+            dataUser.picture = req.file.filename;
+        }
+        var dataEmployee = {
+            name: req.body.name,
+            phone_number: req.body.phone_number,
+            city: req.body.city,
+            state: req.body.state,
+            suburb: req.body.suburb,
+            street: req.body.street,
+            int_number: req.body.int_number,
+            ext_number: req.body.ext_number,
+            hiring_date: req.body.hiring_date,
+        }
+        models.User.update(dataUser, {
+            where: { id: id },
+            raw: true,
+        }).then((changed_data, rowsupdated) => {
+            console.log(changed_data, rowsupdated)
+        }).catch((error) => {
+            console.log('error', error)
+        })
+        models.Employee.update(dataEmployee, {
+            where: { UserId: id },
+            raw: true,
+        }).then((changed_data, rowsupdated) => {
+            console.log(changed_data, rowsupdated)
+        }).catch((error) => {
+            console.log('error', error)
+        })
+
+        res.send(req.file);
+    });
+
 
 //ELIMINAR USUARIO ID
 router.delete('/:id', isLoggedIn, function (req, res, next) {

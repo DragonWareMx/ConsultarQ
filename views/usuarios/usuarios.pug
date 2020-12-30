@@ -74,10 +74,10 @@ block content
                                 input(type='email' autocomplete="nope"  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='email' title='Correo electrónico' data-title='Correo electrónico')
                             .field.uk-margin-bottom
-                                input(type='password' autocomplete='new-password'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='password' autocomplete='new-password'  id="password" name="password" value='' onchange="this.setAttribute('value', this.value); validatePassword();" required='')
                                 label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
                             .field.uk-margin-bottom
-                                input(type='password' autocomplete='new-password'  id="password-confirm" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='password' autocomplete='new-password'  id="password-confirm" onkeyup="validatePassword()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
                             .field.uk-margin-bottom
                                 select(id="role" name="role" autocomplete='off' value='' required)
@@ -126,13 +126,13 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-user" method="POST"  action="/usuarios/edit/" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-edit-user" action="/usuarios/edit/"  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") FOTO DE PERFIL
                         div(class="form-group uk-margin-top uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
-                            a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
+                            a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
                                 img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
-                                div() Agregar foto
+                                div() Editar foto
                             input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
@@ -148,10 +148,10 @@ block content
                                 div() Editar contraseña
                             div(style="display:none" id="pass-div")
                                 .field.uk-margin-bottom
-                                    input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value);" )
+                                    input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
                                     label(for='password-edit' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
                                 .field.uk-margin-bottom
-                                    input(type='password' autocomplete='new-password'  id="password-confirm-edit" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
+                                    input(type='password' autocomplete='new-password'  id="password-confirm-edit" onkeyup="validatePasswordEdit()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
                                     label(for='password-confirm-edit' title='Confirmar contraseña' data-title='Confirmar contraseña')
                             .field.uk-margin-bottom
                                 select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
@@ -193,13 +193,44 @@ block content
                                         label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
-                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Agregar
+                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
+
+    script.
+        var password = document.getElementById("password")
+        , confirm_password = document.getElementById("password-confirm");
+
+         var password_edit = document.getElementById("password-edit")
+        , confirm_password_edit = document.getElementById("password-confirm-edit");
+
+        function validatePassword(){
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Las contraseñas no coinciden");
+                confirm_password.reportValidity();
+            } else {
+                confirm_password.setCustomValidity('');
+                confirm_password.reportValidity();
+            }
+        }
+        function validatePasswordEdit(){
+            if(password_edit.value != confirm_password_edit.value) {
+                confirm_password_edit.setCustomValidity("Las contraseñas no coinciden");
+                confirm_password_edit.reportValidity();
+            } else {
+                confirm_password_edit.setCustomValidity('');
+                confirm_password_edit.reportValidity();
+            }
+        }
 
     script.
          jQuery(($) => {
             $('#foto').on('click', function() {
                 $("#fileField").click();
             });
+
+            $('#foto-edit').on('click', function() {
+                $("#fileField-edit").click();
+            });
+
             function readURL(input) {
                 $('#avatar').attr('src', "/img/iconos/default.png");
                 if (input.files && input.files[0]) {
@@ -216,16 +247,37 @@ block content
             $("#fileField").change(function() {
                 readURL(this);
             });
+            //el de abajo es igual pero para el avatar a la hora de editar
+            function readURL(input) {
+                $('#avatar-edit').attr('src', "/img/iconos/default.png");
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
 
+                    reader.onload = function(e) {
+                    $('#avatar-edit').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+
+            $("#fileField-edit").change(function() {
+                readURL(this);
+            });
+
+            //esto de aqui abajo es para ocultar los campos de pass
             $('#pass').on('click', function() {
                  if ($("#pass-div").is(':visible')) {
                     $("#pass-div").hide();
+                    $("#password-edit").val('').change();
+                    $("#password-confirm-edit").val('').change();
                 }
                 else{
                     $("#pass-div").show();
                 }
             });
 
+            //esto de abajo es para al momento de abrir el modal de editar cargar los datos
              $('.editar').on('click', function() {
                 var userID = $(this).data('id');
                 var users=!{ JSON.stringify(usuarios) };
@@ -258,7 +310,7 @@ block content
                 $('#int_number-edit').val(obj["Employee"]["int_number"]).change();
 
                 //esto es para poner el id en el action del form
-                $('#form-edit-user').attr('action', '/usuarios/edit/'+obj["id"]+"?_method=PUT");
+                $('#form-edit-user').attr('action', '/usuarios/edit/'+obj["id"]);
             });
         });
 
