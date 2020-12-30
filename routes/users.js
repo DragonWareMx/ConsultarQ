@@ -4,12 +4,13 @@ const { check, validationResult } = require('express-validator/check');
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
-
+const helpers = require('../lib/helpers');
 
 //sequelize models
 const models = require('../models/index');
 
 //subir archivos
+const fs = require('fs');
 var multer = require('multer');
 var path = require('path')
 var storage = multer.diskStorage({
@@ -83,7 +84,16 @@ router.get('/', isLoggedIn, function (req, res, next) {
 
 //UPDATE USUARIO ID
 router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
-    function (req, res, next) {
+    [
+        check('email')
+            .isEmail()
+            .normalizeEmail().withMessage('Correo electrónico no válido.'),
+    ],
+    async function (req, res, next) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).send(errors.array());
+        }
         let id = req.params.id
         let nuevosDatos = req.body
         console.log("estos son los datos que llegan xddddd: ", nuevosDatos);
@@ -93,6 +103,9 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
         };
         if (req.file) {
             dataUser.picture = req.file.filename;
+        }
+        if (req.body.password) {
+            dataUser.password = await helpers.encryptPassword(req.body.password);
         }
         var dataEmployee = {
             name: req.body.name,
@@ -105,24 +118,34 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             ext_number: req.body.ext_number,
             hiring_date: req.body.hiring_date,
         }
-        models.User.update(dataUser, {
-            where: { id: id },
-            raw: true,
-        }).then((changed_data, rowsupdated) => {
-            console.log(changed_data, rowsupdated)
-        }).catch((error) => {
-            console.log('error', error)
-        })
-        models.Employee.update(dataEmployee, {
-            where: { UserId: id },
-            raw: true,
-        }).then((changed_data, rowsupdated) => {
-            console.log(changed_data, rowsupdated)
-        }).catch((error) => {
-            console.log('error', error)
-        })
+        models.User
+            .findOne({
+                where: { id: id }
+            })
+            .then(user => {
+                //esto de abajo es para borrar la imagen vieja en caso de que hayan subido una nueva
+                if (req.file) {
+                    fs.unlink('public/uploads/avatar/' + user.picture, (err) => {
+                        if (err) {
+                            console.log("failed to delete local image:" + err);
+                        } else {
+                            console.log('successfully deleted local image');
+                        }
+                    });
+                }
+                user.update(dataUser)
+                    .then(User => { })
+            })
+        models.Employee
+            .findOne({
+                where: { UserId: id }
+            })
+            .then(employee => {
+                employee.update(dataEmployee)
+                    .then(Employee => { })
+            })
 
-        res.send(req.file);
+        res.send(dataUser);
     });
 
 
