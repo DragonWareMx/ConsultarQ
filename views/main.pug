@@ -20,7 +20,7 @@ html
                 //- perfil
                 div(class="profile_container")
                     if user.picture
-                        img(src="/uploads/"+user.picture class="profile_image")
+                        img(src="/uploads/avatar/"+user.picture class="profile_image")
                     else
                         img(src="/img/iconos/default.png" class="profile_image")
                     div(class="profile_info")
@@ -117,7 +117,7 @@ html
                                 li(class="category_item")
                                     a(href="/prestadores_externos") Prestadores externos
                                         img(src="/icons/userHand.png" class="category_icon")
-                                    
+
 
                 div(class="categories_dropdown")
                     div(style="width:100%;display:flex;justify-content:center")

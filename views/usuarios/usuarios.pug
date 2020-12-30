@@ -18,7 +18,7 @@ block content
                         div(class="uk-card-body uk-flex uk-flex-top uk-padding-small")
                             div(class="uk-width-auto")
                                 if usuario.picture
-                                     img(src="/uploads/"+usuario.picture alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                                     img(src="/uploads/avatar/"+usuario.picture alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                                 else
                                     img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                             div(class="uk-width-expand uk-margin-small-left")
@@ -63,7 +63,7 @@ block content
                             a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
                                 img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
                                 div() Agregar foto
-                            input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px")
+                            input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
@@ -80,10 +80,10 @@ block content
                                 input(type='password' autocomplete='new-password'  id="password-confirm" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
                             .field.uk-margin-bottom
-                                select(id="role" name="role" autocomplete='off' value='' /*required*/)
+                                select(id="role" name="role" autocomplete='off' value='' required)
                                     option(value="" disabled hidden selected ) Seleccionar
-                                    option(value="arquitecto" ) Arquitecto
-                                    option(value="adminisrador" ) Administrador
+                                    each rol in roles
+                                        option(value=rol.id ) #{rol.name}
                                 label(for='role' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
@@ -126,14 +126,14 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-user" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-edit-user" method="POST"  action="/usuarios/edit/" enctype="multipart/form-data")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") FOTO DE PERFIL
                         div(class="form-group uk-margin-top uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
                             a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
                                 img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
                                 div() Agregar foto
-                            input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px")
+                            input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
@@ -156,8 +156,8 @@ block content
                             .field.uk-margin-bottom
                                 select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
                                     option(value="" disabled hidden selected ) Seleccionar
-                                    option(value="arquitecto" ) Arquitecto
-                                    option(value="adminisrador" ) Administrador
+                                    each rol in roles
+                                        option(value=rol.id ) #{rol.name}
                                 label(for='role-edit' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
@@ -239,13 +239,14 @@ block content
                 }
                 //Aqui empieza a llenarse el modal
                 if(obj["picture"]!=null){
-                    $('#avatar-edit').attr('src', "/uploads/"+obj["picture"]);
+                    $('#avatar-edit').attr('src', "/uploads/avatar/"+obj["picture"]);
                 }else{
                     $('#avatar-edit').attr('src',"/img/iconos/default.png");
                 }
                 $('#name-edit').val(obj["Employee"]["name"]).change();
                 $('#email-edit').val(obj["email"]).change();
                 //aqui va el rol xd
+                $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true)
                 $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
                 //aqui empiezan los datos de contacto
                 $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
@@ -256,6 +257,8 @@ block content
                 $('#ext_number-edit').val(obj["Employee"]["ext_number"]).change();
                 $('#int_number-edit').val(obj["Employee"]["int_number"]).change();
 
+                //esto es para poner el id en el action del form
+                $('#form-edit-user').attr('action', '/usuarios/edit/'+obj["id"]+"?_method=PUT");
             });
         });
 

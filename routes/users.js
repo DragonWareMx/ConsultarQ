@@ -35,10 +35,16 @@ var upload = multer({
 //TODOS LOS USUARIOS
 router.get('/', isLoggedIn, function (req, res, next) {
     models.User.findAll({
-        include: ["Employee"]
+        include: [{
+            model: models.Employee
+        }, {
+            model: models.Role
+        }],
     }).then(usuarios => {
-        console.log(usuarios);
-        res.render('usuarios', { usuarios })
+        //console.log(usuarios);
+        models.Role.findAll().then(roles => {
+            res.render('usuarios', { usuarios, roles })
+        });
     });
 });
 
@@ -75,19 +81,20 @@ router.get('/editar/:id', isLoggedIn, function (req, res, next) {
 });
 
 //UPDATE USUARIO ID
-router.put('/:id', isLoggedIn, function (req, res, next) {
+router.put('edit/:id', isLoggedIn, function (req, res, next) {
     let id = req.params.id
     let nuevosDatos = req.body
-    models.User
-        .findOne({
-            where: { id: id }
-        })
-        .then(user => {
-            user.update(nuevosDatos)
-                .then(newUser => {
-                    res.send(newUser)
-                })
-        })
+    console.log("estos son los datos que llegan xddddd: ", nuevosDatos);
+    // models.User
+    //     .findOne({
+    //         where: { id: id }
+    //     })
+    //     .then(user => {
+    //         user.update(nuevosDatos)
+    //             .then(newUser => {
+    //                 res.send(newUser)
+    //             })
+    //     })
 });
 
 //ELIMINAR USUARIO ID
