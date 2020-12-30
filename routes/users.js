@@ -13,20 +13,21 @@ var multer = require('multer');
 var path = require('path')
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads')
+        cb(null, 'public/uploads/avatar')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
     }
 })
-var upload = multer({ storage: storage, fileFilter:  (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
-      cb(null, true);
-    } else {
-      cb(null, false);
-      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+var upload = multer({
+    storage: storage, fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
     }
-  }
 });
 
 
@@ -112,13 +113,13 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
     , (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(422).send( errors.array() );
+            return res.status(422).send(errors.array());
         }
-        passport.authenticate('local.signup', function(error, user, info) {
-            if(error) {
-                return res.status(500).json([{msg: 'Ocurrió un error al intentar registrar el usuario.'}]);
+        passport.authenticate('local.signup', function (error, user, info) {
+            if (error) {
+                return res.status(500).json([{ msg: 'Ocurrió un error al intentar registrar el usuario.' }]);
             }
-            if(!user) {
+            if (!user) {
                 return res.status(401).json(info);
             }
             res.json(user);

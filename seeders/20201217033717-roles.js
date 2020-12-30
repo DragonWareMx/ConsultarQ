@@ -12,6 +12,8 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert('Roles', [{
+      name: 'Administrador'
+    }, {
       name: 'Arquitecto'
     }], {});
   },
