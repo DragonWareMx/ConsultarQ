@@ -347,8 +347,17 @@ block content
                         * correcta
                         * */
                         $('#errors').css('display', 'none');
-                        alert('Usuario registrado');
-                        window.location.href = window.location.origin + '/usuarios'
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Usuario registrado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 3000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/usuarios'
+                        }, 3000);
                     },
                     error: function(data){
                         /*
@@ -356,6 +365,75 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors').css('display', 'block');
+                        console.log(data.responseText);
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+            //ajax del form de editar
+             $("#form-edit-user").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-edit");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Usuario editado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 3000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/usuarios'
+                        }, 3000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-edit').css('display', 'block');
                         console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors');

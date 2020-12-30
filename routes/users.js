@@ -142,10 +142,13 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             })
             .then(employee => {
                 employee.update(dataEmployee)
-                    .then(Employee => { })
+                    .then(Employee => {
+                        if (!Employee) {
+                            res.status(500).json([{ msg: 'Ocurrió un error al intentar editar el usuario.' }]);
+                        }
+                        return res.json(Employee);
+                    })
             })
-
-        res.send(dataUser);
     });
 
 
