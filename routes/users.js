@@ -42,6 +42,9 @@ router.get('/', isLoggedIn, function (req, res, next) {
         }, {
             model: models.Role
         }],
+        order: [
+            ['status', 'ASC']
+        ]
     }).then(usuarios => {
         //console.log(usuarios);
         models.Role.findAll().then(roles => {
@@ -98,6 +101,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
         var dataUser = {
             email: req.body.email,
             RoleId: req.body.role,
+            status: req.body.status,
         };
         if (req.file) {
             dataUser.picture = req.file.filename;
@@ -151,14 +155,31 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
 
 
 //ELIMINAR USUARIO ID
-router.delete('/:id', isLoggedIn, function (req, res, next) {
+router.post('/delete/:id', isLoggedIn, function (req, res, next) {
     let id = req.params.id
 
-    models.User.destroy({
-        where: { id: id }
-    }).then(() => {
-        res.send('Persona eliminada')
-    })
+    models.User
+        .findOne({
+            where: { id: id }
+        })
+        .then(user => {
+            //esto de abajo es para borrar la imagen vieja en caso de que hayan subido una nueva
+            if (user.picture != null) {
+                fs.unlink('public/uploads/avatar/' + user.picture, (err) => {
+                    if (err) {
+                        console.log("failed to delete local image:" + err);
+                    } else {
+                        console.log('successfully deleted local image');
+                    }
+                });
+            }
+            user.destroy()
+                .then(() => {
+                    res.json("Persona eliminada");
+                })
+        }).catch(err => {
+            return res.status(500).json([{ msg: 'Ocurrió un error al intentar eliminar el usuario.' }]);
+        });
 });
 
 

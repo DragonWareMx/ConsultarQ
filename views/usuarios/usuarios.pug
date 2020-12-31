@@ -159,7 +159,13 @@ block content
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='hiring_date-edit' title='Fecha de contratación' data-title='Fecha de contratación')
-                        div
+                            .field.uk-margin-bottom
+                                select(id="status" name="status" autocomplete='off' value='' /*required*/)
+                                    option(value="active") Activo
+                                    option(value="inactive") Inactivo
+                                label(for='status' title='Estatus' data-title='Estatus')
+                            div(class="uk-alert-danger" uk-alert style="display:none" id="status-alert")
+                                p(class="uk-text-small") Si el estatus del usuario es inactivo, este ya no podrá ingresar al sistema.
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='tel' id="phone_number-edit" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -191,9 +197,20 @@ block content
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
-                form(action="/viledruid", method="post" class="uk-padding-remove")
-                    a(class="uk-flex uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" href="javascript:;" onclick="parentNode.submit();")
-                        <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+                a(class="uk-flex uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+    //modal para eliminar
+    div(id="delete-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar al usuario Dragonware?
+                form(class="uk-card-body uk-padding-small" id="form-delete-user" action="/usuarios/delete"  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#edit-form" uk-toggle data-id="" data-name="") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+
     script.
         var password = document.getElementById("password")
         , confirm_password = document.getElementById("password-confirm");
@@ -310,6 +327,34 @@ block content
 
                 //esto es para poner el id en el action del form
                 $('#form-edit-user').attr('action', '/usuarios/edit/'+obj["id"]);
+                $('#btnEliminar').data('id',obj["id"]);
+                $('#btnEliminar').data('name',obj["Employee"]["name"]);
+
+                //esto es para poner el status en el select
+                if(obj["status"]=="active"){
+                    $('#status option[value="active"]').prop('selected', 'selected').change();
+                }else{
+                    $('#status option[value="inactive"]').prop('selected', 'selected').change();
+                }
+            });
+
+            $('#status').on('change', function(){
+                if( $('#status').val() == 'active'){
+                    $('#status-alert').hide();
+                }
+                else{
+                    $('#status-alert').show();
+                }
+            });
+
+            //este es para al momento de abrir el modal de eliminar mandar los datos
+            $('#btnEliminar').on('click', function() {
+                var userID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar al usuario '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-user').attr('action', '/usuarios/delete/'+ userID);
             });
         });
 
@@ -384,7 +429,7 @@ block content
                 return false;
             });
             //ajax del form de editar
-             $("#form-edit-user").bind("submit",function(){
+            $("#form-edit-user").bind("submit",function(){
                 // Capturamnos el boton de envío
                 var btnEnviar = $("#btnEnviar-edit");
 
@@ -436,7 +481,76 @@ block content
                         $('#errors-edit').css('display', 'block');
                         console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
-                        var errorsContainer = $('#errors');
+                        var errorsContainer = $('#errors-edit');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+            //ajax del form de eliminar
+            $("#form-delete-user").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-delete");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-delete').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Usuario eliminado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 3000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/usuarios'
+                        }, 3000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-delete').css('display', 'block');
+                        console.log(data.responseText);
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-delete');
                         errorsContainer.innerHTML = '';
                         var errorsList = '';
                         for (var i = 0; i < errors.length; i++) {
