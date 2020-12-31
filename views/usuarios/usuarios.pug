@@ -61,8 +61,7 @@ block content
                         div(class="form-group uk-margin-top uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
                             a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
-                                img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
-                                div() Agregar foto
+                                <span uk-icon="icon: upload; ratio: 0.8"></span> &nbsp Agregar foto
                             input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
@@ -118,7 +117,7 @@ block content
                                         input(type='text' autocomplete='on'  id="int_number" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
                                         label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
                             div(class="uk-width-1 uk-flex-right uk-flex")
-                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
     //form para editar usuario
     div(id="edit-form" uk-modal)
@@ -126,13 +125,12 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-user" action="/usuarios/edit/"  method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small uk-padding-remove-bottom" id="form-edit-user" action="/usuarios/edit/"  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") FOTO DE PERFIL
                         div(class="form-group uk-margin-top uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
                             a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
-                                img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
-                                div() Editar foto
+                                <span uk-icon="icon: pencil; ratio: 0.8"></span> &nbsp Editar foto
                             input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
@@ -144,8 +142,7 @@ block content
                                 input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
                             a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-bottom")
-                                img(src="/img/iconos/edit.png" class="uk-flex" style="width:12px; height:12px;")
-                                div() Editar contraseña
+                                <span uk-icon="icon: pencil; ratio: 0.8"></span> &nbsp Editar contraseña
                             div(style="display:none" id="pass-div")
                                 .field.uk-margin-bottom
                                     input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
@@ -192,9 +189,11 @@ block content
                                         input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
                                         label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
                             div(class="uk-width-1 uk-flex-right uk-flex")
-                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
-
+                form(action="/viledruid", method="post" class="uk-padding-remove")
+                    a(class="uk-flex uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" href="javascript:;" onclick="parentNode.submit();")
+                        <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
     script.
         var password = document.getElementById("password")
         , confirm_password = document.getElementById("password-confirm");
@@ -248,7 +247,7 @@ block content
                 readURL(this);
             });
             //el de abajo es igual pero para el avatar a la hora de editar
-            function readURL(input) {
+            function readURLEdit(input) {
                 $('#avatar-edit').attr('src', "/img/iconos/default.png");
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
@@ -262,7 +261,7 @@ block content
             }
 
             $("#fileField-edit").change(function() {
-                readURL(this);
+                readURLEdit(this);
             });
 
             //esto de aqui abajo es para ocultar los campos de pass
@@ -315,6 +314,7 @@ block content
         });
 
         $(document).ready(function () {
+            //ajax del form de nuevo
             $("#form-new-user").bind("submit",function(){
                 // Capturamnos el boton de envío
                 var btnEnviar = $("#btnEnviar");

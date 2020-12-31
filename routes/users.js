@@ -95,8 +95,6 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             return res.status(422).send(errors.array());
         }
         let id = req.params.id
-        let nuevosDatos = req.body
-        console.log("estos son los datos que llegan xddddd: ", nuevosDatos);
         var dataUser = {
             email: req.body.email,
             RoleId: req.body.role,
