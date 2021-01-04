@@ -79,6 +79,7 @@ app.use('/perfil',require('./routes/perfil'));
 app.use('/roles',require('./routes/roles'));
 app.use('/clientes',require('./routes/clientes'));
 app.use('/servicios',require('./routes/servicios'));
+app.use('/prestadores_externos',require('./routes/providers'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
