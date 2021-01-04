@@ -34,23 +34,53 @@ var upload = multer({
 
 
 /* GET users listing. */
+
 //TODOS LOS USUARIOS
-router.get('/', isLoggedIn, function (req, res, next) {
-    models.User.findAll({
-        include: [{
-            model: models.Employee
-        }, {
-            model: models.Role
-        }],
-        order: [
-            ['status', 'ASC']
-        ]
-    }).then(usuarios => {
-        //console.log(usuarios);
-        models.Role.findAll().then(roles => {
-            res.render('usuarios', { usuarios, roles })
-        });
-    });
+router.get('/', isLoggedIn, async (req, res, next) => {
+    
+    try{
+    //VERIFICACION DEL PERMISO
+        
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: {name: 'ur'}
+                }
+            }
+        })
+
+        if(usuario && usuario.Role && usuario.Role.Permissions){
+    //TIENE PERMISO DE DESPLEGAR VISTA
+            //obtiene todos los usuarios y roles y se manda a la vista
+            models.User.findAll({
+                include: [{
+                    model: models.Employee
+                }, {
+                    model: models.Role
+                }],
+                order: [
+                    ['status', 'ASC']
+                ]
+            }).then(usuarios => {
+                models.Role.findAll().then(roles => {
+                    return res.render('usuarios', { usuarios, roles })
+                });
+            });
+        }
+        else{
+    //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch(error){
+        return res.status(403).json(403)
+    }
 });
 
 //AGREGAR USUARIO
@@ -151,7 +181,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                         return res.json(Employee);
                     })
             })
-    });
+});
 
 
 //ELIMINAR USUARIO ID
@@ -205,6 +235,6 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
             }
             res.json(user);
         })(req, res, next);
-    });
+});
 
 module.exports = router;
