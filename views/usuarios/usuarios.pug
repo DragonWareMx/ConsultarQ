@@ -11,6 +11,19 @@ block content
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Nuevo Usuario
+        form(class="uk-flex uk-margin-bottom")
+            div(class="uk-search uk-search-default uk-width-expand")
+                button(href="#" uk-search-icon)
+                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
+            //- boton de filtrar
+            button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+            div(uk-dropdown="mode: click")
+                ul(class="uk-list")
+                    li(onclick="putSearch('name')") Nombre
+                    li(onclick="putSearch('email')") Correo electrónico
+                    li(onclick="putSearch('name')") Sugerencia
         div(class="uk-child-width-1-2@s" uk-grid)
             each usuario in usuarios
                 div
@@ -237,6 +250,11 @@ block content
             }
         }
 
+        function putSearch(vilevar){
+            alert(vilevar);
+            var filter=document.getElementById("filter");
+            filter.value=vilevar;
+        }
     script.
          jQuery(($) => {
             $('#foto').on('click', function() {
