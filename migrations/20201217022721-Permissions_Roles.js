@@ -32,6 +32,14 @@ module.exports = {
             model: 'Roles',
             key: 'id',
           },
+        },
+        createdAt: {
+          allowNull: false,
+          type: Sequelize.DATE
+        },
+        updatedAt: {
+          allowNull: false,
+          type: Sequelize.DATE
         }
     });
   },
