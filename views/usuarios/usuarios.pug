@@ -443,7 +443,9 @@ block content
                 $('#name-edit').val(obj["Employee"]["name"]).change();
                 $('#email-edit').val(obj["email"]).change();
                 //aqui va el rol xd
-                $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true)
+                if(obj["Role"]){
+                    $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true);
+                }
                 $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
                 //aqui empiezan los datos de contacto
                 $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
