@@ -28,6 +28,7 @@ block content
                 ul(class="uk-list")
                     li(onclick="putSearch('name')") Nombre
                     li(onclick="putSearch('tipo')") Tipo
+                    li(onclick="putSearch('miembro')") Miembro
         div(class="uk-grid-small uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-row-large" uk-grid)
             div()
                 div(class="uk-card  uk-card-default")
@@ -40,15 +41,15 @@ block content
                     div(class="uk-card-body uk-padding-remove")
                         div(class="uk-width-1 uk-margin-small-top")
                             div(class="o-progress-date-line")
-                            div(class="o-progress-date-start")
-                            div(class="o-progress-date-end")
-                            div(class="o-progress-date-today" style="margin-left:93%;" /*Aquí va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
+                            div(class="o-progress-date-start" style="background:#BE3BC0;")
+                            div(class="o-progress-date-end" style="background:#BE3BC0;")
+                            div(class="o-progress-date-today" id="bola1" uk-tooltip="06/01/2020" style="margin-left:93%; border: 1px solid #BE3BC0;" /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
                             div(class="o-progress-date-dates")
                                 div(class="uk-text-small") 12, JUN, 2020
                                 div(class="uk-text-small") 12, NOV, 2020
                     div(class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top")
                         div(class="uk-width-2-5")
-                            div a
+                            div aquí va la barra circular pero ta dificil :c
                         div(class="uk-width-3-5 uk-width-1@s uk-width-3-5")
                             div(class="uk-text-large" style="color: #222238;") 22
                             div(class="uk-text-small") Tareas / Documentos listos
@@ -56,12 +57,54 @@ block content
                             div(class="uk-text-small") Tareas / Documentos faltantes
                     div(class="uk-margin-top uk-margin-small-left uk-text-small") MIEMBROS DEL PROYECTO
                     div(class="uk-width-1 uk-flex uk-flex-wrap")
-                        div(class="uk-width-2-3 uk-flex uk-flex-wrap")
+                        div(class="uk-width-2-3 uk-flex uk-flex-wrap uk-margin-bottom")
                             img(src="/img/prueba/perfil1.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
                             img(src="/img/prueba/perfil2.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
                             img(src="/img/prueba/perfil1.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
                             img(src="/img/prueba/perfil3.jpg" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
-                        div(class="uk-width-1-3 uk-position-bottom-right")
-                            img(src="/icons/archivo.png" width="13px")
-                            div(class="uk-text-small") 20
+                        div(class="uk-width-1-3 uk-position-bottom-right uk-flex uk-flex-right uk-flex-middle uk-margin-small-right uk-margin-bottom")
+                            img(src="/icons/archivo.png" width="13px" style="margin-right:5px;")
+                            div(class="uk-text-small" style="margin-right:10px;") 20
+                            img(src="/icons/comment.png" width="13px" style="margin-right:5px;")
+                            div(class="uk-text-small") 5
+            //- ESTE DIV ES LO MISMO QUE EL DE ARRIBA
+            div()
+                div(class="uk-card  uk-card-default")
+                    div(class="uk-card-header uk-padding-remove uk-flex" style="background:rgba(253, 245, 52, 0.53);" /* va cambiando el background*/)
+                        div(class="uk-width-3-5 uk-margin-small-left uk-margin-small-top uk-margin-small-bottom")
+                            div(class="" style="color: #222238;") Nombre del proyecto
+                            div(class="uk-text-small") Tipo de proyecto 1
+                        div(class="uk-width-2-5 uk-flex uk-flex-right uk-flex-middle")
+                            button(class="uk-margin-small-right" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px;" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) EN TIEMPO
+                    div(class="uk-card-body uk-padding-remove")
+                        div(class="uk-width-1 uk-margin-small-top")
+                            div(class="o-progress-date-line")
+                            //- EL COLOR DE LAS BOLITAS DEBE IR CAMBIANDO
+                            div(class="o-progress-date-start" style="background: #FDF534;")
+                            div(class="o-progress-date-end" style="background: #FDF534;")
+                            div(class="o-progress-date-today" uk-tooltip="06/01/2020" style="margin-left:70%; border: 1px solid #FDF534;" /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
+                            div(class="o-progress-date-dates")
+                                div(class="uk-text-small") 27, DIC, 2020
+                                div(class="uk-text-small") 04, MAR, 2021
+                    div(class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top")
+                        div(class="uk-width-2-5")
+                            div 
+                        div(class="uk-width-3-5 uk-width-1@s uk-width-3-5")
+                            div(class="uk-text-large" style="color: #222238;") 22
+                            div(class="uk-text-small") Tareas / Documentos listos
+                            div(class="uk-text-large" style="color: #222238;") 15
+                            div(class="uk-text-small") Tareas / Documentos faltantes
+                    div(class="uk-margin-top uk-margin-small-left uk-text-small") MIEMBROS DEL PROYECTO
+                    div(class="uk-width-1 uk-flex uk-flex-wrap")
+                        div(class="uk-width-2-3 uk-flex uk-flex-wrap uk-margin-bottom")
+                            img(src="/img/prueba/perfil1.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                            img(src="/img/prueba/perfil2.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                            img(src="/img/prueba/perfil1.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                            img(src="/img/prueba/perfil3.jpg" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                        div(class="uk-width-1-3 uk-position-bottom-right uk-flex uk-flex-right uk-flex-middle uk-margin-small-right uk-margin-bottom")
+                            img(src="/icons/archivo.png" width="13px" style="margin-right:5px;")
+                            div(class="uk-text-small" style="margin-right:10px;") 20
+                            img(src="/icons/comment.png" width="13px" style="margin-right:5px;")
+                            div(class="uk-text-small") 5
+         
 
