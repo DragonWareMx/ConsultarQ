@@ -20,7 +20,7 @@ module.exports = {
       phone_number: {
         type: Sequelize.STRING
       },
-      Provider_AreaId: {
+      ProviderAreaId: {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
