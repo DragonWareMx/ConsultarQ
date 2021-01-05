@@ -27,10 +27,10 @@
     width: 14px;
     height: 14px;
     display:flex;
-    margin-top:-15px;
+    margin-top:-14px;
     margin-left:auto;
     margin-right: 5%;
-    border-radius:50%;  
+    border-radius:50%;
 }
 .o-progress-date-dates{
     display: flex;
