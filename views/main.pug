@@ -20,7 +20,7 @@ html
                 //- perfil
                 div(class="profile_container")
                     if user.picture
-                        img(src="/uploads/"+user.picture class="profile_image")
+                        img(src="/uploads/avatar/"+user.picture class="profile_image")
                     else
                         img(src="/img/iconos/default.png" class="profile_image")
                     div(class="profile_info")
@@ -36,21 +36,14 @@ html
                                     a(href="/inicio" ) Inicio
                                         img(src="/icons/house.png" class="category_icon")
                                 li(class="category_item")
-                                    a(href="/perfil/" ) Perfil
+                                    a(href="/perfil" ) Perfil
                                         img(src="/icons/user.png" class="category_icon")
-                                li(class="uk-parent category_item")
-                                    a(href="#" ) Administrar usuarios
+                                li(class="category_item")
+                                    a(href="/usuarios" ) Usuarios
                                         img(src="/icons/users-logo.png" class="category_icon")
-                                    ul(class="uk-nav-sub")
-                                        li(class="category_item")
-                                            a(href="/usuarios") Usuarios
-                                        li(class="category_item")
-                                            a(href="/roles") Roles
-                                        li(class="category_item")
-                                            span(class="category_subdivider") ACCESOS DIRECTOS
-                                            a(href="/usuarios/nuevo") Agregar usuario
-                                        li(class="category_item")
-                                            a(href="/roles/nuevo") Agregar rol
+                                li(class="category_item")
+                                    a(href="/roles" ) Roles
+                                        img(src="/icons/role.png" class="category_icon")
                                 li(class="uk-parent category_item")
                                     a(href="#") Caja chica
                                         img(src="/icons/coin.png" class="category_icon")
@@ -105,7 +98,7 @@ html
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="uk-parent category_item")
                                     a(href="#") Directorio de clientes
-                                        img(src="/icons/userStar.png" class="category_icon")
+                                        img(src="/icons/directorio.png" class="category_icon")
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="/clientes") Ver directorio
@@ -117,29 +110,21 @@ html
                                 li(class="category_item")
                                     a(href="/prestadores_externos") Prestadores externos
                                         img(src="/icons/userHand.png" class="category_icon")
-                                    
+
 
                 div(class="categories_dropdown")
                     div(style="width:100%;display:flex;justify-content:center")
                         a(href="/inicio")
                             img(src="/icons/house.png" class="category_icon")
                     div(style="width:100%;display:flex;justify-content:center")
-                        a(href="/perfil/")
+                        a(href="/perfil")
                             img(src="/icons/user.png" class="category_icon")
                     div(style="width:100%;display:flex;justify-content:center")
-                        a()
+                        a(href="/usuarios")
                             img(src="/icons/users-logo.png" class="category_icon")
-                        div(uk-dropdown="pos: right-center; mode: click")
-                            ul(class="uk-nav uk-dropdown-nav")
-                                li(class="category_item")
-                                    a(href="/usuarios") Usuarios
-                                li(class="category_item")
-                                    a(href="/roles") Roles
-                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
-                                li(class="category_item")
-                                    a(href="/usuarios/nuevo") Agregar usuario
-                                li(class="category_item")
-                                    a(href="/roles/nuevo") Agregar rol
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a(href="/roles")
+                            img(src="/icons/role.png" class="category_icon")
                     div(style="width:100%;display:flex;justify-content:center")
                         a()
                             img(src="/icons/coin.png" class="category_icon")
