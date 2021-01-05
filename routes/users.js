@@ -300,20 +300,52 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
             .isAlphanumeric().withMessage('El número interior sólo acepta caracteres alfanuméricos.')
             .isLength({ max: 10 }).withMessage('El número interior puede tener un máximo de 10 caracteres.')
     ]
-    , (req, res, next) => {
+    , async (req, res, next) => {
+        //si hay errores entonces se muestran
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).send(errors.array());
         }
-        passport.authenticate('local.signup', function (error, user, info) {
-            if (error) {
-                return res.status(500).json([{ msg: 'Ocurrió un error al intentar registrar el usuario.' }]);
+        else{
+            try{
+            //VERIFICACION DEL PERMISO
+                
+                //obtenemos el usuario, su rol y su permiso
+                let usuario = await models.User.findOne({
+                    where: {
+                        id: req.user.id
+                    },
+                    include: {
+                        model: models.Role,
+                        include: {
+                            model: models.Permission,
+                            where: {name: 'uc'}
+                        }
+                    }
+                })
+        
+                if(usuario && usuario.Role && usuario.Role.Permissions){
+            //TIENE PERMISO DE AGREGAR USUARIO
+                    //guarda el usuario
+                    passport.authenticate('local.signup', function (error, user, info) {
+                        if (error) {
+                            return res.status(500).json([{ msg: 'Ocurrió un error al intentar registrar el usuario.' }]);
+                        }
+                        if (!user) {
+                            return res.status(401).json(info);
+                        }
+                        res.status(200).json([{status: 200}]);
+                    })(req, res, next);
+                }
+                else{
+            //NO TIENE PERMISOS
+                    return res.status(403).json([{ msg: 'No estás autorizado para registrar usuarios.' }])
+                }
             }
-            if (!user) {
-                return res.status(401).json(info);
+            catch(error){
+                return res.status(403).json([{ msg: 'No estás autorizado para registrar usuarios.' }])
             }
-            res.json(user);
-        })(req, res, next);
+        }
 });
 
 module.exports = router;

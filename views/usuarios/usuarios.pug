@@ -315,11 +315,9 @@ block content
              $('.editar').on('click', function() {
                 var userID = $(this).data('id');
                 var users=!{ JSON.stringify(usuarios) };
-                console.log(users);
                 for(var key in users){
                     var obj=users[key];
                     if(obj["id"] == userID){
-                        console.log(obj);
                         break;
                     }
                 }
@@ -428,7 +426,6 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors').css('display', 'block');
-                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors');
                         errorsContainer.innerHTML = '';
@@ -497,7 +494,6 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors-edit').css('display', 'block');
-                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors-edit');
                         errorsContainer.innerHTML = '';
@@ -566,7 +562,6 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors-delete').css('display', 'block');
-                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors-delete');
                         errorsContainer.innerHTML = '';
