@@ -22,7 +22,8 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM('active', 'inactive'),
-        defaultValue: 'active'
+        defaultValue: 'active',
+        allowNull: false,
       },
       RoleId: {
         type: Sequelize.INTEGER,

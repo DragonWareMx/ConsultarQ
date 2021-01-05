@@ -170,10 +170,10 @@ block content
                                         option(value=rol.id ) #{rol.name}
                                 label(for='role-edit' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
-                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
                                 label(for='hiring_date-edit' title='Fecha de contratación' data-title='Fecha de contratación')
                             .field.uk-margin-bottom
-                                select(id="status" name="status" autocomplete='off' value='' /*required*/)
+                                select(id="status" name="status" autocomplete='off' value='' required)
                                     option(value="active") Activo
                                     option(value="inactive") Inactivo
                                 label(for='status' title='Estatus' data-title='Estatus')

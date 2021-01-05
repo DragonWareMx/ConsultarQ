@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.ENUM('active', 'inactive'),
-      defaultValue: 'active'
+      defaultValue: 'active',
+      allowNull: false
     }
   }, {
     sequelize,

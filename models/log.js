@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Log.init({
     title: DataTypes.STRING,
-    description: DataTypes.STRING
+    description: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Log',
