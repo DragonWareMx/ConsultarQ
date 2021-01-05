@@ -14,7 +14,7 @@ block content
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 button(href="#" uk-search-icon type="button")
-                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar...")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
                 input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
             button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
@@ -63,7 +63,7 @@ block content
                                         div(style="flex-basis:100%")
                                         div(class="uk-text-small") Progreso 60%
                                 progress( id="js-progressbar" class="uk-progress" value="60" max="100")
-        ul.uk-pagination.uk-flex-center(uk-margin='')
+        ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
             //- li
             //-     a(href='#')
             //-     span(uk-pagination-previous='')
@@ -263,30 +263,31 @@ block content
             filter.value=vilevar;
         }
 
-        //- function myFunction() {
-        //-     var input, filter, cards, cardContainer, h5, title, i;
-        //-     input = document.getElementById("buscador");
-        //-     filter = input.value.toUpperCase();
-        //-     parameter=document.getElementById("filter").value;
-        //-     cardContainer = document.getElementById("items");
-        //-     cards = cardContainer.getElementsByClassName("item");
-        //-     for (i = 0; i < cards.length; i++) {
-        //-         if(parameter == "name"){
-        //-             title = cards[i].querySelector('div[class~="user-name"]');
-        //-         }
-        //-         if(parameter == "email"){
-        //-             title = cards[i].querySelector('div[class~="user-email"]');
-        //-         }
-        //-         if(parameter == "phone"){
-        //-             title = cards[i].querySelector('div[class~="user-phone"]');
-        //-         }
-        //-         if (title.innerText.toUpperCase().indexOf(filter) > -1) {
-        //-             cards[i].style.display = "flex"
-        //-             } else {
-        //-                 cards[i].style.display = "none"
-        //-         }
-        //-     }
-        //- }
+        function myFunction() {
+            var input, filter, cards, cardContainer, h5, title, i;
+            input = document.getElementById("buscador");
+            filter = input.value.toUpperCase();
+            parameter=document.getElementById("filter").value;
+            cardContainer = document.getElementById("items");
+            cards = cardContainer.getElementsByClassName("item");
+            document.getElementById("pagination").style.display = "none";
+            for (i = 0; i < cards.length; i++) {
+                if(parameter == "name"){
+                    title = cards[i].querySelector('div[class~="user-name"]');
+                }
+                if(parameter == "email"){
+                    title = cards[i].querySelector('div[class~="user-email"]');
+                }
+                if(parameter == "phone"){
+                    title = cards[i].querySelector('div[class~="user-phone"]');
+                }
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex"
+                    } else {
+                        cards[i].style.display = "none"
+                }
+            }
+        }
 
     script.
         $(document).ready(function () {
@@ -345,31 +346,11 @@ block content
 
             });
 
-
-            $studentSearch.on('input', function () {
-                hideAll();
-                $studentItem.each(function() {
-                    $(this).removeClass("result");
-                });
-                    // value of searched
-                    var text = $(this).val().toLowerCase();
-                    // results of search
-                    var results = $("ul.items li:contains('" + text.toLowerCase() + "')");
-                    results.addClass("result");
-
-                // if student has result class
-                // dispaly
-                // else hide
-                if($studentItem.hasClass('result')) {
-                    $('.result').show();
-                    $studentItem.removeClass('result');
-                }
-            });
-
             $studentSearch.keyup(function()
             {
                 if (!this.value) {
                 hideAll();
+                $paginationList.show();
                 displayRange(0, itemTotal);
                 }
             });
