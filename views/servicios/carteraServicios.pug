@@ -8,7 +8,7 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Cartera de servicios
             div(class="uk-animation-toggle" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-animation-fast")
+                a(href="/servicios/agregar-servicio" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-animation-fast")
                     img(src="/img/iconos/more.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Agregar servicio
         div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top" uk-grid)
@@ -21,7 +21,7 @@ block content
                                 img(src="/img/iconos/pdfGray.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
                                 |ConsultarQ_Servicios.pdf
                             div(class="uk-width-1-2 uk-flex uk-flex-middle uk-text-small")
-                                a(href="#")
+                                a(href="#modal-editarPDF" uk-toggle)
                                     img(src="/img/iconos/edit.png" style="width:10px;height:10px;" class="uk-margin-small-right") 
                                     |Editar pdf
                         div(class="uk-width-2-5@l uk-flex uk-flex-wrap div-compartir-service div-service-res")
@@ -40,7 +40,7 @@ block content
                     div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px;") 
                         img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
                         |Supervisión de la obra
-                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                        a(href="/servicios/editar-servicio" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
                             img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
                             |Editar
                         a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
@@ -57,7 +57,7 @@ block content
                     div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px") 
                         img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
                         |Ingeniería de costos
-                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                        a(href="/servicios/editar-servicio" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
                             img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
                             |Editar
                         a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
@@ -74,7 +74,7 @@ block content
                     div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px") 
                         img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
                         |Gestión urbana asistida
-                        a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                        a(href="/servicios/editar-servicio" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
                             img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
                             |Editar
                         a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
@@ -86,4 +86,14 @@ block content
                                 li Licencias de construcción
                                 li Fraccionamientos y nomenclatura
                                 li Estudios técnicos y justificativos...
+    div(id="modal-editarPDF" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar PDF
+            div(style="border: dashed #c7c7c7 1px" class="uk-flex uk-flex-middle uk-padding uk-margin")
+                a(id="archivo" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
+                    <span uk-icon="icon: upload; ratio: 0.8" style="margin-right:5px"></span>Selecciona el archivo
+                input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
+            div(class="uk-width-1 uk-flex-right uk-flex")
+                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
             
