@@ -8,7 +8,7 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
-router.get('/', isLoggedIn,function (req, res, next) {
+router.get('/activos', isLoggedIn,function (req, res, next) {
     res.render('proyectos'); 
   });
   
