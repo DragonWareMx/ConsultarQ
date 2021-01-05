@@ -15,6 +15,10 @@ router.get('/login2' , isNotLoggedIn ,(req,res,next) => {
     res.render('login2', { title: 'Iniciar sesión' });
 });
 
+router.get('/recuperar-pssw' , isNotLoggedIn ,(req,res,next) => {
+    res.render('recuperar_pssw', { title: 'Recuperar contraseña' });
+});
+
 router.post('/login', isNotLoggedIn ,(req, res, next) =>{
     passport.authenticate('local.signin',{
         successRedirect: '/inicio',

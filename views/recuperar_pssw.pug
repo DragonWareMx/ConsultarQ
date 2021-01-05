@@ -10,19 +10,18 @@ block content
                         div(class="uk-position-bottom uk-width-2-5 uk-text-center" style="color:white; font-size:13px; padding-bottom:10px") 2020 ©ConsultarQ
                     div(class="uk-width-3-5 uk-height-1-1 div-white-login")
                         div(class="uk-width-1-1 uk-height-1-1 uk-padding-large div-conteiner-white" style="padding-left:35px !important; padding-bottom:0px")
-                            div(class="uk-text-bold txt-iniciar uk-margin-small-bottom") Iniciar sesión
+                            div(class="uk-text-bold txt-iniciar uk-margin-small-bottom") Recuperar contraseña
                                 img(src="/img/logos/logo-consultarqai.png" class="img-logo-responsive" style="width:120px; height;50px;")
                             hr(class="uk-margin-remove" style="border: 2px solid #3B86D9; width:82px; background-color:#3B86D9;")
+                            p(class="text-pssw" style="color:#6B6B72; font-size:13px") Se enviará un mensaje a la cuenta de correo electrónico con un enlace para restaurar la contraseña
                             form(class="formulario uk-padding",style="padding-left:0px; padding-right:0px; margin-top:20px",method='post', action='#')
                                 p(class="uk-margin-remove-bottom" style="color:#6B6B72") Correo electrónico
                                 input(class="uk-input uk-padding-remove uk-width-1-1",style="color:#222238; border-top:none; border-left:none; border-right:none",type="email",name="email")
-                                p(class="uk-margin-remove-bottom" style="color:#6B6B72") Contraseña
-                                input(class="uk-input uk-padding-remove uk-width-1-1",style="color:#222238; border-top:none; border-left:none; border-right:none",type="password",name="password")
                                 if messages
                                     for message, i in messages
                                         p.txt-alert-login #{ message }
-                                button(class="uk-padding-small uk-width-1-1 uk-margin-medium-top" type="submit") Iniciar sesión
-                        div(class="uk-width-1-1 div-gray-login uk-text-center uk-position-bottom-right uk-width-3-5" style="background-color:#DBDBDC; font-size:13px; padding:8px") ¿Olvidaste tu contraseña? 
+                                button(class="uk-padding-small uk-width-1-1 uk-margin-medium-top" type="submit") Enviar
+                        div(class="uk-width-1-1 div-gray-login uk-text-center uk-position-bottom-right uk-width-3-5" style="background-color:#DBDBDC; font-size:13px; padding:8px") ¿Listo para iniciar sesión? 
                             a(style="text-decoration:none !important") Clic aquí
             div(class="uk-width-1-1 uk-text-center div-copy" style="font-size:11px; margin-top:10px;") 2020 ©ConsultarQ
             div(class="uk-width-1-1 uk-text-center div-developed" style="font-size:13px; margin-top:10px;") Desarrollado por 
