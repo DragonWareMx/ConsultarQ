@@ -13,8 +13,9 @@ block content
                     div Nuevo Usuario
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
-                button(href="#" uk-search-icon type="button")
+                span(uk-search-icon type="button")
                 input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                label(for="buscador" class="tag-filter" id="tag-filter") Nombre
                 input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
             button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
@@ -260,6 +261,18 @@ block content
 
         function putSearch(vilevar){
             var filter=document.getElementById("filter");
+            var tag=document.getElementById("tag-filter");
+            switch(vilevar){
+                case 'name':
+                    tag.innerHTML='Nombre';
+                    break;
+                case 'email':
+                    tag.innerHTML='Email';
+                    break;
+                case 'phone':
+                    tag.innerHTML='Tel';
+                    break;
+            }
             filter.value=vilevar;
         }
 
@@ -291,16 +304,10 @@ block content
 
     script.
         $(document).ready(function () {
-            console.log("ey");
             const $studentItem = $('.item');
-            const $page = $('.page');
-            //- const $pagination = $('.pagination');
             const $paginationList = $('.uk-pagination');
             const $studentSearch = $('#buscador');
             const itemTotal = 6;
-            console.log($studentItem.length);
-            console.log($studentItem.length / itemTotal + 1);
-            console.log($("ul.items"));
 
             // hide all
             function hideAll() {
@@ -314,7 +321,6 @@ block content
                 hideAll();
                 // display 0 - 1 students
                 $studentItem.slice(a,b).fadeIn();
-
             }
 
             displayRange(0, itemTotal);
@@ -325,7 +331,6 @@ block content
                 pagination += `
                     <li><a class="pagination__num">${i}</a></li>
                 `;
-                console.log("si entró al for raza");
             }
             $paginationList.append(pagination);
             // click on pagination num
@@ -340,7 +345,7 @@ block content
                 let paginationText = Number($(this).text()) - 1;
                 let startFrom = paginationText * itemTotal;
                 let end = paginationText * itemTotal + paginationText + itemTotal;
-                console.log('start: ' + startFrom + '   end: ' + end)
+                // console.log('start: ' + startFrom + '   end: ' + end)
                 // display ranges
                 displayRange(startFrom, end);
 
