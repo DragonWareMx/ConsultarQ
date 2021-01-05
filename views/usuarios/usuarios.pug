@@ -92,13 +92,13 @@ block content
                                 input(type='password' autocomplete='new-password'  id="password-confirm" onkeyup="validatePassword()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
                             .field.uk-margin-bottom
-                                select(id="role" name="role" autocomplete='off' value='' required)
+                                select(id="role" name="role" autocomplete='off' value='')
                                     option(value="" disabled hidden selected ) Seleccionar
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
                                 label(for='role' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
-                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
                                 label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
