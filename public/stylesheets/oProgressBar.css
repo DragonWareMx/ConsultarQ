@@ -1,0 +1,40 @@
+.o-progress-date-line{
+    width: 90%;
+    margin-left:auto;
+    margin-right: auto;
+    border-bottom: 2px solid #C7C7C7;
+}
+.o-progress-date-start{
+    background: #3B86D9;
+    width: 14px;
+    height: 14px;
+    display:flex;
+    margin-top:-8px;
+    margin-left:5%;
+    border-radius:50%;
+}
+.o-progress-date-today{
+    background: #FFFFFF;
+    border: 1px solid #BE3BC0;
+    width: 14px;
+    height: 14px;
+    display:flex;
+    margin-top:-15px;
+    border-radius: 50%;
+}
+.o-progress-date-end{
+    background: #3B86D9;
+    width: 14px;
+    height: 14px;
+    display:flex;
+    margin-top:-14px;
+    margin-left:auto;
+    margin-right: 5%;
+    border-radius:50%;
+}
+.o-progress-date-dates{
+    display: flex;
+    justify-content: space-between;
+    padding-left: 2%;
+    padding-right: 2%;
+}
