@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       User.hasOne(models.Employee);
       User.belongsTo(models.Role);
+      User.hasMany(models.Log);
     }
   };
   User.init({

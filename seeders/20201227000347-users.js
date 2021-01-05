@@ -14,13 +14,14 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    
+
     //encriptacion de la password
     const userPassword = await helpers.encryptPassword("viledruid9000");
 
-   await queryInterface.bulkInsert('Users', [{
+    await queryInterface.bulkInsert('Users', [{
       email: 'DragonwareOficial@hotmail.com',
       password: userPassword,
+      RoleId: 1,
     }], {});
   },
 

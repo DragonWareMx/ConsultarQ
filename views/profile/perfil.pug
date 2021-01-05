@@ -18,7 +18,7 @@ block content
                     div(class="uk-margin-auto uk-flex uk-flex-wrap")
                         div(class="uk-width-auto uk-margin-small-right div-foto-perfil")
                             if user.picture
-                                img(src="/uploads/"+user.picture class="uk-border-circle uk-margin-auto" style="width:90px;height:90px; background-size:cover; object-fit:cover;")
+                                img(src="/uploads/avatar/"+user.picture class="uk-border-circle uk-margin-auto" style="width:90px;height:90px; background-size:cover; object-fit:cover;")
                             else
                                 img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto" style="width:90px;height:90px; background-size:cover; object-fit:cover;")
                             a(href="/perfil/editar/" class="uk-text-center" style="font-size:13px")

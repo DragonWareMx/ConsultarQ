@@ -2,15 +2,28 @@ extends ../main
 
 block head
     title ConsultarQ - Usuarios
-
+    link(rel="stylesheet" href="/stylesheets/others.css")
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar usuarios
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar Usuarios
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="/usuarios/nuevo")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Usuarios
+                    div Nuevo Usuario
+        form(class="uk-flex uk-margin-bottom")
+            div(class="uk-search uk-search-default uk-width-expand")
+                button(href="#" uk-search-icon)
+                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
+            //- boton de filtrar
+            button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+            div(uk-dropdown="mode: click")
+                ul(class="uk-list")
+                    li(onclick="putSearch('name')") Nombre
+                    li(onclick="putSearch('email')") Correo electrónico
+                    li(onclick="putSearch('name')") Sugerencia
         div(class="uk-child-width-1-2@s" uk-grid)
             each usuario in usuarios
                 div
@@ -18,14 +31,14 @@ block content
                         div(class="uk-card-body uk-flex uk-flex-top uk-padding-small")
                             div(class="uk-width-auto")
                                 if usuario.picture
-                                     img(src="/uploads/"+usuario.picture alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
+                                     img(src="/uploads/avatar/"+usuario.picture alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                                 else
                                     img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                             div(class="uk-width-expand uk-margin-small-left")
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
                                     div #{usuario.Employee.name}
                                     div(class="uk-animation-toggle" tabindex="0")
-                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left" href="/usuarios/editar/"+usuario.id)
+                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
                                         img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
                                         div(class="uk-text-small") Editar
                                 div(class="uk-text-small uk-margin-remove-top" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
@@ -50,3 +63,525 @@ block content
                                         div(style="flex-basis:100%")
                                         div(class="uk-text-small") Progreso 60%
                                 progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+        //Form para agregar usuario
+        div(id="user-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors")
+                form(class="uk-card-body uk-padding-small" id="form-new-user" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-bottom") FOTO DE PERFIL
+                        div(class="form-group uk-margin-top uk-border-circle")
+                            img(src="/img/iconos/default.png" alt=""  id="avatar" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
+                            a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
+                                <span uk-icon="icon: upload; ratio: 0.8"></span> &nbsp Agregar foto
+                            input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
+                    div(class="uk-child-width-1-1 uk-grid")
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name' title='Nombre Completo' data-title='Nombre Completo')
+                            .field.uk-margin-bottom
+                                input(type='email' autocomplete="nope"  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                            .field.uk-margin-bottom
+                                input(type='password' autocomplete='new-password'  id="password" name="password" value='' onchange="this.setAttribute('value', this.value); validatePassword();" required='')
+                                label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                            .field.uk-margin-bottom
+                                input(type='password' autocomplete='new-password'  id="password-confirm" onkeyup="validatePassword()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                            .field.uk-margin-bottom
+                                select(id="role" name="role" autocomplete='off' value='' required)
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    each rol in roles
+                                        option(value=rol.id ) #{rol.name}
+                                label(for='role' title='Rol' data-title='Rol')
+                            .field.uk-margin-bottom
+                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
+                            div(class="uk-grid")
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="city" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='city' title='Ciudad' data-title='Ciudad')
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="state" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='state' title='Estado' data-title='Estado')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='suburb' title='Colonia' data-title='Colonia')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="street" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='street' title='Calle' data-title='Calle')
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="ext_number" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='ext_number' title='No. Exterior' data-title='No. Exterior')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="int_number" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
+                                        label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
+                            div(class="uk-width-1 uk-flex-right uk-flex")
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+    //form para editar usuario
+    div(id="edit-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-edit")
+                form(class="uk-card-body uk-padding-small uk-padding-remove-bottom" id="form-edit-user" action="/usuarios/edit/"  method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-small-bottom") FOTO DE PERFIL
+                        div(class="form-group uk-margin-top uk-border-circle")
+                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
+                            a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
+                                <span uk-icon="icon: pencil; ratio: 0.8"></span> &nbsp Editar foto
+                            input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
+                    div(class="uk-child-width-1-1 uk-grid")
+                        div
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name-edit" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
+                            .field.uk-margin-bottom
+                                input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
+                            a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-bottom")
+                                <span uk-icon="icon: pencil; ratio: 0.8"></span> &nbsp Editar contraseña
+                            div(style="display:none" id="pass-div")
+                                .field.uk-margin-bottom
+                                    input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
+                                    label(for='password-edit' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                                .field.uk-margin-bottom
+                                    input(type='password' autocomplete='new-password'  id="password-confirm-edit" onkeyup="validatePasswordEdit()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
+                                    label(for='password-confirm-edit' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                            .field.uk-margin-bottom
+                                select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    each rol in roles
+                                        option(value=rol.id ) #{rol.name}
+                                label(for='role-edit' title='Rol' data-title='Rol')
+                            .field.uk-margin-bottom
+                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='hiring_date-edit' title='Fecha de contratación' data-title='Fecha de contratación')
+                            .field.uk-margin-bottom
+                                select(id="status" name="status" autocomplete='off' value='' /*required*/)
+                                    option(value="active") Activo
+                                    option(value="inactive") Inactivo
+                                label(for='status' title='Estatus' data-title='Estatus')
+                            div(class="uk-alert-danger" uk-alert style="display:none" id="status-alert")
+                                p(class="uk-text-small") Si el estatus del usuario es inactivo, este ya no podrá ingresar al sistema.
+                            div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='tel' id="phone_number-edit" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_number-edit' title='Número telefónico' data-title='Número telefónico')
+                            div(class="uk-grid")
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="city-edit" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='city-edit' title='Ciudad' data-title='Ciudad')
+                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="state-edit" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='state-edit' title='Estado' data-title='Estado')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="suburb-edit" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='suburb-edit' title='Colonia' data-title='Colonia')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on'  id="street-edit" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='street-edit' title='Calle' data-title='Calle')
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="ext_number-edit" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='ext_number-edit' title='No. Exterior' data-title='No. Exterior')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
+                                        label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
+                            div(class="uk-width-1 uk-flex-right uk-flex")
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
+                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
+                a(class="uk-flex uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+    //modal para eliminar
+    div(id="delete-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar al usuario Dragonware?
+                form(class="uk-card-body uk-padding-small" id="form-delete-user" action="/usuarios/delete"  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#edit-form" uk-toggle data-id="" data-name="") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+
+    script.
+        var password = document.getElementById("password")
+        , confirm_password = document.getElementById("password-confirm");
+
+         var password_edit = document.getElementById("password-edit")
+        , confirm_password_edit = document.getElementById("password-confirm-edit");
+
+        function validatePassword(){
+            if(password.value != confirm_password.value) {
+                confirm_password.setCustomValidity("Las contraseñas no coinciden");
+                confirm_password.reportValidity();
+            } else {
+                confirm_password.setCustomValidity('');
+                confirm_password.reportValidity();
+            }
+        }
+        function validatePasswordEdit(){
+            if(password_edit.value != confirm_password_edit.value) {
+                confirm_password_edit.setCustomValidity("Las contraseñas no coinciden");
+                confirm_password_edit.reportValidity();
+            } else {
+                confirm_password_edit.setCustomValidity('');
+                confirm_password_edit.reportValidity();
+            }
+        }
+
+        function putSearch(vilevar){
+            alert(vilevar);
+            var filter=document.getElementById("filter");
+            filter.value=vilevar;
+        }
+    script.
+         jQuery(($) => {
+            $('#foto').on('click', function() {
+                $("#fileField").click();
+            });
+
+            $('#foto-edit').on('click', function() {
+                $("#fileField-edit").click();
+            });
+
+            function readURL(input) {
+                $('#avatar').attr('src', "/img/iconos/default.png");
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                    $('#avatar').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+
+            $("#fileField").change(function() {
+                readURL(this);
+            });
+            //el de abajo es igual pero para el avatar a la hora de editar
+            function readURLEdit(input) {
+                $('#avatar-edit').attr('src', "/img/iconos/default.png");
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                    $('#avatar-edit').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+
+            $("#fileField-edit").change(function() {
+                readURLEdit(this);
+            });
+
+            //esto de aqui abajo es para ocultar los campos de pass
+            $('#pass').on('click', function() {
+                 if ($("#pass-div").is(':visible')) {
+                    $("#pass-div").hide();
+                    $("#password-edit").val('').change();
+                    $("#password-confirm-edit").val('').change();
+                }
+                else{
+                    $("#pass-div").show();
+                }
+            });
+
+            //esto de abajo es para al momento de abrir el modal de editar cargar los datos
+             $('.editar').on('click', function() {
+                var userID = $(this).data('id');
+                var users=!{ JSON.stringify(usuarios) };
+                console.log(users);
+                for(var key in users){
+                    var obj=users[key];
+                    if(obj["id"] == userID){
+                        console.log(obj);
+                        break;
+                    }
+                }
+                //Aqui empieza a llenarse el modal
+                if(obj["picture"]!=null){
+                    $('#avatar-edit').attr('src', "/uploads/avatar/"+obj["picture"]);
+                }else{
+                    $('#avatar-edit').attr('src',"/img/iconos/default.png");
+                }
+                $('#name-edit').val(obj["Employee"]["name"]).change();
+                $('#email-edit').val(obj["email"]).change();
+                //aqui va el rol xd
+                $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true)
+                $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                //aqui empiezan los datos de contacto
+                $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
+                $('#city-edit').val(obj["Employee"]["city"]).change();
+                $('#state-edit').val(obj["Employee"]["state"]).change();
+                $('#suburb-edit').val(obj["Employee"]["suburb"]).change();
+                $('#street-edit').val(obj["Employee"]["street"]).change();
+                $('#ext_number-edit').val(obj["Employee"]["ext_number"]).change();
+                $('#int_number-edit').val(obj["Employee"]["int_number"]).change();
+
+                //esto es para poner el id en el action del form
+                $('#form-edit-user').attr('action', '/usuarios/edit/'+obj["id"]);
+                $('#btnEliminar').data('id',obj["id"]);
+                $('#btnEliminar').data('name',obj["Employee"]["name"]);
+
+                //esto es para poner el status en el select
+                if(obj["status"]=="active"){
+                    $('#status option[value="active"]').prop('selected', 'selected').change();
+                }else{
+                    $('#status option[value="inactive"]').prop('selected', 'selected').change();
+                }
+            });
+
+            $('#status').on('change', function(){
+                if( $('#status').val() == 'active'){
+                    $('#status-alert').hide();
+                }
+                else{
+                    $('#status-alert').show();
+                }
+            });
+
+            //este es para al momento de abrir el modal de eliminar mandar los datos
+            $('#btnEliminar').on('click', function() {
+                var userID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar al usuario '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-user').attr('action', '/usuarios/delete/'+ userID);
+            });
+        });
+
+        $(document).ready(function () {
+            //ajax del form de nuevo
+            $("#form-new-user").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Usuario registrado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 3000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/usuarios'
+                        }, 3000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        console.log(data.responseText);
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+            //ajax del form de editar
+            $("#form-edit-user").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-edit");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Usuario editado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 3000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/usuarios'
+                        }, 3000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-edit').css('display', 'block');
+                        console.log(data.responseText);
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-edit');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+            //ajax del form de eliminar
+            $("#form-delete-user").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-delete");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-delete').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Usuario eliminado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 3000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/usuarios'
+                        }, 3000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-delete').css('display', 'block');
+                        console.log(data.responseText);
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-delete');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+        });
