@@ -3,6 +3,7 @@ extends ../main
 block head
     title ConsultarQ - Caja chica
     link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/cajaChica.css")
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     
     
@@ -14,25 +15,119 @@ block content
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar registro
-        div(class="uk-width-1-1 uk-flex uk-flex-wrap" style="background-color:pink")
-            div(class="uk-grid-small uk-child-width-expand@s uk-width-1-1" uk-grid)
+        div(class="uk-width-1-1 uk-flex uk-flex-wrap")
+            div(class="uk-grid-small uk-child-width-expand@s uk-width-1-1 uk-flex uk-flex-wrap-reverse" uk-height-match="target: > div > .uk-card" uk-grid)
                 div
-                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:5px")
-                        div(class="uk-width-3-5@m uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center" style="background-color:pink;") 
-                            div.uk-margin-small-bottom Ingresos
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
+                        div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center") 
+                            div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Ingresos
+                                img(src="/icons/money.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") 578 registros
-                            a(class=" uk-text-center" href="#"  style="width:100% !important; background-color:gray; padding:2px; border-radius:2px; font-size:12px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class=" uk-text-center" href="#"  style="width:100% !important; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
-                        div.uk-width-expand JJ
+                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
+                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                        a(href="#" class="uk-flex  uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
+                            <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
-                    div(class="uk-card uk-card-default uk-card-body") Egresos
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
+                        div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center") 
+                            div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Egresos
+                                img(src="/icons/moneyLess.png" style="width:18px; height:18px; margin-left:10px")
+                            div.uk-margin-small-bottom(style="color:#222238") 324 registros
+                            a(class=" uk-text-center" href="#"  style="width:100% !important; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            
+                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
+                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                        a(href="#" class="uk-flex  uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
+                            <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
-                    div(class="uk-card uk-card-default uk-card-body") Prefacturas
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
+                        div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center") 
+                            div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Prefacturas
+                                img(src="/icons/doc.png" style="width:18px; height:18px; margin-left:10px")
+                            div.uk-margin-small-bottom(style="color:#222238") 178 registros
+                            a(class=" uk-text-center" href="#"  style="width:100% !important; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            
+                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
+                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                        a(href="#" class="uk-flex uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
+                            <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
-                    div(class="uk-card uk-card-default uk-card-body") Filtrar información
-            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="background-color:blue; padding-right:15px;")
-                div(class="uk-width-3-4@s uk-padding-remove" style="background-color:green")
-                    div(class="uk-card uk-card-default uk-card-body") Ingresos
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap" style="padding:8px")
+                        div(style="color:#222238; font-weight:500") FILTRAR INFORMACIÓN
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top" style="justify-content:space-between")
+                            div(class="" style="width:30%")
+                                button(class="button-caja uk-width-1-1" style="margin-right:5px") Año
+                            div(class="" style="width:30%")
+                                button(class="button-caja uk-width-1-1" style="") Mes
+                            div(class="" style="width:33%")
+                                button(class="button-caja uk-width-1-1" style="") Quincena
+                        div(class="uk-width-1-1 uk-margin-small-top")
+                            select(class="uk-select uk-width-1-1 uk-remove-padding" style="font-size:14px; ")
+                                option(selected) Nombre del proyecto
+                                option Proyecto 1
+                                option Proyecto 2
+                                option Proyecto 3
+                        div(class="uk-width-1-1 uk-flex uk-flex-center uk-margin-small-top")
+                            button(class="button-caja button-caja-s uk-width-1-2" style="") Buscar
+            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;")
+                div(class="uk-width-3-4@s uk-padding-remove")
+                    div(class="uk-card uk-card-default uk-card-body uk-padding-small")
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle ")
+                            div(class="uk-align-center") 
+                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;") 
+                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF 
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center") 
+                            a(uk-icon="icon: chevron-left")
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") NOVIEMBRE
+                            a(uk-icon="icon: chevron-right")
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="color:#222238") Quincena 1
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center") Nombre del proyecto
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
+                            div(class="uk-width-3-5@m" style="background-color:pink") Hola
+                            div(class="uk-width-2-5@m " style="padding:6px;")
+                                div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
+                                    div(class="uk-width-1-5@m uk-flex uk-flex-center")
+                                        img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
+                                    div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
+                                        div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
+                                            div(class="uk-width-1-3@m" style="color:#222238") Contadores
+                                            div(class="uk-width-expand@m")
+                                                progress(id="js-progressbar" class="" value="60" max="100" style="")
+                                        div(class="uk-flex uk-flex-wrap uk-width-1-1")
+                                            div(class="uk-width-1-3@m") 23 registros
+                                            div(class="uk-width-expand@m")
+                                                progress(id="js-progressbar" class="" value="40" max="100")
+                                
+                                div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
+                                    div(class="uk-width-1-5@m uk-flex uk-flex-center")
+                                        img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
+                                    div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
+                                        div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
+                                            div(class="uk-width-1-3@m" style="color:#222238") Arquitectos
+                                            div(class="uk-width-expand@m")
+                                                progress(id="js-progressbar" class="" value="60" max="100" style="")
+                                        div(class="uk-flex uk-flex-wrap uk-width-1-1")
+                                            div(class="uk-width-1-3@m") 23 registros
+                                            div(class="uk-width-expand@m")
+                                                progress(id="js-progressbar" class="" value="40" max="100")
+                            
+                                div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body" style="padding:2px; padding-top:15px; padding-bottom:15px")
+                                    div(class="uk-width-1-5@m uk-flex uk-flex-center")
+                                        img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
+                                    div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
+                                        div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
+                                            div(class="uk-width-1-3@m" style="color:#222238") Administr..
+                                            div(class="uk-width-expand@m")
+                                                progress(id="js-progressbar" class="" value="60" max="100" style="")
+                                        div(class="uk-flex uk-flex-wrap uk-width-1-1")
+                                            div(class="uk-width-1-3@m") 23 registros
+                                            div(class="uk-width-expand@m")
+                                                progress(id="js-progressbar" class="" value="40" max="100")
+                            a(href="#" class="uk-flex uk-flex-middle  uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
+                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+
                     div(class="uk-card uk-card-default uk-card-body uk-margin-top") Ingresos
                 div(class="uk-width-expand")
                     div(class="uk-card uk-card-default uk-card-body" style="height:380px") Ingresos
