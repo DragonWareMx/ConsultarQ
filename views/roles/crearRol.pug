@@ -1,8 +1,8 @@
 extends ../main
 
 block head
-    title ConsultarQ - Crear Usuario
-
+    title ConsultarQ - Crear Rol
+    link(rel="stylesheet" href="/stylesheets/others.css")
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
@@ -13,9 +13,10 @@ block content
                     div Regresar
         div(class="uk-card uk-card-default uk-align-center uk-margin-top")
             form(class="uk-card-body" action="/roles/nuevo" method="POST")
-                div(class="uk-margin-small-top uk-margin-small-bottom") Nombre del rol
-                input(class="uk-input uk-form-small uk-width-1-4@m" autocomplete="off" placeholder="Nombre del rol" id="name" name="role" required)
-                div(class="uk-overflow-auto uk-margin-top")   
+                div(class="field uk-margin-bottom uk-width-1-2@l")
+                    input(type='text' autocomplete='on' id="name" name="role" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='name' title='Nombre del rol' data-title='Nombre del rol')
+                div(class="uk-overflow-auto uk-margin-top")
                     table(class="uk-table uk-table-small uk-table-divider")
                         thead
                             tr
@@ -27,7 +28,7 @@ block content
                         tbody
                             tr
                                 td Usuarios
-                                td(class="uk-text-center") 
+                                td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="ur")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="uu")
@@ -37,17 +38,17 @@ block content
                                     input(type="checkbox" class="uk-checkbox" name="ud")
                             tr
                                 td Caja chica
-                                td(class="uk-text-center") 
+                                td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="cr")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="cu")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="cc") 
+                                    input(type="checkbox" class="uk-checkbox" name="cc")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="cd")
                             tr
                                 td Cartera de servicios
-                                td(class="uk-text-center") 
+                                td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="sr")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="su")
@@ -57,7 +58,7 @@ block content
                                     input(type="checkbox" class="uk-checkbox" name="sd")
                             tr
                                 td Proyectos
-                                td(class="uk-text-center") 
+                                td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="pr")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="pu")
@@ -67,7 +68,7 @@ block content
                                     input(type="checkbox" class="uk-checkbox" name="pd")
                             tr
                                 td Directorio de clientes
-                                td(class="uk-text-center") 
+                                td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="dr")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="du")
@@ -77,7 +78,7 @@ block content
                                     input(type="checkbox" class="uk-checkbox" name="dd")
                             tr
                                 td Prestadores externos
-                                td(class="uk-text-center") 
+                                td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="er")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox" name="eu")

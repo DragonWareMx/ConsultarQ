@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
-const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
 
@@ -9,14 +9,18 @@ const passport = require('passport');
 const models = require('../models/index');
 
 //AGREGAR USUARIO
-router.get('/nuevo', isLoggedIn,function(req, res, next) {
+router.get('/nuevo', isLoggedIn, function (req, res, next) {
     res.render('crearRol')
 });
 
-router.get('/', isLoggedIn,function(req, res, next) {
+router.get('/', isLoggedIn, function (req, res, next) {
     models.Role.findAll({
-        include: ["Users"]
-      }).then(roles => {
+        include: [{
+            model: models.User
+        }, {
+            model: models.Permission
+        }],
+    }).then(roles => {
         res.render('roles', { roles })
     });
     /*
