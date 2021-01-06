@@ -45,69 +45,147 @@ block content
                                         th(class="uk-table-shrink") Edición
                                         th(class="uk-table-shrink") Eliminar
                                 -
-                                    var obj = JSON.parse('{ "name":"John", "age":55, "city":"New York"}');
-                                #{obj["name"]}
+                                    var list = { "uc":"No","ur":"No","uu":"No","ud":"No",
+                                                    "cc":"No","cr":"No","cu":"No","cd":"No",
+                                                    "sc":"No","sr":"No","su":"No","sd":"No",
+                                                    "pc":"No","pr":"No","pu":"No","pd":"No",
+                                                    "dc":"No","dr":"No","du":"No","dd":"No",
+                                                    "ec":"No","er":"No","eu":"No","ed":"No"
+                                                    };
+                                each perm in role.Permissions
+                                    if (perm.name == "uc")
+                                        - list.uc="Si"
+                                    else if (perm.name == "ur")
+                                        - list.ur="Si"
+                                    else if (perm.name == "uu")
+                                        - list.uu="Si"
+                                    else if (perm.name == "ud")
+                                        - list.ud="Si"
+                                    else if (perm.name == "cc")
+                                        - list.cc="Si"
+                                    else if (perm.name == "cr")
+                                        - list.cr="Si"
+                                    else if (perm.name == "cu")
+                                        - list.cu="Si"
+                                    else if (perm.name == "cd")
+                                        - list.cd="Si"
+                                    else if (perm.name == "sc")
+                                        - list.sc="Si"
+                                    else if (perm.name == "sr")
+                                        - list.sr="Si"
+                                    else if (perm.name == "su")
+                                        - list.su="Si"
+                                    else if (perm.name == "sd")
+                                        - list.sd="Si"
+                                    else if (perm.name == "pc")
+                                        - list.pc="Si"
+                                    else if (perm.name == "pr")
+                                        - list.pr="Si"
+                                    else if (perm.name == "pu")
+                                        - list.pu="Si"
+                                    else if (perm.name == "pd")
+                                        - list.pd="Si"
+                                    else if (perm.name == "dc")
+                                        - list.dc="Si"
+                                    else if (perm.name == "dr")
+                                        - list.dr="Si"
+                                    else if (perm.name == "du")
+                                        - list.du="Si"
+                                    else if (perm.name == "dd")
+                                        - list.dd="Si"
+                                    else if (perm.name == "ec")
+                                        - list.ec="Si"
+                                    else if (perm.name == "er")
+                                        - list.er="Si"
+                                    else if (perm.name == "eu")
+                                        - list.eu="Si"
+                                    else if (perm.name == "ed")
+                                        - list.ed="Si"
                                 tbody
                                     tr
                                         td Usuarios
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.uc
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.ur
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.uu
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.ud
                                     tr
                                         td Caja chica
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.cc
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.cr
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.cu
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.cd
                                     tr
                                         td Cartera de servicios
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.sc
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.sr
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.su
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.sd
                                     tr
                                         td Proyectos
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.pc
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.pr
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.pu
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.pd
                                     tr
                                         td Directorio de clientes
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.dc
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.dr
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.du
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.dd
                                     tr
                                         td Prestadores externos
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.ec
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.er
                                         td(class="uk-text-center")
-                                            div() Si
+                                            div()
+                                                = list.eu
                                         td(class="uk-text-center")
-                                            div() No
+                                            div()
+                                                = list.ed
 
     script.
         $(document).ready(function(){
