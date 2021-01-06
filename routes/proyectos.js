@@ -8,8 +8,8 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
-router.get('/', function (req, res, next) {
-    res.render('proyectos');
+router.get('/activos', isLoggedIn,function (req, res, next) {
+    res.render('proyectos'); 
   });
   
 
