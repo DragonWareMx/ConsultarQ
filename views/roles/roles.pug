@@ -17,7 +17,7 @@ block content
                     div(class="uk-card uk-card-default uk-width-1 uk-padding-small")
                         div(class="uk-card-body uk-flex uk-padding-remove")
                             div(class="uk-animation-toggle uk-width-1 uk-text-right uk-margin-auto-left uk-margin-remove-right" tabindex="0")
-                                a(class="uk-text-right uk-flex-inline uk-flex-middle uk-flex uk-text-primary uk-link-heading uk-animation-shake"  href="#modal-editar-rol" uk-toggle)
+                                a(class="uk-text-right uk-flex-inline uk-flex-middle uk-flex uk-text-primary uk-link-heading uk-animation-shake editar"  href="#modal-editar-rol" uk-toggle data-id=role.id)
                                     img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
                                     div(class="uk-text-small") Editar
                         div(class="uk-flex uk-flex-middle uk-flex-wrap")
@@ -277,7 +277,7 @@ block content
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar Rol
             form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" action="/roles/nuevo" method="POST")
                 div(class="field uk-margin-bottom uk-width-1-2@l")
-                    input(type='text' autocomplete='on' id="name" name="role" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    input(type='text' autocomplete='on' id="name-edit" name="role" value='' onchange="this.setAttribute('value', this.value);" required='')
                     label(for='name' title='Nombre del rol' data-title='Nombre del rol')
                 div(class="uk-overflow-auto uk-margin-top")
                     table(class="uk-table uk-table-small uk-table-divider")
@@ -292,63 +292,63 @@ block content
                             tr
                                 td Usuarios
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="uc")
+                                    input(type="checkbox" class="uk-checkbox" id="uc-edit" name="uc")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="ur")
+                                    input(type="checkbox" class="uk-checkbox"  id="ur-edit" name="ur")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="uu")
+                                    input(type="checkbox" class="uk-checkbox"  id="uu-edit" name="uu")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="ud")
+                                    input(type="checkbox" class="uk-checkbox"  id="ud-edit" name="ud")
                             tr
                                 td Caja chica
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="cc")
+                                    input(type="checkbox" class="uk-checkbox"  id="cc-edit" name="cc")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="cr")
+                                    input(type="checkbox" class="uk-checkbox"  id="cr-edit" name="cr")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="cu")
+                                    input(type="checkbox" class="uk-checkbox"  id="cu-edit" name="cu")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="cd")
+                                    input(type="checkbox" class="uk-checkbox"  id="cd-edit" name="cd")
                             tr
                                 td Cartera de servicios
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="sc")
+                                    input(type="checkbox" class="uk-checkbox"  id="sc-edit" name="sc")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="sr")
+                                    input(type="checkbox" class="uk-checkbox"  id="sr-edit" name="sr")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="su")
+                                    input(type="checkbox" class="uk-checkbox"  id="su-edit" name="su")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="sd")
+                                    input(type="checkbox" class="uk-checkbox"  id="sd-edit" name="sd")
                             tr
                                 td Proyectos
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="pc")
+                                    input(type="checkbox" class="uk-checkbox"  id="pc-edit" name="pc")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="pr")
+                                    input(type="checkbox" class="uk-checkbox"  id="pr-edit" name="pr")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="pu")
+                                    input(type="checkbox" class="uk-checkbox"  id="pu-edit" name="pu")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="pd")
+                                    input(type="checkbox" class="uk-checkbox"  id="pd-edit" name="pd")
                             tr
                                 td Directorio de clientes
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="dc")
+                                    input(type="checkbox" class="uk-checkbox"  id="dc-edit" name="dc")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="dr")
+                                    input(type="checkbox" class="uk-checkbox"  id="dr-edit" name="dr")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="du")
+                                    input(type="checkbox" class="uk-checkbox"  id="du-edit" name="du")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="dd")
+                                    input(type="checkbox" class="uk-checkbox"  id="dd-edit" name="dd")
                             tr
                                 td Prestadores externos
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="ec")
+                                    input(type="checkbox" class="uk-checkbox"  id="ec-edit" name="ec")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="er")
+                                    input(type="checkbox" class="uk-checkbox"  id="er-edit" name="er")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="eu")
+                                    input(type="checkbox" class="uk-checkbox"  id="eu-edit" name="eu")
                                 td(class="uk-text-center")
-                                    input(type="checkbox" class="uk-checkbox" name="ed")
+                                    input(type="checkbox" class="uk-checkbox"  id="ed-edit" name="ed")
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" type="submit") Guardar
@@ -368,6 +368,19 @@ block content
                     button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
     script.
         $(document).ready(function(){
-             var users=!{ JSON.stringify(roles) };
-             console.log(users);
+             $('.editar').on('click', function() {
+                var roleID = $(this).data('id');
+                var roles=!{ JSON.stringify(roles) };
+                for(var key in roles){
+                    var obj=roles[key];
+                    if(obj["id"] == roleID){
+                        break;
+                    }
+                }
+                $('#name-edit').val(obj['name']).change();
+                $('#modal-editar-rol').find('input:checkbox').prop('checked', false);
+                jQuery.each(obj['Permissions'], function(index,item){
+                    $('#'+item['name']+'-edit').prop("checked", true);
+                });
+             });
         })
