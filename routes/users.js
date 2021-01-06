@@ -37,10 +37,10 @@ var upload = multer({
 
 //TODOS LOS USUARIOS
 router.get('/', isLoggedIn, async (req, res, next) => {
-    
-    try{
-    //VERIFICACION DEL PERMISO
-        
+
+    try {
+        //VERIFICACION DEL PERMISO
+
         //obtenemos el usuario, su rol y su permiso
         let usuario = await models.User.findOne({
             where: {
@@ -50,13 +50,13 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: {name: 'ur'}
+                    where: { name: 'ur' }
                 }
             }
         })
 
-        if(usuario && usuario.Role && usuario.Role.Permissions){
-    //TIENE PERMISO DE DESPLEGAR VISTA
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
             //obtiene todos los usuarios y roles y se manda a la vista
             models.User.findAll({
                 include: [{
@@ -69,16 +69,17 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 ]
             }).then(usuarios => {
                 models.Role.findAll().then(roles => {
+                    console.log('AQUIIIIIIIIIIIIIII WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE', usuarios)
                     return res.render('usuarios', { usuarios, roles })
                 });
             });
         }
-        else{
-    //NO TIENE PERMISOS
+        else {
+            //NO TIENE PERMISOS
             return res.status(403).json(403)
         }
     }
-    catch(error){
+    catch (error) {
         return res.status(403).json(403)
     }
 });
@@ -414,44 +415,42 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
             .matches(/(?=.*?[0-9])/).withMessage('La contraseña debe tener al menos un número.')
             .not().matches(/^$|\s+/).withMessage('No se aceptan espacios en la contraseña.'),
         check('role')
-            .custom(async (role) => 
-            {
+            .custom(async (role) => {
                 //se crea el validador, es true porque si no hay rol tambien es valido
                 var validador = true
 
                 //si no es nulo
-                if(role){
+                if (role) {
                     validador = false
 
                     let ids = await models.Role.findAll({
                         attributes: ['id'],
                         raw: true
                     })
-                    
+
                     ids.forEach(id => {
-                        if(role == id.id){
+                        if (role == id.id) {
                             validador = true
                         }
                     });
                 }
-                if(validador)
+                if (validador)
                     return true
                 else
                     throw new Error('El rol existe.');
             }).withMessage('El rol no es válido.'),
         check('hiring_date')
-            .optional({checkFalsy: true})
-            .custom(date =>
-                {
-                    console.log(date)
-                    return !isNaN(Date.parse(date));
-                }
+            .optional({ checkFalsy: true })
+            .custom(date => {
+                console.log(date)
+                return !isNaN(Date.parse(date));
+            }
             ).withMessage('La fecha no es válida'),
         check('phone_number')
             .not().isEmpty().withMessage('Número telefónico electrónico es un campo requerido.')
             .trim()
             .isNumeric().withMessage('Sólo se aceptan números en el número telefónico.')
-            .isLength({max: 50, min: 10}).withMessage('El número telefónico debe tener al menos 10 dígitos.'),
+            .isLength({ max: 50, min: 10 }).withMessage('El número telefónico debe tener al menos 10 dígitos.'),
         check('city')
             .not().isEmpty().withMessage('Ciudad es un campo requerido.')
             .isLength({ max: 255 }).withMessage('Ciudad puede tener un máximo de 255 caracteres.')
@@ -477,7 +476,7 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
             .isAlphanumeric().withMessage('El número interior sólo acepta caracteres alfanuméricos.')
             .isLength({ max: 10 }).withMessage('El número exterior puede tener un máximo de 10 caracteres.'),
         check('int_number')
-            .optional({checkFalsy: true})
+            .optional({ checkFalsy: true })
             .isAlphanumeric().withMessage('El número interior sólo acepta caracteres alfanuméricos.')
             .isLength({ max: 10 }).withMessage('El número interior puede tener un máximo de 10 caracteres.')
     ]
@@ -487,10 +486,10 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
         if (!errors.isEmpty()) {
             return res.status(422).send(errors.array());
         }
-        else{
-            try{
-            //VERIFICACION DEL PERMISO
-                
+        else {
+            try {
+                //VERIFICACION DEL PERMISO
+
                 //obtenemos el usuario, su rol y su permiso
                 let usuario = await models.User.findOne({
                     where: {
@@ -500,13 +499,13 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                         model: models.Role,
                         include: {
                             model: models.Permission,
-                            where: {name: 'uc'}
+                            where: { name: 'uc' }
                         }
                     }
                 })
-        
-                if(usuario && usuario.Role && usuario.Role.Permissions){
-            //TIENE PERMISO DE AGREGAR USUARIO
+
+                if (usuario && usuario.Role && usuario.Role.Permissions) {
+                    //TIENE PERMISO DE AGREGAR USUARIO
                     //guarda el usuario
                     passport.authenticate('local.signup', function (error, user, info) {
                         if (error) {
@@ -515,18 +514,18 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                         if (!user) {
                             return res.status(401).json(info);
                         }
-                        res.status(200).json([{status: 200}]);
+                        res.status(200).json([{ status: 200 }]);
                     })(req, res, next);
                 }
-                else{
-            //NO TIENE PERMISOS
+                else {
+                    //NO TIENE PERMISOS
                     return res.status(403).json([{ msg: 'No estás autorizado para registrar usuarios.' }])
                 }
             }
-            catch(error){
+            catch (error) {
                 return res.status(403).json([{ msg: 'No estás autorizado para registrar usuarios.' }])
             }
         }
-});
+    });
 
 module.exports = router;
