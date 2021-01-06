@@ -12,7 +12,7 @@ router.get('/', isLoggedIn, function(req, res, next) {
     res.render('caja')
 });
 
-//  se consultan todos los egresos
+//  se consultan solo los egresos
 router.get('/egresos', isLoggedIn, async (req, res, next) => {
 
     try {
@@ -62,7 +62,7 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
 
 });
 
-/*  se consultan todos los ingresos
+//  se consultan solo los ingresos
 router.get('/ingresos', isLoggedIn, async (req, res, next) => {
 
     try {
@@ -84,22 +84,21 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
 
         if (usuario && usuario.Role && usuario.Role.Permissions) {
             //TIENE PERMISO DE DESPLEGAR VISTA
-            //obtiene todos los usuarios y roles y se manda a la vista
-            models.User.findAll({
+            models.Transaction.findAll({
                 include: [{
-                    model: models.Transaction
-                }, {
                     model: models.Pa_Type
-                }]
+                },
+                {
+                    model: models.Concept
+                }],
+                order: [
+                    ['date','DESC']
+                ], 
+                where: {
+                    T_type: 'ingreso'
+                }
             }).then(ingresos => {
-                models.Transaction.findAll({
-                        where: {
-                            T_type: 'ingreso'
-                        }
-                    }
-                ).then(tipos => {
-                    return res.render('egresos', { ingresos, tipos })
-                });
+                return res.render('caja/ingresos', { ingresos })
             });
         }
         else {
@@ -111,9 +110,105 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
         return res.status(403).json(403)
     }
 
-    res.render('egresos')
 });
-*/
+
+//  se consultan solo las transacciones que son deducibles
+router.get('/deducibles', isLoggedIn, async (req, res, next) => {
+
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'ur' }
+                }
+            }
+        })
+
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            models.Transaction.findAll({
+                include: [{
+                    model: models.Pa_Type
+                },
+                {
+                    model: models.Concept
+                }],
+                order: [
+                    ['date','DESC']
+                ], 
+                where: {
+                    invoice: 1
+                }
+            }).then(deducibles => {
+                return res.render('caja/deducibles', { deducibles })
+            });
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch (error) {
+        return res.status(403).json(403)
+    }
+
+});
+
+//  se consultan todas las transacciones
+router.get('/historial', isLoggedIn, async (req, res, next) => {
+
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'ur' }
+                }
+            }
+        })
+
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            models.Transaction.findAll({
+                include: [{
+                    model: models.Pa_Type
+                },
+                {
+                    model: models.Concept
+                }],
+                order: [
+                    ['date','DESC']
+                ]
+            }).then(transacciones => {
+                return res.render('caja/historial', { transacciones })
+            });
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch (error) {
+        return res.status(403).json(403)
+    }
+
+});
+
 
 
 module.exports = router;

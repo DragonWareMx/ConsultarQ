@@ -58,7 +58,7 @@ block content
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                         div(tabindex="0")
                             each prestador in prestadores
-                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + prestador.Provider_Area.id + "" uk-toggle="target: #modal-editar" data-id=prestador.Provider_Area.id)
+                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + prestador.Provider_Area.id uk-toggle="target: #modal-editar" data-id=prestador.Provider_Area.id)
                                     img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                                     div Editar
                     button(class="uk-modal-close-default" type="button" uk-close='')
