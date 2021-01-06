@@ -69,7 +69,6 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 ]
             }).then(usuarios => {
                 models.Role.findAll().then(roles => {
-                    console.log('AQUIIIIIIIIIIIIIII WEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE', usuarios)
                     return res.render('usuarios', { usuarios, roles })
                 });
             });
@@ -172,7 +171,6 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .optional({checkFalsy: true})
             .custom(date =>
                 {
-                    console.log(date)
                     return !isNaN(Date.parse(date));
                 }
             ).withMessage('La fecha no es válida'),
@@ -337,23 +335,23 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             await empleadoU.update(dataEmployee, {transaction: t})
 
 //SE REGISTRA EL LOG
-                //obtenemos el usuario que realiza la transaccion
-                const usuario = await models.User.findOne({
-                    where: {
-                        id: req.user.id
-                    },
-                    transaction: t
-                })
+            //obtenemos el usuario que realiza la transaccion
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                transaction: t
+            })
 
-                //guardamos los datos del log
-                var dataLog = {
-                    UserId: usuario.id,
-                    title: "Actualización de usuario",
-                    description: "El usuario "+usuario.email+" ha actualizado el usuario "+usuarioU.email+" con los siguientes datos:\nRol: "+rolName+"\nNombre: "+empleadoU.name+"\nNúmero telefónico: "+empleadoU.phone_number+"\nCiudad: "+empleadoU.city+"\nEstado: "+empleadoU.state+"\nColonia: "+empleadoU.suburb+"\nCalle: "+empleadoU.street+"\nNúmero interior: "+empleadoU.int_number+"\nNúmero exterior: "+empleadoU.ext_number+"\nFecha de contratación: "+empleadoU.hiring_date
-                }
+            //guardamos los datos del log
+            var dataLog = {
+                UserId: usuario.id,
+                title: "Actualización de usuario",
+                description: "El usuario "+usuario.email+" ha actualizado el usuario "+usuarioU.email+" con los siguientes datos:\nRol: "+rolName+"\nNombre: "+empleadoU.name+"\nNúmero telefónico: "+empleadoU.phone_number+"\nCiudad: "+empleadoU.city+"\nEstado: "+empleadoU.state+"\nColonia: "+empleadoU.suburb+"\nCalle: "+empleadoU.street+"\nNúmero interior: "+empleadoU.int_number+"\nNúmero exterior: "+empleadoU.ext_number+"\nFecha de contratación: "+empleadoU.hiring_date
+            }
 
-                //guarda el log en la base de datos
-                const log = await models.Log.create(dataLog, { transaction: t })
+            //guarda el log en la base de datos
+            const log = await models.Log.create(dataLog, { transaction: t })
 
             //nos aseguramos que se hayan guardado correctamente el log, el usuario y el empleado
             if(!log)
@@ -378,31 +376,97 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
 
 
 //DELETE USUARIO ID
-router.post('/delete/:id', isLoggedIn, function (req, res, next) {
-    let id = req.params.id
+router.post('/delete/:id', isLoggedIn, async (req, res, next) => {
+    try {
+//VERIFICACION DEL PERMISO
 
-    models.User
-        .findOne({
-            where: { id: id }
-        })
-        .then(user => {
-            //esto de abajo es para borrar la imagen vieja en caso de que hayan subido una nueva
-            if (user.picture != null) {
-                fs.unlink('public/uploads/avatar/' + user.picture, (err) => {
-                    if (err) {
-                        console.log("failed to delete local image:" + err);
-                    } else {
-                        console.log('successfully deleted local image');
-                    }
-                });
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'ud' }
+                }
             }
-            user.destroy()
-                .then(() => {
-                    res.json("Persona eliminada");
-                })
-        }).catch(err => {
-            return res.status(500).json([{ msg: 'Ocurrió un error al intentar eliminar el usuario.' }]);
-        });
+        })
+
+        if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+            //NO TIENE PERMISOS
+            return res.status(403).json([{ msg: 'No tienes permiso de eliminar usuarios.' }])   
+        }
+    }
+    catch (error) {
+        return res.status(403).json([{ msg: 'No tienes permiso de eliminar usuarios.' }])
+    }
+
+    //TIENE PERMISO
+
+    //Transaccion
+    const t = await models.sequelize.transaction()
+    try {
+        let id = req.params.id
+
+        const usuarioD = await models.User
+            .findOne({
+                where: { id: id },
+                transaction: t
+            })
+
+        //esto de abajo es para borrar la imagen vieja en caso de que hayan subido una nueva
+        if (usuarioD.picture != null) {
+            fs.unlink('public/uploads/avatar/' + usuarioD.picture, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+            });
+        }
+        
+        await usuarioD.destroy({transaction: t})
+
+//SE REGISTRA EL LOG
+        //obtenemos el usuario que realiza la transaccion
+        const usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            transaction: t
+        })
+
+        //guardamos los datos del log
+        var dataLog = {
+            UserId: usuario.id,
+            title: "Eliminación de usuario",
+            description: "El usuario "+usuario.email+" ha eliminado el usuario "+usuarioD.email
+        }
+
+        //guarda el log en la base de datos
+        const log = await models.Log.create(dataLog, { transaction: t })
+
+        //verifica si se elimina el usuario
+        const verUser = await models.User.findOne({where: {id: usuarioD.id}, transaction: t})
+
+        if(verUser)
+            throw new Error()
+        if(!log)
+            throw new Error()
+
+        res.status(200).json([{ status: 200 }]);
+        // If the execution reaches this line, no errors were thrown.
+        // We commit the transaction.
+        await t.commit()
+    } catch (error) {
+
+        // If the execution reaches this line, an error was thrown.
+        // We rollback the transaction.
+        await t.rollback();
+        return res.status(500).json([{ msg: 'No fue posible eliminar el usuario, vuelva a intentarlo más tarde.' }])
+    }
 });
 
 //CREATE USUARIO
@@ -456,7 +520,6 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
         check('hiring_date')
             .optional({ checkFalsy: true })
             .custom(date => {
-                console.log(date)
                 return !isNaN(Date.parse(date));
             }
             ).withMessage('La fecha no es válida'),
