@@ -15,6 +15,9 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             where: {
                 id: req.user.id
             },
+            order: [
+                ['status', 'ASC']
+            ],
             include: {
                 model: models.Role,
                 include: {

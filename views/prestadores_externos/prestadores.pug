@@ -39,6 +39,7 @@ block content
                                     th(class="uk-text-center") Nombre
                                     th(class="uk-text-center") ÁREA
                                     th(class="uk-text-center") TELÉFONO
+                                    th(class="uk-text-center") ESTATUS
                             tbody
                                 each prestador in prestadores
                                     tr(class="info" uk-toggle="target: #modal-info" data-id=prestador.id)
@@ -46,6 +47,10 @@ block content
                                         td #{prestador.name}
                                         td #{prestador.Provider_Area.name}
                                         td #{prestador.phone_number}
+                                        if(prestador.status == 'active')
+                                            td Activo
+                                        else
+                                            td Inactivo
             //- informacion completa
             div(id="modal-info" uk-modal)
                 div(class="uk-modal-dialog uk-modal-body")
