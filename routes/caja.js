@@ -9,7 +9,7 @@ const passport = require('passport');
 const models = require('../models/index');
 
 router.get('/', isLoggedIn, function(req, res, next) {
-    res.render('cajaChica')
+    res.render('caja')
 });
 
 

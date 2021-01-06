@@ -81,7 +81,7 @@ app.use('/perfil', require('./routes/perfil'));
 app.use('/roles', require('./routes/roles'));
 app.use('/clientes', require('./routes/clientes'));
 app.use('/servicios', require('./routes/servicios'));
-app.use('/servicios', require('./routes/caja'));
+app.use('/caja', require('./routes/caja'));
 app.use('/prestadores_externos', require('./routes/providers'));
 app.use('/proyectos', require('./routes/proyectos'));
 
