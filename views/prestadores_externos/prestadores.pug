@@ -2,7 +2,7 @@ extends ../main
 
 block head
     title Prestadores Externos
-    script(src="javascripts/prestadores.js")
+    link(rel="stylesheet" href="/stylesheets/others.css")
 
 block content
     div(class="uk-container")
@@ -41,211 +41,131 @@ block content
                                     th(class="uk-text-center") TELÉFONO
                             tbody
                                 each prestador in prestadores
-                                    tr(href="#modal-info" uk-toggle)
+                                    tr(class="info" uk-toggle="target: #modal-info" data-id=prestador.id)
                                         td #{prestador.id}
                                         td #{prestador.name}
                                         td #{prestador.Provider_Area.name}
                                         td #{prestador.phone_number}
             //- informacion completa
-            div(id="modal-info" class="uk-flex-top" uk-modal)
-                div(class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical")
-                    button(class="uk-modal-close-default" type="button" uk-close)
-                    div(class="uk-container uk-margin-top uk-margin-left uk-margin-right")
-                        div(class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap")
-                            div(class="uk-text-left uk-text-primary uk-margin-bottom") INFORMACIÓN COMPLETA
-                            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-editar" uk-toggle)
+            div(id="modal-info" uk-modal)
+                div(class="uk-modal-dialog uk-modal-body")
+                    div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                        div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
+                        div(tabindex="0")
+                            each prestador in prestadores
+                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + prestador.Provider_Area.id + "" uk-toggle="target: #modal-editar" data-id=prestador.Provider_Area.id)
                                     img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                                     div Editar
-                    div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                        form(class="uk-width-1-1")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | ID
-                                    label()
-                                        | 1
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Estatus
-                                    span(class="uk-label uk-label-success")
-                                        | Activo
-                            div(class="uk-width-1-1 uk-flex-uk-flex-wrap")
-                                div(class="uk-width-1-1@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Nombre
-                                    label()
-                                        | Jose Adolfo Lemus Magana
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Área
-                                    label() 
-                                        | area del prestador
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Teléfono
-                                    label()
-                                        | 4444444444
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Correo
-                                    label() 
-                                        | correo@ejemplo.com
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | RFC
-                                    label()
-                                        | 123456789ASWR
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Cédula
-                                    label() 
-                                        | 123456789ASWR
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Número de DRO
-                                    label()
-                                        | 1111111
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Número de cuenta
-                                    label() 
-                                        | 1234567891258796
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Fecha de registro
-                                    label()
-                                        | 02 de Enero de 2020
+                    button(class="uk-modal-close-default" type="button" uk-close='')
+                    form(class="uk-card-body uk-padding-small")
+                        div
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="info-id" name="info-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='info-id' title='Id' data-title='Id')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        select(id="info-estatus" name="role" autocomplete='off' value='' disabled)
+                                            option(value="" disabled hidden selected ) Seleccionar
+                                            option(value="activo") Activo
+                                            option(value="inactivo") Inactivo
+                                        label(for='info-estatus' title='Estatus' data-title='Estatus')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="info-nombre" name="info-nombre" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                label(for='info-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="info-area" name="info-area" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                label(for='info-area' title='Área' data-title='Área')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="info-telefono" name="info-telefono" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                label(for='info-telefono' title='Teléfono' data-title='Teléfono')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="info-correo" name="info-correo" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                label(for='info-correo' title='Correo' data-title='Correo')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="info-dro" name="info-dro" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                label(for='info-dro' title='Número de DRO' data-title='Número de DRO')
             //- agregar prestador externo
-            div(id="modal-agregar" class="uk-flex-top" uk-modal)
-                div(class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical")
-                    button(class="uk-modal-close-default" type="button" uk-close)
-                    div(class="uk-container")
-                        div(class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap")
-                            div(class="uk-text-left uk-text-primary uk-margin-bottom") AGREGAR PRESTADOR EXTERNO
-                    div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-container")
-                        form(class="uk-width-1-1")
-                            div(class="uk-width-1-1 uk-flex-uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Estatus
-                                        select(class="uk-select")
-                                            option(value="") Activo
-                                            option(value="") Inactivo
-                            div(class="uk-width-1-1 uk-flex-uk-flex-wrap")
-                                div(class="uk-width-1-1@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Nombre
-                                    input(type="text" class="uk-input" placeholder="Nombre completo")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Área
-                                    input(type="text" class="uk-input" placeholder="Área")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Teléfono
-                                    input(type="text" class="uk-input" placeholder="Teléfono")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div
-                                        | Correo
-                                    input(type="text" class="uk-input" placeholder="correo@ejemplo.com")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | RFC
-                                    input(type="text" class="uk-input" placeholder="13 dígitos")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Cédula
-                                    input(type="text" class="uk-input" placeholder="7-8 dígitos")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Número de DRO
-                                    input(type="text" class="uk-input" placeholder="7-8 dígitos")
-                            div(class="uk-width-1-2@s uk-margin-small-left uk-margin-top")
-                                div()
-                                    | Número de cuenta
-                                input(type="text" class="uk-input" placeholder="16 dígitos")
-                            div(class="uk-width-1-1@s uk-margin-small-left uk-margin-top")
-                                div(class="uk-align-right margin-top uk-flex uk-flex-wrap")
-                                    a(class="uk-text-primary uk-flex-inline uk-flex uk-flex-middle uk-link-heading" href="#") Cancelar
-                                    button(class="uk-button uk-button-default uk-flex-inline uk-flex uk-flex-middle uk-margin-left") Guardar
+            div(id="modal-agregar" uk-modal)
+                div(class="uk-modal-dialog uk-modal-body")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar prestador
+                    button(class="uk-modal-close-default" type="button" uk-close='')
+                    form(class="uk-card-body uk-padding-small" id="add-form" action="/prestadores_externos/nuevo" method="POST" enctype="multipart/form-data")
+                        div(class="uk-child-width-1- uk-grid")
+                            div
+                                .field.uk-margin-bottom
+                                    select(id="add-estatus" name="add-estatus" autocomplete='off' value='' required)
+                                        option(value="" disabled hidden selected ) Seleccionar
+                                        option(value="activo") Activo
+                                        option(value="inactivo") Inactivo
+                                    label(for='add-estatus' title='Estatus' data-title='Estatus')
+                                .field.uk-margin-bottom
+                                    input(type='text' autocomplete='on' id="add-nombre" name="add-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                                .field.uk-margin-bottom
+                                    select(id="add-area" name="add-area" autocomplete='off' value='' required)
+                                        option(value="" disabled hidden selected ) Seleccionar
+                                        each prestador in prestadores
+                                            option(value=prestador.Provider_Area.id) #{prestador.Provider_Area.name}
+                                    label(for='add-area' title='Área' data-title='Área')
+                                .field.uk-margin-bottom
+                                    input(type='text' autocomplete='on' id="add-telefono" name="add-telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add-telefono' title='Teléfono' data-title='Teléfono')
+                                .field.uk-margin-bottom
+                                    input(type='text' autocomplete='on' id="add-correo" name="add-correo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add-correo' title='Correo' data-title='Correo')
+                                .field.uk-margin-bottom
+                                    input(type='text' autocomplete='on' id="add-dro" name="add-dro" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add-dro' title='Número de DRO' data-title='Número de DRO')
+                                div(class="uk-width-1 uk-flex-right uk-flex")
+                                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Agregar
             //- editar prestador externo
-            div(id="modal-editar" class="uk-flex-top" uk-modal)
-                div(class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical")
-                    button(class="uk-modal-close-default" type="button" uk-close)
-                    div(class="uk-container uk-margin-top uk-margin-left uk-margin-right")
-                        div(class="uk-flex uk-flex-between uk-flex-middle uk-flex-wrap")
-                            div(class="uk-text-left uk-text-primary uk-margin-bottom") EDITAR INFORMACIÓN
-                            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading" href="/prestadores/editar")
-                                    img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                    div Eliminar
-                    div(class="uk-flex uk-flex-wrap-reverse uk-container")
-                        form(class="uk-width-1-1")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | ID
-                                    label() 
-                                        | 1
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Estatus
-                                    select(class="uk-select")
-                                        option(value="") Activo
-                                        option(value="") Inactivo
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-1@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Nombre
-                                    input(type="text" class="uk-input" placeholder="Nombre completo")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Área
-                                    input(type="text" class="uk-input" placeholder="Área")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Teléfono
-                                    input(type="text" class="uk-input" placeholder="Teléfono")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Correo
-                                    input(type="text" class="uk-input" placeholder="correo@ejemplo.com")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | RFC
-                                    input(type="text" class="uk-input" placeholder="13 dígitos")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Cédula
-                                    input(type="text" class="uk-input" placeholder="7-8 dígitos")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Número de DRO
-                                    input(type="text" class="uk-input" placeholder="7-8 dígitos")
-                            div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-                                div(class="uk-width-1-2@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Número de cuenta
-                                    input(type="text" class="uk-input" placeholder="16 dígitos")
-                                div(class="uk-width-expand@s uk-margin-top uk-margin-small-left")
-                                    div()
-                                        | Fecha de registro
-                                    input(type="text" class="uk-input" placeholder="Fecha de registro")
-                            div(class="uk-width-1-1@s uk-margin-small-left uk-margin-top")
-                                div(class="uk-align-right margin-top")
-                                    a(class="uk-text-primary uk-flex-inline uk-flex uk-flex-middle uk-link-heading" href="#") Cancelar
-                                    button(class="uk-button uk-button-default uk-flex-inline uk-flex uk-flex-middle uk-margin-left") Guardar
+            div(id="modal-editar" uk-modal)
+                div(class="uk-modal-dialog uk-modal-body")
+                    div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                        div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar información
+                        div(tabindex="0")
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading editar" href="")
+                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Eliminar
+                    button(class="uk-modal-close-default" type="button" uk-close='')
+                    form(class="uk-card-body uk-padding-small")
+                        div
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="edit-id" name="edit-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='edit-id' title='Id' data-title='Id')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        select(id="edit-estatus" name="role" autocomplete='off' value='')
+                                            option(value="" disabled hidden selected ) Seleccionar
+                                            option(value="activo") Activo
+                                            option(value="inactivo") Inactivo
+                                        label(for='edit-estatus' title='Estatus' data-title='Estatus')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="edit-nombre" name="edit-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                            .field.uk-margin-bottom
+                                select(id="edit-area" name="edit-area" autocomplete='off' value='' required)
+                                    option(value="" disabled hidden selected) Seleccionar
+                                    each prestador in prestadores
+                                        option(value=prestador.Provider_Area.id) #{prestador.Provider_Area.name}
+                                label(for='edit-area' title='Área' data-title='Área')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="edit-telefono" name="edit-telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit-telefono' title='Teléfono' data-title='Teléfono')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="edit-correo" name="edit-correo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit-correo' title='Correo' data-title='Correo')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="edit-dro" name="edit-dro" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit-dro' title='Número de DRO' data-title='Número de DRO')
+                            div(class="uk-width-1 uk-flex-right uk-flex")
+                                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btn-Editar" type="submit") Agregar
         //- paginacion
         div(class="uk-width-1-1")
             ul(class="uk-pagination uk-margin-top")
@@ -256,8 +176,142 @@ block content
                 li(class="uk-margin-auto-left")
                     a(href="#") Siguiente
                         span(class="uk-margin-small-left" uk-pagination-next)
-    //-
-        div(class="uk-width-1-1")
-            each prestador in prestadores
-                p #{prestador}
+    
+        script.
+            function ocultar_botones() {
+                $(".editar").hide();
+            }
+
+            jQuery(($) => {
+                //esto de abajo es para al momento de abrir el modal de informacion cargar los datos
+                $('.info').on('click', function() {
+                    var userID = $(this).data('id');
+                    var users=!{ JSON.stringify(prestadores) };
+                    console.log(users);
+                    for(var key in users){
+                        var obj=users[key];
+                        if(obj["id"] == userID){
+                            console.log(obj);
+                            break;
+                        }
+                    }
+
+                    //Aqui se esconden los botones de editar de los otros modal
+                    ocultar_botones();
+                    //Aqui se muestra el boton correspondiente
+                    $(".editar-" + obj["Provider_Area"]["id"] ).show();
+
+                    //Aqui se empieza a llenar el modal
+                    $('#info-id').val(obj["id"]).change();
+                    if(obj["status"]=="active"){
+                        $('#info-estatus option[value="activo"]').prop('selected', 'selected').change();
+                    }else{
+                        $('#info-estatus option[value="inactivo"]').prop('selected', 'selected').change();
+                    }
+                    $('#info-nombre').val(obj["name"]).change();
+                    $('#info-area').val(obj["Provider_Area"]["name"]).change();
+                    $('#info-telefono').val(obj["phone_number"]).change();
+                    $('#info-correo').val(obj["email"]).change();
+                    $('#info-dro').val(obj["dro"]).change();
+                });
+
+                //esto de abajo es para al momento de abrir el modal de editar cargar los datos
+                $('.editar').on('click', function() {
+                    var userID = $(this).data('id');
+                    var users=!{ JSON.stringify(prestadores) };
+                    console.log(users);
+                    for(var key in users){
+                        var obj=users[key];
+                        if(obj["id"] == userID){
+                            console.log(obj);
+                            break;
+                        }
+                    }
+
+                    //Aqui se empieza a llenar el modal
+                    $('#edit-id').val(obj["id"]).change();
+                    if(obj["status"]=="active"){
+                        $('#edit-estatus option[value="activo"]').prop('selected', 'selected').change();
+                    }else{
+                        $('#edit-estatus option[value="inactivo"]').prop('selected', 'selected').change();
+                    }
+                    $('#edit-nombre').val(obj["name"]).change();
+                    $('#edit-area option[value=' + obj["Provider_Area"]["id"] + ']').prop('selected', 'selected').change();
+                    $('#edit-telefono').val(obj["phone_number"]).change();
+                    $('#edit-correo').val(obj["email"]).change();
+                    $('#edit-dro').val(obj["dro"]).change();
+                });
+
+                $(document).ready(function () { 
+                    // ajax para agregar un nuevo prestador
+                    $("#add-form").bind("submit",function(){
+                        // Capturamnos el boton de envío
+                        var btnAgregar = $("#btnAgregar");
+
+                        $.ajax({
+                            type: $(this).attr("method"),
+                            url: $(this).attr("action"),
+                            data: new FormData(this),
+                            dataType: "JSON",
+                            processData: false,
+                            contentType: false,
+                            beforeSend: function(data){
+                                /*
+                                * Esta función se ejecuta durante el envió de la petición al
+                                * servidor.
+                                * */
+                                // btnEnviar.text("Enviando"); Para button
+                                btnAgregar.val("Enviando"); // Para input de tipo button
+                                btnAgregar.attr("disabled","disabled");
+                            },
+                            complete:function(data){
+                                /*
+                                * Se ejecuta al termino de la petición
+                                * */
+                                btnAgregar.val("Enviar formulario");
+                            },
+                            success: function(data){
+                                /*
+                                * Se ejecuta cuando termina la petición y esta ha sido
+                                * correcta
+                                * */
+                                $('#errors').css('display', 'none');
+                                UIkit.notification({
+                                    message: '<span uk-icon=\'icon: check\'></span>Prestador externo registrado con éxito!',
+                                    status: 'success',
+                                    pos: 'top-center',
+                                    timeout: 3000
+                                });
+                                setTimeout(
+                                function()
+                                {
+                                    window.location.href = window.location.origin + '/prestadores_externos'
+                                }, 3000);
+                            },
+                            error: function(data){
+                                /*
+                                * Se ejecuta si la peticón ha sido erronea
+                                * */
+                                btnAgregar.removeAttr("disabled");
+                                $('#errors').css('display', 'block');
+                                console.log(data.responseText);
+                                var errors = JSON.parse(data.responseText);
+                                var errorsContainer = $('#errors');
+                                errorsContainer.innerHTML = '';
+                                var errorsList = '';
+                                for (var i = 0; i < errors.length; i++) {
+                                    //if(errors[i].redirect)
+                                        //window.location.href = window.location.origin + '/logout'
+                                    errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                                }
+                                errorsContainer.html(errorsList);
+
+                                alert("Problemas al tratar de enviar el formulario");
+                            }
+                        });
+                        // Nos permite cancelar el envio del formulario
+                        return false;
+                    });
+                });
+            });
                     
