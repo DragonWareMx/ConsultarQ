@@ -30,6 +30,22 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      PaTypeId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Pa_Types',
+          key: 'id',
+        },
+      },
+      ConceptId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Pa_Types',
+          key: 'id',
+        },
       }
     });
   },

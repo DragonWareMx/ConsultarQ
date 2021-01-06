@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Pa_Type.hasMany(models.Transaction)
     }
   };
   Pa_Type.init({
