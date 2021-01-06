@@ -138,6 +138,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .matches(/(?=.*?[0-9])/).withMessage('La contraseña debe tener al menos un número.')
             .not().matches(/^$|\s+/).withMessage('No se aceptan espacios en la contraseña.'),
         check('role')
+            .optional({checkFalsy: true})
             .custom(async (role) => 
             {
                 //se crea el validador, es true porque si no hay rol tambien es valido
@@ -157,9 +158,13 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                             validador = true
                         }
                     });
+
+                    if(role == 0)
+                        validador = true
                 }
-                if(validador)
+                if(validador){
                     return true
+                }
                 else
                     throw new Error('El rol existe.');
             }).withMessage('El rol no es válido.'),
@@ -250,18 +255,24 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             var rolName
 
             if(req.body.role){
-                const rol = await models.Role.findOne({
-                    where: {
-                        id: req.body.role
-                    },
-                    transaction: t
-                })
+                if(req.body.role == 0){
+                    req.body.role = null
+                    rolName = "Sin rol"
+                }
+                else{
+                    const rol = await models.Role.findOne({
+                        where: {
+                            id: req.body.role
+                        },
+                        transaction: t
+                    })
 
-                //si el roll no existe ROLLBACK
-                if(!rol)
-                    throw new Error()
-                else
-                    rolName = rol.name
+                    //si el roll no existe ROLLBACK
+                    if(!rol)
+                        throw new Error()
+                    else
+                        rolName = rol.name
+                }
             }
             else
                 rolName = "Sin rol"
@@ -433,6 +444,9 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                             validador = true
                         }
                     });
+
+                    if(role == 0)
+                        validador = true
                 }
                 if (validador)
                     return true
