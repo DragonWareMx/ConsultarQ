@@ -105,6 +105,7 @@ block content
                                     option(value="" disabled hidden selected ) Seleccionar
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
+                                    option(value="") Ninguno
                                 label(for='role' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
@@ -177,6 +178,7 @@ block content
                                     option(value="" disabled hidden selected ) Seleccionar
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
+                                    option(value="") Ninguno
                                 label(for='role-edit' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
@@ -446,7 +448,9 @@ block content
                 if(obj["Role"]){
                     $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true);
                 }
-                $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                if(obj["Employee"]["hiring_date"]){
+                    $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                }
                 //aqui empiezan los datos de contacto
                 $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
                 $('#city-edit').val(obj["Employee"]["city"]).change();
