@@ -1,0 +1,74 @@
+extends ../main
+
+block head
+    title ConsultarQ - Proyectos Layouts
+    link(rel="stylesheet" href="/stylesheets/others.css")
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Editar tipo de proyecto
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="/proyectos/layouts" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
+                    img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
+                    div Regresar
+        div(class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" uk-grid)
+            div(class="uk-card uk-card-default uk-card-body uk-padding-remove-bottom")
+                div(class="uk-text-primary uk-margin-bottom uk-margin-small-left") Titulo del tipo de proyecto
+                div(class="uk-overflow-auto")
+                    table(class="uk-table uk-table-small uk-table-divider uk-table-justify")
+                        thead
+                            tr
+                                th(class="uk-text-center uk-table-shrink") #
+                                th(class="uk-text-truncate uk-table-expand") Concepto
+                                th(class="uk-text-truncate uk-table-expand") Descripción
+                                th(class="uk-text-truncate uk-width-small") Unidad
+                                th(class="uk-text-truncate  uk-width-small") Costo/U
+                        tbody
+                            tr 
+                                td 1
+                                td Concepto número 1 
+                                td Descripción número 1
+                                td Kg.
+                                td 1,000,000.00
+                div(class="uk-flex uk-flex-right  uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom"  uk-toggle="target: #task-form")
+                    img(src="/icons/more.png" width="20px" style="margin-top:3px; margin-right:5px;")
+                    a(class="") Agregar Tarea
+        //- modal
+        div(id="task-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Tarea
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors")
+                form(class="uk-card-body uk-padding-small" id="form-new-layout" action="/proyectos/layout/1/tarea" method="POST" enctype="multipart/form-data")
+                    div(class="uk-child-width-1 uk-grid")
+                        div
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='off' id="concepto" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='concepto' title='Concepto' data-title='Concepto')
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='off' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='descripcion' title='Descripcion' data-title='Descripcion')
+                        div
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='off'  id="unidad" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='unidad' title='Unidad' data-title='Unidad')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='number' autocomplete='off'  id="costo" name="costo"  value='' onchange="this.setAttribute('value', this.value);")
+                                        label(for='costo' title='Costo' data-title='Costo')
+                                div(class="uk-width-1-2@s uk-width-1 uk-flex uk-flex-right@s uk-flex-left uk-margin-small-bottom")
+                                    div(class="uk-text-primary") Posición
+                                div(class="uk-width-1-2@s uk-width-1")
+                                    .field.uk-margin-bottom
+                                        select(id="posicion" name="posicion" autocomplete='off' value='' Required='')
+                                            option(value='1') 1
+                                            option(value='2') 2
+                                            option(value='3') 3
+                                            option(value='4' selected) 4
+                                label(for='role-edit' title='Rol' data-title='Rol')
+                        div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
+                            button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+                                    

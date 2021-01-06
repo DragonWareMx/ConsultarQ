@@ -15,6 +15,18 @@ router.get('/activos', isLoggedIn,function (req, res, next) {
 router.get('/documentacion', isLoggedIn,function (req, res, next) {
   res.render('documentacion'); 
 });
+
+router.get('/layouts', isLoggedIn,function (req, res, next) {
+  res.render('layouts');
+});
+
+router.get('/layout/editar/1', isLoggedIn,function (req, res, next) {
+  res.render('editarLayout');
+});
+
+router.post('/layout/nuevo', isLoggedIn,function (req, res, next) {
+  
+});
   
 
 module.exports = router;
