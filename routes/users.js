@@ -342,7 +342,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                 }
 
                 //guarda el log en la base de datos
-                const log = await models.Log.create(dataLog, { transaction: t });
+                const log = await models.Log.create(dataLog, { transaction: t })
 
             //nos aseguramos que se hayan guardado correctamente el log, el usuario y el empleado
             if(!log)
@@ -352,7 +352,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             if(!usuarioU)
                 throw new Error()
 
-            res.json(empleadoU);
+            res.status(200).json([{ status: 200 }]);
             // If the execution reaches this line, no errors were thrown.
             // We commit the transaction.
             await t.commit()
