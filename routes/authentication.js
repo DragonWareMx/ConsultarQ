@@ -68,11 +68,5 @@ router.get('/inicio', isLoggedIn, function(req, res, next) {
     //res.render('index', { title: 'Express' });
     res.render("inicio");
 });
-
-//  prestadores externos
-router.get('/prestadores_externos', isLoggedIn, function(req, res, next) {
-    //res.render('index', { title: 'Express' });
-    res.render("prestadores_externos/prestadores");
-});
   
 module.exports = router;
