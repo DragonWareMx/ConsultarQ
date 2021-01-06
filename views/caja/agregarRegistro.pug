@@ -1,0 +1,57 @@
+extends ../main 
+
+block head
+    title ConsultarQ - Agregar registro
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/cajaChica.css")
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    
+    
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom btn-back") Agregar registro
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
+                    img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Regresar
+        div(class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-margin-top uk-padding-small uk-flex uk-flex-wrap")
+            div(class="uk-width-1-3@m uk-padding-small")    
+                .field.uk-margin-bottom
+                    select(id="type" name="type" autocomplete='off' value='')
+                        option(value="" disabled hidden selected ) Seleccionar
+                        option(value="0") Ingreso
+                        option(value="1") Engrero
+                    label(for='type' title='Tipo de movimiento' data-title='Tipo de movimiento')
+                .field.uk-margin-bottom
+                    select(id="concepto" name="concepto" autocomplete='off' value='')
+                        option(value="" disabled hidden selected ) Seleccionar
+                        option(value="0") Concepto 1
+                        option(value="1") Concepto 2
+                    label(for='concepto' title='Concepto' data-title='Concepto')
+                .field.uk-margin-bottom
+                    select(id="pago" name="pago" autocomplete='off' value='')
+                        option(value="" disabled hidden selected ) Seleccionar
+                        option(value="0") Efectivo
+                        option(value="1") Tarjeta
+                    label(for='pago' title='Tipo de pago' data-title='Tipo de pago')
+                .field.uk-margin-bottom
+                    select(id="proyecto" name="proyecto" autocomplete='off' value='')
+                        option(value="" disabled hidden selected ) Seleccionar
+                        option(value="0") Proyecto 1
+                        option(value="1") Proyecto 2
+                    label(for='proyecto' title='Proyecto' data-title='Proyecto')
+            div(class="uk-width-1-3@m uk-padding-small")    
+                .field.uk-margin-bottom
+                    input(type='date' autocomplete='on' id="date" name="date" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='date' title='Fecha de registro' data-title='Fecha de registro')
+                .field.uk-margin-bottom
+                    textarea(type='date' autocomplete='on' id="date" name="date" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='date' title='Fecha de registro' data-title='Fecha de registro')
+            div(class="uk-width-1-3@m uk-padding-small")    
+                .field.uk-margin-bottom
+                    input(type='number' autocomplete='on' id="monto" name="monto"  step="100.00" min="0" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='monto' title='Monto total' data-title='Monto total')
+            div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
+                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
+                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar

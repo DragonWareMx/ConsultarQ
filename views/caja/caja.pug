@@ -12,7 +12,7 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Caja chica
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
+                a(href="/caja/agregar-registro" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar registro
         div(class="uk-width-1-1 uk-flex uk-flex-wrap")
@@ -65,7 +65,7 @@ block content
                                 button(class="button-caja uk-width-1-1" style="") Quincena
                         div(class="uk-width-1-1 uk-margin-small-top")
                             select(class="uk-select uk-width-1-1 uk-remove-padding" style="font-size:14px; ")
-                                option(selected) Nombre del proyecto
+                                option(disabled hidden selected) Nombre del proyecto
                                 option Proyecto 1
                                 option Proyecto 2
                                 option Proyecto 3

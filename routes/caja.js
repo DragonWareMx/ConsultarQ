@@ -11,6 +11,10 @@ const models = require('../models/index');
 router.get('/', isLoggedIn, function(req, res, next) {
     res.render('caja')
 });
+router.get('/agregar-registro', isLoggedIn, function(req, res, next) {
+    res.render('agregarRegistro') 
+});
+
 
 
 module.exports = router;
