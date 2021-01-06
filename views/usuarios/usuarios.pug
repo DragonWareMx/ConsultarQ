@@ -13,20 +13,21 @@ block content
                     div Nuevo Usuario
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
-                button(href="#" uk-search-icon)
-                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                span(uk-search-icon type="button")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                label(for="buscador" class="tag-filter" id="tag-filter") Nombre
                 input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
             button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
                 img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
             div(uk-dropdown="mode: click")
                 ul(class="uk-list")
-                    li(onclick="putSearch('name')") Nombre
-                    li(onclick="putSearch('email')") Correo electrónico
-                    li(onclick="putSearch('name')") Sugerencia
-        div(class="uk-child-width-1-2@s" uk-grid)
+                    li(onclick="putSearch('name')" class="uk-dropdown-close") Nombre
+                    li(onclick="putSearch('email')" class="uk-dropdown-close") Correo electrónico
+                    li(onclick="putSearch('phone')" class="uk-dropdown-close") Número de teléfono
+        ul(class="uk-child-width-1-2@s items" uk-grid id="items")
             each usuario in usuarios
-                div
+                li(class="item")
                     div(class="uk-card uk-card-default uk-width-1")
                         div(class="uk-card-body uk-flex uk-flex-top uk-padding-small")
                             div(class="uk-width-auto")
@@ -36,13 +37,13 @@ block content
                                     img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-margin-auto uk-flex" style="width:94px;height:94px; background-size:cover; object-fit:cover;")
                             div(class="uk-width-expand uk-margin-small-left")
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
-                                    div #{usuario.Employee.name}
+                                    div(class="user-name") #{usuario.Employee.name}
                                     div(class="uk-animation-toggle" tabindex="0")
                                     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
                                         img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
                                         div(class="uk-text-small") Editar
-                                div(class="uk-text-small uk-margin-remove-top" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
-                                div(class="uk-text-small uk-margin-remove-top" style="margin-bottom:5px") #{usuario.Employee.phone_number}
+                                div(class="uk-text-small uk-margin-remove-top user-email" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
+                                div(class="uk-text-small uk-margin-remove-top user-phone" style="margin-bottom:5px") #{usuario.Employee.phone_number}
                                 div(class="uk-flex uk-margin-top uk-flex-middle uk-flex-wrap uk-margin-remove-top")
                                     div(class="uk-text-small uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Estatus:
                                     span(class=(usuario.status === "active" ? "uk-label uk-label-success" : "uk-label uk-label-danger"))
@@ -63,6 +64,14 @@ block content
                                         div(style="flex-basis:100%")
                                         div(class="uk-text-small") Progreso 60%
                                 progress( id="js-progressbar" class="uk-progress" value="60" max="100")
+        ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
+            //- li
+            //-     a(href='#')
+            //-     span(uk-pagination-previous='')
+            //- li
+            //-     a(href='#')
+            //-     span(uk-pagination-next='')
+
         //Form para agregar usuario
         div(id="user-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -92,13 +101,13 @@ block content
                                 input(type='password' autocomplete='new-password'  id="password-confirm" onkeyup="validatePassword()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
                             .field.uk-margin-bottom
-                                select(id="role" name="role" autocomplete='off' value='' required)
+                                select(id="role" name="role" autocomplete='off' value='')
                                     option(value="" disabled hidden selected ) Seleccionar
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
                                 label(for='role' title='Rol' data-title='Rol')
                             .field.uk-margin-bottom
-                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
                                 label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
@@ -251,12 +260,116 @@ block content
         }
 
         function putSearch(vilevar){
-            alert(vilevar);
             var filter=document.getElementById("filter");
+            var tag=document.getElementById("tag-filter");
+            switch(vilevar){
+                case 'name':
+                    tag.innerHTML='Nombre';
+                    break;
+                case 'email':
+                    tag.innerHTML='Email';
+                    break;
+                case 'phone':
+                    tag.innerHTML='Tel';
+                    break;
+            }
             filter.value=vilevar;
         }
+
+        function myFunction() {
+            var input, filter, cards, cardContainer, h5, title, i;
+            input = document.getElementById("buscador");
+            filter = input.value.toUpperCase();
+            parameter=document.getElementById("filter").value;
+            cardContainer = document.getElementById("items");
+            cards = cardContainer.getElementsByClassName("item");
+            document.getElementById("pagination").style.display = "none";
+            for (i = 0; i < cards.length; i++) {
+                if(parameter == "name"){
+                    title = cards[i].querySelector('div[class~="user-name"]');
+                }
+                if(parameter == "email"){
+                    title = cards[i].querySelector('div[class~="user-email"]');
+                }
+                if(parameter == "phone"){
+                    title = cards[i].querySelector('div[class~="user-phone"]');
+                }
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex"
+                    } else {
+                        cards[i].style.display = "none"
+                }
+            }
+        }
+
+    script.
+        $(document).ready(function () {
+            const $studentItem = $('.item');
+            const $paginationList = $('.uk-pagination');
+            const $studentSearch = $('#buscador');
+            const itemTotal = 6;
+
+            // hide all
+            function hideAll() {
+                $studentItem.hide();
+            }
+
+            hideAll();
+
+            // display first 10
+            function displayRange(a,b) {
+                hideAll();
+                // display 0 - 1 students
+                $studentItem.slice(a,b).fadeIn();
+            }
+
+            displayRange(0, itemTotal);
+
+            // create pagination links
+            let pagination = '';
+            for(var i = 1; i < $studentItem.length / itemTotal +  1; i ++) {
+                pagination += `
+                    <li><a class="pagination__num">${i}</a></li>
+                `;
+            }
+            $paginationList.append(pagination);
+            // click on pagination num
+            // pass into display range
+            // calc and show range
+            $('body').on('click', '.pagination__num', function () {
+
+                hideAll();
+
+                // get text number 1 - 5
+                // get ranges for start and end
+                let paginationText = Number($(this).text()) - 1;
+                let startFrom = paginationText * itemTotal;
+                let end = paginationText * itemTotal + paginationText + itemTotal;
+                // console.log('start: ' + startFrom + '   end: ' + end)
+                // display ranges
+                displayRange(startFrom, end);
+
+            });
+
+            $studentSearch.keyup(function()
+            {
+                if (!this.value) {
+                hideAll();
+                $paginationList.show();
+                displayRange(0, itemTotal);
+                }
+            });
+        });
     script.
          jQuery(($) => {
+             //esto es un intento de paginacion
+             $('#items').each(
+                 function(){
+                     //alert(($(this).find('.item')).length);
+                 }
+             );
+
+             //esto es para la foto de perfil
             $('#foto').on('click', function() {
                 $("#fileField").click();
             });
@@ -315,11 +428,9 @@ block content
              $('.editar').on('click', function() {
                 var userID = $(this).data('id');
                 var users=!{ JSON.stringify(usuarios) };
-                console.log(users);
                 for(var key in users){
                     var obj=users[key];
                     if(obj["id"] == userID){
-                        console.log(obj);
                         break;
                     }
                 }
@@ -332,7 +443,9 @@ block content
                 $('#name-edit').val(obj["Employee"]["name"]).change();
                 $('#email-edit').val(obj["email"]).change();
                 //aqui va el rol xd
-                $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true)
+                if(obj["Role"]){
+                    $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true);
+                }
                 $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
                 //aqui empiezan los datos de contacto
                 $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
@@ -428,7 +541,6 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors').css('display', 'block');
-                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors');
                         errorsContainer.innerHTML = '';
@@ -497,7 +609,6 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors-edit').css('display', 'block');
-                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors-edit');
                         errorsContainer.innerHTML = '';
@@ -566,7 +677,6 @@ block content
                         * */
                         btnEnviar.removeAttr("disabled");
                         $('#errors-delete').css('display', 'block');
-                        console.log(data.responseText);
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors-delete');
                         errorsContainer.innerHTML = '';

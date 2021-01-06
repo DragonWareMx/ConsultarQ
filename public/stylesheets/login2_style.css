@@ -1,0 +1,104 @@
+.body-login{
+    background:        url(/img/background.png);
+    background-size:   cover;
+    background-repeat: no-repeat;
+    display:           flex;
+    justify-content:   center;
+    flex-direction:    column;
+}
+.div-blue-logo{
+    background:        url(/img/fondo5-1.png);
+    background-size:   cover;
+    background-repeat: no-repeat;
+    display:           flex;
+    height: 500px;
+}
+.img-logo-q{
+    width: 194px;
+    height: 70px;
+}
+.txt-iniciar{
+    font-family: Calibri;
+    font-style:    normal;
+    font-size:     26px;
+    line-height:   24px;
+    color:         #222238;
+}
+.formulario p{
+    font-size: 16px;
+}
+.formulario input{
+    font-size: 14px !important;
+}
+.formulario button{
+    background:    #DBDBDC;
+    border:        none;
+    border-radius: 5px;
+    outline: none; 
+    color:         #999999;
+    font-family:  'Montserrat';
+    font-style:    normal;
+    font-weight:   600;
+    font-size:     14px;
+    line-height:   20px;
+    transition: all ease-in-out 0.25s;
+}
+.formulario button:hover, .formulario button:focus{
+    background: #3B86D9;
+    cursor:     pointer;
+    color:      white;
+    transition: all ease-in-out 0.25s;
+    outline: none; 
+}
+.div-copy, .img-logo-responsive{
+    display: none;
+}
+.txt-alert-login{
+    font-style:    normal;
+    font-weight:   normal;
+    font-size:     13px;
+    line-height:   16px;
+    color:         #DC5454;
+    margin-bottom: 0px;
+}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+    .body-login{
+        background:white; 
+    }
+    .div-blue-logo img, .div-blue-logo div, .div-blue-logo{
+        display: none !important;
+    }
+    .div-white-login{
+        width: 100% !important;
+    }
+    .div-gray-login{
+        position: absolute !important;
+        width: 100% !important;
+        bottom: 0;
+        left: 0 !important;
+        right: 0 !important;
+        background-color: #3B86D9 !important;
+        color:white;
+    }
+    .div-gray-login a{
+        color: white !important;
+    }
+    .div-copy{
+        display: block;
+    }
+    .img-logo-responsive{
+        display: inline-block;
+        float: right;
+    }
+    .div-conteiner-white{
+        padding-top: 30px !important;
+    }
+    .div-developed{
+        font-size: 11px !important;
+    }
+    .text-pssw{
+        margin-top: 80px;
+    }
+}

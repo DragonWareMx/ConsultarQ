@@ -1,0 +1,27 @@
+extends ../main 
+
+block head
+    title ConsultarQ - Agregar servicio 
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    
+    
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar servicio
+        div(class="uk-card uk-card-default uk-card-body uk-width-4-5@m uk-margin-top")
+            .field.uk-margin-bottom
+                input(type='text' autocomplete='on' id="name-service" name="name-service" value='' onchange="this.setAttribute('value', this.value);" required='')
+                label(for='name' title='Nombre del servicio' data-title='Nombre del servicio')
+            div Descripción
+            div(id="editor" style="resize:none !important")
+                b Elaboración de:
+                ul
+                    li Complete la información del servicio  
+            script.
+                CKEDITOR.replace( 'editor' );
+            div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
+                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
+                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+                

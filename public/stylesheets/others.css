@@ -145,3 +145,20 @@ label{
   padding: 0 6px;
   left: 9px;
 }
+
+.tag-filter{
+  position: absolute;
+  right: 5px;
+  top: 10px ;
+  font-style: italic;
+  font-size: 12px;
+  background-color: #3B86D9;
+  border: solid 0.5px #1e87f0;
+  border-radius: 2em;
+  width: 50px;
+  height: 20px;
+  text-align: center;
+  color: #fff;
+  opacity: 0.5;
+  vertical-align: middle;
+}
