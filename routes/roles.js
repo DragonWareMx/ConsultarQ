@@ -16,9 +16,14 @@ router.get('/nuevo', isLoggedIn, function (req, res, next) {
 router.get('/', isLoggedIn, function (req, res, next) {
     models.Role.findAll({
         include: [{
-            model: models.User
+            model: models.User,
+            include: {
+                model: models.Employee,
+                attributes: ['name']
+            }
         }, {
-            model: models.Permission
+            model: models.Permission,
+            attributes: ['name']
         }],
     }).then(roles => {
         res.render('roles', { roles })

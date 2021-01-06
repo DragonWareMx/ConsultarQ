@@ -25,12 +25,14 @@ block content
                             div(class="uk-right uk-margin-small-top") #{role.Permissions.length} permisos
                         div() #{role.Users.length} usuarios tienen asignado este rol
                         div(class="uk-flex uk-flex-wrap")
-                            div(class="uk-width-1 uk-flex uk-flex-middle uk-flex-wrap")
-                                each user in role.Users
+                            div(class="uk-width-1 uk-flex uk-flex-middle uk-flex-wrap" style="height:44px")
+                                each user , index in role.Users
                                     if user.picture
-                                        img(src="/uploads/avatar/"+user.picture uk-tooltip=user.email style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
+                                        img(src="/uploads/avatar/"+user.picture uk-tooltip=user.Employee.name style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
                                     else
-                                        img(src="/img/iconos/default.png" uk-tooltip=user.email style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
+                                        img(src="/img/iconos/default.png" uk-tooltip=user.Employee.name style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
+                                    if index == 4
+                                        - break
                                 if role.Users.length > 5
                                     div(class="uk-right uk-margin-top") #{role.Users.length - 5} más...
                         div(class="uk-overflow-auto uk-margin-top")
@@ -38,10 +40,13 @@ block content
                                 thead
                                     tr
                                         th(class="uk-table-spand uk-table-shrink@m") Permisos
+                                        th(class="uk-table-shrink") Crear
                                         th(class="uk-table-shrink") Lectura
                                         th(class="uk-table-shrink") Edición
-                                        th(class="uk-table-shrink") Crear
                                         th(class="uk-table-shrink") Eliminar
+                                -
+                                    var obj = JSON.parse('{ "name":"John", "age":55, "city":"New York"}');
+                                #{obj["name"]}
                                 tbody
                                     tr
                                         td Usuarios
