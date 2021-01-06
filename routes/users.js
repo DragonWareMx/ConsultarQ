@@ -351,7 +351,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             if(!usuarioU)
                 throw new Error()
 
-            res.json(Employee);
+            res.json(empleadoU);
             // If the execution reaches this line, no errors were thrown.
             // We commit the transaction.
             await t.commit()
