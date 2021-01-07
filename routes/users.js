@@ -6,6 +6,9 @@ const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 const passport = require('passport');
 const helpers = require('../lib/helpers');
 
+//operadores
+const { Op } = require("sequelize");
+
 //sequelize models
 const models = require('../models/index');
 
@@ -49,13 +52,28 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             include: {
                 model: models.Role,
                 include: {
-                    model: models.Permission,
-                    where: { name: 'ur' }
+                    model: models.Permission
                 }
             }
         })
 
-        if (usuario && usuario.Role && usuario.Role.Permissions) {
+        var pC = false;
+        var pR = false;
+        var pU = false;
+        var pD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if(permiso.name == 'uc')
+                pC = true
+            else if(permiso.name == 'ur')
+                pR = true
+            else if(permiso.name == 'uu')
+                pU = true
+            else if(permiso.name == 'ud')
+                pD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
             //TIENE PERMISO DE DESPLEGAR VISTA
             //obtiene todos los usuarios y roles y se manda a la vista
             models.User.findAll({
@@ -64,12 +82,13 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 }, {
                     model: models.Role
                 }],
+                where: {email: {[Op.ne]: "DragonWareOficial@hotmail.com"}},
                 order: [
                     ['status', 'ASC']
                 ]
             }).then(usuarios => {
                 models.Role.findAll().then(roles => {
-                    return res.render('usuarios', { usuarios, roles })
+                    return res.render('usuarios', { usuarios, roles,pC,pU,pD })
                 });
             });
         }

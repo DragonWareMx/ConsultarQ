@@ -8,9 +8,10 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar Usuarios
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
-                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Nuevo Usuario
+                if pC
+                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
+                        img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                        div Nuevo Usuario
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 span(uk-search-icon type="button")
@@ -39,9 +40,10 @@ block content
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
                                     div(class="user-name") #{usuario.Employee.name}
                                     div(class="uk-animation-toggle" tabindex="0")
-                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
-                                        img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                        div(class="uk-text-small") Editar
+                                    if pU
+                                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
+                                            img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                            div(class="uk-text-small") Editar
                                 div(class="uk-text-small uk-margin-remove-top user-email" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
                                 div(class="uk-text-small uk-margin-remove-top user-phone" style="margin-bottom:5px") #{usuario.Employee.phone_number}
                                 div(class="uk-flex uk-margin-top uk-flex-middle uk-flex-wrap uk-margin-remove-top")
@@ -221,8 +223,9 @@ block content
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
-                a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
-                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+                if pD
+                    a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                        <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
     //modal para eliminar
     div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")

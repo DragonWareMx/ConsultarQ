@@ -22,7 +22,6 @@ module.exports = {
       street: encrypt("Sierra nevada"),
       int_number: encrypt("301"),
       ext_number: encrypt("55"),
-      hiring_date: "12-12-2020",
       UserId: 1
     }], {});
   },
