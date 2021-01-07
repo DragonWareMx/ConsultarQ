@@ -106,10 +106,10 @@ block content
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
                                     option(value="0") Ninguno
-                                label(for='role' title='Rol' data-title='Rol')
+                                label(for='role' title='Rol (opcional)' data-title='Rol (opcional)')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
-                                label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
+                                label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
                             .field.uk-margin-bottom
@@ -179,10 +179,10 @@ block content
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
                                     option(value="0") Ninguno
-                                label(for='role-edit' title='Rol' data-title='Rol')
+                                label(for='role-edit' title='Rol (opcional)' data-title='Rol (opcional)')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
-                                label(for='hiring_date-edit' title='Fecha de contratación' data-title='Fecha de contratación')
+                                label(for='hiring_date-edit' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                             .field.uk-margin-bottom
                                 select(id="status" name="status" autocomplete='off' value='' required)
                                     option(value="active") Activo
@@ -217,7 +217,7 @@ block content
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
-                                        label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
+                                        label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior (opcional)')
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
@@ -364,13 +364,6 @@ block content
         });
     script.
          jQuery(($) => {
-             //esto es un intento de paginacion
-             $('#items').each(
-                 function(){
-                     //alert(($(this).find('.item')).length);
-                 }
-             );
-
              //esto es para la foto de perfil
             $('#foto').on('click', function() {
                 $("#fileField").click();
@@ -447,9 +440,13 @@ block content
                 //aqui va el rol xd
                 if(obj["Role"]){
                     $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true);
+                }else{
+                    $('#role-edit option:eq(3)').prop('selected', true);
                 }
                 if(obj["Employee"]["hiring_date"]){
                     $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                }else{
+                    $('#hiring_date-edit').val("");
                 }
                 //aqui empiezan los datos de contacto
                 $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
