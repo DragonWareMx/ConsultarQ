@@ -14,6 +14,9 @@ router.get('/', isLoggedIn, function(req, res, next) {
 router.get('/agregar-registro', isLoggedIn, function(req, res, next) {
     res.render('agregarRegistro') 
 });
+router.get('/editar-registro', isLoggedIn, function(req, res, next) {
+    res.render('editarRegistro') 
+});
 
 
 
