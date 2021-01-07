@@ -11,13 +11,19 @@ module.exports = {
       contract: {
         type: Sequelize.STRING
       },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       observations: {
         type: Sequelize.STRING
       },
       start_date: {
+        allowNull: false,
         type: Sequelize.DATEONLY
       },
       end_date: {
+        allowNull: false,
         type: Sequelize.DATEONLY
       },
       createdAt: {

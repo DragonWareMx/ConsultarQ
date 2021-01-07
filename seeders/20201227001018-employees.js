@@ -13,17 +13,30 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('Employees', [{
-      name: encrypt('DragonWare'),
-      phone_number: encrypt("4435555555"),
-      city: encrypt("Morelia"),
-      state: encrypt("Michoacán"),
-      suburb: encrypt("Lomas del tecnológico"),
-      street: encrypt("Sierra nevada"),
-      int_number: encrypt("301"),
-      ext_number: encrypt("55"),
-      UserId: 1
-    }], {});
+    await queryInterface.bulkInsert('Employees', [
+      {
+        name: encrypt('DragonWare'),
+        phone_number: encrypt("4435555555"),
+        city: encrypt("Morelia"),
+        state: encrypt("Michoacán"),
+        suburb: encrypt("Lomas del tecnológico"),
+        street: encrypt("Sierra nevada"),
+        int_number: encrypt("301"),
+        ext_number: encrypt("55"),
+        UserId: 1
+      },
+      {
+        name: encrypt('John Doe'),
+        phone_number: encrypt("4435555555"),
+        city: encrypt("Morelia"),
+        state: encrypt("Michoacán"),
+        suburb: encrypt("Lomas del tecnológico"),
+        street: encrypt("Sierra nevada"),
+        int_number: encrypt("301"),
+        ext_number: encrypt("55"),
+        UserId: 2
+      }
+    ], {});
   },
 
   down: async (queryInterface, Sequelize) => {
