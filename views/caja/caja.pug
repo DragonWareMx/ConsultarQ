@@ -27,8 +27,9 @@ block content
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
                             img(src="/icons/circle.png" style="width:84px; height:84px; ")
-                        a(href="#" class="uk-flex  uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
-                            <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                        div(class="uk-width-1-1 uk-flex uk-flex-right")
+                            a(href="#" class="uk-flex  uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
+                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center") 
@@ -39,8 +40,9 @@ block content
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
                             img(src="/icons/circle.png" style="width:84px; height:84px; ")
-                        a(href="#" class="uk-flex  uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
-                            <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                        div(class="uk-width-1-1 uk-flex uk-flex-right")
+                            a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
+                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center") 
@@ -51,8 +53,9 @@ block content
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
                             img(src="/icons/circle.png" style="width:84px; height:84px; ")
-                        a(href="#" class="uk-flex uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
-                            <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                        div(class="uk-width-1-1 uk-flex uk-flex-right")
+                            a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
+                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap" style="padding:8px")
                         div(style="color:#222238; font-weight:500") FILTRAR INFORMACIÓN
@@ -93,12 +96,12 @@ block content
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
                                             div(class="uk-width-1-3@m" style="color:#222238") Contadores
-                                            div(class="uk-width-expand@m")
-                                                progress(id="js-progressbar" class="" value="60" max="100" style="")
+                                            div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
                                             div(class="uk-width-1-3@m") 23 registros
-                                            div(class="uk-width-expand@m")
-                                                progress(id="js-progressbar" class="" value="40" max="100")
+                                            div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                                 
                                 div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
                                     div(class="uk-width-1-5@m uk-flex uk-flex-center")
@@ -106,12 +109,12 @@ block content
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
                                             div(class="uk-width-1-3@m" style="color:#222238") Arquitectos
-                                            div(class="uk-width-expand@m")
-                                                progress(id="js-progressbar" class="" value="60" max="100" style="")
+                                            div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
                                             div(class="uk-width-1-3@m") 23 registros
-                                            div(class="uk-width-expand@m")
-                                                progress(id="js-progressbar" class="" value="40" max="100")
+                                            div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                             
                                 div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body" style="padding:2px; padding-top:15px; padding-bottom:15px")
                                     div(class="uk-width-1-5@m uk-flex uk-flex-center")
@@ -119,16 +122,85 @@ block content
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
                                             div(class="uk-width-1-3@m" style="color:#222238") Administr..
-                                            div(class="uk-width-expand@m")
-                                                progress(id="js-progressbar" class="" value="60" max="100" style="")
+                                            div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
                                             div(class="uk-width-1-3@m") 23 registros
-                                            div(class="uk-width-expand@m")
-                                                progress(id="js-progressbar" class="" value="40" max="100")
-                            a(href="#" class="uk-flex uk-flex-middle  uk-flex-wrap uk-margin-top uk-flex-right" style="font-size:13px;")
-                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
-
-                    div(class="uk-card uk-card-default uk-card-body uk-margin-top") Ingresos
+                                            div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            div(class="uk-width-1-1 uk-flex uk-flex-right")
+                                a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
+                                    <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                        div(class="uk-width-1-1 uk-margin-small-top" style="border-top:solid 1px #EEEEEE")
+                            div(class="uk-margin-top" style="color:#222238") ÚLTIMOS REGISTROS
+                            div(class="uk-margin-small-top uk-overflow-auto uk-width-1-1")
+                                table.uk-table.uk-table-small.table-caja.uk-table-middle
+                                    thead
+                                        tr
+                                            th ID
+                                            th USUARIO
+                                            th MOVIMIENTO
+                                            th CONCEPTO
+                                            th MONTO
+                                    tbody
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |María Flores Escobedo
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |Solo 5 registros aquí
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |María Flores Escobedo
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |Solo 5 registros aquí
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000    
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |Solo 5 registros aquí
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000   
+                    div(class="uk-card uk-card-default uk-card-body uk-margin-top uk-padding-small")
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle ")
+                            div(class="uk-align-center") 
+                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;") 
+                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF 
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center") 
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") HISTORIAL
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
+                            div(class="uk-width-3-5@m" style="background-color:pink") Hola
+                            div(class="uk-width-2-5@m " style="padding:6px;")
+                        div(class="uk-width-1-1 uk-flex uk-flex-right")
+                                a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
+                                    <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial completo
                 div(class="uk-width-expand")
                     div(class="uk-card uk-card-default uk-card-body" style="height:380px") Ingresos
 
