@@ -9,10 +9,6 @@ const passport = require('passport');
 const models = require('../models/index');
 
 //AGREGAR USUARIO
-router.get('/nuevo', isLoggedIn, function (req, res, next) {
-    res.render('crearRol')
-});
-
 router.get('/', isLoggedIn, function (req, res, next) {
     models.Role.findAll({
         include: [{
@@ -28,13 +24,24 @@ router.get('/', isLoggedIn, function (req, res, next) {
     }).then(roles => {
         res.render('roles', { roles })
     });
-    /*
-    models.Role.findAll({
-        include: { all:true}
-    }).then(roles => {
-        console.log(roles)
-        res.render('roles', { roles })
-    });*/
+});
+
+router.post('/create', isLoggedIn, async function (req, res, next) {
+    var permsID = []
+    for (var key in req.body) {
+        if (key != "role_name") {
+            const permission = await models.Permission.findOne({ where: { name: key }, raw: true });
+            permsID.push(permission['id'])
+        }
+    }
+    //se crea el rol
+    models.Role.create({
+        name: req.body.role_name
+    }).then(async (rol) => {
+        console.log(rol)
+        await rol.setPermissions(permsID)
+        res.send("si jaló");
+    })
 });
 
 module.exports = router;
