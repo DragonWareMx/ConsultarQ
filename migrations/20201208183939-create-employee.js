@@ -10,34 +10,34 @@ module.exports = {
       },
       name: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       phone_number: {
         allowNull: false,
-        type: Sequelize.STRING(50)
+        type: Sequelize.TEXT
       },
       city: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       state: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       suburb: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       street: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.TEXT
       },
       int_number: {
-        type: Sequelize.STRING(10)
+        type: Sequelize.TEXT
       },
       ext_number: {
         allowNull: false,
-        type: Sequelize.STRING(10)
+        type: Sequelize.TEXT
       },
       hiring_date: {
         type: Sequelize.DATEONLY

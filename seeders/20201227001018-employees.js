@@ -1,4 +1,5 @@
 'use strict';
+const { encrypt } = require('../lib/crypto');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
@@ -13,14 +14,14 @@ module.exports = {
     */
 
     await queryInterface.bulkInsert('Employees', [{
-      name: 'DragonWare',
-      phone_number: "4435555555",
-      city: "Morelia",
-      state: "Michoacán",
-      suburb: "Lomas del tecnológico",
-      street: "Sierra nevada",
-      int_number: "301",
-      ext_number: "55",
+      name: encrypt('DragonWare'),
+      phone_number: encrypt("4435555555"),
+      city: encrypt("Morelia"),
+      state: encrypt("Michoacán"),
+      suburb: encrypt("Lomas del tecnológico"),
+      street: encrypt("Sierra nevada"),
+      int_number: encrypt("301"),
+      ext_number: encrypt("55"),
       hiring_date: "12-12-2020",
       UserId: 1
     }], {});
