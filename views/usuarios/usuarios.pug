@@ -105,9 +105,10 @@ block content
                             .field.uk-margin-bottom
                                 select(id="role" name="role" autocomplete='off' value='')
                                     option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Ninguno
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
-                                    option(value="0") Ninguno
+
                                 label(for='role' title='Rol (opcional)' data-title='Rol (opcional)')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
@@ -178,9 +179,9 @@ block content
                             .field.uk-margin-bottom
                                 select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
                                     option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Ninguno
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
-                                    option(value="0") Ninguno
                                 label(for='role-edit' title='Rol (opcional)' data-title='Rol (opcional)')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
@@ -444,7 +445,7 @@ block content
                 if(obj["Role"]){
                     $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true);
                 }else{
-                    $('#role-edit option:eq(3)').prop('selected', true);
+                    $('#role-edit option:eq(1)').prop('selected', true);
                 }
                 if(obj["Employee"]["hiring_date"]){
                     $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
@@ -531,13 +532,13 @@ block content
                             message: '<span uk-icon=\'icon: check\'></span>Usuario registrado con éxito!',
                             status: 'success',
                             pos: 'top-center',
-                            timeout: 3000
+                            timeout: 2000
                         });
                         setTimeout(
                         function()
                         {
                             window.location.href = window.location.origin + '/usuarios'
-                        }, 3000);
+                        }, 2000);
                     },
                     error: function(data){
                         /*
@@ -599,13 +600,13 @@ block content
                             message: '<span uk-icon=\'icon: check\'></span>Usuario editado con éxito!',
                             status: 'success',
                             pos: 'top-center',
-                            timeout: 3000
+                            timeout: 2000
                         });
                         setTimeout(
                         function()
                         {
                             window.location.href = window.location.origin + '/usuarios'
-                        }, 3000);
+                        }, 2000);
                     },
                     error: function(data){
                         /*
@@ -667,13 +668,13 @@ block content
                             message: '<span uk-icon=\'icon: check\'></span>Usuario eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
-                            timeout: 3000
+                            timeout: 2000
                         });
                         setTimeout(
                         function()
                         {
                             window.location.href = window.location.origin + '/usuarios'
-                        }, 3000);
+                        }, 2000);
                     },
                     error: function(data){
                         /*
