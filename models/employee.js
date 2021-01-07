@@ -1,4 +1,7 @@
 'use strict';
+//encriptacion
+const { encrypt, decrypt } = require('../lib/crypto');
+
 const {
   Model
 } = require('sequelize');
@@ -17,7 +20,13 @@ module.exports = (sequelize, DataTypes) => {
   Employee.init({
     name: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      get(){
+        return decrypt(this.getDataValue('name'))
+      },
+      set(value){
+        this.setDataValue('name',encrypt(value))
+      }
     },
     phone_number: {
       allowNull: false,
