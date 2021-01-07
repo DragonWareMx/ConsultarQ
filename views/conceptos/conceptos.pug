@@ -65,6 +65,48 @@ block content
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="info-descripcion" name="info-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
                             label(for='info-descripcion' title='Descripción' data-title='Descripción')
+        //- modal para editar
+        div(id="modal-editar" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar concepto
+                    div(tabindex="0")
+                        each concepto in conceptos
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar eliminar-" + concepto.id + "" data-id=concepto.id)
+                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Eliminar
+                button(class="uk-modal-close-default" type="button" uk-close='')
+                form(class="uk-card-body uk-padding-small")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="edit-id" name="edit-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='edit-id' title='Id' data-title='Id')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="edit-nombre" name="edit-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='edit-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="edit-descripcion" name="edit-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='edit-descripcion' title='Descripción' data-title='Descripción')
+                        div(class="uk-width-1 uk-flex-right uk-flex")
+                            button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
+        //- modal para agregar
+        div(id="modal-agregar" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar concepto
+                button(class="uk-modal-close-default" type="button" uk-close='')
+                form(class="uk-card-body uk-padding-small")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="add-nombre" name="add-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='add-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="add-descripcion" name="add-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='add-descripcion' title='Descripción' data-title='Descripción')
+                        div(class="uk-width-1 uk-flex-right uk-flex")
+                            button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Guardar
         //- paginacion
         div(class="uk-width-1-1")
             ul(class="uk-pagination uk-margin-top")
@@ -79,28 +121,55 @@ block content
         script.
             function ocultar_botones() {
                 $(".editar").hide();
+                $(".eliminar").hide();
             }
 
             $('.info').on('click', function() {
-                    var userID = $(this).data('id');
-                    var users=!{ JSON.stringify(conceptos) };
-                    console.log(users);
-                    for(var key in users){
-                        var obj=users[key];
-                        if(obj["id"] == userID){
-                            console.log(obj);
-                            break;
-                        }
+                var userID = $(this).data('id');
+                var users=!{ JSON.stringify(conceptos) };
+                console.log(users);
+                for(var key in users){
+                    var obj=users[key];
+                    if(obj["id"] == userID){
+                        console.log(obj);
+                        break;
                     }
+                }
 
-                    //Aqui se esconden los botones de editar de los otros modal
-                    ocultar_botones();
-                    //Aqui se muestra el boton correspondiente
-                    $(".editar-" + obj["id"] ).show();
+                //Aqui se esconden los botones de editar de los otros modal
+                ocultar_botones();
+                //Aqui se muestra el boton correspondiente
+                $(".editar-" + obj["id"] ).show();
+                $(".eliminar-" + obj["id"] ).show();
 
-                    //Aqui se empieza a llenar el modal
-                    $('#info-id').val(obj["id"]).change();
-                    $('#info-nombre').val(obj["name"]).change();
-                    $('#info-descripcion').val(obj["description"]).change();
-                    
-                });
+                //Aqui se empieza a llenar el modal
+                $('#info-id').val(obj["id"]).change();
+                $('#info-nombre').val(obj["name"]).change();
+                $('#info-descripcion').val(obj["description"]).change();
+
+            });
+
+            //esto de abajo es para al momento de abrir el modal de editar cargar los datos
+            $('.editar').on('click', function() {
+                var userID = $(this).data('id');
+                var users=!{ JSON.stringify(conceptos) };
+                console.log(users);
+                for(var key in users){
+                    var obj=users[key];
+                    if(obj["id"] == userID){
+                        console.log(obj);
+                        break;
+                    }
+                }
+
+                //Aqui se esconden los botones de editar de los otros modal
+                ocultar_botones();
+                //Aqui se muestra el boton correspondiente
+                $(".editar-" + obj["id"] ).show();
+                $(".eliminar-" + obj["id"] ).show();
+
+                //Aqui se empieza a llenar el modal
+                $('#edit-id').val(obj["id"]).change();
+                $('#edit-nombre').val(obj["name"]).change();
+                $('#edit-descripcion').val(obj["description"]).change();
+            });
