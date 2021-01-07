@@ -84,6 +84,7 @@ app.use('/servicios', require('./routes/servicios'));
 app.use('/caja', require('./routes/caja'));
 app.use('/prestadores_externos', require('./routes/providers'));
 app.use('/proyectos', require('./routes/proyectos'));
+app.use('/conceptos', require('./routes/conceptos'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));
