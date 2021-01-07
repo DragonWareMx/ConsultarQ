@@ -42,9 +42,10 @@ html
                                     li(class="category_item")
                                         a(href="/usuarios" ) Usuarios
                                             img(src="/icons/users-logo.png" class="category_icon")
-                                li(class="category_item")
-                                    a(href="/roles" ) Roles
-                                        img(src="/icons/role.png" class="category_icon")
+                                if uR
+                                    li(class="category_item")
+                                        a(href="/roles" ) Roles
+                                            img(src="/icons/role.png" class="category_icon")
                                 li(class="uk-parent category_item")
                                     a(href="#") Caja chica
                                         img(src="/icons/coin.png" class="category_icon")

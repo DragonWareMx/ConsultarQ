@@ -87,7 +87,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                     ['status', 'ASC']
                 ]
             }).then(usuarios => {
-                models.Role.findAll().then(roles => {
+                models.Role.findAll({where: {name: {[Op.ne]: "DragonWare"}}}).then(roles => {
                     return res.render('usuarios', { usuarios, roles,pC,pU,pD })
                 });
             });
@@ -136,6 +136,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
 
                     let ids = await models.Role.findAll({
                         attributes: ['id'],
+                        where: {id: {[Op.ne]: 1}},
                         raw: true
                     })
                     
@@ -586,7 +587,7 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                 }
             }
             catch (error) {
-                return res.status(403).json([{ msg: 'No estás autorizado para registrar usuarios.' }])
+                return res.status(403).json([{ msg: 'No fue posible registrar el usuario, inténtelo más tarde.' }])
             }
         }
 });
