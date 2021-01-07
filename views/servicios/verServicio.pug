@@ -1,0 +1,31 @@
+extends ../main 
+
+block head
+    title ConsultarQ - Cartera de servicios
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    
+    
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Cartera de servicios
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
+                    img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Regresar 
+        div(class="uk-card uk-card-default uk-card-body uk-padding-remove uk-margin-top")
+            div(class="uk-card-header uk-flex uk-flex-middle uk-text-emphasis" style="padding:8px;") 
+                img(src="/img/iconos/service.png" style="width:20px;height:20px;" class="uk-margin-small-right") 
+                a(href="/servicios/ver-servicio" class="uk-link-heading") Supervisión de la obra
+                a(href="/servicios/editar-servicio" class="uk-position-right uk-margin-small-right a-edit-service a-hidden-ser")
+                    img(src="/img/iconos/edit.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
+                    |Editar
+                a(href="#" class="uk-position-right uk-margin-small-right a-edit-service a-block-ser")
+                    img(src="/img/iconos/edit.png" style="width:15px;height:15px;") 
+            div(class="uk-width-1-1 uk-flex flex-wrap " style="padding:10px; padding-left:40px; padding-bottom:0px")
+                div(class="uk-width-1-1 uk-text-mute uk-text-bold") Elaboración de:
+                    ul(class="uk-text-normal")
+                        li Revisión y análisis de la documentación contractual
+                        li Revisón del proyecto ejecutivo
+                        li Manejo de bitácora
+                        li Control de estimaciones de obra...

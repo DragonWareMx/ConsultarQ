@@ -23,6 +23,7 @@ path.join(__dirname, 'views/profile'),
 path.join(__dirname, 'views/roles'),
 path.join(__dirname, 'views/clientes'),
 path.join(__dirname, 'views/servicios'),
+path.join(__dirname, 'views/caja'),
 path.join(__dirname, 'views/proyectos'),
 ]
 );
@@ -101,8 +102,11 @@ app.use('/perfil', require('./routes/perfil'));
 app.use('/roles', require('./routes/roles'));
 app.use('/clientes', require('./routes/clientes'));
 app.use('/servicios', require('./routes/servicios'));
+app.use('/caja', require('./routes/caja'));
 app.use('/prestadores_externos', require('./routes/providers'));
 app.use('/proyectos', require('./routes/proyectos'));
+app.use('/conceptos', require('./routes/conceptos'));
+app.use('/tipos_de_pago', require('./routes/pa_types'));
 
 // Public
 app.use(express.static(path.join(__dirname, 'public')));

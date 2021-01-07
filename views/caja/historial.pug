@@ -1,0 +1,157 @@
+extends ../main
+
+block head
+    title Historial
+    link(rel="stylesheet" href="/stylesheets/others.css")
+
+block content
+    div(class="uk-container")
+        //- titulo y boton de agregar
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Historial de transacciones
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
+                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Agregar transacción
+        //- barra de busqueda
+        form(class="uk-flex")
+            div(class="uk-search uk-search-default uk-width-expand")
+                a(href="#" uk-search-icon)
+                input(class="uk-search-input" type="search" placeholder="Buscar...")
+            //- boton de filtrar
+            button(class="uk-button uk-button-primary uk-width-auto" href="#")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+            div(uk-dropdown="mode: click")
+                ul(class="uk-list")
+                    li() sugerencia 1
+                    li() sugerencia 2
+                    li() sugerencia 3
+        //- contenido
+        div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
+            div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
+                div(class="uk-card-body uk-text-center")
+                    div(class="uk-overflow-auto uk-margin-top")
+                        table(class="uk-table uk-table-divider")
+                            thead
+                                tr
+                                    th(class="uk-text-center") ID
+                                    th(class="uk-text-center") NOMBRE
+                                    th(class="uk-text-center") CONCEPTO
+                                    th(class="uk-text-center") MONTO
+                                    th(class="uk-text-center") DIRECCIÓN
+                                    th(class="uk-text-center") FECHA
+                            tbody
+                                each transaccion in transacciones
+                                    tr(class="info" uk-toggle="target: #modal-info" data-id=transaccion.id)
+                                        td #{transaccion.id}
+                                        td Nombre del empleado
+                                        td #{transaccion.Concept.name}
+                                        td #{transaccion.amount}
+                                        if(transaccion.T_type == 'egreso')
+                                            td Egreso
+                                        else
+                                            td Ingreso
+                                        td #{transaccion.date}
+        //- informacion completa
+        div(id="modal-info" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
+                    div(tabindex="0")
+                        each transaccion in transacciones
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + transaccion.id + "" uk-toggle="target: #modal-editar" data-id=transaccion.id)
+                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Editar
+                button(class="uk-modal-close-default" type="button" uk-close='')
+                form(class="uk-card-body uk-padding-small")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-id" name="info-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-id' title='Id' data-title='Id')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-proyecto" name="info-proyecto" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-proyecto' title='Proyecto' data-title='Proyecto')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-nombre" name="info-nombre" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-concepto" name="info-concepto" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-concepto' title='Concepto' data-title='Concepto')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-direccion" name="info-direccion" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-direccion' title='Dirección' data-title='Dirección')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-monto" name="info-monto" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-monto' title='Monto' data-title='Monto')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-tipo-pago" name="info-tipo-pago" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-tipo-pago' title='Tipo de pago' data-title='Tipo de pago')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-descripcion" name="info-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-descripcion' title='Descripción' data-title='Descripción')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-fecha" name="info-fecha" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-fecha' title='Fecha de registro' data-title='Fecha de registro')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-deducible" name="info-deducible" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-deducible' title='Deducible' data-title='Deducible')
+        //- paginacion
+        div(class="uk-width-1-1")
+            ul(class="uk-pagination uk-margin-top")
+                li()
+                    a(href="#")
+                        span(class="uk-margin-small-right" uk-pagination-previous) 
+                        | Anterior
+                li(class="uk-margin-auto-left")
+                    a(href="#") Siguiente
+                        span(class="uk-margin-small-left" uk-pagination-next)
+        
+        script.
+            function ocultar_botones() {
+                $(".editar").hide();
+            }
+
+            $('.info').on('click', function() {
+                    var userID = $(this).data('id');
+                    var users=!{ JSON.stringify(transacciones) };
+                    console.log(users);
+                    for(var key in users){
+                        var obj=users[key];
+                        if(obj["id"] == userID){
+                            console.log(obj);
+                            break;
+                        }
+                    }
+
+                    //Aqui se esconden los botones de editar de los otros modal
+                    ocultar_botones();
+                    //Aqui se muestra el boton correspondiente
+                    $(".editar-" + obj["id"] ).show();
+
+                    //Aqui se empieza a llenar el modal
+                    $('#info-id').val(obj["id"]).change();
+                    //$('#info-nombre').val(obj["name"]).change();
+                    if(obj["status"]=="active"){
+                        $('#info-estatus option[value="activo"]').prop('selected', 'selected').change();
+                    }else{
+                        $('#info-estatus option[value="inactivo"]').prop('selected', 'selected').change();
+                    }
+                    $('#info-concepto').val(obj["Concept"]["name"]).change();
+                    if(obj["T_type"] == "egreso"){
+                        $('#info-direccion').val("Egreso").change();
+                    }
+                    else{
+                        $('#info-direccion').val("Ingreso").change();
+                    }
+                    $('#info-monto').val(obj["amount"]).change();
+                    $('#info-tipo-pago').val(obj["Pa_Type"]["name"]).change();
+                    $('#info-descripcion').val(obj["description"]).change();
+                    $('#info-fecha').val(obj["date"]).change();
+                    if(obj["invoice"] == true){
+                        $('#info-deducible').val("Si").change();
+                    }
+                    else{
+                        $('#info-deducible').val("No").change();
+                    }
+                    
+                });

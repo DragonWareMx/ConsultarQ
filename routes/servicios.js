@@ -12,5 +12,17 @@ router.get('/', isLoggedIn, function(req, res, next) {
     res.render('carteraServicios')
 });
 
+router.get('/ver-servicio', isLoggedIn, function(req, res, next) {
+    res.render('verServicio')
+});
+
+router.get('/agregar-servicio', isLoggedIn, function(req, res, next) {
+    res.render('agregarServicio')
+});
+
+router.get('/editar-servicio', isLoggedIn, function(req, res, next) {
+    res.render('editarServicio')
+});
+
 
 module.exports = router;

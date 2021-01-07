@@ -18,7 +18,7 @@ module.exports = {
           email: "adolfo@ejemplo.com",
           phone_number: "4455667788",
           ProviderAreaId: 1,
-          status: 'active'
+          status: 'inactive'
         },
         {
           name: 'Oscar Huerta',
