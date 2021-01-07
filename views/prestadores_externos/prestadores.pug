@@ -58,7 +58,7 @@ block content
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                         div(tabindex="0")
                             each prestador in prestadores
-                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + prestador.Provider_Area.id uk-toggle="target: #modal-editar" data-id=prestador.Provider_Area.id)
+                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + prestador.id uk-toggle="target: #modal-editar" data-id=prestador.Provider_Area.id)
                                     img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                                     div Editar
                     button(class="uk-modal-close-default" type="button" uk-close='')
@@ -132,9 +132,10 @@ block content
                     div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar información
                         div(tabindex="0")
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading editar" href="")
-                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                div Eliminar
+                            each prestador in prestadores
+                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar eliminar-" + prestador.id + "" href="")
+                                    img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                    div Eliminar
                     button(class="uk-modal-close-default" type="button" uk-close='')
                     form(class="uk-card-body uk-padding-small")
                         div
@@ -170,7 +171,7 @@ block content
                                 label(for='edit-dro' title='Número de DRO' data-title='Número de DRO')
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btn-Editar" type="submit") Agregar
+                                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
         //- paginacion
         div(class="uk-width-1-1")
             ul(class="uk-pagination uk-margin-top")
@@ -185,6 +186,7 @@ block content
         script.
             function ocultar_botones() {
                 $(".editar").hide();
+                $(".eliminar").hide();
             }
 
             jQuery(($) => {
@@ -204,7 +206,8 @@ block content
                     //Aqui se esconden los botones de editar de los otros modal
                     ocultar_botones();
                     //Aqui se muestra el boton correspondiente
-                    $(".editar-" + obj["Provider_Area"]["id"] ).show();
+                    $(".editar-" + obj["id"] ).show();
+                    $(".eliminar-" + obj["id"] ).show();
 
                     //Aqui se empieza a llenar el modal
                     $('#info-id').val(obj["id"]).change();
