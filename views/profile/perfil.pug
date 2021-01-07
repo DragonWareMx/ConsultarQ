@@ -26,15 +26,15 @@ block content
                         div(class="uk-width-auto div-datos-perfil")
                             div(class="")
                                 div(class="uk-text-emphasis uk-text-bold") #{user.Employee.name}
-                                div(class="uk-text-emphasis") Arquitecto de base
+                                div(class="uk-text-emphasis") #{user.Role.name}
                                 div(class="btn-status-active btn-status-perfil" style="margin-top:10px;") ACTIVO
                 div(class="")
                     div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
-                        <span uk-icon="receiver" class="uk-margin-small-right"></span>+5244444444
+                        <span uk-icon="receiver" class="uk-margin-small-right"></span>+#{user.Employee.phone_number}
                     div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
-                        <span uk-icon="location" class="uk-margin-small-right"></span>Col. centro, calle Victoria, #754
+                        <span uk-icon="location" class="uk-margin-small-right"></span> #{user.Employee.suburb}, #{user.Employee.street} ##{user.Employee.ext_number}
                     div(class="uk-width-1-1 uk-text-emphasis")
-                        <span uk-icon="mail" class="uk-margin-small-right"></span>correo@ejemplo.com
+                        <span uk-icon="mail" class="uk-margin-small-right"></span>#{user.email}
                 div(class="")
                     div(class="uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                         div(class="uk-width-3-5@l uk-text-muted") Proyectos completados
@@ -56,13 +56,13 @@ block content
                             div(class="uk-width-1-2@l uk-text-emphasis") Arquitecto de base
                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-width-1-2@l uk-text-muted") Rol
-                            div(class="uk-width-1-2@l uk-text-emphasis") Arquitecto
+                            div(class="uk-width-1-2@l uk-text-emphasis") #{user.Role.name}
                         div(class="uk-flex uk-flex-wrap uk-flex-middle")
                             div(class="uk-width-1-2@l uk-text-muted") Salario
                             div(class="uk-width-1-2@l uk-text-emphasis") 12%
                         div(class="uk-flex uk-flex-wrap uk-flex-middle")
                             div(class="uk-width-1-2@l uk-text-muted") Fecha de contratación
-                            div(class="uk-width-1-2@l uk-text-emphasis") 02 de Enero de 2020
+                            div(class="uk-width-1-2@l uk-text-emphasis") #{user.Employee.hiring_date}
             div(class="uk-card uk-card-default uk-width-expand uk-margin-small-right uk-margin-bottom")
                 div(class="uk-card-body uk-flex uk-flex-wrap uk-padding-small")
                     div(class="uk-text-muted uk-width-1-1") Últimos proyectos
