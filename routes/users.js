@@ -102,38 +102,6 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     }
 });
 
-//AGREGAR USUARIO
-// router.get('/nuevo', isLoggedIn, function (req, res, next) {
-//     res.render('nuevoUsuario')
-// });
-
-//VER USUARIO ID
-// router.get('/:id', isLoggedIn, function (req, res, next) {
-//     let id = req.params.id
-//     models.User
-//         .findOne({
-//             where: { id: id },
-//         })
-//         .then(user => {
-//             res.send(user)
-//         })
-// });
-
-// router.get('/editar/:id', isLoggedIn, function (req, res, next) {
-//     let id = req.params.id
-//     models.User
-//         .findOne({
-//             where: { id: id },
-//             include: ['Employee']
-//         })
-//         .then(usuario => {
-//             if (!usuario) {
-//                 return res.send('error')  //AQUI VA LA VISTA DE ERRORES ERROR
-//             }
-//             res.render('editarUsuario', { usuario })
-//         })
-// });
-
 //UPDATE USUARIO ID
 router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
     [
@@ -393,7 +361,6 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
         }
 });
 
-
 //DELETE USUARIO ID
 router.post('/delete/:id', isLoggedIn, async (req, res, next) => {
     try {
@@ -622,6 +589,6 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                 return res.status(403).json([{ msg: 'No estás autorizado para registrar usuarios.' }])
             }
         }
-    });
+});
 
 module.exports = router;

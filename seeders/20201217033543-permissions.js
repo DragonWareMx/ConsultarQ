@@ -34,6 +34,9 @@ module.exports = {
         name: 'cu'
       },
       {
+        name: 'cd'
+      },
+      {
         name: 'sc'
       },
       {

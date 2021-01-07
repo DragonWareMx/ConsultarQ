@@ -192,9 +192,9 @@ block content
         div(class="uk-modal-dialog uk-modal-body")
             button(class="uk-modal-close-default" type="button" uk-close)
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Crear Rol
-            form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" action="/roles/nuevo" method="POST")
+            form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" action="/roles/create" method="POST")
                 div(class="field uk-margin-bottom uk-width-1-2@l")
-                    input(type='text' autocomplete='on' id="name" name="role" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    input(type='text' id="name" name="role_name" value='' onchange="this.setAttribute('value', this.value);" required='')
                     label(for='name' title='Nombre del rol' data-title='Nombre del rol')
                 div(class="uk-overflow-auto uk-margin-top")
                     table(class="uk-table uk-table-small uk-table-divider")
@@ -275,9 +275,9 @@ block content
         div(class="uk-modal-dialog uk-modal-body")
             button(class="uk-modal-close-default" type="button" uk-close)
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar Rol
-            form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" action="/roles/nuevo" method="POST")
+            form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" id="form-edit-role" action="/roles/update" method="POST")
                 div(class="field uk-margin-bottom uk-width-1-2@l")
-                    input(type='text' autocomplete='on' id="name-edit" name="role" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    input(type='text' id="name-edit" name="role_name" value='' onchange="this.setAttribute('value', this.value);" required='')
                     label(for='name' title='Nombre del rol' data-title='Nombre del rol')
                 div(class="uk-overflow-auto uk-margin-top")
                     table(class="uk-table uk-table-small uk-table-divider")
@@ -377,10 +377,24 @@ block content
                         break;
                     }
                 }
+
                 $('#name-edit').val(obj['name']).change();
                 $('#modal-editar-rol').find('input:checkbox').prop('checked', false);
                 jQuery.each(obj['Permissions'], function(index,item){
                     $('#'+item['name']+'-edit').prop("checked", true);
                 });
+                //esto no se pa que sea pero parece necesario
+                $('#form-edit-role').attr('action', '/roles/update/'+obj["id"]);
+                $('#btnEliminar').data('id',obj["id"]);
+                $('#btnEliminar').data('name',obj["name"]);
              });
+
+             $('#btnEliminar').on('click', function() {
+                var roleID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar el rol '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-user').attr('action', '/roles/delete/'+ roleID);
+            });
         })
