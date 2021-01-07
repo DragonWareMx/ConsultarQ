@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Concept.hasMany(models.Transaction)
     }
   };
   Concept.init({
