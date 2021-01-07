@@ -63,13 +63,13 @@ router.get('/', isLoggedIn, async (req, res, next) => {
         var pD = false;
 
         usuario.Role.Permissions.forEach(permiso => {
-            if(permiso.name == 'uc')
+            if (permiso.name == 'uc')
                 pC = true
-            else if(permiso.name == 'ur')
+            else if (permiso.name == 'ur')
                 pR = true
-            else if(permiso.name == 'uu')
+            else if (permiso.name == 'uu')
                 pU = true
-            else if(permiso.name == 'ud')
+            else if (permiso.name == 'ud')
                 pD = true
         });
 
@@ -82,13 +82,13 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 }, {
                     model: models.Role
                 }],
-                where: {email: {[Op.ne]: "DragonWareOficial@hotmail.com"}},
+                where: { email: { [Op.ne]: "DragonWareOficial@hotmail.com" } },
                 order: [
                     ['status', 'ASC']
                 ]
             }).then(usuarios => {
-                models.Role.findAll({where: {name: {[Op.ne]: "DragonWare"}}}).then(roles => {
-                    return res.render('usuarios', { usuarios, roles,pC,pU,pD })
+                models.Role.findAll({ where: { name: { [Op.ne]: "DragonWare" } } }).then(roles => {
+                    return res.render('usuarios', { usuarios, roles, pC, pU, pD })
                 });
             });
         }
@@ -115,7 +115,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .isEmail().withMessage('Correo electrónico no válido.')
             .normalizeEmail(),
         check('password')
-            .optional({checkFalsy: true})
+            .optional({ checkFalsy: true })
             .trim()
             .not().isEmpty().withMessage('Contraseña es un campo requerido.')
             .isLength({ min: 8, max: 24 }).withMessage('La contraseña debe tener minimo 8 caracteres y máximo 24 caracteres.')
@@ -124,49 +124,47 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .matches(/(?=.*?[0-9])/).withMessage('La contraseña debe tener al menos un número.')
             .not().matches(/^$|\s+/).withMessage('No se aceptan espacios en la contraseña.'),
         check('role')
-            .optional({checkFalsy: true})
-            .custom(async (role) => 
-            {
+            .optional({ checkFalsy: true })
+            .custom(async (role) => {
                 //se crea el validador, es true porque si no hay rol tambien es valido
                 var validador = true
 
                 //si no es nulo
-                if(role){
+                if (role) {
                     validador = false
 
                     let ids = await models.Role.findAll({
                         attributes: ['id'],
-                        where: {id: {[Op.ne]: 1}},
+                        where: { id: { [Op.ne]: 1 } },
                         raw: true
                     })
-                    
+
                     ids.forEach(id => {
-                        if(role == id.id){
+                        if (role == id.id) {
                             validador = true
                         }
                     });
 
-                    if(role == 0)
+                    if (role == 0)
                         validador = true
                 }
-                if(validador){
+                if (validador) {
                     return true
                 }
                 else
                     throw new Error('El rol existe.');
             }).withMessage('El rol no es válido.'),
         check('hiring_date')
-            .optional({checkFalsy: true})
-            .custom(date =>
-                {
-                    return !isNaN(Date.parse(date));
-                }
+            .optional({ checkFalsy: true })
+            .custom(date => {
+                return !isNaN(Date.parse(date));
+            }
             ).withMessage('La fecha no es válida'),
         check('phone_number')
             .not().isEmpty().withMessage('Número telefónico electrónico es un campo requerido.')
             .trim()
             .isNumeric().withMessage('Sólo se aceptan números en el número telefónico.')
-            .isLength({max: 50, min: 10}).withMessage('El número telefónico debe tener al menos 10 dígitos.'),
+            .isLength({ max: 50, min: 10 }).withMessage('El número telefónico debe tener al menos 10 dígitos.'),
         check('city')
             .not().isEmpty().withMessage('Ciudad es un campo requerido.')
             .isLength({ max: 255 }).withMessage('Ciudad puede tener un máximo de 255 caracteres.')
@@ -192,7 +190,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .isAlphanumeric().withMessage('El número interior sólo acepta caracteres alfanuméricos.')
             .isLength({ max: 10 }).withMessage('El número exterior puede tener un máximo de 10 caracteres.'),
         check('int_number')
-            .optional({checkFalsy: true})
+            .optional({ checkFalsy: true })
             .isAlphanumeric().withMessage('El número interior sólo acepta caracteres alfanuméricos.')
             .isLength({ max: 10 }).withMessage('El número interior puede tener un máximo de 10 caracteres.'),
         check('status').isIn(['active', 'inactive']).withMessage('El estatus ingresado no es válido.')
@@ -204,48 +202,48 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             return res.status(422).send(errors.array());
         }
 
-        try{
-//VERIFICACION DEL PERMISO     
-                //obtenemos el usuario, su rol y su permiso
-                const usuario = await models.User.findOne({
-                    where: {
-                        id: req.user.id
-                    },
+        try {
+            //VERIFICACION DEL PERMISO
+            //obtenemos el usuario, su rol y su permiso
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
                     include: {
-                        model: models.Role,
-                        include: {
-                            model: models.Permission,
-                            where: {name: 'uu'}
-                        }
+                        model: models.Permission,
+                        where: { name: 'uu' }
                     }
-                })
-//NO TIENE PERMISO
-                if(!(usuario && usuario.Role && usuario.Role.Permissions)){
-                    return res.status(403).json([{ msg: 'No estás autorizado para actualizar usuarios.' }])
                 }
-            }
-            catch(error){
+            })
+            //NO TIENE PERMISO
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
                 return res.status(403).json([{ msg: 'No estás autorizado para actualizar usuarios.' }])
             }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para actualizar usuarios.' }])
+        }
 
-//TIENE PERMISO
+        //TIENE PERMISO
 
         //Transaccion
         const t = await models.sequelize.transaction()
         try {
-//ACTUALIZACION DE USUARIO
+            //ACTUALIZACION DE USUARIO
             //obtenemos el id del usuario que vamos a actualizar
             let id = req.params.id
 
             //verificamos que exista el rol
             var rolName
 
-            if(req.body.role){
-                if(req.body.role == 0){
+            if (req.body.role) {
+                if (req.body.role == 0) {
                     req.body.role = null
                     rolName = "Sin rol"
                 }
-                else{
+                else {
                     const rol = await models.Role.findOne({
                         where: {
                             id: req.body.role
@@ -254,7 +252,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                     })
 
                     //si el roll no existe ROLLBACK
-                    if(!rol)
+                    if (!rol)
                         throw new Error()
                     else
                         rolName = rol.name
@@ -277,7 +275,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                 dataUser.password = await helpers.encryptPassword(req.body.password);
             }
 
-//ACTUALIZACION DE EMPLEADO
+            //ACTUALIZACION DE EMPLEADO
             //guardamos los datos del empleado
             var dataEmployee = {
                 name: req.body.name,
@@ -290,7 +288,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                 ext_number: req.body.ext_number
             }
 
-            if(!isNaN(Date.parse(req.body.hiring_date))){
+            if (!isNaN(Date.parse(req.body.hiring_date))) {
                 dataEmployee.hiring_date = req.body.hiring_date
             }
 
@@ -300,10 +298,10 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
                     where: { id: id },
                     transaction: t
                 })
-                
+
             //esto de abajo es para borrar la imagen vieja en caso de que hayan subido una nueva
             if (req.file) {
-                fs.unlink('public/uploads/avatar/' + user.picture, (err) => {
+                fs.unlink('public/uploads/avatar/' + usuarioU.picture, (err) => {
                     if (err) {
                         console.log("failed to delete local image:" + err);
                     } else {
@@ -313,16 +311,16 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             }
 
             //se actualiza el usuario
-            await usuarioU.update(dataUser, {transaction: t})
+            await usuarioU.update(dataUser, { transaction: t })
 
             const empleadoU = await models.Employee
                 .findOne({
                     where: { UserId: id }
                 })
 
-            await empleadoU.update(dataEmployee, {transaction: t})
+            await empleadoU.update(dataEmployee, { transaction: t })
 
-//SE REGISTRA EL LOG
+            //SE REGISTRA EL LOG
             //obtenemos el usuario que realiza la transaccion
             const usuario = await models.User.findOne({
                 where: {
@@ -335,18 +333,18 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             var dataLog = {
                 UserId: usuario.id,
                 title: "Actualización de usuario",
-                description: "El usuario "+usuario.email+" ha actualizado el usuario "+usuarioU.email+" con los siguientes datos:\nRol: "+rolName+"\nNombre: "+empleadoU.name+"\nNúmero telefónico: "+empleadoU.phone_number+"\nCiudad: "+empleadoU.city+"\nEstado: "+empleadoU.state+"\nColonia: "+empleadoU.suburb+"\nCalle: "+empleadoU.street+"\nNúmero interior: "+empleadoU.int_number+"\nNúmero exterior: "+empleadoU.ext_number+"\nFecha de contratación: "+empleadoU.hiring_date
+                description: "El usuario " + usuario.email + " ha actualizado el usuario " + usuarioU.email + " con los siguientes datos:\nRol: " + rolName + "\nNombre: " + empleadoU.name + "\nNúmero telefónico: " + empleadoU.phone_number + "\nCiudad: " + empleadoU.city + "\nEstado: " + empleadoU.state + "\nColonia: " + empleadoU.suburb + "\nCalle: " + empleadoU.street + "\nNúmero interior: " + empleadoU.int_number + "\nNúmero exterior: " + empleadoU.ext_number + "\nFecha de contratación: " + empleadoU.hiring_date
             }
 
             //guarda el log en la base de datos
             const log = await models.Log.create(dataLog, { transaction: t })
 
             //nos aseguramos que se hayan guardado correctamente el log, el usuario y el empleado
-            if(!log)
+            if (!log)
                 throw new Error()
             if (!empleadoU)
                 throw new Error()
-            if(!usuarioU)
+            if (!usuarioU)
                 throw new Error()
 
             res.status(200).json([{ status: 200 }]);
@@ -360,12 +358,12 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             await t.rollback();
             return res.status(500).json([{ msg: 'No fue posible actualizar el usuario, vuelva a intentarlo más tarde.' }])
         }
-});
+    });
 
 //DELETE USUARIO ID
 router.post('/delete/:id', isLoggedIn, async (req, res, next) => {
     try {
-//VERIFICACION DEL PERMISO
+        //VERIFICACION DEL PERMISO
 
         //obtenemos el usuario, su rol y su permiso
         let usuario = await models.User.findOne({
@@ -383,7 +381,7 @@ router.post('/delete/:id', isLoggedIn, async (req, res, next) => {
 
         if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
             //NO TIENE PERMISOS
-            return res.status(403).json([{ msg: 'No tienes permiso de eliminar usuarios.' }])   
+            return res.status(403).json([{ msg: 'No tienes permiso de eliminar usuarios.' }])
         }
     }
     catch (error) {
@@ -413,10 +411,10 @@ router.post('/delete/:id', isLoggedIn, async (req, res, next) => {
                 }
             });
         }
-        
-        await usuarioD.destroy({transaction: t})
 
-//SE REGISTRA EL LOG
+        await usuarioD.destroy({ transaction: t })
+
+        //SE REGISTRA EL LOG
         //obtenemos el usuario que realiza la transaccion
         const usuario = await models.User.findOne({
             where: {
@@ -429,18 +427,18 @@ router.post('/delete/:id', isLoggedIn, async (req, res, next) => {
         var dataLog = {
             UserId: usuario.id,
             title: "Eliminación de usuario",
-            description: "El usuario "+usuario.email+" ha eliminado el usuario "+usuarioD.email
+            description: "El usuario " + usuario.email + " ha eliminado el usuario " + usuarioD.email
         }
 
         //guarda el log en la base de datos
         const log = await models.Log.create(dataLog, { transaction: t })
 
         //verifica si se elimina el usuario
-        const verUser = await models.User.findOne({where: {id: usuarioD.id}, transaction: t})
+        const verUser = await models.User.findOne({ where: { id: usuarioD.id }, transaction: t })
 
-        if(verUser)
+        if (verUser)
             throw new Error()
-        if(!log)
+        if (!log)
             throw new Error()
 
         res.status(200).json([{ status: 200 }]);
@@ -496,7 +494,7 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                         }
                     });
 
-                    if(role == 0)
+                    if (role == 0)
                         validador = true
                 }
                 if (validador)
@@ -590,6 +588,6 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                 return res.status(403).json([{ msg: 'No fue posible registrar el usuario, inténtelo más tarde.' }])
             }
         }
-});
+    });
 
 module.exports = router;
