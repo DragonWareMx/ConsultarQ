@@ -11,6 +11,13 @@ const models = require('../models/index');
 router.get('/', isLoggedIn, function(req, res, next) {
     res.render('caja')
 });
+router.get('/agregar-registro', isLoggedIn, function(req, res, next) {
+    res.render('agregarRegistro') 
+});
+router.get('/editar-registro', isLoggedIn, function(req, res, next) {
+    res.render('editarRegistro') 
+});
+
 
 //  se consultan solo los egresos
 router.get('/egresos', isLoggedIn, async (req, res, next) => {

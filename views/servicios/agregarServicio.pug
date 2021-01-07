@@ -10,7 +10,11 @@ block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar servicio
-        div(class="uk-card uk-card-default uk-card-body uk-width-4-5@m uk-margin-top")
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
+                    img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Regresar
+        div(class="uk-card uk-card-default uk-card-body uk-width-4-5@m uk-margin-top uk-padding-small")
             .field.uk-margin-bottom
                 input(type='text' autocomplete='on' id="name-service" name="name-service" value='' onchange="this.setAttribute('value', this.value);" required='')
                 label(for='name' title='Nombre del servicio' data-title='Nombre del servicio')
