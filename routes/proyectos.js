@@ -16,6 +16,10 @@ router.get('/documentacion', isLoggedIn,function (req, res, next) {
   res.render('documentacion'); 
 });
 
+router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
+  res.render('editarDocumentacion'); 
+});
+
 router.get('/layouts', isLoggedIn,function (req, res, next) {
   res.render('layouts');
 });
