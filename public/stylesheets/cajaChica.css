@@ -42,6 +42,10 @@
 .textarea-caja:focus, .textarea-caja:active{
     border: 1px solid #1e87f0;
 }
+.table-caja tbody tr th{
+    color: black;
+    text-transform: initial;
+}
 
 @media(max-width:960px){
     .div-info-nex-caja{

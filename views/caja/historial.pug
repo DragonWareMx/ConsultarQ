@@ -10,7 +10,7 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Historial de transacciones
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="/caja/agregar-registro")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar transacción
         //- barra de busqueda
@@ -59,7 +59,7 @@ block content
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                     div(tabindex="0")
                         each transaccion in transacciones
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + transaccion.id + "" uk-toggle="target: #modal-editar" data-id=transaccion.id)
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + transaccion.id + "" href="/caja/editar-registro" data-id=transaccion.id)
                                 img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                                 div Editar
                 button(class="uk-modal-close-default" type="button" uk-close='')
