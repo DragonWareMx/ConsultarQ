@@ -100,10 +100,15 @@ block content
                         div(class="uk-margin-top uk-margin-small-left uk-text-small") MIEMBROS DEL PROYECTO
                         div(class="uk-width-1 uk-flex uk-flex-wrap")
                             div(class="uk-width-2-3 uk-flex uk-flex-wrap uk-margin-bottom")
-                                img(src="/img/prueba/perfil1.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
-                                img(src="/img/prueba/perfil2.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
-                                img(src="/img/prueba/perfil1.png" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
-                                img(src="/img/prueba/perfil3.jpg" width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                                each user , index in proyecto.Users
+                                    if user.picture
+                                        img(src="/uploads/avatar/"+user.picture uk-tooltip=user.Employee.name width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                                    else
+                                        img(src="/img/iconos/default.png" width="33px" uk-tooltip=user.Employee.name class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")
+                                    if index == 4
+                                        - break
+                                if proyecto.Users.length > 5
+                                    div(class="uk-right uk-margin-top") #{role.Users.length - 5} más...
                             div(class="uk-width-1-3 uk-position-bottom-right uk-flex uk-flex-right uk-flex-middle uk-margin-small-right uk-margin-bottom")
                                 img(src="/icons/archivo.png" width="13px" style="margin-right:5px;")
                                 div(class="uk-text-small" style="margin-right:10px;") 20

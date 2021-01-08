@@ -9,7 +9,12 @@ const passport = require('passport');
 const models = require('../models/index');
 
 router.get('/activos', isLoggedIn,async function (req, res, next) {
-  const proyectos = await models.Project.findAll()
+  const proyectos = await models.Project.findAll({
+      include: {
+        model: models.User,
+        include: models.Employee
+    }
+  })
   res.render('proyectos', {proyectos});
 });
 

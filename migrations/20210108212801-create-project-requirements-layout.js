@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Projects', {
+    await queryInterface.createTable('Project_Requirements_Layouts', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,30 +9,18 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       ProTypeId: {
+        type: Sequelize.INTEGER
+      },
+      ProTypeId: {
         type: Sequelize.INTEGER,
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         references: {
-          model: 'Pro_Type',
+          model: 'Pro_Types',
           key: 'id',
         },
       },
-      contract: {
-        type: Sequelize.STRING
-      },
       name: {
-        allowNull: false,
         type: Sequelize.STRING
-      },
-      observations: {
-        type: Sequelize.STRING
-      },
-      start_date: {
-        allowNull: false,
-        type: Sequelize.DATEONLY
-      },
-      end_date: {
-        allowNull: false,
-        type: Sequelize.DATEONLY
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +33,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Projects');
+    await queryInterface.dropTable('Project_Requirements_Layouts');
   }
 };
