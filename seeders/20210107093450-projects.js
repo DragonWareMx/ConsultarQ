@@ -14,8 +14,8 @@ module.exports = {
    await queryInterface.bulkInsert('Projects', [{
       name: "Proyecto de John Doe",
       observations: "El proyecto ya inició",
-      start_date: "12-01-2020",
-      end_date: "12-12-2020"
+      start_date: "2020-01-01",
+      end_date: "2020-12-12"
     }], {});
     await queryInterface.bulkInsert('Project_Employees', [{
       UserId: 2,

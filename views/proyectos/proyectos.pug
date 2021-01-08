@@ -50,14 +50,48 @@ block content
                                 div(class="o-progress-date-line")
                                 div(class="o-progress-date-start" style="background:#BE3BC0;")
                                 div(class="o-progress-date-end" style="background:#BE3BC0;")
-                                div(class="o-progress-date-today" id="bola1" uk-tooltip="06/01/2020" style="margin-left:93%; border: 1px solid #BE3BC0;" /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
+                                -
+                                    const fechaII = new Date(proyecto.start_date+"T11:22:33+0000")
+                                    const fechaI = fechaII.getTime()
+                                    const fechaTI = new Date(proyecto.end_date+"T11:22:33+0000")
+                                    const fechaT = fechaTI.getTime()
+                                    const hoyI = new Date()
+                                    const hoy = hoyI.getTime()
+
+                                    var diasF
+                                    diasF = ((hoy-fechaI)/(fechaT-fechaI))*100
+
+                                    if(diasF > 91)
+                                        diasF = 91
+                                    else if(diasF < 5)
+                                        diasF = 5
+
+                                    const MESES = [
+                                    "ENE",
+                                    "FEB",
+                                    "MAR",
+                                    "ABR",
+                                    "MAY",
+                                    "JUN",
+                                    "JUL",
+                                    "AGO",
+                                    "SEP",
+                                    "OCT",
+                                    "NOV",
+                                    "DIC",
+                                    ];
+                                    const f = new Date();
+
+                                    mesI = MESES[fechaII.getMonth()];
+                                    mesF = MESES[fechaTI.getMonth()];
+                                div(class="o-progress-date-today" uk-tooltip=hoyI.getDate()+"/"+(hoyI.getMonth()+1)+"/"+hoyI.getFullYear() style="margin-left:"+diasF+"%; border: 1px solid #BE3BC0;" /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
                                 div(class="o-progress-date-dates")
-                                    div(class="uk-text-small") 12, JUN, 2020
-                                    div(class="uk-text-small") 12, NOV, 2020
+                                    div(class="uk-text-small") #{fechaII.getDate()}, #{mesI}, #{fechaII.getFullYear()}
+                                    div(class="uk-text-small") #{fechaTI.getDate()}, #{mesF}, #{fechaTI.getFullYear()}
                         div(class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top")
                             div(class="uk-width-2-5")
-                                div(class="progress--circle progress--100" style="")
-                                    div(class="progress__number") 100%
+                                div(class="progress--circle progress--95" style="")
+                                    div(class="progress__number") 93%
                             div(class="uk-width-3-5 uk-width-1@s uk-width-3-5")
                                 div(class="uk-text-large" style="color: #222238;") 22
                                 div(class="uk-text-small") Tareas / Documentos listos
