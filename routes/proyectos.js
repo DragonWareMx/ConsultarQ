@@ -46,10 +46,12 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
       //TIENE PERMISO DE DESPLEGAR VISTA
       //obtiene todos los proyectos y se manda a la vista
       const proyectos = await models.Project.findAll({
-          include: {
-            model: models.User,
-            include: models.Employee
-        }
+        include: [{
+          model: models.User,
+          include: models.Employee
+        },{
+          model: models.Pro_Type
+        }]
       })
       res.render('proyectos', {proyectos});
     }
