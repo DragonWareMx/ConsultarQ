@@ -9,13 +9,68 @@ const passport = require('passport');
 const models = require('../models/index');
 
 router.get('/activos', isLoggedIn,async function (req, res, next) {
-  const proyectos = await models.Project.findAll({
-      include: {
-        model: models.User,
-        include: models.Employee
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR && pC) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      const proyectos = await models.Project.findAll({
+          include: {
+            model: models.User,
+            include: models.Employee
+        }
+      })
+      res.render('proyectos', {proyectos});
     }
-  })
-  res.render('proyectos', {proyectos});
+    else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
+      const proyectosDelUsuario = await models.Project.findAll({
+        include: {
+          model: models.User,
+          include: models.Employee
+        }
+      })
+      res.render('proyectos', {proyectosDelUsuario});
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.status(403).json(403)
+    }
+  }
+  catch (error) {
+    console.log(error)
+      return res.status(403).json(403)
+  }
 });
 
 router.get('/documentacion', isLoggedIn,function (req, res, next) {

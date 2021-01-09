@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Pro_Type',
+          model: 'Pro_Types',
           key: 'id',
         },
       },
@@ -30,9 +30,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATEONLY
       },
-      end_date: {
+      deadline: {
         allowNull: false,
         type: Sequelize.DATEONLY
+      },
+      end_date: {
+        type: Sequelize.DATEONLY
+      },
+      status:{
+        allowNull: false,
+        type: Sequelize.ENUM('activo', 'cancelado','terminado'),
+        defaultValue: 'activo',
       },
       createdAt: {
         allowNull: false,
