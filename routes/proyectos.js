@@ -22,6 +22,19 @@ router.get('/documentacion', isLoggedIn,function (req, res, next) {
   res.render('documentacion'); 
 });
 
+router.get('/agregar', isLoggedIn,function (req, res, next) {
+  models.Provider.findAll({
+    include: [{
+        model: models.Provider_Area
+    }],
+    order: [
+        ['status', 'ASC']
+    ]
+    }).then(prestadores => {
+      return res.render('agregarProyecto', { prestadores})
+  });
+});
+
 router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
   res.render('editarDocumentacion'); 
 });
