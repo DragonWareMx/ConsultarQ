@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Task.belongsTo(models.Project_Requirements)
+      Task.belongsTo(models.Project_Requirement)
     }
   };
   Task.init({
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     check: {
       allowNull: false,
       defaultValue: false,
-      type: Sequelize.BOOLEAN
+      type: DataTypes.BOOLEAN
     }
   }, {
     sequelize,
