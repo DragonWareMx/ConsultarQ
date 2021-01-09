@@ -96,14 +96,15 @@ block content
                 div(class="uk-modal-dialog uk-modal-body")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar prestador
                     button(class="uk-modal-close-default" type="button" uk-close='')
-                    form(class="uk-card-body uk-padding-small" id="add-form" action="/prestadores_externos/nuevo" method="POST" enctype="multipart/form-data")
+                    div(id="errors")
+                    form(class="uk-card-body uk-padding-small" id="add-form" action="/prestadores_externos/nuevo" method="POST")
                         div(class="uk-child-width-1- uk-grid")
                             div
                                 .field.uk-margin-bottom
                                     select(id="add-estatus" name="add-estatus" autocomplete='off' value='' required)
                                         option(value="" disabled hidden selected ) Seleccionar
-                                        option(value="activo") Activo
-                                        option(value="inactivo") Inactivo
+                                        option(value="active") Activo
+                                        option(value="inactive") Inactivo
                                     label(for='add-estatus' title='Estatus' data-title='Estatus')
                                 .field.uk-margin-bottom
                                     input(type='text' autocomplete='on' id="add-nombre" name="add-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -177,12 +178,12 @@ block content
             ul(class="uk-pagination uk-margin-top")
                 li()
                     a(href="#")
-                        span(class="uk-margin-small-right" uk-pagination-previous) 
+                        span(class="uk-margin-small-right" uk-pagination-previous)
                         | Anterior
                 li(class="uk-margin-auto-left")
                     a(href="#") Siguiente
                         span(class="uk-margin-small-left" uk-pagination-next)
-    
+
         script.
             function ocultar_botones() {
                 $(".editar").hide();
@@ -250,9 +251,9 @@ block content
                     $('#edit-dro').val(obj["dro"]).change();
                 });
 
-                $(document).ready(function () { 
+                $(document).ready(function () {
                     // ajax para agregar un nuevo prestador
-                    $("#add-form").bind("submit",function(){
+                    $("#edit-form").bind("submit",function(){
                         // Capturamnos el boton de envío
                         var btnAgregar = $("#btnAgregar");
 
@@ -322,4 +323,3 @@ block content
                     });
                 });
             });
-                    
