@@ -12,9 +12,18 @@ block content
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="#modal-crear-rol" uk-toggle)
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar rol
-        div(class="uk-child-width-1-2@s" uk-grid)
+        form(class="uk-flex uk-margin-bottom")
+            div(class="uk-search uk-search-default uk-width-expand")
+                span(uk-search-icon type="button")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                label(for="buscador" class="tag-filter" id="tag-filter") Nombre
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
+            //- boton de filtrar
+            div(class="uk-button uk-button-primary uk-width-auto" href="#" style="cursor: default")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+        ul(class="uk-child-width-1-2@s" uk-grid id="items")
             each role in roles
-                div
+                li(class="item")
                     div(class="uk-card uk-card-default uk-width-1 uk-padding-small")
                         div(class="uk-card-body uk-flex uk-padding-remove")
                             div(class="uk-animation-toggle uk-width-1 uk-text-right uk-margin-auto-left uk-margin-remove-right" tabindex="0")
@@ -23,7 +32,7 @@ block content
                                     img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
                                     div(class="uk-text-small") Editar
                         div(class="uk-flex uk-flex-middle uk-flex-wrap")
-                            div(class="uk-text-large uk-margin-small-right") #{role.name}
+                            div(class="uk-text-large uk-margin-small-right role-name") #{role.name}
                             div(class="uk-right uk-margin-small-top") #{role.Permissions.length} permisos
                         div() #{role.Users.length} usuarios tienen asignado este rol
                         div(class="uk-flex uk-flex-wrap")
@@ -188,7 +197,7 @@ block content
                                         td(class="uk-text-center")
                                             div()
                                                 = list.ed
-
+        ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
     //- Modal para crear
     div(id="modal-crear-rol" class="uk-modal-container" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
@@ -403,6 +412,83 @@ block content
                 $('#form-delete-role').attr('action', '/roles/delete/'+ roleID);
             });
         })
+
+    script.
+        $(document).ready(function () {
+            const $studentItem = $('.item');
+            const $paginationList = $('.uk-pagination');
+            const $studentSearch = $('#buscador');
+            const itemTotal = 4;
+
+            // hide all
+            function hideAll() {
+                $studentItem.hide();
+            }
+
+            hideAll();
+
+            // display first 10
+            function displayRange(a,b) {
+                hideAll();
+                // display 0 - 1 students
+                $studentItem.slice(a,b).fadeIn();
+            }
+
+            displayRange(0, itemTotal);
+
+            // create pagination links
+            let pagination = '';
+            for(var i = 1; i < $studentItem.length / itemTotal +  1; i ++) {
+                pagination += `
+                    <li><a class="pagination__num">${i}</a></li>
+                `;
+            }
+            $paginationList.append(pagination);
+            // click on pagination num
+            // pass into display range
+            // calc and show range
+            $('body').on('click', '.pagination__num', function () {
+
+                hideAll();
+
+                // get text number 1 - 5
+                // get ranges for start and end
+                let paginationText = Number($(this).text()) - 1;
+                let startFrom = paginationText * itemTotal;
+                let end = paginationText * itemTotal + paginationText + itemTotal;
+                // console.log('start: ' + startFrom + '   end: ' + end)
+                // display ranges
+                displayRange(startFrom, end);
+
+            });
+
+            $studentSearch.keyup(function()
+            {
+                if (!this.value) {
+                hideAll();
+                $paginationList.show();
+                displayRange(0, itemTotal);
+                }
+            });
+        });
+
+    script.
+        function myFunction() {
+            var input, filter, cards, cardContainer, h5, title, i;
+            input = document.getElementById("buscador");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("items");
+            cards = cardContainer.getElementsByClassName("item");
+            document.getElementById("pagination").style.display = "none";
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector('div[class~="role-name"]');
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex"
+                    } else {
+                        cards[i].style.display = "none"
+                }
+            }
+        }
 
     script.
         $(document).ready(function () {
