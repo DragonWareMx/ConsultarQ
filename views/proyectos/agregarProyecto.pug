@@ -3,6 +3,7 @@ extends ../main
 block head
     title ConsultarQ - Proyectos Agregar
     link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/addProyect.css")
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
@@ -71,24 +72,33 @@ block content
                                 div(id="agregar_miembro" class="uk-flex uk-flex-middle" style="cursor:pointer;")
                                     img(src="/icons/more.png" width="10px" style="margin-right:5px;")
                                     div(class="uk-text-primary" style="font-size: 12px;line-height: 15px;") Agregar
-                            div(class="uk-width-1-2")
+                            div(class="uk-width-1-2@m uk-width-1")
                                 .field.uk-margin-bottom.uk-margin-small-top
                                         input(type='text' list="miembros" id="miembro" name="miembro" placeholder="Miembros" onchange="this.setAttribute('value', this.value);")
                                         datalist(id="miembros")
-                                            each miembro in prestadores
+                                            each miembro in miembros
                                                 option(value=miembro.name)
+                            div(id="lista_miembros" class="uk-child-width-1")
+                                input(type="hidden" id="input_miembros" name="input_miembros[]")
+                    div(class="uk-width-1")
+                        div(class="uk-text-secondary uk-text-small uk-margin-small-left" style="margin-bottom:3px;") OBSERVACIONES
+                        textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7")
+
+                        
                                 
     
     script.
         $(document).ready(function () {
             var arrProveedores=[];
+            var arrMiembros=[];
             $('#estatus').change(function(){    
                 if(this.value=="terminado"){
                     document.getElementById("end_date_div").style.display="block";
+                    $('#end_date_div').hide().slideDown('fast');
                     document.getElementById("end_date").required=true;
                 }
                 else{
-                    document.getElementById("end_date_div").style.display="none";
+                    $('#end_date_div').slideUp("fast");
                     document.getElementById("end_date").required=false;
                 }
             });
@@ -100,6 +110,7 @@ block content
                     if(obj["name"] == input.val()){
                         if($.inArray(obj["id"],arrProveedores)==-1){
                             $('#lista_proveedores').append('<div id="'+obj['id']+'p" class="uk-flex uk-flex-middle"><img class="delete_proveedor" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="cursor:pointer"><div class="uk-margin-small-left uk-text-small">'+obj["name"]+'</div></div>');
+                            $('#'+obj["id"]+'p').hide().show('normal');
                             arrProveedores.push(obj["id"]);
                             $('#input_proveedores').val(arrProveedores);
                         }
@@ -112,9 +123,52 @@ block content
                 arrProveedores = jQuery.grep(arrProveedores, function(value) {
                     return value != id;
                 });
-                var div = document.getElementById(id+'p');
-                div.remove();
+                $('#'+id+'p').slideUp('normal');
+                setTimeout(
+                    function() 
+                    {
+                        var div = document.getElementById(id+'p');
+                        div.remove();
+                    }, 
+                500);
                 $('#input_proveedores').val(arrProveedores);
+            });
+            $('#agregar_miembro').click(function(){ 
+                var input=$('#miembro');
+                var miembros=!{ JSON.stringify(miembros) };
+                for(var key in miembros){
+                    var obj=miembros[key];
+                    if(obj["name"] == input.val()){
+                        if($.inArray(obj["id"],arrMiembros)==-1){
+                            if(obj.User["picture"]){
+                                $('#lista_miembros').append('<div id="'+obj['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj['id']+'" name="rol'+obj['id']+'" value="" onchange="this.setAttribute("value", this.value);"><label for="rol'+obj['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj['id']+'" name="rolP'+obj['id']+'" value="" onchange="this.setAttribute("value", this.value);"><label for="rolP'+obj['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#'+obj["id"]+'m').hide().show('slow');
+                            }
+                            else{
+                                $('#lista_miembros').append('<div id="'+obj['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj['id']+'" name="rol'+obj['id']+'" value="" onchange="this.setAttribute("value", this.value);"><label for="rol'+obj['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj['id']+'" name="rolP'+obj['id']+'" value="" onchange="this.setAttribute("value", this.value);"><label for="rolP'+obj['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#'+obj["id"]+'m').hide().show('slow');
+                            }
+                            arrMiembros.push(obj["id"]);
+                            $('#input_miembros').val(arrMiembros);
+                        }
+                        break;
+                    }
+                }
+            });
+            $(document.body).on('click','.delete_miembro', function(e) {  
+                var id=$(this).data('id');
+                arrMiembros = jQuery.grep(arrMiembros, function(value) {
+                    return value != id;
+                });
+                $('#'+id+'m').hide('slow');
+                setTimeout(
+                    function() 
+                    {
+                        var div = document.getElementById(id+'m');
+                        div.remove();
+                    }, 
+                500);
+                $('#input_miembros').val(arrProveedores);
             });
         });
 

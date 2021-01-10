@@ -88,7 +88,17 @@ router.get('/agregar', isLoggedIn,function (req, res, next) {
         ['status', 'ASC']
     ]
     }).then(prestadores => {
-      return res.render('agregarProyecto', { prestadores})
+      models.Employee.findAll({
+        include: [{
+          model: models.User
+        }],
+        order: [
+          ['name','ASC']
+        ]
+      }).then(miembros =>{
+
+        return res.render('agregarProyecto', { prestadores,miembros})
+      });
   });
 });
 
