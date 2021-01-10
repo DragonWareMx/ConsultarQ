@@ -101,29 +101,29 @@ block content
                         div(class="uk-child-width-1- uk-grid")
                             div
                                 .field.uk-margin-bottom
-                                    select(id="add-estatus" name="add-estatus" autocomplete='off' value='' required)
+                                    select(id="add_estatus" name="add_estatus" autocomplete='off' value='' required)
                                         option(value="" disabled hidden selected ) Seleccionar
                                         option(value="active") Activo
                                         option(value="inactive") Inactivo
-                                    label(for='add-estatus' title='Estatus' data-title='Estatus')
+                                    label(for='add_estatus' title='Estatus' data-title='Estatus')
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add-nombre" name="add-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                                    input(type='text' autocomplete='on' id="add_nombre" name="add_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add_nombre' title='Nombre Completo' data-title='Nombre Completo')
                                 .field.uk-margin-bottom
-                                    select(id="add-area" name="add-area" autocomplete='off' value='' required)
+                                    select(id="add_area" name="add_area" autocomplete='off' value='' required)
                                         option(value="" disabled hidden selected ) Seleccionar
-                                        each prestador in prestadores
-                                            option(value=prestador.Provider_Area.id) #{prestador.Provider_Area.name}
-                                    label(for='add-area' title='Área' data-title='Área')
+                                        each area in areas
+                                            option(value=area.id) #{area.name}
+                                    label(for='add_area' title='Área' data-title='Área')
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add-telefono" name="add-telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add-telefono' title='Teléfono' data-title='Teléfono')
+                                    input(type='text' autocomplete='on' id="add_telefono" name="add_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add_telefono' title='Teléfono' data-title='Teléfono')
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add-correo" name="add-correo" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add-correo' title='Correo' data-title='Correo')
+                                    input(type='text' autocomplete='on' id="add_correo" name="add_correo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add_correo' title='Correo' data-title='Correo')
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add-dro" name="add-dro" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add-dro' title='Número de DRO' data-title='Número de DRO')
+                                    input(type='text' autocomplete='on' id="add_dro" name="add_dro" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='add_dro' title='Número de DRO' data-title='Número de DRO')
                                 div(class="uk-width-1 uk-flex-right uk-flex")
                                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Agregar
@@ -138,7 +138,7 @@ block content
                                     img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                                     div Eliminar
                     button(class="uk-modal-close-default" type="button" uk-close='')
-                    form(class="uk-card-body uk-padding-small")
+                    form(class="uk-card-body uk-padding-small" action="/prestadores_externos/edit" method="POST")
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
@@ -158,8 +158,8 @@ block content
                             .field.uk-margin-bottom
                                 select(id="edit-area" name="edit-area" autocomplete='off' value='' required)
                                     option(value="" disabled hidden selected) Seleccionar
-                                    each prestador in prestadores
-                                        option(value=prestador.Provider_Area.id) #{prestador.Provider_Area.name}
+                                    each area in areas
+                                            option(value=area.id) #{area.name}
                                 label(for='edit-area' title='Área' data-title='Área')
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='on' id="edit-telefono" name="edit-telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -253,17 +253,14 @@ block content
 
                 $(document).ready(function () {
                     // ajax para agregar un nuevo prestador
-                    $("#edit-form").bind("submit",function(){
+                    $("#add-form").bind("submit",function(){
                         // Capturamnos el boton de envío
                         var btnAgregar = $("#btnAgregar");
 
                         $.ajax({
                             type: $(this).attr("method"),
                             url: $(this).attr("action"),
-                            data: new FormData(this),
-                            dataType: "JSON",
-                            processData: false,
-                            contentType: false,
+                            data: $(this).serialize(),
                             beforeSend: function(data){
                                 /*
                                 * Esta función se ejecuta durante el envió de la petición al
@@ -289,13 +286,13 @@ block content
                                     message: '<span uk-icon=\'icon: check\'></span>Prestador externo registrado con éxito!',
                                     status: 'success',
                                     pos: 'top-center',
-                                    timeout: 3000
+                                    timeout: 2000
                                 });
                                 setTimeout(
                                 function()
                                 {
                                     window.location.href = window.location.origin + '/prestadores_externos'
-                                }, 3000);
+                                }, 2000);
                             },
                             error: function(data){
                                 /*
