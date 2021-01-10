@@ -161,7 +161,7 @@ router.post('/nuevo', isLoggedIn,
             //guardamos los datos del log
             var dataLog = {
                 UserId: usuario.id,
-                title: "Registro de rol",
+                title: "Registro de prestador",
                 description: desc
             }
 
@@ -253,73 +253,158 @@ router.post('/edit/:id', isLoggedIn,
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'ec' }
+                        where: { name: 'eu' }
                     }
                 }
             })
 
             if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
                 //NO TIENE PERMISO DE AGREGAR rol
-                return res.status(403).json([{ msg: 'No estás autorizado para registrar prestadores.' }])
+                return res.status(403).json([{ msg: 'No estás autorizado para actualizar prestadores.' }])
             }
         }
         catch (error) {
-            return res.status(403).json([{ msg: 'No estás autorizado para registrar prestadores.' }])
+            return res.status(403).json([{ msg: 'No estás autorizado para actualizar prestadores.' }])
         }
         //aqui va la transaccion pero no se como hacerla xdd
-        // const t = await models.sequelize.transaction()
-        // try {
-        //     //GUARDA EL PRESTADOR
-        //     //se crea el prestador
-        //     const newPrestador = await models.Provider.create({
-        //         name: req.body.add_nombre,
-        //         dro: req.body.add_dro,
-        //         email: req.body.add_correo,
-        //         phone_number: req.body.add_telefono,
-        //         ProviderAreaId: req.body.add_area,
-        //         status: req.body.add_estatus,
-        //     }, { transaction: t })
+        const t = await models.sequelize.transaction()
+        try {
+            //GUARDA EL PRESTADOR
+            //se busca el prestador
+            const prestadorU = await models.Provider.findOne({
+                where: { id: req.params.id }, transaction: t
+            })
 
-        //     //SE REGISTRA EL LOG
-        //     //obtenemos el usuario que realiza la transaccion
-        //     const usuario = await models.User.findOne({
-        //         where: {
-        //             id: req.user.id
-        //         },
-        //         transaction: t
-        //     })
+            await prestadorU.update({
+                name: req.body.edit_nombre,
+                dro: req.body.edit_dro,
+                email: req.body.edit_correo,
+                phone_number: req.body.edit_telefono,
+                ProviderAreaId: req.body.edit_area,
+                status: req.body.edit_estatus,
+            }, { transaction: t })
 
-        //     //descripcion del log
-        //     var desc = "El usuario " + usuario.email + " ha registrado un prestador nuevo con los siguientes datos:\nNombre: " + newPrestador.name + "\nDRO: " + newPrestador.dro + "\nNúmero telefónico: " + newPrestador.phone_number + "\nEmail: " + newPrestador.email + "\nArea: " + newPrestador.ProviderAreaId + "\nStatus: " + newPrestador.status
+            //SE REGISTRA EL LOG
+            //obtenemos el usuario que realiza la transaccion
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                transaction: t
+            })
 
-        //     //guardamos los datos del log
-        //     var dataLog = {
-        //         UserId: usuario.id,
-        //         title: "Registro de rol",
-        //         description: desc
-        //     }
+            //descripcion del log
+            var desc = "El usuario " + usuario.email + " ha actualizado un prestador con los siguientes datos:\nNombre: " + prestadorU.name + "\nDRO: " + prestadorU.dro + "\nNúmero telefónico: " + prestadorU.phone_number + "\nEmail: " + prestadorU.email + "\nArea: " + prestadorU.ProviderAreaId + "\nStatus: " + prestadorU.status
 
-        //     //guarda el log en la base de datos
-        //     const log = await models.Log.create(dataLog, { transaction: t })
+            //guardamos los datos del log
+            var dataLog = {
+                UserId: usuario.id,
+                title: "Actualizacion de prestador",
+                description: desc
+            }
 
-        //     //verifica que se hayan registrado el log y el prestador
-        //     if (!log)
-        //         throw new Error()
-        //     if (!newPrestador)
-        //         throw new Error()
+            //guarda el log en la base de datos
+            const log = await models.Log.create(dataLog, { transaction: t })
 
-        //     res.status(200).json([{ status: 200 }]);
-        //     // If the execution reaches this line, no errors were thrown.
-        //     // We commit the transaction.
-        //     await t.commit()
-        // } catch (error) {
+            //verifica que se hayan registrado el log y el prestador
+            if (!log)
+                throw new Error()
+            if (!prestadorU)
+                throw new Error()
 
-        //     // If the execution reaches this line, an error was thrown.
-        //     // We rollback the transaction.
-        //     await t.rollback();
-        //     return res.status(500).json([{ msg: 'No fue posible registrar el prestador, vuelva a intentarlo más tarde.' }])
-        // }
-        res.send(req.body)
+            res.status(200).json([{ status: 200 }]);
+            // If the execution reaches this line, no errors were thrown.
+            // We commit the transaction.
+            await t.commit()
+        } catch (error) {
+
+            // If the execution reaches this line, an error was thrown.
+            // We rollback the transaction.
+            await t.rollback();
+            return res.status(500).json([{ msg: 'No fue posible actualizar el prestador, vuelva a intentarlo más tarde.' }])
+        }
+    });
+
+//eliminar prestador
+router.post('/delete/:id', isLoggedIn,
+    async (req, res, next) => {
+        try {
+            //VERIFICACION DEL PERMISO
+
+            //obtenemos el usuario, su rol y su permiso
+            let usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'ed' }
+                    }
+                }
+            })
+
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+                //NO TIENE PERMISO DE AGREGAR rol
+                return res.status(403).json([{ msg: 'No estás autorizado para eliminar prestadores.' }])
+            }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para eliminar prestadores.' }])
+        }
+        //aqui va la transaccion pero no se como hacerla xdd
+        const t = await models.sequelize.transaction()
+        try {
+            //GUARDA EL PRESTADOR
+            //se busca el prestador
+            const prestadorD = await models.Provider.findOne({
+                where: { id: req.params.id }, transaction: t
+            })
+
+            await prestadorD.destroy({ transaction: t })
+
+            //SE REGISTRA EL LOG
+            //obtenemos el usuario que realiza la transaccion
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                transaction: t
+            })
+
+            //descripcion del log
+            var desc = "El usuario " + usuario.email + " ha eliminado el prestador con el id " + prestadorD.id + " de nombre " + prestadorD.name
+
+            //guardamos los datos del log
+            var dataLog = {
+                UserId: usuario.id,
+                title: "Eliminacion de prestador",
+                description: desc
+            }
+
+            //guarda el log en la base de datos
+            const log = await models.Log.create(dataLog, { transaction: t })
+
+            //verifica si se elimina el prestador
+            const verPres = await models.Provider.findOne({ where: { id: req.params.id }, transaction: t })
+
+            if (verPres)
+                throw new Error()
+            if (!log)
+                throw new Error()
+
+            res.status(200).json([{ status: 200 }]);
+            // If the execution reaches this line, no errors were thrown.
+            // We commit the transaction.
+            await t.commit()
+        } catch (error) {
+
+            // If the execution reaches this line, an error was thrown.
+            // We rollback the transaction.
+            await t.rollback();
+            return res.status(500).json([{ msg: 'No fue posible eliminar el prestador, vuelva a intentarlo más tarde.' }])
+        }
     });
 
 module.exports = router;

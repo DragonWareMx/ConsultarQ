@@ -14,18 +14,20 @@ block content
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar prestador
         //- barra de busqueda
-        form(class="uk-flex")
+        form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
-                a(href="#" uk-search-icon)
-                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                span(uk-search-icon type="button")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                label(for="buscador" class="tag-filter" id="tag-filter") Nombre
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
-            button(class="uk-button uk-button-primary uk-width-auto" href="#")
+            div(class="uk-button uk-button-primary uk-width-auto" href="#" style="cursor: default")
                 img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
             div(uk-dropdown="mode: click")
                 ul(class="uk-list")
-                    li() sugerencia 1
-                    li() sugerencia 2
-                    li() sugerencia 3
+                    li(onclick="putSearch('name')" class="uk-dropdown-close" style="cursor:pointer") Nombre
+                    li(onclick="putSearch('email')" class="uk-dropdown-close" style="cursor:pointer") Correo electrónico
+                    li(onclick="putSearch('phone')" class="uk-dropdown-close" style="cursor:pointer") Número de teléfono
         //- contenido
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             //- tabla
@@ -40,9 +42,9 @@ block content
                                     th(class="uk-text-center") ÁREA
                                     th(class="uk-text-center") TELÉFONO
                                     th(class="uk-text-center") ESTATUS
-                            tbody
+                            tbody(id="items")
                                 each prestador in prestadores
-                                    tr(class="info" uk-toggle="target: #modal-info" data-id=prestador.id)
+                                    tr(class="info item" uk-toggle="target: #modal-info" data-id=prestador.id id="item")
                                         td #{prestador.id}
                                         td #{prestador.name}
                                         td #{prestador.Provider_Area.name}
@@ -57,10 +59,9 @@ block content
                     div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                         div(tabindex="0")
-                            each prestador in prestadores
-                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + prestador.id uk-toggle="target: #modal-editar" data-id=prestador.Provider_Area.id)
-                                    img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                    div Editar
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" data-id="")
+                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Editar
                     button(class="uk-modal-close-default" type="button" uk-close='')
                     form(class="uk-card-body uk-padding-small")
                         div
@@ -133,11 +134,11 @@ block content
                     div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar información
                         div(tabindex="0")
-                            each prestador in prestadores
-                                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar eliminar-" + prestador.id + "" href="")
-                                    img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                    div Eliminar
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar"  id="btnEliminar" href="#delete-form" uk-toggle)
+                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Eliminar
                     button(class="uk-modal-close-default" type="button" uk-close='')
+                    div(id="errors-edit")
                     form(class="uk-card-body uk-padding-small" id="edit-form" action="/prestadores_externos/edit" method="POST")
                         div
                             div.uk-grid
@@ -173,43 +174,54 @@ block content
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
+
+        //-modal para eliminar
+        div(id="delete-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar prestador
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar al prestador Dragonware?
+                form(class="uk-card-body uk-padding-small" id="form-delete-pres" action="/prestadores_externos/delete"  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+
         //- paginacion
-        div(class="uk-width-1-1")
-            ul(class="uk-pagination uk-margin-top")
-                li()
-                    a(href="#")
-                        span(class="uk-margin-small-right" uk-pagination-previous)
-                        | Anterior
-                li(class="uk-margin-auto-left")
-                    a(href="#") Siguiente
-                        span(class="uk-margin-small-left" uk-pagination-next)
+        ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
 
         script.
-            function ocultar_botones() {
-                $(".editar").hide();
-                $(".eliminar").hide();
+            function myFunction() {
+                var input, filter, cards, cardContainer, h5, title, i;
+                input = document.getElementById("buscador");
+                filter = input.value.toUpperCase();
+                parameter=document.getElementById("filter").value;
+                cardContainer = document.getElementById("items");
+                cards = cardContainer.getElementsByClassName("item");
+                document.getElementById("pagination").style.display = "none";
+                for (i = 0; i < cards.length; i++) {
+                    title = cards[i].querySelector('#items tbody td');
+                    if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                        cards[i].style.display = "flex"
+                        } else {
+                            cards[i].style.display = "none"
+                    }
+                }
             }
 
+        script.
             jQuery(($) => {
                 //esto de abajo es para al momento de abrir el modal de informacion cargar los datos
                 $('.info').on('click', function() {
                     var userID = $(this).data('id');
                     var users=!{ JSON.stringify(prestadores) };
-                    console.log(users);
                     for(var key in users){
                         var obj=users[key];
                         if(obj["id"] == userID){
-                            console.log(obj);
                             break;
                         }
                     }
-
-                    //Aqui se esconden los botones de editar de los otros modal
-                    ocultar_botones();
-                    //Aqui se muestra el boton correspondiente
-                    $(".editar-" + obj["id"] ).show();
-                    $(".eliminar-" + obj["id"] ).show();
-
+                    $('.editar').data('id',obj["id"]);
                     //Aqui se empieza a llenar el modal
                     $('#info-id').val(obj["id"]).change();
                     if(obj["status"]=="active"){
@@ -228,11 +240,9 @@ block content
                 $('.editar').on('click', function() {
                     var userID = $(this).data('id');
                     var users=!{ JSON.stringify(prestadores) };
-                    console.log(users);
                     for(var key in users){
                         var obj=users[key];
                         if(obj["id"] == userID){
-                            console.log(obj);
                             break;
                         }
                     }
@@ -251,6 +261,17 @@ block content
                     $('#edit_dro').val(obj["dro"]).change();
 
                     $('#edit-form').attr('action', '/prestadores_externos/edit/'+obj["id"]);
+                    $('#btnEliminar').data('id',obj["id"]);
+                    $('#btnEliminar').data('name',obj["name"]);
+                });
+
+                $('#btnEliminar').on('click', function() {
+                    var userID = $(this).data('id');
+                    var name = $(this).data('name');
+
+                    $('#text-delete').text('¿Estás seguro de que deseas eliminar al prestador '+ name +'?');
+                    //esto es para poner el id en el action del form
+                    $('#form-delete-pres').attr('action', '/prestadores_externos/delete/'+ userID);
                 });
 
                 $(document).ready(function () {
@@ -305,6 +326,138 @@ block content
                                 console.log(data.responseText);
                                 var errors = JSON.parse(data.responseText);
                                 var errorsContainer = $('#errors');
+                                errorsContainer.innerHTML = '';
+                                var errorsList = '';
+                                for (var i = 0; i < errors.length; i++) {
+                                    //if(errors[i].redirect)
+                                        //window.location.href = window.location.origin + '/logout'
+                                    errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                                }
+                                errorsContainer.html(errorsList);
+
+                                alert("Problemas al tratar de enviar el formulario");
+                            }
+                        });
+                        // Nos permite cancelar el envio del formulario
+                        return false;
+                    });
+
+                    $("#edit-form").bind("submit",function(){
+                        // Capturamnos el boton de envío
+                        var btnAgregar = $("#btnEditar");
+
+                        $.ajax({
+                            type: $(this).attr("method"),
+                            url: $(this).attr("action"),
+                            data: $(this).serialize(),
+                            beforeSend: function(data){
+                                /*
+                                * Esta función se ejecuta durante el envió de la petición al
+                                * servidor.
+                                * */
+                                // btnEnviar.text("Enviando"); Para button
+                                btnAgregar.val("Enviando"); // Para input de tipo button
+                                btnAgregar.attr("disabled","disabled");
+                            },
+                            complete:function(data){
+                                /*
+                                * Se ejecuta al termino de la petición
+                                * */
+                                btnAgregar.val("Enviar formulario");
+                            },
+                            success: function(data){
+                                /*
+                                * Se ejecuta cuando termina la petición y esta ha sido
+                                * correcta
+                                * */
+                                $('#errors-edit').css('display', 'none');
+                                UIkit.notification({
+                                    message: '<span uk-icon=\'icon: check\'></span>Prestador externo registrado con éxito!',
+                                    status: 'success',
+                                    pos: 'top-center',
+                                    timeout: 2000
+                                });
+                                setTimeout(
+                                function()
+                                {
+                                    window.location.href = window.location.origin + '/prestadores_externos'
+                                }, 2000);
+                            },
+                            error: function(data){
+                                /*
+                                * Se ejecuta si la peticón ha sido erronea
+                                * */
+                                btnAgregar.removeAttr("disabled");
+                                $('#errors-edit').css('display', 'block');
+                                console.log(data.responseText);
+                                var errors = JSON.parse(data.responseText);
+                                var errorsContainer = $('#errors-edit');
+                                errorsContainer.innerHTML = '';
+                                var errorsList = '';
+                                for (var i = 0; i < errors.length; i++) {
+                                    //if(errors[i].redirect)
+                                        //window.location.href = window.location.origin + '/logout'
+                                    errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                                }
+                                errorsContainer.html(errorsList);
+
+                                alert("Problemas al tratar de enviar el formulario");
+                            }
+                        });
+                        // Nos permite cancelar el envio del formulario
+                        return false;
+                    });
+
+                    $("#form-delete-pres").bind("submit",function(){
+                        // Capturamnos el boton de envío
+                        var btnAgregar = $("#btnEnviar-delete");
+
+                        $.ajax({
+                            type: $(this).attr("method"),
+                            url: $(this).attr("action"),
+                            data: $(this).serialize(),
+                            beforeSend: function(data){
+                                /*
+                                * Esta función se ejecuta durante el envió de la petición al
+                                * servidor.
+                                * */
+                                // btnEnviar.text("Enviando"); Para button
+                                btnAgregar.val("Enviando"); // Para input de tipo button
+                                btnAgregar.attr("disabled","disabled");
+                            },
+                            complete:function(data){
+                                /*
+                                * Se ejecuta al termino de la petición
+                                * */
+                                btnAgregar.val("Enviar formulario");
+                            },
+                            success: function(data){
+                                /*
+                                * Se ejecuta cuando termina la petición y esta ha sido
+                                * correcta
+                                * */
+                                $('#errors-delete').css('display', 'none');
+                                UIkit.notification({
+                                    message: '<span uk-icon=\'icon: check\'></span>Prestador externo eliminado con éxito!',
+                                    status: 'success',
+                                    pos: 'top-center',
+                                    timeout: 2000
+                                });
+                                setTimeout(
+                                function()
+                                {
+                                    window.location.href = window.location.origin + '/prestadores_externos'
+                                }, 2000);
+                            },
+                            error: function(data){
+                                /*
+                                * Se ejecuta si la peticón ha sido erronea
+                                * */
+                                btnAgregar.removeAttr("disabled");
+                                $('#errors-delete').css('display', 'block');
+                                console.log(data.responseText);
+                                var errors = JSON.parse(data.responseText);
+                                var errorsContainer = $('#errors-delete');
                                 errorsContainer.innerHTML = '';
                                 var errorsList = '';
                                 for (var i = 0; i < errors.length; i++) {
