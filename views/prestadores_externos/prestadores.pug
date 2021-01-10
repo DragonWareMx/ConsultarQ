@@ -138,7 +138,7 @@ block content
                                     img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                                     div Eliminar
                     button(class="uk-modal-close-default" type="button" uk-close='')
-                    form(class="uk-card-body uk-padding-small" action="/prestadores_externos/edit" method="POST")
+                    form(class="uk-card-body uk-padding-small" id="edit-form" action="/prestadores_externos/edit" method="POST")
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
@@ -147,29 +147,29 @@ block content
                                         label(for='edit-id' title='Id' data-title='Id')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        select(id="edit-estatus" name="role" autocomplete='off' value='')
+                                        select(id="edit_estatus" name="edit_estatus" autocomplete='off' value='')
                                             option(value="" disabled hidden selected ) Seleccionar
-                                            option(value="activo") Activo
-                                            option(value="inactivo") Inactivo
-                                        label(for='edit-estatus' title='Estatus' data-title='Estatus')
+                                            option(value="active") Activo
+                                            option(value="inactive") Inactivo
+                                        label(for='edit_estatus' title='Estatus' data-title='Estatus')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit-nombre" name="edit-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                                input(type='text' autocomplete='on' id="edit_nombre" name="edit_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit_nombre' title='Nombre Completo' data-title='Nombre Completo')
                             .field.uk-margin-bottom
-                                select(id="edit-area" name="edit-area" autocomplete='off' value='' required)
+                                select(id="edit_area" name="edit_area" autocomplete='off' value='' required)
                                     option(value="" disabled hidden selected) Seleccionar
                                     each area in areas
                                             option(value=area.id) #{area.name}
-                                label(for='edit-area' title='Área' data-title='Área')
+                                label(for='edit_area' title='Área' data-title='Área')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit-telefono" name="edit-telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit-telefono' title='Teléfono' data-title='Teléfono')
+                                input(type='text' autocomplete='on' id="edit_telefono" name="edit_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit_telefono' title='Teléfono' data-title='Teléfono')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit-correo" name="edit-correo" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit-correo' title='Correo' data-title='Correo')
+                                input(type='text' autocomplete='on' id="edit_correo" name="edit_correo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit_correo' title='Correo' data-title='Correo')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit-dro" name="edit-dro" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit-dro' title='Número de DRO' data-title='Número de DRO')
+                                input(type='text' autocomplete='on' id="edit_dro" name="edit_dro" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='edit_dro' title='Número de DRO' data-title='Número de DRO')
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
@@ -240,15 +240,17 @@ block content
                     //Aqui se empieza a llenar el modal
                     $('#edit-id').val(obj["id"]).change();
                     if(obj["status"]=="active"){
-                        $('#edit-estatus option[value="activo"]').prop('selected', 'selected').change();
+                        $('#edit_estatus option[value="active"]').prop('selected', 'selected').change();
                     }else{
-                        $('#edit-estatus option[value="inactivo"]').prop('selected', 'selected').change();
+                        $('#edit_estatus option[value="inactive"]').prop('selected', 'selected').change();
                     }
-                    $('#edit-nombre').val(obj["name"]).change();
-                    $('#edit-area option[value=' + obj["Provider_Area"]["id"] + ']').prop('selected', 'selected').change();
-                    $('#edit-telefono').val(obj["phone_number"]).change();
-                    $('#edit-correo').val(obj["email"]).change();
-                    $('#edit-dro').val(obj["dro"]).change();
+                    $('#edit_nombre').val(obj["name"]).change();
+                    $('#edit_area option[value=' + obj["Provider_Area"]["id"] + ']').prop('selected', 'selected').change();
+                    $('#edit_telefono').val(obj["phone_number"]).change();
+                    $('#edit_correo').val(obj["email"]).change();
+                    $('#edit_dro').val(obj["dro"]).change();
+
+                    $('#edit-form').attr('action', '/prestadores_externos/edit/'+obj["id"]);
                 });
 
                 $(document).ready(function () {
