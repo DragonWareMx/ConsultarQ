@@ -41,6 +41,28 @@ module.exports = {
         check: true
       }
     ], {});
+    await queryInterface.bulkInsert('Pro_Types', [{
+      name: "Layout de proyecto número 1",
+    }], {});
+    await queryInterface.bulkInsert('Project_Requirements_Layouts', [{
+      ProTypeId: 1,
+    }], {});
+    await queryInterface.bulkInsert('Tasks_Layouts', [
+      {
+        ProjectRequirementsLayoutId: 1,
+        unit: 'Kg.',
+        concept: 'Cemento',
+        price:'100',
+        description:'Cemento para ladrillos industrial.'
+      },
+      {
+        ProjectRequirementsLayoutId: 1,
+        unit: 'lt.',
+        concept: 'Arcilla',
+        price:'500',
+        description:'Arcilla líquida para hacer manualidades.'
+      }
+    ], {});
   },
 
   down: async (queryInterface, Sequelize) => {
