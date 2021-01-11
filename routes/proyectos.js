@@ -121,7 +121,18 @@ router.get('/layouts', isLoggedIn,function (req, res, next) {
 });
 
 router.get('/layout/editar/1', isLoggedIn,function (req, res, next) {
-  res.render('editarLayout');
+  models.Pro_Type.findOne({
+    where: {
+      id: 1
+    },
+    include: [{
+      model: models.Project_Requirements_Layout,
+      include: models.Tasks_Layout
+    }
+  ]
+  }).then(layout =>{
+    res.render('editarLayout',{layout});
+  });
 });
 
 router.post('/layout/nuevo', isLoggedIn,function (req, res, next) {
