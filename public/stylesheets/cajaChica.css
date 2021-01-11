@@ -25,6 +25,7 @@
     background-color: #DBDBDC;
     transition: all ease-in 0.25s; 
 }
+
 .button-caja:hover{
     cursor: pointer;
 }
@@ -46,10 +47,46 @@
     color: black;
     text-transform: initial;
 }
-
+.btn-filtro-date{
+    width:30%;
+}
+@media(max-width:1300px){
+    .button-caja{
+        font-size: 12px !important;
+    }
+}
+@media(max-width:1200px){
+    .btn-filtro-date{
+        width: 100% !important;
+        margin-bottom: 5px;
+    }
+}
 @media(max-width:960px){
     .div-info-nex-caja{
         padding-bottom: 0px;
         border-bottom: solid 1px rgb(236, 236, 236);
+    }
+    .btn-filtro-date{
+        width: 30% !important;
+        margin-bottom: 0px;
+    }
+    .btn-agregarRegistro{
+        width: 30% !important;
+        margin-right:35%;
+        margin-left: 35%;
+    }
+}
+@media(max-width:500px){
+    .btn-agregarRegistro{
+        width: 50% !important;
+        margin-right:25%;
+        margin-left: 25%;
+    }
+}
+@media(max-width:400px){
+    .btn-agregarRegistro{
+        width: 100% !important;
+        margin-right:0%;
+        margin-left: 0%;
     }
 }
