@@ -10,6 +10,7 @@ module.exports = {
       },
       ProjectRequirementId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         onDelete: 'CASCADE',
         references: {
           model: 'Project_Requirements',

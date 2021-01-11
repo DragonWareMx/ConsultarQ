@@ -98,14 +98,34 @@ block content
                                     div(class="uk-text-small") #{fechaII.getDate()}, #{mesI}, #{fechaII.getFullYear()}
                                     div(class="uk-text-small") #{fechaTI.getDate()}, #{mesF}, #{fechaTI.getFullYear()}
                         //- AVANCES TAREAS
+                        -
+                            var tareasListas = 0
+                            var tareasFaltantes = 0
+                            var tareasTotales = 0
+                            var porcentaje = 100
+                            var porcentajeRedondeado = 99
+                        if proyecto.Project_Requirement && proyecto.Project_Requirement.Tasks
+                            each task in proyecto.Project_Requirement.Tasks
+                                -
+                                    tareasTotales++
+                                    if(task.check)
+                                        tareasListas++
+                                    else
+                                        tareasFaltantes++
+                            if tareasTotales > 0
+                                -
+                                    porcentaje = parseInt((tareasListas/tareasTotales)*100)
+                                    porcentajeRedondeado = Math.ceil(porcentaje/5)*5;
+                                    if(porcentajeRedondeado >= 100)
+                                        porcentajeRedondeado = 99
                         div(class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top")
                             div(class="uk-width-2-5")
-                                div(class="progress--circle progress--95" style="")
-                                    div(class="progress__number") 93%
+                                div(class="progress--circle progress--"+porcentajeRedondeado style="")
+                                    div(class="progress__number") #{porcentaje}%
                             div(class="uk-width-3-5 uk-width-1@s uk-width-3-5")
-                                div(class="uk-text-large" style="color: #222238;") 22
+                                div(class="uk-text-large" style="color: #222238;") #{tareasListas}
                                 div(class="uk-text-small") Tareas listas
-                                div(class="uk-text-large" style="color: #222238;") 15
+                                div(class="uk-text-large" style="color: #222238;") #{tareasFaltantes}
                                 div(class="uk-text-small") Tareas faltantes
                         //- MIEMBROS DEL PROYECTO
                         div(class="uk-margin-top uk-margin-small-left uk-text-small") MIEMBROS DEL PROYECTO

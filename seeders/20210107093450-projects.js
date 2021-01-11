@@ -26,6 +26,21 @@ module.exports = {
       ProjectEmployeeId: 1,
       comment: 'Este proyecto ya está muy atrasado.',
     }], {});
+    await queryInterface.bulkInsert('Project_Requirements', [{
+      ProjectId: 1,
+    }], {});
+    await queryInterface.bulkInsert('Tasks', [
+      {
+        ProjectRequirementId: 1,
+        concept: 'Elaborar planos.',
+        check: false
+      },
+      {
+        ProjectRequirementId: 1,
+        concept: 'Otro requisito de prueba.',
+        check: true
+      }
+    ], {});
   },
 
   down: async (queryInterface, Sequelize) => {

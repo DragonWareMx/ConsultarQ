@@ -55,8 +55,14 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
         {
           model: models.Project_Employee,
           include: models.Comment
-        }]
+        },
+        {
+          model: models.Project_Requirement,
+          include: models.Task
+        }
+      ]
       })
+      console.log(proyectos)
       res.render('proyectos', {proyectos});
     }
     else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
