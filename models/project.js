@@ -11,13 +11,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Project.belongsToMany(models.User, { through: 'project_employees', uniqueKey: 'ProjectId' });
     }
   };
   Project.init({
     contract: DataTypes.STRING,
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     observations: DataTypes.STRING,
-    start_date: DataTypes.DATEONLY,
-    end_date: DataTypes.DATEONLY
+    start_date: {
+      allowNull: false,
+      type: DataTypes.DATEONLY
+    },
+    end_date: {
+      allowNull: false,
+      type: DataTypes.DATEONLY
+    }
   }, {
     sequelize,
     modelName: 'Project',

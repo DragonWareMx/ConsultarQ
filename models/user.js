@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.Employee);
       User.belongsTo(models.Role);
       User.hasMany(models.Log);
+      User.belongsToMany(models.Project, { through: 'project_employees', uniqueKey: 'UserId' });
     }
   };
   User.init({
@@ -31,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.ENUM('active', 'inactive'),
-      defaultValue: 'active'
+      defaultValue: 'active',
+      allowNull: false
     }
   }, {
     sequelize,

@@ -62,10 +62,31 @@ app.use(async (req, res, next) => {
 
   try {
     var usuario = await models.User.findOne({
-      where: { id: req.user.id }, include: ["Employee"]
+      where: { id: req.user.id }, include: [
+        {model: models.Employee},
+        {
+          model: models.Role,
+          include: {
+              model: models.Permission,
+              where: {name: 'ur'}
+          }
+        }
+      ]
     });
 
     app.locals.user = usuario;
+
+    //permisos
+    uR = false
+
+    if(usuario.Role && usuario.Role.Permissions){
+      usuario.Role.Permissions.forEach(permiso => {
+        if(permiso.name == 'ur')
+          uR = true
+      });
+    }
+
+    app.locals.uR = uR;
   }
   catch (error) {
     app.locals.user = req.user

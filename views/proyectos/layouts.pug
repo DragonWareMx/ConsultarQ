@@ -1,0 +1,61 @@
+extends ../main
+
+block head
+    title ConsultarQ - Proyectos Layouts
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/oProgressBar.css")
+    link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Layouts
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #layout-form")
+                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Nuevo Tipo de Proyecto
+        form(class="uk-flex uk-margin-bottom")
+            div(class="uk-search uk-search-default uk-width-expand")
+                button(href="#" uk-search-icon)
+                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
+            //- boton de filtrar
+            button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+            div(uk-dropdown="mode: click")
+                ul(class="uk-list")
+                    li(onclick="putSearch('name')") Nombre
+                    li(onclick="putSearch('tipo')") Tipo
+                    li(onclick="putSearch('miembro')") Miembro
+        div(class="uk-grid-small uk-child-width-1-3@m uk-child-width-1-2@s uk-child-width-1 uk-grid-row-large" uk-grid)
+            div()
+                div(class="uk-card  uk-card-default")
+                    div(class="uk-card-header uk-padding-small uk-flex")
+                        div(class="uk-width-4-5 uk-text-primary uk-text-truncate") Tipo de proyecto
+                        a(href="/proyectos/layout/editar/1" class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
+                            img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
+                            div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
+                    div(class="uk-card-body uk-padding-small uk-flex")
+                        div(class="uk-text-small") 45 Tareas
+            div()
+                div(class="uk-card  uk-card-default")
+                    div(class="uk-card-header uk-padding-small uk-flex")
+                        div(class="uk-width-4-5 uk-text-primary uk-text-truncate") Proyectos Viledruid
+                        a(href="/proyectos/layout/editar/1" class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
+                            img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
+                            div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
+                    div(class="uk-card-body uk-padding-small uk-flex")
+                        div(class="uk-text-small") 777 Tareas
+        div(id="layout-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Layout
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors")
+                form(class="uk-card-body uk-padding-small" id="form-new-layout" action="/proyectos/layout/nuevo" method="POST" enctype="multipart/form-data")
+                    div(class="uk-child-width-1-1 uk-grid")
+                        div
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="tipo" name="tipo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='tipo' title='Tipo de proyecto' data-title='Tipo de proyectos')
+                            div(class="uk-width-1 uk-flex-right uk-flex")
+                                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar

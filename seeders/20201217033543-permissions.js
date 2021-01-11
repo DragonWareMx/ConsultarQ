@@ -24,6 +24,66 @@ module.exports = {
       {
         name: 'ud'
       },
+      {
+        name: 'cc'
+      },
+      {
+        name: 'cr'
+      },
+      {
+        name: 'cu'
+      },
+      {
+        name: 'cd'
+      },
+      {
+        name: 'sc'
+      },
+      {
+        name: 'sr'
+      },
+      {
+        name: 'su'
+      },
+      {
+        name: 'sd'
+      },
+      {
+        name: 'pc'
+      },
+      {
+        name: 'pr'
+      },
+      {
+        name: 'pu'
+      },
+      {
+        name: 'pd'
+      },
+      {
+        name: 'dc'
+      },
+      {
+        name: 'dr'
+      },
+      {
+        name: 'du'
+      },
+      {
+        name: 'dd'
+      },
+      {
+        name: 'ec'
+      },
+      {
+        name: 'er'
+      },
+      {
+        name: 'eu'
+      },
+      {
+        name: 'ed'
+      },
     ], {});
   },
 

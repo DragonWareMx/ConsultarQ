@@ -8,9 +8,10 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar Usuarios
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
-                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Nuevo Usuario
+                if pC
+                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
+                        img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                        div Nuevo Usuario
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 span(uk-search-icon type="button")
@@ -39,9 +40,10 @@ block content
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
                                     div(class="user-name") #{usuario.Employee.name}
                                     div(class="uk-animation-toggle" tabindex="0")
-                                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
-                                        img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                        div(class="uk-text-small") Editar
+                                    if pU
+                                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
+                                            img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                            div(class="uk-text-small") Editar
                                 div(class="uk-text-small uk-margin-remove-top user-email" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
                                 div(class="uk-text-small uk-margin-remove-top user-phone" style="margin-bottom:5px") #{usuario.Employee.phone_number}
                                 div(class="uk-flex uk-margin-top uk-flex-middle uk-flex-wrap uk-margin-remove-top")
@@ -103,12 +105,14 @@ block content
                             .field.uk-margin-bottom
                                 select(id="role" name="role" autocomplete='off' value='')
                                     option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Ninguno
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
-                                label(for='role' title='Rol' data-title='Rol')
+
+                                label(for='role' title='Rol (opcional)' data-title='Rol (opcional)')
                             .field.uk-margin-bottom
                                 input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
-                                label(for='hiring_date' title='Fecha de contratación' data-title='Fecha de contratación')
+                                label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
                             .field.uk-margin-bottom
@@ -175,14 +179,15 @@ block content
                             .field.uk-margin-bottom
                                 select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
                                     option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Ninguno
                                     each rol in roles
                                         option(value=rol.id ) #{rol.name}
-                                label(for='role-edit' title='Rol' data-title='Rol')
+                                label(for='role-edit' title='Rol (opcional)' data-title='Rol (opcional)')
                             .field.uk-margin-bottom
-                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='hiring_date-edit' title='Fecha de contratación' data-title='Fecha de contratación')
+                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
+                                label(for='hiring_date-edit' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                             .field.uk-margin-bottom
-                                select(id="status" name="status" autocomplete='off' value='' /*required*/)
+                                select(id="status" name="status" autocomplete='off' value='' required)
                                     option(value="active") Activo
                                     option(value="inactive") Inactivo
                                 label(for='status' title='Estatus' data-title='Estatus')
@@ -215,12 +220,13 @@ block content
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
-                                        label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
+                                        label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior (opcional)')
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
-                a(class="uk-flex uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
-                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+                if pD
+                    a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                        <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
     //modal para eliminar
     div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -362,13 +368,6 @@ block content
         });
     script.
          jQuery(($) => {
-             //esto es un intento de paginacion
-             $('#items').each(
-                 function(){
-                     //alert(($(this).find('.item')).length);
-                 }
-             );
-
              //esto es para la foto de perfil
             $('#foto').on('click', function() {
                 $("#fileField").click();
@@ -445,8 +444,14 @@ block content
                 //aqui va el rol xd
                 if(obj["Role"]){
                     $('#role-edit option:eq('+obj["Role"]["id"]+')').prop('selected', true);
+                }else{
+                    $('#role-edit option:eq(1)').prop('selected', true);
                 }
-                $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                if(obj["Employee"]["hiring_date"]){
+                    $('#hiring_date-edit').val(obj["Employee"]["hiring_date"]).change();
+                }else{
+                    $('#hiring_date-edit').val("");
+                }
                 //aqui empiezan los datos de contacto
                 $('#phone_number-edit').val(obj["Employee"]["phone_number"]).change();
                 $('#city-edit').val(obj["Employee"]["city"]).change();
@@ -527,13 +532,13 @@ block content
                             message: '<span uk-icon=\'icon: check\'></span>Usuario registrado con éxito!',
                             status: 'success',
                             pos: 'top-center',
-                            timeout: 3000
+                            timeout: 2000
                         });
                         setTimeout(
                         function()
                         {
                             window.location.href = window.location.origin + '/usuarios'
-                        }, 3000);
+                        }, 2000);
                     },
                     error: function(data){
                         /*
@@ -595,13 +600,13 @@ block content
                             message: '<span uk-icon=\'icon: check\'></span>Usuario editado con éxito!',
                             status: 'success',
                             pos: 'top-center',
-                            timeout: 3000
+                            timeout: 2000
                         });
                         setTimeout(
                         function()
                         {
                             window.location.href = window.location.origin + '/usuarios'
-                        }, 3000);
+                        }, 2000);
                     },
                     error: function(data){
                         /*
@@ -663,13 +668,13 @@ block content
                             message: '<span uk-icon=\'icon: check\'></span>Usuario eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
-                            timeout: 3000
+                            timeout: 2000
                         });
                         setTimeout(
                         function()
                         {
                             window.location.href = window.location.origin + '/usuarios'
-                        }, 3000);
+                        }, 2000);
                     },
                     error: function(data){
                         /*

@@ -18,11 +18,18 @@ module.exports = {
     //encriptacion de la password
     const userPassword = await helpers.encryptPassword("viledruid9000");
 
-    await queryInterface.bulkInsert('Users', [{
-      email: 'DragonwareOficial@hotmail.com',
-      password: userPassword,
-      RoleId: 1,
-    }], {});
+    await queryInterface.bulkInsert('Users', [
+      {
+        email: 'DragonwareOficial@hotmail.com',
+        password: userPassword,
+        RoleId: 1,
+      },
+      {
+        email: 'johndoe@hotmail.com',
+        password: userPassword,
+        RoleId: 2
+      }
+    ], {});
   },
 
   down: async (queryInterface, Sequelize) => {

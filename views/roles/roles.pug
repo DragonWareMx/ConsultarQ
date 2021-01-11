@@ -1,193 +1,604 @@
 extends ../main
 
 block head
-    title ConsultarQ - Crear Usuario
-
+    title ConsultarQ - Roles
+    link(rel="stylesheet" href="/stylesheets/others.css")
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Roles
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar Roles
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="/roles/nuevo")
+            if pC
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="#modal-crear-rol" uk-toggle)
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar rol
         div(class="uk-child-width-1-2@s" uk-grid)
-            div
-                div(class="uk-card uk-card-default uk-width-1 uk-padding-small")
-                    div(class="uk-card-body uk-flex uk-padding-remove")
-                        div(class="uk-animation-toggle uk-width-1 uk-text-right uk-margin-auto-left uk-margin-remove-right" tabindex="0")
-                            a(class="uk-text-right uk-flex-inline uk-flex-middle uk-flex uk-text-primary uk-link-heading uk-animation-shake" href="#")
-                                img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                div(class="uk-text-small") Editar
-                    div(class="uk-flex uk-flex-middle uk-flex-wrap") 
-                        div(class="uk-text-large uk-margin-small-right") Arquitecto
-                        div(class="uk-right uk-margin-small-top") 15 permisos
-                    div() 12 usuarios tienen asignado este rol
-                    div(class="uk-flex uk-flex-wrap")
-                        div(class="uk-width-1 uk-flex uk-flex-middle uk-flex-wrap")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            div(class="uk-right uk-margin-top") 6 más...
-                    div(class="uk-overflow-auto uk-margin-top")   
-                        table(class="uk-table uk-table-small uk-table-divider")
-                            thead
-                                tr
-                                    th(class="uk-table-spand uk-table-shrink@m") Permisos
-                                    th(class="uk-table-shrink") Lectura
-                                    th(class="uk-table-shrink") Edición
-                                    th(class="uk-table-shrink") Crear
-                                    th(class="uk-table-shrink") Eliminar
-                            tbody
-                                tr
-                                    td Usuarios
-                                    td(class="uk-text-center") 
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() No
-                                    td(class="uk-text-center")
-                                        div() Si
-                                tr
-                                    td Caja chica
-                                    td(class="uk-text-center") 
-                                         div() No
-                                    td(class="uk-text-center")
-                                         div() No
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                tr
-                                    td Cartera de servicios
-                                    td(class="uk-text-center") 
-                                         div() No
-                                    td(class="uk-text-center")
-                                       div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                         div() No
-                                tr
-                                    td Proyectos
-                                    td(class="uk-text-center") 
-                                       div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                         div() No
-                                tr
-                                    td Directorio de clientes
-                                    td(class="uk-text-center") 
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                tr
-                                    td Prestadores externos
-                                    td(class="uk-text-center") 
-                                         div() No
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() No
-            div
-                div(class="uk-card uk-card-default uk-width-1 uk-padding-small")
-                    div(class="uk-card-body uk-flex uk-padding-remove")
-                        div(class="uk-animation-toggle uk-width-1 uk-text-right uk-margin-auto-left uk-margin-remove-right" tabindex="0")
-                            a(class="uk-text-right uk-flex-inline uk-flex-middle uk-flex uk-text-primary uk-link-heading uk-animation-shake" href="#")
-                                img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                div(class="uk-text-small") Editar
-                    div(class="uk-flex uk-flex-middle uk-flex-wrap") 
-                        div(class="uk-text-large uk-margin-small-right") Arquitecto
-                        div(class="uk-right uk-margin-small-top") 15 permisos
-                    div() 12 usuarios tienen asignado este rol
-                    div(class="uk-flex uk-flex-wrap")
-                        div(class="uk-width-1 uk-flex uk-flex-middle uk-flex-wrap")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            img(src="/img/iconos/default.png" style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
-                            div(class="uk-right uk-margin-top") 6 más...
-                    div(class="uk-overflow-auto uk-margin-top")   
-                        table(class="uk-table uk-table-small uk-table-divider")
-                            thead
-                                tr
-                                    th(class="uk-table-spand uk-table-shrink@m") Permisos
-                                    th(class="uk-table-shrink") Lectura
-                                    th(class="uk-table-shrink") Edición
-                                    th(class="uk-table-shrink") Crear
-                                    th(class="uk-table-shrink") Eliminar
-                            tbody
-                                tr
-                                    td Usuarios
-                                    td(class="uk-text-center") 
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() No
-                                    td(class="uk-text-center")
-                                        div() Si
-                                tr
-                                    td Caja chica
-                                    td(class="uk-text-center") 
-                                         div() No
-                                    td(class="uk-text-center")
-                                         div() No
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                tr
-                                    td Cartera de servicios
-                                    td(class="uk-text-center") 
-                                         div() No
-                                    td(class="uk-text-center")
-                                       div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                         div() No
-                                tr
-                                    td Proyectos
-                                    td(class="uk-text-center") 
-                                       div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                         div() No
-                                tr
-                                    td Directorio de clientes
-                                    td(class="uk-text-center") 
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                tr
-                                    td Prestadores externos
-                                    td(class="uk-text-center") 
-                                         div() No
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() Si
-                                    td(class="uk-text-center")
-                                        div() No
-                    
+            each role in roles
+                div
+                    div(class="uk-card uk-card-default uk-width-1 uk-padding-small")
+                        div(class="uk-card-body uk-flex uk-padding-remove")
+                            div(class="uk-animation-toggle uk-width-1 uk-text-right uk-margin-auto-left uk-margin-remove-right" tabindex="0")
+                            if pU
+                                a(class="uk-text-right uk-flex-inline uk-flex-middle uk-flex uk-text-primary uk-link-heading uk-animation-shake editar"  href="#modal-editar-rol" uk-toggle data-id=role.id)
+                                    img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                    div(class="uk-text-small") Editar
+                        div(class="uk-flex uk-flex-middle uk-flex-wrap")
+                            div(class="uk-text-large uk-margin-small-right") #{role.name}
+                            div(class="uk-right uk-margin-small-top") #{role.Permissions.length} permisos
+                        div() #{role.Users.length} usuarios tienen asignado este rol
+                        div(class="uk-flex uk-flex-wrap")
+                            div(class="uk-width-1 uk-flex uk-flex-middle uk-flex-wrap" style="height:44px")
+                                each user , index in role.Users
+                                    if user.picture
+                                        img(src="/uploads/avatar/"+user.picture uk-tooltip=user.Employee.name style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
+                                    else
+                                        img(src="/img/iconos/default.png" uk-tooltip=user.Employee.name style="width:34px;height:34px;background-size:cover;object-fit:cover;" class="uk-border-circle uk-margin-small-right uk-margin-small-top")
+                                    if index == 4
+                                        - break
+                                if role.Users.length > 5
+                                    div(class="uk-right uk-margin-top") #{role.Users.length - 5} más...
+                        div(class="uk-overflow-auto uk-margin-top")
+                            table(class="uk-table uk-table-small uk-table-divider")
+                                thead
+                                    tr
+                                        th(class="uk-table-spand uk-table-shrink@m") Permisos
+                                        th(class="uk-table-shrink") Crear
+                                        th(class="uk-table-shrink") Lectura
+                                        th(class="uk-table-shrink") Edición
+                                        th(class="uk-table-shrink") Eliminar
+                                -
+                                    var list = { "uc":"No","ur":"No","uu":"No","ud":"No",
+                                                    "cc":"No","cr":"No","cu":"No","cd":"No",
+                                                    "sc":"No","sr":"No","su":"No","sd":"No",
+                                                    "pc":"No","pr":"No","pu":"No","pd":"No",
+                                                    "dc":"No","dr":"No","du":"No","dd":"No",
+                                                    "ec":"No","er":"No","eu":"No","ed":"No"
+                                                    };
+                                each perm in role.Permissions
+                                    if (perm.name == "uc")
+                                        - list.uc="Si"
+                                    else if (perm.name == "ur")
+                                        - list.ur="Si"
+                                    else if (perm.name == "uu")
+                                        - list.uu="Si"
+                                    else if (perm.name == "ud")
+                                        - list.ud="Si"
+                                    else if (perm.name == "cc")
+                                        - list.cc="Si"
+                                    else if (perm.name == "cr")
+                                        - list.cr="Si"
+                                    else if (perm.name == "cu")
+                                        - list.cu="Si"
+                                    else if (perm.name == "cd")
+                                        - list.cd="Si"
+                                    else if (perm.name == "sc")
+                                        - list.sc="Si"
+                                    else if (perm.name == "sr")
+                                        - list.sr="Si"
+                                    else if (perm.name == "su")
+                                        - list.su="Si"
+                                    else if (perm.name == "sd")
+                                        - list.sd="Si"
+                                    else if (perm.name == "pc")
+                                        - list.pc="Si"
+                                    else if (perm.name == "pr")
+                                        - list.pr="Si"
+                                    else if (perm.name == "pu")
+                                        - list.pu="Si"
+                                    else if (perm.name == "pd")
+                                        - list.pd="Si"
+                                    else if (perm.name == "dc")
+                                        - list.dc="Si"
+                                    else if (perm.name == "dr")
+                                        - list.dr="Si"
+                                    else if (perm.name == "du")
+                                        - list.du="Si"
+                                    else if (perm.name == "dd")
+                                        - list.dd="Si"
+                                    else if (perm.name == "ec")
+                                        - list.ec="Si"
+                                    else if (perm.name == "er")
+                                        - list.er="Si"
+                                    else if (perm.name == "eu")
+                                        - list.eu="Si"
+                                    else if (perm.name == "ed")
+                                        - list.ed="Si"
+                                tbody
+                                    tr
+                                        td Usuarios y roles
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.uc
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.ur
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.uu
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.ud
+                                    tr
+                                        td Caja chica
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.cc
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.cr
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.cu
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.cd
+                                    tr
+                                        td Cartera de servicios
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.sc
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.sr
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.su
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.sd
+                                    tr
+                                        td Proyectos
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.pc
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.pr
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.pu
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.pd
+                                    tr
+                                        td Directorio de clientes
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.dc
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.dr
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.du
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.dd
+                                    tr
+                                        td Prestadores externos
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.ec
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.er
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.eu
+                                        td(class="uk-text-center")
+                                            div()
+                                                = list.ed
+
+    //- Modal para crear
+    div(id="modal-crear-rol" class="uk-modal-container" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            button(class="uk-modal-close-default" type="button" uk-close)
+            div(id="errors")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Crear Rol
+            form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" id="form-create-role" action="/roles/create" method="POST" )
+                div(class="field uk-margin-bottom uk-width-1-2@l")
+                    input(type='text' id="name" name="role_name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='name' title='Nombre del rol' data-title='Nombre del rol')
+                div(class="uk-overflow-auto uk-margin-top")
+                    table(class="uk-table uk-table-small uk-table-divider")
+                        thead
+                            tr
+                                th(class="uk-table-spand uk-table-shrink@m") Permisos
+                                th(class="uk-table-shrink") Crear
+                                th(class="uk-table-shrink") Lectura
+                                th(class="uk-table-shrink") Edición
+                                th(class="uk-table-shrink") Eliminar
+                        tbody
+                            tr
+                                td Usuarios y roles
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="uc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ur")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="uu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ud")
+                            tr
+                                td Caja chica
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="cd")
+                            tr
+                                td Cartera de servicios
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="sc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="sr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="su")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="sd")
+                            tr
+                                td Proyectos
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="pd")
+                            tr
+                                td Directorio de clientes
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="dc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="dr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="du")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="dd")
+                            tr
+                                td Prestadores externos
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ec")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="er")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="eu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" name="ed")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+
+    //- Modal para editar
+    div(id="modal-editar-rol" class="uk-modal-container" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            button(class="uk-modal-close-default" type="button" uk-close)
+            div(id="errors-edit")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar Rol
+            form(class="uk-card-body uk-padding-remove-left uk-padding-remove-right uk-padding-remove-bottom" id="form-edit-role" action="/roles/update" method="POST")
+                div(class="field uk-margin-bottom uk-width-1-2@l")
+                    input(type='text' id="name-edit" name="role_name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='name' title='Nombre del rol' data-title='Nombre del rol')
+                div(class="uk-overflow-auto uk-margin-top")
+                    table(class="uk-table uk-table-small uk-table-divider")
+                        thead
+                            tr
+                                th(class="uk-table-spand uk-table-shrink@m") Permisos
+                                th(class="uk-table-shrink") Crear
+                                th(class="uk-table-shrink") Lectura
+                                th(class="uk-table-shrink") Edición
+                                th(class="uk-table-shrink") Eliminar
+                        tbody
+                            tr
+                                td Usuarios y roles
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox" id="uc-edit" name="uc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="ur-edit" name="ur")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="uu-edit" name="uu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="ud-edit" name="ud")
+                            tr
+                                td Caja chica
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="cc-edit" name="cc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="cr-edit" name="cr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="cu-edit" name="cu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="cd-edit" name="cd")
+                            tr
+                                td Cartera de servicios
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="sc-edit" name="sc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="sr-edit" name="sr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="su-edit" name="su")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="sd-edit" name="sd")
+                            tr
+                                td Proyectos
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="pc-edit" name="pc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="pr-edit" name="pr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="pu-edit" name="pu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="pd-edit" name="pd")
+                            tr
+                                td Directorio de clientes
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="dc-edit" name="dc")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="dr-edit" name="dr")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="du-edit" name="du")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="dd-edit" name="dd")
+                            tr
+                                td Prestadores externos
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="ec-edit" name="ec")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="er-edit" name="er")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="eu-edit" name="eu")
+                                td(class="uk-text-center")
+                                    input(type="checkbox" class="uk-checkbox"  id="ed-edit" name="ed")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
+            if pD
+                a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+
+    //- Modal para eliminar
+    div(id="delete-form" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar Rol
+            button(type='button' uk-close='' class="uk-modal-close-default")
+            div(id="errors-delete")
+            div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el rol Dragonware?
+            form(class="uk-card-body uk-padding-small" id="form-delete-role" action="/roles/delete"  method="POST")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                    a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar-rol" uk-toggle data-id="" data-name="") Cancelar
+                    button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+    script.
+        $(document).ready(function(){
+             $('.editar').on('click', function() {
+                var roleID = $(this).data('id');
+                var roles=!{ JSON.stringify(roles) };
+                for(var key in roles){
+                    var obj=roles[key];
+                    if(obj["id"] == roleID){
+                        break;
+                    }
+                }
+
+                $('#name-edit').val(obj['name']).change();
+                $('#modal-editar-rol').find('input:checkbox').prop('checked', false);
+                jQuery.each(obj['Permissions'], function(index,item){
+                    $('#'+item['name']+'-edit').prop("checked", true);
+                });
+                //esto no se pa que sea pero parece necesario
+                $('#form-edit-role').attr('action', '/roles/update/'+obj["id"]);
+                $('#btnEliminar').data('id',obj["id"]);
+                $('#btnEliminar').data('name',obj["name"]);
+             });
+
+             $('#btnEliminar').on('click', function() {
+                var roleID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar el rol '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-role').attr('action', '/roles/delete/'+ roleID);
+            });
+        })
+
+    script.
+        $(document).ready(function () {
+            //ajax del form de nuevo
+            $("#form-create-role").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Rol creado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/roles'
+                        }, 2000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+            //ajax del form de editar
+            $("#form-edit-role").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-edit");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Rol editado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/roles'
+                        }, 2000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-edit').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-edit');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+            //ajax del form de eliminar
+            $("#form-delete-role").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-delete");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-delete').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Rol eliminado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/roles'
+                        }, 2000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-delete').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-delete');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+        });

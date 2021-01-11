@@ -38,12 +38,14 @@ html
                                 li(class="category_item")
                                     a(href="/perfil" ) Perfil
                                         img(src="/icons/user.png" class="category_icon")
-                                li(class="category_item")
-                                    a(href="/usuarios" ) Usuarios
-                                        img(src="/icons/users-logo.png" class="category_icon")
-                                li(class="category_item")
-                                    a(href="/roles" ) Roles
-                                        img(src="/icons/role.png" class="category_icon")
+                                if uR
+                                    li(class="category_item")
+                                        a(href="/usuarios" ) Usuarios
+                                            img(src="/icons/users-logo.png" class="category_icon")
+                                if uR
+                                    li(class="category_item")
+                                        a(href="/roles" ) Roles
+                                            img(src="/icons/role.png" class="category_icon")
                                 li(class="uk-parent category_item")
                                     a(href="#") Caja chica
                                         img(src="/icons/coin.png" class="category_icon")
@@ -76,24 +78,13 @@ html
                                     //-         a(href="/servicios/") Ver cartera de servicios
                                     //-     li(class="category_item")
                                     //-         span(class="category_subdivider") ACCESOS DIRECTOS
-                                    //-         a(href="/servicios/agregar-servicio") Agregar servicio
-                                li(class="uk-parent category_item")
-                                    a(href="#") Proyectos
+                                    //-         a(href="#") Agregar servicio
+                                li(class="category_item")
+                                    a(href="/proyectos/activos") Proyectos
                                         img(src="/icons/checklist.png" class="category_icon")
-                                    ul(class="uk-nav-sub")
-                                        li(class="category_item")
-                                            a(href="#") Ver proyectos
-                                        li(class="category_item")
-                                            a(href="#") Documentación
-                                        li(class="category_item")
-                                            a(href="#") Activos
-                                        li(class="category_item")
-                                            a(href="#") Inactivos
-                                        li(class="category_item")
-                                            a(href="#") Roles de proyecto
-                                        li(class="category_item")
-                                            span(class="category_subdivider") ACCESOS DIRECTOS
-                                            a(href="#") Agregar proyecto
+                                li(class="category_item")
+                                    a(href="/proyectos/layouts") Layouts de proyectos
+                                        img(src="/icons/checklist.png" class="category_icon")
                         li(class="category") CLIENTES Y PROVEEDORES
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="uk-parent category_item")
