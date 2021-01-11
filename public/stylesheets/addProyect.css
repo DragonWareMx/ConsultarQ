@@ -1,0 +1,6 @@
+@media(max-width:500px){
+    .o-flex-wrap-500{
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
