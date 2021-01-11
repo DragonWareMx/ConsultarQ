@@ -62,17 +62,28 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
         }
       ]
       })
-      console.log(proyectos)
       res.render('proyectos', {proyectos});
     }
     else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
-      const proyectosDelUsuario = await models.Project.findAll({
-        include: {
+      const proyectos = await models.Project.findAll({
+        include: [{
           model: models.User,
-          include: models.Employee
+          include: models.Employee,
+          where: {id: usuario.id}
+        },{
+          model: models.Pro_Type
+        },
+        {
+          model: models.Project_Employee,
+          include: models.Comment
+        },
+        {
+          model: models.Project_Requirement,
+          include: models.Task
         }
+      ]
       })
-      res.render('proyectos', {proyectosDelUsuario});
+      res.render('proyectos', {proyectos});
     }
     else {
         //NO TIENE PERMISOS
