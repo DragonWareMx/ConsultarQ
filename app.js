@@ -63,12 +63,12 @@ app.use(async (req, res, next) => {
   try {
     var usuario = await models.User.findOne({
       where: { id: req.user.id }, include: [
-        {model: models.Employee},
+        { model: models.Employee },
         {
           model: models.Role,
           include: {
-              model: models.Permission,
-              where: {name: 'ur'}
+            model: models.Permission,
+            where: { name: 'ur' }
           }
         }
       ]
@@ -79,9 +79,9 @@ app.use(async (req, res, next) => {
     //permisos
     uR = false
 
-    if(usuario.Role && usuario.Role.Permissions){
+    if (usuario.Role && usuario.Role.Permissions) {
       usuario.Role.Permissions.forEach(permiso => {
-        if(permiso.name == 'ur')
+        if (permiso.name == 'ur')
           uR = true
       });
     }
