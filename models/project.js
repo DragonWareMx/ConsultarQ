@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const quotation = require('./quotation');
 module.exports = (sequelize, DataTypes) => {
   class Project extends Model {
     /**
@@ -15,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       Project.hasMany(models.Project_Employee)
       Project.hasOne(models.Project_Requirement)
       Project.belongsTo(models.Pro_Type)
+      Project.hasMany(models.Quotation)
     }
   };
   Project.init({
