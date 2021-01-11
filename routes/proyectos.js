@@ -8,6 +8,7 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
+//VER PROYECYOS ACTIVOS
 router.get('/activos', isLoggedIn,async function (req, res, next) {
   try {
     //VERIFICACION DEL PERMISO
@@ -100,7 +101,128 @@ router.get('/documentacion', isLoggedIn,function (req, res, next) {
   res.render('documentacion'); 
 });
 
+//AGREGAR PROYECTO
+router.post('/create',
+    [
+      check('nombreP')
+        .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+    ]
+    , isLoggedIn, async function (req, res, next) {
+        //si hay errores entonces se muestran
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).send(errors.array());
+        }
+
+        try {
+            //VERIFICACION DEL PERMISO
+
+            //obtenemos el usuario, su rol y su permiso
+            let usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'uc' }
+                    }
+                }
+            })
+
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+                //NO TIENE PERMISO DE AGREGAR rol
+                return res.status(403).json([{ msg: 'No estás autorizado para registrar roles.' }])
+            }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para registrar roles.' }])
+        }
+
+        //TIENE PERMISO
+        //Transaccion
+        const t = await models.sequelize.transaction()
+        try {
+            //GUARDA EL ROL
+            //guarda el ROL
+            var permsID = []
+            for (var key in req.body) {
+                if (key != "role_name") {
+                    const permission = await models.Permission.findOne({ where: { name: key }, raw: true, transaction: t });
+                    permsID.push(permission['id'])
+                }
+            }
+            //se crea el rol
+            const newRol = await models.Role.create({
+                name: req.body.role_name,
+            }, { transaction: t })
+
+            await newRol.setPermissions(permsID, { transaction: t })
+
+            //SE REGISTRA EL LOG
+            //obtenemos el usuario que realiza la transaccion
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                transaction: t
+            })
+
+            //descripcion del log
+            var desc = "El usuario " + usuario.email + " ha registrado un rol nuevo con los siguientes datos:\nnombre: " + newRol.name + "\nCon los permisos:\n"
+
+            var contador = 0
+            for (var key in req.body) {
+                if (key != "role_name") {
+                    desc = desc + key + "\n"
+                    contador++
+                }
+            }
+
+            if (contador == 0) {
+                desc = desc + "Ningún permiso"
+            }
+
+            //guardamos los datos del log
+            var dataLog = {
+                UserId: usuario.id,
+                title: "Registro de rol",
+                description: desc
+            }
+
+            //guarda el log en la base de datos
+            const log = await models.Log.create(dataLog, { transaction: t })
+
+            //verifica que se hayan registrado el log y el rol
+            if (!log)
+                throw new Error()
+            if (!newRol)
+                throw new Error()
+
+            res.status(200).json([{ status: 200 }]);
+            // If the execution reaches this line, no errors were thrown.
+            // We commit the transaction.
+            await t.commit()
+        } catch (error) {
+
+            // If the execution reaches this line, an error was thrown.
+            // We rollback the transaction.
+            await t.rollback();
+            return res.status(500).json([{ msg: 'No fue posible registrar el rol, vuelva a intentarlo más tarde.' }])
+        }
+});
+
 router.get('/agregar', isLoggedIn,function (req, res, next) {
+  //si hay errores entonces se muestran
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+      return res.status(422).send(errors.array());
+  }
+
   models.Provider.findAll({
     include: [{
         model: models.Provider_Area

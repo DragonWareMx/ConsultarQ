@@ -588,6 +588,6 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
                 return res.status(403).json([{ msg: 'No fue posible registrar el usuario, inténtelo más tarde.' }])
             }
         }
-    });
+});
 
 module.exports = router;
