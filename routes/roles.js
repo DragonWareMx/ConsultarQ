@@ -187,7 +187,7 @@ router.post('/create',
             await t.rollback();
             return res.status(500).json([{ msg: 'No fue posible registrar el rol, vuelva a intentarlo más tarde.' }])
         }
-    });
+});
 
 //ACTUALIZAR ROL
 router.post('/update/:id',
