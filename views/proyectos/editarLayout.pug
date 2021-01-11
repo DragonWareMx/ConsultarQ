@@ -28,9 +28,9 @@ block content
                                 th(class="uk-text-truncate uk-width-small") Unidad
                                 th(class="uk-text-truncate  uk-width-small") Costo/U
                         tbody 
-                            each task in layout.Project_Requirements_Layout.Tasks_Layouts
+                            each task, index in layout.Project_Requirements_Layout.Tasks_Layouts
                                 tr(uk-toggle="target: #editTask-form" class="editar" data-id=task.id) 
-                                    td(class="uk-text-truncate") #{task.id}
+                                    td(class="uk-text-truncate") #{index+1}
                                     td(class="uk-text-truncate") #{task.concept}
                                     td(class="uk-text-truncate") #{task.description}
                                     td(class="uk-text-truncate") #{task.unit}
