@@ -246,7 +246,18 @@ router.get('/agregar', isLoggedIn,function (req, res, next) {
 });
 
 router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
-  res.render('editarDocumentacion'); 
+  models.Project.findOne({
+    where: {
+      id: 1
+    },
+    include: [{
+      model: models.Project_Requirement,
+      include: models.Task
+    }
+  ]
+  }).then(project =>{
+    res.render('editarDocumentacion',{project});
+  }); 
 });
 
 router.get('/layouts', isLoggedIn,function (req, res, next) {

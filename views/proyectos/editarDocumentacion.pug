@@ -166,4 +166,25 @@ block content
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="document-edit" type="submit") Guardar
-                                    
+    script.
+        $('.editar').on('click', function() {
+            var taskId = $(this).data('id'); //
+            var tasks=!{ JSON.stringify(project.Project_Requirement.Tasks) };
+            var layout=!{ JSON.stringify(layout) };
+            for(var key in tasks){
+                var obj=tasks[key];
+                if(obj["id"] == taskId){
+                    break;
+                }
+            }
+            //Aqui empieza a llenarse el modal
+            $('#concepto-edit').val(obj["concept"]).change();
+            $('#descripcion-edit').val(obj["description"]).change();
+            $('#unidad-edit').val(obj["unit"]).change();
+            $('#costo-edit').val(obj["price"]).change();
+            
+
+            //esto es para poner el id en el action del form
+            $('#form-edit-task').attr('action', '/proyectos/layout/'+layout["id"]+'/tarea/editar/'+obj["id"]);
+            $('#form-delete-task').attr('action', '/proyectos/layout/'+layout["id"]+'/tarea/eliminar/'+obj["id"]);
+        });                               
