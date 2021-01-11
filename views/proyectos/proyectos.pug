@@ -100,9 +100,9 @@ block content
                                     div(class="progress__number") 93%
                             div(class="uk-width-3-5 uk-width-1@s uk-width-3-5")
                                 div(class="uk-text-large" style="color: #222238;") 22
-                                div(class="uk-text-small") Tareas / Documentos listos
+                                div(class="uk-text-small") Tareas listas
                                 div(class="uk-text-large" style="color: #222238;") 15
-                                div(class="uk-text-small") Tareas / Documentos faltantes
+                                div(class="uk-text-small") Tareas faltantes
                         div(class="uk-margin-top uk-margin-small-left uk-text-small") MIEMBROS DEL PROYECTO
                         div(class="uk-width-1 uk-flex uk-flex-wrap")
                             div(class="uk-width-2-3 uk-flex uk-flex-wrap uk-margin-bottom")
@@ -119,7 +119,13 @@ block content
                                 img(src="/icons/archivo.png" width="13px" style="margin-right:5px;")
                                 div(class="uk-text-small" style="margin-right:10px;") 20
                                 img(src="/icons/comment.png" width="13px" style="margin-right:5px;")
-                                div(class="uk-text-small") 5
+                                //- contamos los comentarios
+                                -
+                                    var contadorComentarios = 0
+                                each empleado in proyecto.Project_Employees
+                                    -
+                                        contadorComentarios += empleado.Comments.length
+                                div(class="uk-text-small") #{contadorComentarios}
             //- ESTE DIV ES LO MISMO QUE EL DE ARRIBA
             div()
                 div(class="uk-card  uk-card-default")

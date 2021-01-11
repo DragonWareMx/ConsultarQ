@@ -51,6 +51,10 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           include: models.Employee
         },{
           model: models.Pro_Type
+        },
+        {
+          model: models.Project_Employee,
+          include: models.Comment
         }]
       })
       res.render('proyectos', {proyectos});

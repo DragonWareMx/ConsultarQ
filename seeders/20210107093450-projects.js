@@ -22,6 +22,10 @@ module.exports = {
       ProjectId: 1,
       profit: "100"
     }], {});
+    await queryInterface.bulkInsert('Comments', [{
+      ProjectEmployeeId: 1,
+      comment: 'Este proyecto ya está muy atrasado.',
+    }], {});
   },
 
   down: async (queryInterface, Sequelize) => {
