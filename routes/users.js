@@ -159,7 +159,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .custom(date => {
                 return !isNaN(Date.parse(date));
             }
-            ).withMessage('La fecha no es válida'),
+            ).withMessage('La fecha no es válida.'),
         check('phone_number')
             .not().isEmpty().withMessage('Número telefónico electrónico es un campo requerido.')
             .trim()

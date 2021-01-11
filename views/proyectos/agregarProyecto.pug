@@ -12,12 +12,13 @@ block content
                 a(href="javascript:history.back()" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
+        div(id="errors")
         form(action="/proyectos/create" id="form-create-project" method="POST" class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" enctype="multipart/form-data" uk-grid)
             div(class="uk-card uk-card-default uk-card-body uk-padding-remove-top uk-padding-remove-bottom uk-flex uk-flex-wrap")
                 div(class="uk-width-1-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
                     div(class="uk-text-primary uk-text-small") DATOS GENERALES
                     .field.uk-margin-bottom.uk-margin-small-top
-                        input(type='text' autocomplete='off' id="nombreP" name="nombreP" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        input(type='text' autocomplete='off' id="nombreP" name="nombreP" value='' maxlength="255" onchange="this.setAttribute('value', this.value);" required='')
                         label(for='nombreP' title='Nombre del proyecto' data-title='Nombre del proyecto')
                     .field.uk-margin-bottom.uk-margin-small-top
                         select(type='select' id="estatus" name="estatus" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -31,11 +32,15 @@ block content
                     .field.uk-margin-bottom(style="display:none" id="end_date_div")
                         input(type='date' id="end_date" name="end_date"  onchange="this.setAttribute('value', this.value);")
                         label(for='end_date' title='Fecha de término' data-title='Fecha de término')
+                    .field.uk-margin-bottom
+                        input(type='date' id="deadline" name="deadline"  onchange="this.setAttribute('value', this.value);" required)
+                        label(for='start_date' title='Fecha límite' data-title='Fecha límite')
                     .field.uk-margin-bottom.uk-margin-small-top
                         select(type='select' id="tipo" name="tipo" value='' onchange="this.setAttribute('value', this.value);")
-                            option(value="") Seleccionar layout
-                            option(value="0") Casa - Habitación
-                            option(value="1") Otro tipo de proyecto
+                            option(value="" disabled hidden selected) Seleccionar layout
+                            option(value="0") Ninguno
+                            each tipo in proTypes
+                                option(value=tipo.id ) #{tipo.name}
                         label(for='tipo' title='Layout' data-title='Layout')
                     div(class="uk-flex uk-flex-wrap uk-flex-between")
                         div(class="uk-text-primary uk-text-small") PROVEEDORES
@@ -85,7 +90,7 @@ block content
                         textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7")
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-bottom")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button") Cancelar
-                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
 
 
 
@@ -174,10 +179,7 @@ block content
                 500);
                 $('#input_miembros').val(arrProveedores);
             });
-        });
 
-    script.
-        $(document).ready(function () {
             //ajax del form de nuevo
             $("#form-create-project").bind("submit",function(){
                 // Capturamnos el boton de envío
@@ -186,7 +188,10 @@ block content
                 $.ajax({
                     type: $(this).attr("method"),
                     url: $(this).attr("action"),
-                    data: $(this).serialize(),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
                     beforeSend: function(data){
                         /*
                         * Esta función se ejecuta durante el envió de la petición al
@@ -243,3 +248,4 @@ block content
                 // Nos permite cancelar el envio del formulario
                 return false;
             });
+        });

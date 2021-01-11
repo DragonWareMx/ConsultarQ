@@ -8,6 +8,30 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
+//subir archivos
+const fs = require('fs');
+var multer = require('multer');
+var path = require('path')
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public/uploads/docs')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+    }
+})
+var upload = multer({
+    storage: storage, fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "application/pdf" || file.mimetype == "application/msword" || file.mimetype == "application/vnd.ms-excel") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
+
+
 //VER PROYECYOS ACTIVOS
 router.get('/activos', isLoggedIn,async function (req, res, next) {
   try {
@@ -102,13 +126,59 @@ router.get('/documentacion', isLoggedIn,function (req, res, next) {
 });
 
 //AGREGAR PROYECTO
-router.post('/create',
+router.post('/create', upload.any(),
     [
       check('nombreP')
         .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
         .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
         .trim()
         .escape(),
+      check('estatus')
+        .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
+        check('start_date')
+        .not().isEmpty()
+        .custom(date => {
+            return !isNaN(Date.parse(date));
+        }).withMessage('La fecha de inicio no es válida.'),
+      check('end_date')
+        .optional({ checkFalsy: true })
+        .custom(date => {
+          return !isNaN(Date.parse(date));
+        }).withMessage('La fecha de término no es válida.'),
+      check('deadline')
+        .not().isEmpty()
+        .custom(date => {
+          return !isNaN(Date.parse(date));
+        }).withMessage('La fecha límite no es válida.'),
+      check('tipo')
+            .custom(async (tipo) => {
+                //se crea el validador, es true porque si no hay rol tambien es valido
+                var validador = true
+
+                //si no es nulo
+                if (tipo) {
+                    validador = false
+
+                    let ids = await models.Pro_Type.findAll({
+                        attributes: ['id'],
+                        raw: true
+                    })
+
+                    ids.forEach(id => {
+                        if (tipo == id.id) {
+                            validador = true
+                        }
+                    });
+
+                    if (tipo == 0)
+                        validador = true
+                }
+                if (validador) {
+                    return true
+                }
+                else
+                    throw new Error('El tipo de proyecto seleccionado existe.');
+            }).withMessage('El tipo de proyecto seleccionado no es válido.'),
     ]
     , isLoggedIn, async function (req, res, next) {
         //si hay errores entonces se muestran
@@ -216,33 +286,34 @@ router.post('/create',
         }
 });
 
-router.get('/agregar', isLoggedIn,function (req, res, next) {
+router.get('/agregar', isLoggedIn,async function (req, res, next) {
   //si hay errores entonces se muestran
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
       return res.status(422).send(errors.array());
   }
 
-  models.Provider.findAll({
+  const prestadores = await models.Provider.findAll({
     include: [{
         model: models.Provider_Area
     }],
     order: [
         ['status', 'ASC']
     ]
-    }).then(prestadores => {
-      models.Employee.findAll({
-        include: [{
-          model: models.User
-        }],
-        order: [
-          ['name','ASC']
-        ]
-      }).then(miembros =>{
+  })
+      
+  const miembros = await models.Employee.findAll({
+    include: [{
+      model: models.User
+    }],
+    order: [
+      ['name','ASC']
+    ]
+  })
 
-        return res.render('agregarProyecto', { prestadores,miembros})
-      });
-  });
+  const proTypes = await models.Pro_Type.findAll()
+
+  return res.render('agregarProyecto', { prestadores,miembros, proTypes})
 });
 
 router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
