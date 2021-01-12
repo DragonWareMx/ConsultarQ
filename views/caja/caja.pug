@@ -4,6 +4,8 @@ block head
     title ConsultarQ - Caja chica
     link(rel="stylesheet" href="/stylesheets/others.css")
     link(rel="stylesheet" href="/stylesheets/cajaChica.css")
+    link(rel="stylesheet" href="/stylesheets/oProgressBar.css")
+    link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     
@@ -25,8 +27,9 @@ block content
                             div.uk-margin-small-bottom(style="color:#222238") 578 registros
                             a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
-                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle uk-padding-remove uk-margin-small-top")
+                            div(class="progress--circle circle-caja progress--100" style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/ingresos" class="uk-flex  uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -39,7 +42,8 @@ block content
                             a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                            div(class="progress--circle circle-caja progress--100" style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/egresos" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -52,7 +56,8 @@ block content
                             a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                            div(class="progress--circle circle-caja progress--100" style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/deducibles" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -74,8 +79,8 @@ block content
                                 option Proyecto 3
                         div(class="uk-width-1-1 uk-flex uk-flex-center uk-margin-small-top")
                             button(class="button-caja button-caja-s uk-width-1-2" style="") Buscar
-            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;")
-                div(class="uk-width-3-4@s uk-padding-remove")
+            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;" uk-height-match="target: > div > .uk-card")
+                div(class="uk-width-3-4@m uk-padding-remove")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-small")
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-align-center") 
@@ -133,11 +138,11 @@ block content
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
-                                            div(class="uk-width-1-3@m" style="color:#222238") Contadores
+                                            div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Contadores
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
-                                            div(class="uk-width-1-3@m") 23 registros
+                                            div(class="uk-width-1-3@m" style="margin-right:3px") 23 registros
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                                 
@@ -146,7 +151,7 @@ block content
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
-                                            div(class="uk-width-1-3@m" style="color:#222238") Arquitectos
+                                            div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Arquitectos
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
@@ -159,7 +164,7 @@ block content
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
-                                            div(class="uk-width-1-3@m" style="color:#222238") Administr..
+                                            div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Administrador
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
@@ -172,7 +177,7 @@ block content
                         div(class="uk-width-1-1 uk-margin-small-top" style="border-top:solid 1px #EEEEEE")
                             div(class="uk-margin-top" style="color:#222238") ÚLTIMOS REGISTROS
                             div(class="uk-margin-small-top uk-overflow-auto uk-width-1-1")
-                                table.uk-table.uk-table-small.table-caja.uk-table-middle
+                                table.uk-table.uk-table-small.table-caja.uk-table-middle.uk-table-responsive
                                     thead
                                         tr
                                             th ID
@@ -277,7 +282,7 @@ block content
                                             } 
                                         } 
                                     });
-                            div(class="uk-width-2-5@m " style="padding:10px;")
+                            div(class="uk-width-2-5@m div-canvas-historial" style="padding:10px;")
                                 <canvas id="chart-historial-dona" width="" height=""></canvas>
                                 script.
                                     var ctx = document.getElementById('chart-historial-dona');
@@ -301,11 +306,11 @@ block content
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                                 a(href="/caja/historial" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
                                     <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial completo
-                div(class="uk-width-expand@m")
-                    div(class="uk-card uk-card-default uk-card-body uk-padding-remove" style="height:680px")
+                div(class="uk-width-expand@m div-year-res")
+                    div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px") 
                             a(uk-icon="icon: chevron-left")
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2020
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2020 (%)
                             a(uk-icon="icon: chevron-right")
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                             <canvas id="chart-year-pie" width="400px" height=""></canvas>
@@ -330,7 +335,7 @@ block content
                                     }
                                 });
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") INGRESOS
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") INGRESOS (%)
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                         <canvas id="chart-ingresos-dona" width="400px" height=""></canvas>
                         script.
@@ -355,7 +360,7 @@ block content
                                 }
                             });
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") EGRESOS
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") EGRESOS (%)
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                         <canvas id="chart-egresos-dona" width="400px" height=""></canvas>
                         script.
@@ -378,6 +383,7 @@ block content
                                     
                                 }
                             });
+                        div.uk-padding.uk-text-small.uk-text-center Principales ingresos y egresos del año.
             
             div(id="modal-agregarRegistro" uk-modal class="uk-modal-container")
                 div(class="uk-modal-dialog uk-modal-body")
