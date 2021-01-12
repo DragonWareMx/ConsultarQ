@@ -8,6 +8,10 @@
     border-radius: 5%;
     text-align:center !important;
 }
+.btn-status-noactive{
+    background-color:#F1A5A5;
+    color:#DC5454;
+}
 #div-edit{
     display: none;
 }

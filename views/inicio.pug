@@ -2,52 +2,340 @@ extends main
 
 block head
     title ConsultarQ - Inicio
+    link(rel="stylesheet" href="/stylesheets/cajaChica.css")
+    link(rel="stylesheet" href="/stylesheets/oProgressBar.css")
+    link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
 
 block content
     div(class="uk-container")
-        div(class="uk-animation-toggle" tabindex="0")
-            div(class="uk-card uk-card-default uk-width-2-3@m uk-width-auto@s  uk-align-center uk-margin-large-top uk-animation-shake")
-                div(class="uk-card-header")
-                    div(class="uk-grid-small uk-flex-middle" uk-grid)
-                        div(class="uk-width-expand")
-                            h3(class="uk-card-title uk-margin-remove-bottom") ConsultarQ
-                            p(class="uk-text-meta uk-margin-remove-top") Bienvenido de nuevo #{user.name}
-                div(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap")
-                    p(id="calendar" class="uk-margin-auto") La fecha de hoy es: 
-                    p(id="clock" class="uk-margin-auto uk-width-1 uk-text-primary uk-text-center uk-text-lead")
-            a(href="/logout", style="color:blue" class="uk-align-right") Cerrar Sesión
-    script. 
-        function showTime() {
-            'use strict';
-            var date    = new Date(),
-                hours   = date.getHours(),
-                minutes = date.getMinutes(),
-                seconds = date.getSeconds(),
-                day = date.getDay(),
-                month = date.getMonth() + 1,
-                year = date.getFullYear();
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Inicio
+        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-top")
+            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;" uk-height-match="target: > div > .uk-card")
+                div(class="uk-width-3-4@m uk-padding-remove")
+                    div(class="uk-card uk-card-default uk-card-body uk-padding-small")
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
+                            div(class="uk-align-center") 
+                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;") 
+                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF 
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") ENERO
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="color:#222238") Quincena 1
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
+                            //- ********************* PARA USUARIO ARQUITECTO****************
 
-            if (hours < 10) {
-                hours = '0' + hours;
-            }
-            if (minutes < 10) {
-                minutes = '0' + minutes;
-            }
-            if (seconds < 10) {
-                seconds = '0' + seconds;
-            }
-            document.getElementById('clock').textContent = hours + ':' + minutes + ':' + seconds;
-            if(month < 10){
-                document.getElementById('calendar').textContent ='La fecha de hoy es: ' + day + '/0' + month + '/' + year;
-            }
-            else{
-                document.getElementById('calendar').textContent = 'La fecha de hoy es: ' + day + '/' + month + '/' + year;
-            }
-            }
+                            div(class="uk-width-4-5" style="") 
+                                <canvas id="chart-general" width="400" height="250"></canvas>
+                                script.
+                                    var ctx = document.getElementById('chart-general');
+                                    var dataFirst = {
+                                        label: "Ingresos",
+                                        data: [9562, 5975, 7544, 2073, 1000, 5400, 4000],
+                                        borderColor: "#1e87f0",
+                                        fill: false,
+                                        lineTension: 0,
+                                        borderWidth:2
+                                        };
+                                        
+                                    var dataSecond = {
+                                        label: "Egresos",
+                                        data: [2000, 7600, 6000, 3654, 7622, 1000, 1800],
+                                        borderColor: "#222238",
+                                        fill: false,
+                                        lineTension: 0,
+                                        borderWidth:2
+                                    };
+                                    
+                                    var dataGeneral = {
+                                    labels: ["0", "1", "2", "3", "4", "5", "6"],
+                                    datasets: [dataFirst, dataSecond]
+                                    };
+                                    var myLineChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: dataGeneral,
+                                        options: { 
+                                            elements: { 
+                                                point:{ 
+                                                    radius: 1 
+                                                },
+                                                legend: {
+                                                }
+                                            } 
+                                        } 
+                                    });
 
-            window.onload = function() {
-            'use strcit';
-            
-            setInterval(showTime, 1000);
-        };
+                            //- *****************PARA USUARIO ADMIN Y CONTADOR****************
+
+                            //- div(class="uk-width-3-5@l" style="") 
+                            //-     <canvas id="chart-general" width="400" height="250"></canvas>
+                            //-     script.
+                            //-         var ctx = document.getElementById('chart-general');
+                            //-         var dataFirst = {
+                            //-             label: "Ingresos",
+                            //-             data: [9562, 5975, 7544, 2073, 1000, 5400, 4000],
+                            //-             borderColor: "#1e87f0",
+                            //-             fill: false,
+                            //-             lineTension: 0,
+                            //-             borderWidth:2
+                            //-             };
+                                        
+                            //-         var dataSecond = {
+                            //-             label: "Egresos",
+                            //-             data: [2000, 7600, 6000, 3654, 7622, 1000, 1800],
+                            //-             borderColor: "#222238",
+                            //-             fill: false,
+                            //-             lineTension: 0,
+                            //-             borderWidth:2
+                            //-         };
+                                    
+                            //-         var dataGeneral = {
+                            //-         labels: ["0", "1", "2", "3", "4", "5", "6"],
+                            //-         datasets: [dataFirst, dataSecond]
+                            //-         };
+                            //-         var myLineChart = new Chart(ctx, {
+                            //-             type: 'line',
+                            //-             data: dataGeneral,
+                            //-             options: { 
+                            //-                 elements: { 
+                            //-                     point:{ 
+                            //-                         radius: 1 
+                            //-                     },
+                            //-                     legend: {
+                            //-                     }
+                            //-                 } 
+                            //-             } 
+                            //-         });
+                            //- div(class="uk-width-2-5@l " style="padding:6px;")
+                            //-     div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
+                            //-         div(class="uk-width-1-5@m uk-flex uk-flex-center")
+                            //-             img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
+                            //-         div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
+                            //-             div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
+                            //-                 div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Contadores
+                            //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                            //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
+                            //-             div(class="uk-flex uk-flex-wrap uk-width-1-1")
+                            //-                 div(class="uk-width-1-3@m" style="margin-right:3px") 23 registros
+                            //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                            //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                                
+                            //-     div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
+                            //-         div(class="uk-width-1-5@m uk-flex uk-flex-center")
+                            //-             img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
+                            //-         div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
+                            //-             div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
+                            //-                 div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Arquitectos
+                            //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                            //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
+                            //-             div(class="uk-flex uk-flex-wrap uk-width-1-1")
+                            //-                 div(class="uk-width-1-3@m") 23 registros
+                            //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                            //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            
+                            //-     div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body" style="padding:2px; padding-top:15px; padding-bottom:15px")
+                            //-         div(class="uk-width-1-5@m uk-flex uk-flex-center")
+                            //-             img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
+                            //-         div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
+                            //-             div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
+                            //-                 div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Administrador
+                            //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                            //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
+                            //-             div(class="uk-flex uk-flex-wrap uk-width-1-1")
+                            //-                 div(class="uk-width-1-3@m") 23 registros
+                            //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
+                            //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            div(class="uk-width-1-1 uk-flex uk-flex-right")
+                                a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
+                                    <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                        div(class="uk-width-1-1 uk-margin-small-top" style="border-top:solid 1px #EEEEEE")
+                            div(class="uk-margin-top" style="color:#222238") ÚLTIMOS REGISTROS
+                            div(class="uk-margin-small-top uk-overflow-auto uk-width-1-1")
+                                table.uk-table.uk-table-small.table-caja.uk-table-middle.uk-table-responsive
+                                    thead
+                                        tr
+                                            th ID
+                                            th USUARIO
+                                            th MOVIMIENTO
+                                            th CONCEPTO
+                                            th MONTO
+                                    tbody
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |María Flores Escobedo
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |Solo 5 registros aquí
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |María Flores Escobedo
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |Solo 5 registros aquí
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000    
+                                        tr
+                                            th 123
+                                            th.uk-flex.uk-flex-middle 
+                                                div
+                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                |Solo 5 registros aquí
+                                            th Ingreso
+                                            th Concepto 1
+                                            th $9,000  
+
+                div(class="uk-width-expand@m div-proyectos-inicio")
+                    div(class="uk-card uk-card-default uk-card-body uk-padding-remove ")
+                        //- **********************USUARIO TIPO CONTADOR****************
+                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px") 
+                        //-     div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2021 (%)
+                        //- div(class="uk-width-1-1 uk-margin-small-top" style="")
+                        //-     <canvas id="chart-year-pie" width="400px" height=""></canvas>
+                        //-     script.
+                        //-         var ctx = document.getElementById('chart-year-pie');
+                        //-         var myPieChart = new Chart(ctx, {
+                        //-             type: 'pie',
+                        //-             data:{
+                        //-                 labels: ["Ingresos", "Egresos"],
+                        //-                 datasets: [{
+                        //-                     backgroundColor: ["#1e87f0", "#222238"],
+                        //-                     data: [55,45]
+                        //-                 }],
+                        //-             },
+                        //-             options: { 
+                                        
+                        //-                 legend: {
+                        //-                     display: false,
+                        //-                     position:'bottom'
+                        //-                 }
+                                        
+                        //-             }
+                        //-         });
+                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
+                        //-     div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") INGRESOS (%)
+                        //- div(class="uk-width-1-1 uk-margin-small-top" style="")
+                        //- <canvas id="chart-ingresos-dona" width="400px" height=""></canvas>
+                        //- script.
+                        //-     var ctx = document.getElementById('chart-ingresos-dona');
+                        //-     var myPieChart = new Chart(ctx, {
+                        //-         type: 'doughnut',
+                        //-         data:{
+                        //-             labels: ["Concepto 1", "Concepto 2", "Concepto 3", "Concepto 4"],
+                        //-             datasets: [{
+                        //-                 backgroundColor: ["#1e87f0", "#9CCAFE","#0D4481","#9898BF"],
+                        //-                 data: [62.5,25,13.8,35.4],
+                        //-                 borderWidth:4
+                        //-             }],
+                        //-         },
+                        //-         options: { 
+                                    
+                        //-             legend: {
+                        //-                 display: false,
+                        //-                 position:'bottom'
+                        //-             }
+                                    
+                        //-         }
+                        //-     });
+                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
+                        //-     div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") EGRESOS (%)
+                        //- div(class="uk-width-1-1 uk-margin-small-top" style="")
+                        //- <canvas id="chart-egresos-dona" width="400px" height=""></canvas>
+                        //- script.
+                        //-     var ctx = document.getElementById('chart-egresos-dona');
+                        //-     var myPieChart = new Chart(ctx, {
+                        //-         type: 'doughnut',
+                        //-         data:{
+                        //-             labels: ["Concepto 1", "Concepto 2", "Concepto 3", "Concepto 4"],
+                        //-             datasets: [{
+                        //-                 backgroundColor: ["#222238","#40408D","#7272E1","#95ADA9"],
+                        //-                 data: [62.5,25,13.8,35.4]
+                        //-             }],
+                        //-         },
+                        //-         options: { 
+                                    
+                        //-             legend: {
+                        //-                 display: false,
+                        //-                 position:'bottom'
+                        //-             }
+                                    
+                        //-         }
+                        //-     });
+                        //- div.uk-padding.uk-text-small.uk-text-center Principales ingresos y egresos del año 2021
+
+                        //- **********USUARIO TIPO ADMIN Y ARQUITECTO***********
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px") 
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") PROYECTOS
+                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7") 
+                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
+                            div.uk-width-1-1
+                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
+                                div.btn-status-active ACTIVO 
+                            div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                        
+                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7") 
+                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
+                            div.uk-width-1-1
+                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
+                                div.btn-status-active.btn-status-noactive INACTIVO 
+                            div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                        
+                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7") 
+                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
+                            div.uk-width-1-1
+                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
+                                div.btn-status-active ACTIVO 
+                            div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+
+                        
+        
             
