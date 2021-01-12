@@ -198,7 +198,7 @@ router.post('/password/reset', isNotLoggedIn, async (req, res, next) => {
                 console.log(error);
             } else {
                 await user.update({ resetLink: token });
-                req.flash('message', "El correo electrónico con el enlace para restaurar la contraseña ha sido enviado.");
+                req.flash('success', "El correo electrónico con el enlace para restaurar la contraseña ha sido enviado.");
                 return res.redirect('/password/reset');
             }
         });
@@ -209,15 +209,32 @@ router.get('/password/reset/:token', isNotLoggedIn, (req, res, next) => {
     res.render('reset_pssw', { token: req.params.token, title: 'Restaurar contraseña' });
 });
 
-router.post('/password/reset/:token', isNotLoggedIn, async (req, res, next) => {
+router.post('/password/reset/:token', [
+    check('email')
+        .not().isEmpty().withMessage('Correo electrónico es un campo requerido.')
+        .isEmail().withMessage('Correo electrónico no válido.')
+        .normalizeEmail(),
+    check('password')
+        .trim()
+        .not().isEmpty().withMessage('Contraseña es un campo requerido.')
+        .isLength({ min: 8, max: 24 }).withMessage('La contraseña debe tener minimo 8 caracteres y máximo 24 caracteres.')
+        .matches(/(?=.*?[A-Z])/).withMessage('La contraseña debe tener al menos una mayúscula.')
+        .matches(/(?=.*?[a-z])/).withMessage('La contraseña debe tener al menos una minúscula.')
+        .matches(/(?=.*?[0-9])/).withMessage('La contraseña debe tener al menos un número.')
+        .not().matches(/^$|\s+/).withMessage('No se aceptan espacios en la contraseña.'),
+], isNotLoggedIn, async (req, res, next) => {
     const { resetLink, password, password_confirm, email } = req.body;
     var backURL = req.header('Referer') || '/';
-    if (password != password_confirm) {
-        req.flash('message', "Las contraseñas no coinciden.");
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        var err = errors.array()
+        err.forEach(element => {
+            req.flash('message', element.msg);
+        });
         return res.redirect(backURL);
     }
-    if (password.lenght < 8) {
-        req.flash('message', "La contraseña tiene que ser de mínimo 8 caracteres.");
+    if (password != password_confirm) {
+        req.flash('message', "Las contraseñas no coinciden.");
         return res.redirect(backURL);
     }
     if (resetLink) {
@@ -250,7 +267,7 @@ router.post('/password/reset/:token', isNotLoggedIn, async (req, res, next) => {
                         const log = await models.Log.create(dataLog, { transaction: t })
 
                         await t.commit()
-                        req.flash('message', "Tu contraseña ha sido cambiada con éxito.");
+                        req.flash('success', "Tu contraseña ha sido cambiada con éxito.");
                         return res.redirect('/login');
                     } catch (error) {
                         await t.rollback();

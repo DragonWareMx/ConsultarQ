@@ -21,6 +21,9 @@ block content
                                 if messages
                                     for message, i in messages
                                         p.txt-alert-login #{ message }
+                                if successes
+                                    for success, i in successes
+                                        p.txt-success-login #{ success }
                                 button(class="uk-padding-small uk-width-1-1 uk-margin-medium-top" type="submit") Iniciar sesión
                         div(class="uk-width-1-1 div-gray-login uk-text-center uk-position-bottom-right uk-width-3-5" style="background-color:#DBDBDC; font-size:13px; padding:8px") ¿Olvidaste tu contraseña?
                             a(style="text-decoration:none !important" href="/password/reset") Clic aquí

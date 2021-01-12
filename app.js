@@ -67,13 +67,11 @@ app.use(async (req, res, next) => {
         {
           model: models.Role,
           include: {
-            model: models.Permission,
-            where: { name: 'ur' }
+            model: models.Permission
           }
         }
       ]
     });
-
     app.locals.user = usuario;
 
     //permisos
