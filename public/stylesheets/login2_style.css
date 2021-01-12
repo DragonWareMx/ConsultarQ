@@ -56,7 +56,9 @@
 .txt-alert-login{
     font-style:    normal;
     font-weight:   normal;
-    font-size:     13px;
+    font-size:     12px !important;
+    margin-top: 0px !important;
+    margin-bottom: 2px !important;
     line-height:   16px;
     color:         #DC5454;
     margin-bottom: 0px;
@@ -65,7 +67,9 @@
 .txt-success-login{
     font-style:    normal;
     font-weight:   normal;
-    font-size:     13px;
+    font-size:     12px !important;
+    margin-top: 0px !important;
+    margin-bottom: 2px !important;
     line-height:   16px;
     color:         #54dc88;
     margin-bottom: 0px;
