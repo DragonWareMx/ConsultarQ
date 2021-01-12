@@ -151,34 +151,212 @@ router.post('/create', upload.any(),
           return !isNaN(Date.parse(date));
         }).withMessage('La fecha límite no es válida.'),
       check('tipo')
-            .custom(async (tipo) => {
-                //se crea el validador, es true porque si no hay rol tambien es valido
-                var validador = true
+        .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            var validador = true
 
-                //si no es nulo
-                if (tipo) {
-                    validador = false
+            //si no es nulo
+            if (tipo) {
+                validador = false
 
-                    let ids = await models.Pro_Type.findAll({
-                        attributes: ['id'],
-                        raw: true
-                    })
+                let ids = await models.Pro_Type.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
 
-                    ids.forEach(id => {
-                        if (tipo == id.id) {
-                            validador = true
-                        }
-                    });
-
-                    if (tipo == 0)
+                ids.forEach(id => {
+                    if (tipo == id.id) {
                         validador = true
-                }
-                if (validador) {
-                    return true
-                }
-                else
-                    throw new Error('El tipo de proyecto seleccionado existe.');
-            }).withMessage('El tipo de proyecto seleccionado no es válido.'),
+                    }
+                });
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('El tipo de proyecto seleccionado existe.');
+        }).withMessage('El tipo de proyecto seleccionado no es válido.'),
+        check('proveedor')
+          .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            var validador = true
+
+            //si no es nulo
+            if (tipo) {
+                validador = false
+
+                let ids = await models.Pro_Type.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                ids.forEach(id => {
+                    if (tipo == id.id) {
+                        validador = true
+                    }
+                });
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('El tipo de proyecto seleccionado existe.');
+        }).withMessage('El tipo de proyecto seleccionado no es válido.'),
+      check('proveedor')
+          .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            var validador = true
+
+            //si no es nulo
+            if (tipo) {
+                validador = false
+
+                let ids = await models.Pro_Type.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                ids.forEach(id => {
+                    if (tipo == id.id) {
+                        validador = true
+                    }
+                });
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('El tipo de proyecto seleccionado existe.');
+        }).withMessage('El tipo de proyecto seleccionado no es válido.'),
+      check('input_proveedores')
+        .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            tipo = tipo[0].split(",")
+
+            var validador = true
+
+            //si no es nulo
+            if (tipo) {
+                let ids = await models.Provider.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                validador2 = false
+
+                tipo.forEach(idB => {
+                  ids.forEach(id => {
+                    if (idB == id.id) {
+                      validador2 = true
+                    }
+                  })
+
+                  if(validador2 == false)
+                    validador = false
+                  validador2 = false
+                })
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('Uno de los proveedores seleccionados no existe.');
+        }).withMessage('Hubo un error con alguno de los proveedores seleccionados, reinténtelo más tarde.'),
+      check('cliente')
+        .custom(async (tipo) => {
+          //se crea el validador, es true porque si no hay rol tambien es valido
+          validador = false
+
+          let ids = await models.Client.findAll({
+              attributes: ['id'],
+              raw: true
+          })
+
+          ids.forEach(id => {
+              if (tipo == id.id) {
+                validador = true
+              }
+          })
+
+          if (validador) {
+              return true
+          }
+        }).withMessage('El Cliente seleccionado no es válido.'),
+        check('miembro')
+        .custom(async (tipo) => {
+          //se crea el validador, es true porque si no hay rol tambien es valido
+          validador = false
+
+          let ids = await models.Client.findAll({
+              attributes: ['id'],
+              raw: true
+          })
+
+          ids.forEach(id => {
+              if (tipo == id.id) {
+                validador = true
+              }
+          })
+
+          if (validador) {
+              return true
+          }
+        }).withMessage('Algún miembro seleccionado no es válido.'),
+        check('miembro')
+          .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            tipo = tipo[0].split(",")
+
+            var validador = true
+
+            //si no es nulo
+            if (tipo && tipo[0] != '') {
+                let ids = await models.Employee.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                validador2 = false
+
+                tipo.forEach(idB => {
+                  ids.forEach(id => {
+                    if (idB == id.id) {
+                      validador2 = true
+                    }
+                  })
+
+                  if(validador2 == false)
+                    validador = false
+                  validador2 = false
+                })
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('Algún miembro seleccionado no es válido.');
+        }).withMessage('Algún miembro seleccionado no es válido.'),
+        check('observaciones')
+          .optional({ checkFalsy: true })
+          .withMessage('Observaciones es un campo requerido.')
+          .isLength({ max: 255 }).withMessage('Observaciones puede tener un máximo de 255 caracteres.')
+          .trim()
+          .escape()
     ]
     , isLoggedIn, async function (req, res, next) {
         //si hay errores entonces se muestran
