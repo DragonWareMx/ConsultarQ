@@ -5,6 +5,7 @@ const router = express.Router();
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
+const helpers = require('../lib/helpers');
 require('connect-flash');
 require('dotenv').config();
 //brute-force
@@ -202,6 +203,69 @@ router.post('/password/reset', isNotLoggedIn, async (req, res, next) => {
             }
         });
     }
+});
+
+router.get('/password/reset/:token', isNotLoggedIn, (req, res, next) => {
+    res.render('reset_pssw', { token: req.params.token, title: 'Restaurar contraseña' });
+});
+
+router.post('/password/reset/:token', isNotLoggedIn, async (req, res, next) => {
+    const { resetLink, password, password_confirm, email } = req.body;
+    var backURL = req.header('Referer') || '/';
+    if (password != password_confirm) {
+        req.flash('message', "Las contraseñas no coinciden.");
+        return res.redirect(backURL);
+    }
+    if (password.lenght < 8) {
+        req.flash('message', "La contraseña tiene que ser de mínimo 8 caracteres.");
+        return res.redirect(backURL);
+    }
+    if (resetLink) {
+        jwt.verify(resetLink, process.env.RESET_PASSWORD_KEY, async function (error, decodedData) {
+            if (error) {
+                req.flash('message', "El token es incorrecto o ha expirado.");
+                return res.redirect(backURL);
+            }
+            else {
+                const user = await models.User.findOne({ where: { resetLink: resetLink, email: email }, include: models.Employee });
+                if (user === null) {
+                    req.flash('message', "No existe ningún usuario con ese correo electrónico.");
+                    return res.redirect(backURL);
+                }
+                else {
+                    const t = await models.sequelize.transaction()
+                    const pass = await helpers.encryptPassword(password)
+                    try {
+                        await user.update({
+                            password: pass,
+                            resetLink: ''
+                        }, { transaction: t })
+
+                        var dataLog = {
+                            UserId: user.id,
+                            title: "Recuperación de contraseña",
+                            description: "El usuario " + user.Employee.name + " ha restaurado su contraseña."
+                        }
+                        //guarda el log en la base de datos
+                        const log = await models.Log.create(dataLog, { transaction: t })
+
+                        await t.commit()
+                        req.flash('message', "Tu contraseña ha sido cambiada con éxito.");
+                        return res.redirect('/login');
+                    } catch (error) {
+                        await t.rollback();
+                        req.flash('message', "Ocurrió un error, vuelve a intentarlo más tarde.");
+                        return res.redirect(backURL);
+                    }
+                }
+            }
+        });
+    }
+    else {
+        req.flash('message', "Ocurrió un error, vuelve a intentarlo más tarde.");
+        return res.redirect(backURL);
+    }
+
 });
 
 router.post('/login',
