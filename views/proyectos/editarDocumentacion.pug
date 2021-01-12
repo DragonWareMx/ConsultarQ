@@ -14,7 +14,7 @@ block content
         div(class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" uk-grid)
             div(class="uk-card uk-card-default uk-card-body uk-padding-remove-bottom uk-margin-small-bottom")
                 div(class="uk-flex uk-flex-top uk-flex-between")
-                    div(class="uk-text-primary uk-margin-bottom uk-margin-small-left") Casa - Habitación
+                    div(class="uk-text-primary uk-margin-bottom uk-margin-small-left") #{project.name}
                     div(class="uk-flex uk-flex-middle")
                         img(src="/icons/edit.png" uk-toggle="target: #editDocument-form" width="13px" class="uk-margin-small-right" style="cursor:pointer")
                         img(src="/icons/delete.png" uk-toggle="target: #deleteDocument-form" width="13px" class="uk-margin-small-left" style="cursor:pointer")
@@ -28,30 +28,28 @@ block content
                                 th(class="uk-text-truncate uk-width-small") Cantidad
                                 th(class="uk-text-truncate uk-width-small") Unidad
                                 th(class="uk-text-truncate  uk-width-small") Costo/U
+                                th(class="uk-text-truncate uk-width-small") Costo/T
                                 th(class="uk-text-truncate uk-width-small") Realizado
                         tbody
-                            tr(uk-toggle="target: #editTask-form") 
-                                td 1
-                                td Concepto número 1 
-                                td Descripción número 1
-                                td 25
-                                td Kg.
-                                td 1,000,000.00
-                                td Sí
-                            tr(uk-toggle="target: #editTask-form") 
-                                td 2
-                                td Concepto número 2 
-                                td Descripción número 2
-                                td 77
-                                td ml.
-                                td 20,000.00
-                                td No
+                            each task, index in project.Project_Requirement.Tasks
+                                tr(uk-toggle="target: #editTask-form" class="editar" data-id=task.id) 
+                                    td #{index + 1}
+                                    td #{task.concept} 
+                                    td #{task.description} 
+                                    td #{task.units} 
+                                    td #{task.unit} 
+                                    td #{task.price}
+                                    td #{task.price*task.units} 
+                                    if task.check
+                                        td Sí 
+                                    else
+                                        td No
                 div(class="uk-flex uk-flex-right  uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
                     img(src="/icons/more.png" width="20px" style="margin-top:3px; margin-right:5px;")
                     a(uk-toggle="target: #task-form") Agregar Tarea
             div(class="uk-card uk-card-default uk-card-body uk-padding-remove uk-margin-small-top uk-flex uk-flex-wrap")
                 div(class="uk-margin-small-top uk-margin-small-left uk-text-small uk-width-1") OBSERVACIONES
-                div(class="uk-width-1 uk-text-secondary" style="border:1px solid #C7C7C7;border-radius:2px;font-size:13px;line-height:16px;margin:19px;padding:8px;") Aquí pues van las observaciones del proyecto, vaya, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. 
+                div(class="uk-width-1 uk-text-secondary" style="border:1px solid #C7C7C7;border-radius:2px;font-size:13px;line-height:16px;margin:19px;padding:8px;") #{project.observations} 
         //- Modal para editar tarea
         div(id="editTask-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -62,31 +60,31 @@ block content
                         a(class="uk-text-danger uk-text-small uk-margin-small-left") Eliminar
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-editTask")
-                form(class="uk-card-body uk-padding-small" id="form-edit-task" action="/proyectos/documentacion/1/tarea/editar/1" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-edit-task" action="" method="POST" enctype="multipart/form-data")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="concepto-edit" name="concepto" value='Concepto número 1' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="concepto-edit" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='concepto-edit' title='Concepto' data-title='Concepto')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="descripcion-edit" name="descripcion" value='Descripción número 1' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="descripcion-edit" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='descripcion-edit' title='Descripcion' data-title='Descripcion')
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='number' autocomplete='off'  id="cantidad-edit" name="cantidad"  value='25' onchange="this.setAttribute('value', this.value);" required='')
+                                        input(type='number' autocomplete='off'  id="cantidad-edit" name="cantidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='cantidad-edit' title='Cantidad' data-title='Cantidad')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='text' autocomplete='off'  id="unidad-edit" name="unidad"  value='Kg.' onchange="this.setAttribute('value', this.value);" required='')
+                                        input(type='text' autocomplete='off'  id="unidad-edit" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='unidad-edit' title='Unidad' data-title='Unidad')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='number' autocomplete='off'  id="costo-edit" name="costo"  value='100000' onchange="this.setAttribute('value', this.value);")
+                                        input(type='number' autocomplete='off'  id="costo-edit" name="costo"  value='' onchange="this.setAttribute('value', this.value);")
                                         label(for='costo-edit' title='Costo' data-title='Costo')
                                 div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-right")
-                                    input(type='checkbox' checked autocomplete='off'  id="realizado-edit" name="realizado" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
+                                    input(type='checkbox' autocomplete='off'  id="realizado-edit" name="realizado" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
                                     label(for='realizado-edit' class="uk-text-primary") Realizado
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
@@ -98,7 +96,7 @@ block content
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-deleteTask")
                 div(class="uk-text-left" id="textTask-delete") ¿Estás seguro de que deseas eliminar la tarea?
-                form(class="uk-card-body uk-padding-small" id="form-delete-task" action="/proyectos/documentacion/1/tarea/eliminar/1"  method="POST")
+                form(class="uk-card-body uk-padding-small" id="form-delete-task" action=""  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="deleteTask" type="submit") Eliminar
@@ -108,8 +106,8 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar documentacion
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-deleteDocument")
-                div(class="uk-text-left" id="textDocument-delete") ¿Estás seguro de que deseas eliminar la documentación del proyecto "Casa - Habitación"?
-                form(class="uk-card-body uk-padding-small" id="form-delete-document" action="/proyectos/documentacion/1/eliminar"  method="POST")
+                div(class="uk-text-left" id="textDocument-delete") ¿Estás seguro de que deseas eliminar la documentación del proyecto "#{project.name}"?
+                form(class="uk-card-body uk-padding-small" id="form-delete-document" action="/proyectos/documentacion/"+project.id+"/eliminar"  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="deleteDocument" type="submit") Eliminar
@@ -119,7 +117,7 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tarea
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-task")
-                form(class="uk-card-body uk-padding-small" id="form-new-task" action="/proyectos/documentacion/1/tarea/agregar" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-new-task" action="/proyectos/documentacion/"+project.id+"/tarea/agregar" method="POST" enctype="multipart/form-data")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -154,23 +152,23 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar documentación
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-editDocument")
-                form(class="uk-card-body uk-padding-small" id="form-edit-document" action="/proyectos/documentacion/1/editar" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-edit-document" action="/proyectos/documentacion/"+project.id+"/editar" method="POST" enctype="multipart/form-data")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="titulo-edit" name="titulo" value='Titulo del tipo de proyecto' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="titulo-edit" name="titulo" value=project.name onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='titulo-edit' title='Tipo de proyecto' data-title='Tipo de proyecto')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="observaciones-edit" name="observaciones" value='Aquí pues van las observaciones del proyecto, vaya, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.' onchange="this.setAttribute('value', this.value);" )
+                                input(type='text' autocomplete='off' id="observaciones-edit" name="observaciones" value=project.observations onchange="this.setAttribute('value', this.value);" )
                                 label(for='observaciones-edit' title='Tipo de proyecto' data-title='Tipo de proyecto')
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="document-edit" type="submit") Guardar
     script.
         $('.editar').on('click', function() {
-            var taskId = $(this).data('id'); //
+            var taskId = $(this).data('id'); 
             var tasks=!{ JSON.stringify(project.Project_Requirement.Tasks) };
-            var layout=!{ JSON.stringify(layout) };
+            var project=!{ JSON.stringify(project) };
             for(var key in tasks){
                 var obj=tasks[key];
                 if(obj["id"] == taskId){
@@ -181,10 +179,13 @@ block content
             $('#concepto-edit').val(obj["concept"]).change();
             $('#descripcion-edit').val(obj["description"]).change();
             $('#unidad-edit').val(obj["unit"]).change();
+            $('#cantidad-edit').val(obj["units"]).change();
             $('#costo-edit').val(obj["price"]).change();
-            
-
+            if(obj["check"])
+                $('#realizado-edit').attr('checked', true)
+            else 
+                $('#realizado-edit').attr('checked', false)
             //esto es para poner el id en el action del form
-            $('#form-edit-task').attr('action', '/proyectos/layout/'+layout["id"]+'/tarea/editar/'+obj["id"]);
-            $('#form-delete-task').attr('action', '/proyectos/layout/'+layout["id"]+'/tarea/eliminar/'+obj["id"]);
+            $('#form-edit-task').attr('action', '/proyectos/documentacion/'+project["id"]+'/tarea/editar/'+obj["id"]);
+            $('#form-delete-task').attr('action', '/proyectos/documentacion/'+project["id"]+'/tarea/eliminar/'+obj["id"]);
         });                               

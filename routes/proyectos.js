@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult, body } = require('express-validator/check');
 const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
@@ -331,14 +331,18 @@ router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
   }); 
 });
 
-router.get('/layouts', isLoggedIn,function (req, res, next) {
-  res.render('layouts');
+router.get('/layouts', isLoggedIn,async function (req, res, next) {
+  const layouts=await models.Pro_Type.findAll({
+    include: {model: models.Project_Requirements_Layout,
+      include: models.Tasks_Layout}
+  })
+  res.render('layouts',{layouts});
 });
 
-router.get('/layout/editar/1', isLoggedIn,function (req, res, next) {
+router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
   models.Pro_Type.findOne({
     where: {
-      id: 1
+      id: req.params.id
     },
     include: [{
       model: models.Project_Requirements_Layout,
