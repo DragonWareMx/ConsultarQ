@@ -135,7 +135,7 @@ router.post('/create', upload.any(),
         .escape(),
       check('estatus')
         .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
-        check('start_date')
+      check('start_date')
         .not().isEmpty()
         .custom(date => {
             return !isNaN(Date.parse(date));
@@ -151,65 +151,8 @@ router.post('/create', upload.any(),
           return !isNaN(Date.parse(date));
         }).withMessage('La fecha límite no es válida.'),
       check('tipo')
+        .optional({ checkFalsy: true })
         .custom(async (tipo) => {
-            //se crea el validador, es true porque si no hay rol tambien es valido
-            var validador = true
-
-            //si no es nulo
-            if (tipo) {
-                validador = false
-
-                let ids = await models.Pro_Type.findAll({
-                    attributes: ['id'],
-                    raw: true
-                })
-
-                ids.forEach(id => {
-                    if (tipo == id.id) {
-                        validador = true
-                    }
-                });
-
-                if (tipo == 0)
-                    validador = true
-            }
-            if (validador) {
-                return true
-            }
-            else
-                throw new Error('El tipo de proyecto seleccionado existe.');
-        }).withMessage('El tipo de proyecto seleccionado no es válido.'),
-        check('proveedor')
-          .custom(async (tipo) => {
-            //se crea el validador, es true porque si no hay rol tambien es valido
-            var validador = true
-
-            //si no es nulo
-            if (tipo) {
-                validador = false
-
-                let ids = await models.Pro_Type.findAll({
-                    attributes: ['id'],
-                    raw: true
-                })
-
-                ids.forEach(id => {
-                    if (tipo == id.id) {
-                        validador = true
-                    }
-                });
-
-                if (tipo == 0)
-                    validador = true
-            }
-            if (validador) {
-                return true
-            }
-            else
-                throw new Error('El tipo de proyecto seleccionado existe.');
-        }).withMessage('El tipo de proyecto seleccionado no es válido.'),
-      check('proveedor')
-          .custom(async (tipo) => {
             //se crea el validador, es true porque si no hay rol tambien es valido
             var validador = true
 
@@ -239,83 +182,71 @@ router.post('/create', upload.any(),
         }).withMessage('El tipo de proyecto seleccionado no es válido.'),
       check('input_proveedores')
         .custom(async (tipo) => {
-            //se crea el validador, es true porque si no hay rol tambien es valido
-            tipo = tipo[0].split(",")
 
-            var validador = true
+          var validador = true
 
-            //si no es nulo
-            if (tipo) {
-                let ids = await models.Provider.findAll({
-                    attributes: ['id'],
-                    raw: true
+          if (/\d/.test(tipo)) {
+              //se crea el validador, es true porque si no hay rol tambien es valido
+              tipo = tipo[0].split(",")
+
+              //si no es nulo
+          
+              let ids = await models.Provider.findAll({
+                  attributes: ['id'],
+                  raw: true
+              })
+
+              validador2 = false
+
+              tipo.forEach(idB => {
+                ids.forEach(id => {
+                  if (idB == id.id) {
+                    validador2 = true
+                  }
                 })
 
+                if(validador2 == false)
+                  validador = false
                 validador2 = false
+              })
 
-                tipo.forEach(idB => {
-                  ids.forEach(id => {
-                    if (idB == id.id) {
-                      validador2 = true
-                    }
-                  })
-
-                  if(validador2 == false)
-                    validador = false
-                  validador2 = false
-                })
-
-                if (tipo == 0)
-                    validador = true
-            }
-            if (validador) {
-                return true
-            }
-            else
-                throw new Error('Uno de los proveedores seleccionados no existe.');
+              if (tipo == 0)
+                  validador = true
+          }
+          if (validador) {
+              return true
+          }
+          else
+              throw new Error('Uno de los proveedores seleccionados no existe.');
         }).withMessage('Hubo un error con alguno de los proveedores seleccionados, reinténtelo más tarde.'),
       check('cliente')
         .custom(async (tipo) => {
-          //se crea el validador, es true porque si no hay rol tambien es valido
-          validador = false
+          if(tipo){
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            validador = false
 
-          let ids = await models.Client.findAll({
-              attributes: ['id'],
-              raw: true
-          })
+            let ids = await models.Client.findAll({
+                attributes: ['id'],
+                raw: true
+            })
 
-          ids.forEach(id => {
-              if (tipo == id.id) {
-                validador = true
-              }
-          })
+            ids.forEach(id => {
+                if (tipo == id.id) {
+                  validador = true
+                }
+            })
 
-          if (validador) {
-              return true
+            if (validador) {
+                return true
+            }
           }
+          else return true
         }).withMessage('El Cliente seleccionado no es válido.'),
         check('miembro')
-        .custom(async (tipo) => {
-          //se crea el validador, es true porque si no hay rol tambien es valido
-          validador = false
-
-          let ids = await models.Client.findAll({
-              attributes: ['id'],
-              raw: true
-          })
-
-          ids.forEach(id => {
-              if (tipo == id.id) {
-                validador = true
-              }
-          })
-
-          if (validador) {
-              return true
-          }
-        }).withMessage('Algún miembro seleccionado no es válido.'),
-        check('miembro')
           .custom(async (tipo) => {
+            if (!(/\d/.test(tipo))) {
+              throw new Error()
+            }
             //se crea el validador, es true porque si no hay rol tambien es valido
             tipo = tipo[0].split(",")
 
@@ -377,84 +308,104 @@ router.post('/create', upload.any(),
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }
+                        where: { name: 'pc' }
                     }
                 }
             })
 
             if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
                 //NO TIENE PERMISO DE AGREGAR rol
-                return res.status(403).json([{ msg: 'No estás autorizado para registrar roles.' }])
+                return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
             }
         }
         catch (error) {
-            return res.status(403).json([{ msg: 'No estás autorizado para registrar roles.' }])
+            return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
         }
 
         //TIENE PERMISO
         //Transaccion
         const t = await models.sequelize.transaction()
         try {
-            //GUARDA EL ROL
-            //guarda el ROL
-            var permsID = []
-            for (var key in req.body) {
-                if (key != "role_name") {
-                    const permission = await models.Permission.findOne({ where: { name: key }, raw: true, transaction: t });
-                    permsID.push(permission['id'])
-                }
-            }
-            //se crea el rol
-            const newRol = await models.Role.create({
-                name: req.body.role_name,
-            }, { transaction: t })
+          //se guardan los datos principales
+          var datos = {
+            name: req.body.role_name,
+            start_date: req.body.start_date,
+            deadline: req.body.deadline,
+            status: req.body.estatus
+          }
 
-            await newRol.setPermissions(permsID, { transaction: t })
+          //SE GUARDAN LOS NULLABLES
+          //tipo de proyecto
+          if(req.body.tipo){
+            datos.ProTypeId = req.body.tipo
+          }
 
-            //SE REGISTRA EL LOG
-            //obtenemos el usuario que realiza la transaccion
-            const usuario = await models.User.findOne({
-                where: {
-                    id: req.user.id
-                },
-                transaction: t
-            })
+          //si hay observaciones
+          if(req.body.observaciones){
+            datos.observations = req.body.observaciones
+          }
 
-            //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un rol nuevo con los siguientes datos:\nnombre: " + newRol.name + "\nCon los permisos:\n"
-
-            var contador = 0
-            for (var key in req.body) {
-                if (key != "role_name") {
-                    desc = desc + key + "\n"
-                    contador++
-                }
-            }
-
-            if (contador == 0) {
-                desc = desc + "Ningún permiso"
-            }
-
-            //guardamos los datos del log
-            var dataLog = {
-                UserId: usuario.id,
-                title: "Registro de rol",
-                description: desc
-            }
-
-            //guarda el log en la base de datos
-            const log = await models.Log.create(dataLog, { transaction: t })
-
-            //verifica que se hayan registrado el log y el rol
-            if (!log)
+          switch(req.body.estatus){
+            case 'terminado':
+              if(req.body.end_date)
+                datos.end_date = req.body.end_date
+              else
                 throw new Error()
-            if (!newRol)
-                throw new Error()
+              break
+            case 'cancelado':
+            case 'activo':
+              break
+            default:
+              throw new Error()
+          }
 
-            res.status(200).json([{ status: 200 }]);
-            // If the execution reaches this line, no errors were thrown.
-            // We commit the transaction.
-            await t.commit()
+          //GUARDA EL PROYECTO
+          const newProject = await models.Project.create(datos, { transaction: t })
+
+          //SE REGISTRA EL LOG
+          //obtenemos el usuario que realiza la transaccion
+          const usuario = await models.User.findOne({
+              where: {
+                  id: req.user.id
+              },
+              transaction: t
+          })
+
+          //descripcion del log
+          var desc = "El usuario " + usuario.email + " ha registrado un rol nuevo con los siguientes datos:\nnombre: " + newRol.name + "\nCon los permisos:\n"
+
+          var contador = 0
+          for (var key in req.body) {
+              if (key != "role_name") {
+                  desc = desc + key + "\n"
+                  contador++
+              }
+          }
+
+          if (contador == 0) {
+              desc = desc + "Ningún permiso"
+          }
+
+          //guardamos los datos del log
+          var dataLog = {
+              UserId: usuario.id,
+              title: "Registro de rol",
+              description: desc
+          }
+
+          //guarda el log en la base de datos
+          const log = await models.Log.create(dataLog, { transaction: t })
+
+          //verifica que se hayan registrado el log y el rol
+          if (!log)
+              throw new Error()
+          if (!newRol)
+              throw new Error()
+
+          res.status(200).json([{ status: 200 }]);
+          // If the execution reaches this line, no errors were thrown.
+          // We commit the transaction.
+          await t.commit()
         } catch (error) {
 
             // If the execution reaches this line, an error was thrown.
@@ -465,12 +416,6 @@ router.post('/create', upload.any(),
 });
 
 router.get('/agregar', isLoggedIn,async function (req, res, next) {
-  //si hay errores entonces se muestran
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-      return res.status(422).send(errors.array());
-  }
-
   const prestadores = await models.Provider.findAll({
     include: [{
         model: models.Provider_Area

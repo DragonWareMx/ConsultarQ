@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       Project.hasOne(models.Project_Requirement)
       Project.belongsTo(models.Pro_Type)
       Project.hasMany(models.Quotation)
+      Project.belongsTo(models.Client)
     }
   };
   Project.init({

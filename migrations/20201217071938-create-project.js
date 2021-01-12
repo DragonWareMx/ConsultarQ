@@ -16,6 +16,14 @@ module.exports = {
           key: 'id',
         },
       },
+      ClientId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Clients',
+          key: 'id',
+        },
+      },
       contract: {
         type: Sequelize.STRING
       },
