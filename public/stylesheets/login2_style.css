@@ -1,6 +1,7 @@
 .body-login{
     background:        url(/img/background.png);
     background-size:   cover;
+    position: absolute;
     background-repeat: no-repeat;
     display:           flex;
     justify-content:   center;
