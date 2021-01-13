@@ -1,0 +1,215 @@
+extends ../main
+
+block head
+    title ConsultarQ - Cliente
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/clientes.css")
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left uk-text-large uk-text-bold uk-text-primary uk-margin-bottom") Cliente
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
+                    img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Regresar
+        div(class="uk-grid-match uk-margin-top uk-flex" uk-grid )
+            div(class="uk-width-3-5@m" style="height:min-content")
+                div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
+                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
+                        div(class="uk-width-auto@m")
+                            img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px")
+                        div(class="uk-width-expand@m" style="font-size:14px")
+                            div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
+                                div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") Adrián Leonardo Aguilar Huerta
+                                div(class="uk-width-expand@l uk-text-right")
+                                    a.uk-flex-inline.uk-flex-middle(style="text-decoration:none; color:#1e87f0 !important" href="#modal-editarCliente" uk-toggle)
+                                        img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                        div(class="uk-text-small") Editar
+                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left" style="margin-top:3px")
+                                <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>4444444444
+                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all; margin-top:3px"  uk-tooltip="title: Correo electrónico; pos: left")
+                                <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>dgmarin61@gmail.com
+                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="margin-top:3px" uk-tooltip="title: Fecha de registro; pos: left")
+                                <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>12 de Noviembre de 2020
+                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="margin-top:3px" uk-tooltip="title: Área; pos: left")
+                                <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>Área de cliente
+                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="margin-top:3px" uk-tooltip="title: RFC; pos: left")
+                                <span uk-icon="icon:hashtag; ratio: 0.8" style="margin-right:5px"></span>1234567891486
+                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="margin-top:3px" uk-tooltip="title: Estatus; pos: left")
+                                div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                        
+
+                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                        div.uk-width-1-1.uk-flex-inline.uk-flex-wrap.uk-flex-middle
+                            div(class="uk-width-1-5@m uk-text-truncate") Cotización
+                            div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px") 
+                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                    a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
+                                div#MoreCot
+                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                        a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
+                                div.uk-width-1-1.uk-flex.uk-flex-middle#GenerarCot
+                                    a.uk-flex.uk-flex-middle(href="#" style="width:max-content")
+                                        <span uk-icon="icon:file-pdf; ratio: 0.8" style="margin-right:5px"></span>Generar
+                        div.uk-width-1-1.uk-flex.uk-flex-right.uk-margin-small-top
+                            a.uk-flex.uk-flex-middle(href="#" style="font-size:13px" id="a-MoreCot") 
+                                img(src="/icons/eye.png" style="width:15px;height:15px; margin-right:5px") 
+                                |Ver más 
+                            
+                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                        div.uk-width-1-1.uk-flex-inline.uk-flex-wrap.uk-flex-middle
+                            div(class="uk-width-1-5@m uk-text-truncate") Contratos
+                            div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px") 
+                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                    a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
+                                div#MoreCont
+                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                        a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
+                                div.uk-width-1-1.uk-flex.uk-flex-middle#GenerarCont
+                                    a.uk-flex.uk-flex-middle(href="#modal-adjuntarContrato" uk-toggle style="width:max-content")
+                                        <span uk-icon="icon:upload; ratio: 0.8" style="margin-right:5px"></span>Adjuntar contrato
+                        div.uk-width-1-1.uk-flex.uk-flex-right.uk-margin-small-top
+                            a.uk-flex.uk-flex-middle(href="#" style="font-size:13px" id="a-MoreCont") 
+                                img(src="/icons/eye.png" style="width:15px;height:15px; margin-right:5px") 
+                                |Ver más 
+                        
+            div(class="uk-width-2-5@m uk-flex uk-flex-column")
+                div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
+                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
+                        div.uk-width-1-1 Proyecto ID 47
+                        div.uk-width-1-1.uk-text-truncate.uk-text-emphasis 
+                            a.uk-link-reset(href="#") Nombre del proyecto
+                        div.uk-width-1-1
+                            progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
+                        div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                        div.uk-width-1-1 Estatus
+                        div.uk-width-1-1.uk-flex.uk-flex-middle
+                            div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                        div.uk-width-1-1 Tipo
+                        div.uk-width-1-1.uk-text-truncate.uk-text-emphasis Tipo del proyecto
+                        div.uk-width-1-1 Fecha de inicio
+                        div.uk-width-1-1.uk-text-truncate.uk-text-emphasis 02 de Agosto de 2020
+                        div.uk-width-1-1 Fecha de término
+                        div.uk-width-1-1.uk-text-truncate.uk-text-emphasis 15 de Septiembre de 2021
+                        div.uk-width-1-1 Miembros del proyecto
+                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                            img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                            img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                            img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                            img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                            img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+
+    div(id="modal-adjuntarContrato" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Adjuntar contrato
+            div(style="border: dashed #c7c7c7 1px" class="uk-flex uk-flex-middle uk-padding uk-margin")
+                a(id="archivo" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
+                    <span uk-icon="icon: upload; ratio: 0.8" style="margin-right:5px"></span>Selecciona el archivo
+                input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
+            div(class="uk-width-1 uk-flex-right uk-flex")
+                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+    
+    div(id="modal-editarCliente" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar cliente
+            div.width-1-1.uk-margin-top
+                form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-cliente" action=""  method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
+                        div(class="form-group uk-border-circle")
+                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
+                                <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
+                            input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
+                    div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='on' id="name-edit" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='name' title='Nombre Completo' data-title='Nombre Completo')
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='rfc' id="rfc" name="rfc" value='' onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='rfc' title='RFC' data-title='RFC')
+                    div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                select(id="area" name="area" autocomplete='off' value='' required)
+                                    option(value="active") Área 1
+                                    option(value="inactive") Área 2
+                                label(for='area' title='Área' data-title='Área')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                select(id="status" name="status" autocomplete='off' value='' required)
+                                    option(value="active") Activo
+                                    option(value="inactive") Inactivo
+                                label(for='status' title='Estatus' data-title='Estatus')
+                    div(class="uk-alert-danger uk-margin-remove" uk-alert style="display:none" id="status-alert")
+                        p(class="uk-text-small") Si el estatus del cliente es inactivo, no podrá ser asignado a nuevos proyectos.
+                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top" id="btnEliminar" href="#delete-form" uk-toggle)
+                        <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
+                div(class="uk-width-1 uk-flex-right uk-flex")
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
+    
+
+    div(id="delete-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar al cliente Dragonware?
+                form(class="uk-card-body uk-padding-small" id="form-delete-user" action=""  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editarCliente" uk-toggle data-id="" data-name="") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+    
+    
+    script.
+        jQuery(($) => {
+            $('#a-MoreCot').on('click', function() {
+                 if ($("#MoreCot").is(':visible')) {
+                    $("#MoreCot").hide();
+                    $("#GenerarCot").hide();
+                    $("#a-MoreCot").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
+                }
+                else{
+                    $("#MoreCot").show();
+                    $("#GenerarCot").show();
+                    $("#a-MoreCot").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
+                }
+            });
+
+            $('#a-MoreCont').on('click', function() {
+                 if ($("#MoreCont").is(':visible')) {
+                    $("#MoreCont").hide();
+                    $("#GenerarCont").hide();
+                    $("#a-MoreCont").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
+                }
+                else{
+                    $("#MoreCont").show();
+                    $("#GenerarCont").show();
+                    $("#a-MoreCont").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
+                }
+            });
+
+            $('#status').on('change', function(){
+                if( $('#status').val() == 'active'){
+                    $('#status-alert').hide();
+                }
+                else{
+                    $('#status-alert').show();
+                }
+            });
+        });            
+
+                        
+                    
+        

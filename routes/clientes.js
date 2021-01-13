@@ -14,4 +14,9 @@ router.get('/', isLoggedIn,function(req, res, next) {
     res.render('clientes')
 });
 
+router.get('/cliente', isLoggedIn,function(req, res, next) {
+
+    res.render('cliente')
+});
+
 module.exports = router;
