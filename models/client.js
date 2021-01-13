@@ -18,7 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     phone_number: DataTypes.STRING,
     rfc: DataTypes.STRING,
-    status: DataTypes.ENUM('active','inactive')
+    picture: DataTypes.STRING,
+    status: DataTypes.ENUM('active', 'inactive')
   }, {
     sequelize,
     modelName: 'Client',

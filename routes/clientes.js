@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
-const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
 
@@ -9,9 +9,9 @@ const passport = require('passport');
 const models = require('../models/index');
 
 //AGREGAR USUARIO
-router.get('/', isLoggedIn,function(req, res, next) {
-
-    res.render('clientes')
+router.get('/', isLoggedIn, async function (req, res, next) {
+    const clientes = await models.Client.findAll();
+    res.render('clientes', { clientes })
 });
 
 module.exports = router;
