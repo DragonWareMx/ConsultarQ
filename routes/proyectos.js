@@ -426,10 +426,10 @@ router.get('/agregar', isLoggedIn,async function (req, res, next) {
   return res.render('agregarProyecto', { prestadores,miembros, proTypes})
 });
 
-router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
+router.get('/documentacion/editar/:id', isLoggedIn,function (req, res, next) {
   models.Project.findOne({
     where: {
-      id: 1
+      id: req.params.id
     },
     include: [{
       model: models.Project_Requirement,
@@ -439,6 +439,25 @@ router.get('/documentacion/editar/1', isLoggedIn,function (req, res, next) {
   }).then(project =>{
     res.render('editarDocumentacion',{project});
   }); 
+});
+
+router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
+  const project=await models.Project.findOne({
+    where:{
+      id: req.params.id
+    }
+  })
+  const proTypes=await models.Pro_Type.findAll()
+  const prestadores=await models.Provider.findAll()
+  const miembros = await models.Employee.findAll({
+    include: [{
+      model: models.User
+    }],
+    order: [
+      ['name','ASC']
+    ]
+  })
+  res.render('editarProyecto',{project,proTypes,prestadores,miembros});
 });
 
 router.get('/layouts', isLoggedIn,async function (req, res, next) {
