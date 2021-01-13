@@ -309,5 +309,84 @@ router.post('/update/:id',
         }
 });
 
+//ELIMINAR CONCEPTO
+router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'ud' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
+                }
+            }
+        })
+
+        if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+            //NO TIENE PERMISOS
+            return res.status(403).json([{ msg: 'No tienes permiso de eliminar conceptos.' }])
+        }
+    }
+    catch (error) {
+        return res.status(403).json([{ msg: 'No tienes permiso de eliminar conceptos.' }])
+    }
+
+    //TIENE PERMISO
+
+    //Transaccion
+    const t = await models.sequelize.transaction()
+    try {
+        //se elimina el rol
+        const patypeD = await models.Pa_Type.findOne({ where: { id: req.params.id }, transaction: t })
+
+        await patypeD.destroy({ transaction: t });
+
+        //SE REGISTRA EL LOG
+        //obtenemos el usuario que realiza la transaccion
+        const usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            transaction: t
+        })
+
+        //guardamos los datos del log
+        var dataLog = {
+            UserId: usuario.id,
+            title: "Eliminación de tipo de pago",
+            description: "El usuario " + usuario.email + " ha eliminado el tipo de pago con el id " + patypeD.id + " de nombre " + patypeD.name + " con descripcion " + patypeD.description
+        }
+
+        //guarda el log en la base de datos
+        const log = await models.Log.create(dataLog, { transaction: t })
+
+        //verifica si se elimina el tipo de pago
+        const verPaType = await models.Pa_Type.findOne({ where: { id: patypeD.id }, transaction: t })
+
+        if (verPaType)
+            throw new Error()
+        if (!log)
+            throw new Error()
+
+        res.status(200).json([{ status: 200 }]);
+        // If the execution reaches this line, no errors were thrown.
+        // We commit the transaction.
+        await t.commit()
+    } catch (error) {
+
+        // If the execution reaches this line, an error was thrown.
+        // We rollback the transaction.
+        await t.rollback();
+        return res.status(500).json([{ msg: 'No fue posible eliminar el tipo de pago, vuelva a intentarlo más tarde.' }])
+    }
+});
+
+
 module.exports = router;
 

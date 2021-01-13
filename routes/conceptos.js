@@ -389,7 +389,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         //guarda el log en la base de datos
         const log = await models.Log.create(dataLog, { transaction: t })
 
-        //verifica si se elimina el rol
+        //verifica si se elimina el concepto
         const verConcept = await models.Concept.findOne({ where: { id: conceptD.id }, transaction: t })
 
         if (verConcept)

@@ -99,7 +99,7 @@ block content
                 div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el concepto?
                 form(class="uk-card-body uk-padding-small" id="form-delete-concept" action="/conceptos/delete"  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
-                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar-rol" uk-toggle data-id="" data-name="") Cancelar
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
         //- modal para agregar
         div(id="modal-agregar" uk-modal)
@@ -333,7 +333,7 @@ block content
                 });
 
                 //ajax del form de eliminar
-                $("#form-delete-role").bind("submit",function(){
+                $("#form-delete-concept").bind("submit",function(){
                     // Capturamnos el boton de envío
                     var btnEliminar = $("#btnEliminar");
 
