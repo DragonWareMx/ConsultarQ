@@ -155,7 +155,7 @@ router.post('/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un concepto nuevo con los siguientes datos:\nnombre: " + newConcept.name + ",\ndescripcion: " + newConcept.description +"\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un concepto nuevo con los siguientes datos:\nnombre: " + newConcept.name + "\ndescripcion: " + newConcept.description +"\nCon los permisos:\n"
 
             // var contador = 0
             // for (var key in req.body) {
@@ -266,13 +266,14 @@ router.post('/update/:id',
                 //         permsID.push(permission['id'])
                 //     }
                 // }
-                //se actualiza el rol
+                //se actualiza el concepto
                 const conceptU = await models.Concept.findOne({
                     where: { id: req.params.id }, transaction: t
                 })
 
                 await conceptU.update({
-                    name: req.body.editNombre
+                    name: req.body.editNombre,
+                    description: req.body.editDescripcion
                 }, { transaction: t })
 
                 //await conceptU.setPermissions(permsID, { transaction: t })
@@ -287,7 +288,7 @@ router.post('/update/:id',
                 })
 
                 //descripcion del log
-                var desc = "El usuario " + usuario.email + " ha actualizado el concepto con el id " + conceptU.id + " con los siguientes datos:\nnombre: " + conceptU.name + ",\ndescripcion: " + conceptU.editDescripcion + "\nCon los permisos:\n"
+                var desc = "El usuario " + usuario.email + " ha actualizado el concepto con el id " + conceptU.id + " con los siguientes datos:\nnombre: " + conceptU.name + "\ndescripcion: " + conceptU.editDescripcion + "\nCon los permisos:\n"
 
                 // var contador = 0
                 // for (var key in req.body) {
@@ -389,7 +390,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         const log = await models.Log.create(dataLog, { transaction: t })
 
         //verifica si se elimina el rol
-        const verConcept = await models.User.findOne({ where: { id: conceptD.id }, transaction: t })
+        const verConcept = await models.Concept.findOne({ where: { id: conceptD.id }, transaction: t })
 
         if (verConcept)
             throw new Error()

@@ -176,7 +176,6 @@ block content
                 ocultar_botones();
                 //Aqui se muestra el boton correspondiente
                 $(".editar-" + obj["id"] ).show();
-                $(".eliminar-" + obj["id"] ).show();
 
                 //se agrega el id a la ruta del action
                 $('#form-edit-concept').attr('action', '/conceptos/update/'+obj["id"]);
@@ -232,7 +231,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Cocnepto registrado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span>Concepto registrado con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
