@@ -26,6 +26,14 @@ module.exports = {
       status: {
         type: Sequelize.ENUM('active', 'inactive')
       },
+      ClientAreaId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Client_Areas',
+          key: 'id',
+        },
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

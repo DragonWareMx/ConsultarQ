@@ -75,8 +75,8 @@ router.post('/password/reset', isNotLoggedIn, async (req, res, next) => {
             port: 2525,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: '0d7de5682b88f2', // generated ethereal user
-                pass: '48efee8fe3e966', // generated ethereal password
+                user: 'a03a4d385a4f7d', // generated ethereal user
+                pass: '9baaf1e878972e', // generated ethereal password
             },
         });
 

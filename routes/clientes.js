@@ -10,7 +10,7 @@ const models = require('../models/index');
 
 //AGREGAR USUARIO
 router.get('/', isLoggedIn, async function (req, res, next) {
-    const clientes = await models.Client.findAll();
+    const clientes = await models.Client.findAll({ include: models.Client_Area });
     res.render('clientes', { clientes })
 });
 
