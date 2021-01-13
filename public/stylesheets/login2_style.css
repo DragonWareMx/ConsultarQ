@@ -2,7 +2,6 @@
     background:        url(/img/background.png);
     background-size:   cover;
     background-repeat: no-repeat;
-    background-attachment: fixed;
     display:           flex;
     justify-content:   center;
     flex-direction:    column;
