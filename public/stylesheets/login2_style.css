@@ -74,6 +74,9 @@
     color:         #54dc88;
     margin-bottom: 0px;
 }
+.div-reset-pssw{
+    padding-top: 20px;
+}
 
 /* RESPONSIVE */
 @media(max-width:600px){
@@ -113,5 +116,8 @@
     }
     .text-pssw{
         margin-top: 80px;
+    }
+    .div-reset-pssw{
+        padding-top: 100px;
     }
 }
