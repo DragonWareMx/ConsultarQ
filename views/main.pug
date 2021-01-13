@@ -98,9 +98,16 @@ html
                                             a(href="#") Generar cotización
                                         li(class="category_item")
                                             a(href="#") Agregar clientes
-                                li(class="category_item")
-                                    a(href="/prestadores_externos") Prestadores externos
+                                li(class="uk-parent category_item")
+                                    a(href="#") Prestadores externos
                                         img(src="/icons/userHand.png" class="category_icon")
+                                    ul(class="uk-nav-sub")
+                                        li(class="category_item")
+                                            a(href="/prestadores_externos") Ver prestadores externos
+                                        li(class="category_item")
+                                            span(class="category_subdivider") ACCESOS DIRECTOS
+                                            a(href="/prestadores_externos/areas") Áreas
+                                        
 
 
                 div(class="categories_dropdown")
@@ -179,8 +186,16 @@ html
                                 li(class="category_item")
                                     a(href="#") Generar clientes
                     div(style="width:100%;display:flex;justify-content:center")
-                        a(href="/prestadores_externos")
+                        a()
                             img(src="/icons/userHand.png" class="category_icon")
+                        div(uk-dropdown="pos: right-center; mode: click")
+                            ul(class="uk-nav uk-dropdown-nav")
+                                li(class="category_item")
+                                    a(href="/prestadores_externos") Ver prestadores externos
+                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                                li(class="category_item")
+                                    a(href="/prestadores_externos/areas") Áreas
+                        
                     div(style="width:100%;display:flex;justify-content:center;margin-top:30px")
                         a(href="/logout")
                             img(src="/icons/out.png" class="category_icon")
