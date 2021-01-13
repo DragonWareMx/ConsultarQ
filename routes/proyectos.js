@@ -242,7 +242,7 @@ router.post('/create', upload.any(),
           }
           else return true
         }).withMessage('El Cliente seleccionado no es válido.'),
-        check('miembro')
+        check('input_miembros')
           .custom(async (tipo) => {
             if (!(/\d/.test(tipo))) {
               throw new Error()
@@ -328,7 +328,7 @@ router.post('/create', upload.any(),
         try {
           //se guardan los datos principales
           var datos = {
-            name: req.body.role_name,
+            name: req.body.nombreP,
             start_date: req.body.start_date,
             deadline: req.body.deadline,
             status: req.body.estatus
@@ -372,24 +372,12 @@ router.post('/create', upload.any(),
           })
 
           //descripcion del log
-          var desc = "El usuario " + usuario.email + " ha registrado un rol nuevo con los siguientes datos:\nnombre: " + newRol.name + "\nCon los permisos:\n"
-
-          var contador = 0
-          for (var key in req.body) {
-              if (key != "role_name") {
-                  desc = desc + key + "\n"
-                  contador++
-              }
-          }
-
-          if (contador == 0) {
-              desc = desc + "Ningún permiso"
-          }
+          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.status 
 
           //guardamos los datos del log
           var dataLog = {
               UserId: usuario.id,
-              title: "Registro de rol",
+              title: "Registro de proyecto",
               description: desc
           }
 
@@ -399,7 +387,7 @@ router.post('/create', upload.any(),
           //verifica que se hayan registrado el log y el rol
           if (!log)
               throw new Error()
-          if (!newRol)
+          if (!newProject)
               throw new Error()
 
           res.status(200).json([{ status: 200 }]);
@@ -407,11 +395,10 @@ router.post('/create', upload.any(),
           // We commit the transaction.
           await t.commit()
         } catch (error) {
-
             // If the execution reaches this line, an error was thrown.
             // We rollback the transaction.
             await t.rollback();
-            return res.status(500).json([{ msg: 'No fue posible registrar el rol, vuelva a intentarlo más tarde.' }])
+            return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
         }
 });
 
