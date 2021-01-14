@@ -1,18 +1,18 @@
 extends ../main
 
 block head
-    title ConsultarQ - Tipos de Pago
+    title ConsultarQ - Áreas Prestadores Externos
     link(rel="stylesheet" href="/stylesheets/others.css")
 
 block content
     div(class="uk-container")
         //- titulo y boton de agregar
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-            div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Tipos de Pago
+            div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Áreas Prestadores Externos
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Agregar tipo de pago
+                    div Agregar Área
         //- barra de busqueda
         form(class="uk-flex")
             div(class="uk-search uk-search-default uk-width-expand")
@@ -38,11 +38,11 @@ block content
                                     th(class="uk-text-center") NOMBRE
                                     th(class="uk-text-center") DESCRIPCIÓN
                             tbody
-                                each tipo in tipos
-                                    tr(class="info" uk-toggle="target: #modal-info" data-id=tipo.id)
-                                        td #{tipo.id}
-                                        td #{tipo.name}
-                                        td #{tipo.description}
+                                each area in areas
+                                    tr(class="info" uk-toggle="target: #modal-info" data-id=area.id)
+                                        td #{area.id}
+                                        td #{area.name}
+                                        td #{area.description}
         //- informacion completa
         div(id="modal-info" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -68,14 +68,14 @@ block content
         div(id="modal-editar" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar concepto
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar Área
                     div(tabindex="0")
                         a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar")
                             img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                             div Eliminar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-patype" action="/tipos_de_pago/update" method="POST")
+                form(class="uk-card-body uk-padding-small" id="form-edit-area" action='/prestadores_externos/areas/update' method="POST")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="editId" name="editId" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
@@ -92,11 +92,11 @@ block content
         //- modal para eliminar
         div(id="modal-eliminar" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
-                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar Tipo de Pago
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar Área
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-delete")
-                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el tipo de pago?
-                form(class="uk-card-body uk-padding-small" id="form-delete-patype" action="/tipos_de_pago/delete"  method="POST")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el área?
+                form(class="uk-card-body uk-padding-small" id="form-delete-area" action="/prestadores_externos/areas/delete"  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
@@ -104,10 +104,10 @@ block content
         div(id="modal-agregar" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tipo de pago
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Área
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors")
-                form(class="uk-card-body uk-padding-small" id="form-new-patype" action="/tipos_de_pago/nuevo" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-new-area" action="/prestadores_externos/areas/nuevo" method="POST" enctype="multipart/form-data")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="addNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -132,7 +132,7 @@ block content
         script.
             $('.info').on('click', function() {
                 var userID = $(this).data('id');
-                var users=!{ JSON.stringify(tipos) };
+                var users=!{ JSON.stringify(areas) };
                 console.log(users);
                 for(var key in users){
                     var obj=users[key];
@@ -156,7 +156,7 @@ block content
             //esto de abajo es para al momento de abrir el modal de editar cargar los datos
             $('.editar').on('click', function() {
                 var userID = $(this).data('id');
-                var users=!{ JSON.stringify(tipos) };
+                var users=!{ JSON.stringify(areas) };
                 console.log(users);
                 for(var key in users){
                     var obj=users[key];
@@ -167,7 +167,7 @@ block content
                 }
 
                 //se agrega el id a la ruta del action
-                $('#form-edit-patype').attr('action', '/tipos_de_pago/update/'+obj["id"]);
+                $('#form-edit-area').attr('action', '/prestadores_externos/areas/update/'+obj["id"]);
                 //se agrega el id al boton de eliminar
                 $('#btnEliminar').data('id',obj["id"]);
                 $('#btnEliminar').data('name',obj["name"]);
@@ -180,17 +180,17 @@ block content
 
             //esto de abajo es para al momento de abrir el modal de eliminar
             $('#btnEliminar').on('click', function() {
-                var patypeID = $(this).data('id');
+                var conceptID = $(this).data('id');
                 var name = $(this).data('name');
 
-                $('#text-delete').text('¿Estás seguro de que deseas eliminar el tipo de pago '+ name +'?');
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar el área '+ name +'?');
                 //esto es para poner el id en el action del form
-                $('#form-delete-patype').attr('action', '/tipos_de_pago/delete/'+ patypeID);
+                $('#form-delete-area').attr('action', '/prestadores_externos/areas/delete/'+ conceptID);
             });
 
             $(document).ready(function () {
                 //  ajax del form de nuevo
-                $("#form-new-patype").bind("submit", function() {
+                $("#form-new-area").bind("submit", function() {
                     // Capturamnos el boton de envío
                     var btnAgregar = $("#btnAgregar");
 
@@ -220,7 +220,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Tipo de pago registrado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span>Área registrada con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -228,7 +228,7 @@ block content
                             setTimeout(
                             function()
                             {
-                                window.location.href = window.location.origin + '/tipos_de_pago'
+                                window.location.href = window.location.origin + '/prestadores_externos/areas'
                             }, 2000);
                         },
                         error: function(data){
@@ -256,7 +256,7 @@ block content
                 });
 
                 //ajax del form de editar
-                $("#form-edit-patype").bind("submit",function(){
+                $("#form-edit-area").bind("submit",function(){
                     // Capturamnos el boton de envío
                     var btnEditar = $("#btnEditar");
 
@@ -286,7 +286,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Tipo de pago editado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span>Área editada con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -294,7 +294,7 @@ block content
                             setTimeout(
                             function()
                             {
-                                window.location.href = window.location.origin + '/tipos_de_pago'
+                                window.location.href = window.location.origin + '/prestadores_externos/areas'
                             }, 2000);
                         },
                         error: function(data){
@@ -303,7 +303,6 @@ block content
                             * */
                             btnEditar.removeAttr("disabled");
                             $('#errors-edit').css('display', 'block');
-                            console.log(data)
                             var errors = JSON.parse(data.responseText);
                             var errorsContainer = $('#errors-edit');
                             errorsContainer.innerHTML = '';
@@ -323,7 +322,7 @@ block content
                 });
 
                 //ajax del form de eliminar
-                $("#form-delete-patype").bind("submit",function(){
+                $("#form-delete-area").bind("submit",function(){
                     // Capturamnos el boton de envío
                     var btnEliminar = $("#btnEliminar");
 
@@ -353,7 +352,7 @@ block content
                             * */
                             $('#errors-delete').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Tipo de pago eliminado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span>Área eliminada con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -361,7 +360,7 @@ block content
                             setTimeout(
                             function()
                             {
-                                window.location.href = window.location.origin + '/tipos_de_pago'
+                                window.location.href = window.location.origin + '/prestadores_externos/areas'
                             }, 2000);
                         },
                         error: function(data){
@@ -387,5 +386,4 @@ block content
                     // Nos permite cancelar el envio del formulario
                     return false;
                 });
-
             });

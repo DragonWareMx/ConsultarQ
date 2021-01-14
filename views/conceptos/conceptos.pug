@@ -1,7 +1,7 @@
 extends ../main
 
 block head
-    title Conceptos
+    title ConsultarQ - Conceptos
     link(rel="stylesheet" href="/stylesheets/others.css")
 
 block content
@@ -49,10 +49,9 @@ block content
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                     div(tabindex="0")
-                        each concepto in conceptos
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + concepto.id + "" uk-toggle="target: #modal-editar" data-id=concepto.id)
-                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                div Editar
+                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
+                            img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                            div Editar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 form(class="uk-card-body uk-padding-small")
                     div
@@ -61,7 +60,7 @@ block content
                             label(for='info-id' title='Id' data-title='Id')
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="info-nombre" name="info-nombre" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                            label(for='info-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                            label(for='info-nombre' title='Nombre' data-title='Nombre')
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="info-descripcion" name="info-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
                             label(for='info-descripcion' title='Descripción' data-title='Descripción')
@@ -71,39 +70,51 @@ block content
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar concepto
                     div(tabindex="0")
-                        each concepto in conceptos
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar eliminar-" + concepto.id + "" data-id=concepto.id)
-                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                div Eliminar
+                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar" )
+                            img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                            div Eliminar
                 button(class="uk-modal-close-default" type="button" uk-close='')
-                form(class="uk-card-body uk-padding-small")
+                div(id="errors-edit")
+                form(class="uk-card-body uk-padding-small" id="form-edit-concept" action='/conceptos/update' method="POST")
                     div
                         .field.uk-margin-bottom
-                            input(type='text' autocomplete='on' id="edit-id" name="edit-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                            label(for='edit-id' title='Id' data-title='Id')
+                            input(type='text' autocomplete='on' id="editId" name="editId" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='editId' title='Id' data-title='Id')
                         .field.uk-margin-bottom
-                            input(type='text' autocomplete='on' id="edit-nombre" name="edit-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='edit-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                            input(type='text' autocomplete='on' id="editNombre" name="editNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='editNombre' title='Nombre' data-title='Nombre')
                         .field.uk-margin-bottom
-                            input(type='text' autocomplete='on' id="edit-descripcion" name="edit-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='edit-descripcion' title='Descripción' data-title='Descripción')
+                            input(type='text' autocomplete='on' id="editDescripcion" name="editDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='editDescripcion' title='Descripción' data-title='Descripción')
                         div(class="uk-width-1 uk-flex-right uk-flex")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
+        //- modal para eliminar
+        div(id="modal-eliminar" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar Concepto
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el concepto?
+                form(class="uk-card-body uk-padding-small" id="form-delete-concept" action="/conceptos/delete"  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
         //- modal para agregar
         div(id="modal-agregar" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar concepto
                 button(class="uk-modal-close-default" type="button" uk-close='')
-                form(class="uk-card-body uk-padding-small")
+                div(id="errors")
+                form(class="uk-card-body uk-padding-small" id="form-new-concept" action="/conceptos/nuevo" method="POST" enctype="multipart/form-data")
                     div
                         .field.uk-margin-bottom
-                            input(type='text' autocomplete='on' id="add-nombre" name="add-nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='add-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                            input(type='text' autocomplete='on' id="addNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='addNombre' title='Nombre' data-title='Nombre')
                         .field.uk-margin-bottom
-                            input(type='text' autocomplete='on' id="add-descripcion" name="add-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='add-descripcion' title='Descripción' data-title='Descripción')
+                            input(type='text' autocomplete='on' id="addDescripcion" name="addDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='addDescripcion' title='Descripción' data-title='Descripción')
                         div(class="uk-width-1 uk-flex-right uk-flex")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Guardar
@@ -119,11 +130,6 @@ block content
                         span(class="uk-margin-small-left" uk-pagination-next)
         
         script.
-            function ocultar_botones() {
-                $(".editar").hide();
-                $(".eliminar").hide();
-            }
-
             $('.info').on('click', function() {
                 var userID = $(this).data('id');
                 var users=!{ JSON.stringify(conceptos) };
@@ -136,11 +142,9 @@ block content
                     }
                 }
 
-                //Aqui se esconden los botones de editar de los otros modal
-                ocultar_botones();
-                //Aqui se muestra el boton correspondiente
-                $(".editar-" + obj["id"] ).show();
-                $(".eliminar-" + obj["id"] ).show();
+                //se agrega el id al boton de editar
+                $('#btnEdit').data('id',obj["id"]);
+                $('#btnEdit').data('name',obj["name"]);
 
                 //Aqui se empieza a llenar el modal
                 $('#info-id').val(obj["id"]).change();
@@ -162,14 +166,224 @@ block content
                     }
                 }
 
-                //Aqui se esconden los botones de editar de los otros modal
-                ocultar_botones();
-                //Aqui se muestra el boton correspondiente
-                $(".editar-" + obj["id"] ).show();
-                $(".eliminar-" + obj["id"] ).show();
+                //se agrega el id a la ruta del action
+                $('#form-edit-concept').attr('action', '/conceptos/update/'+obj["id"]);
+                //se agrega el id al boton de eliminar
+                $('#btnEliminar').data('id',obj["id"]);
+                $('#btnEliminar').data('name',obj["name"]);
 
                 //Aqui se empieza a llenar el modal
-                $('#edit-id').val(obj["id"]).change();
-                $('#edit-nombre').val(obj["name"]).change();
-                $('#edit-descripcion').val(obj["description"]).change();
+                $('#editId').val(obj["id"]).change();
+                $('#editNombre').val(obj["name"]).change();
+                $('#editDescripcion').val(obj["description"]).change();
+            });
+
+            //esto de abajo es para al momento de abrir el modal de eliminar
+            $('#btnEliminar').on('click', function() {
+                var conceptID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar el concepto '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-concept').attr('action', '/conceptos/delete/'+ conceptID);
+            });
+
+            $(document).ready(function () {
+                //  ajax del form de nuevo
+                $("#form-new-concept").bind("submit", function() {
+                    // Capturamnos el boton de envío
+                    var btnAgregar = $("#btnAgregar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEnviar.text("Enviando"); Para button
+                            btnAgregar.val("Enviando"); // Para input de tipo button
+                            btnAgregar.attr("disabled","disabled");
+                        },
+                        complete: function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnAgregar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Concepto registrado con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/conceptos'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnAgregar.removeAttr("disabled");
+                            $('#errors').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+
+                //ajax del form de editar
+                $("#form-edit-concept").bind("submit",function(){
+                    // Capturamnos el boton de envío
+                    var btnEditar = $("#btnEditar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEditar.text("Enviando"); Para button
+                            btnEditar.val("Enviando"); // Para input de tipo button
+                            btnEditar.attr("disabled","disabled");
+                        },
+                        complete:function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnEditar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Concepto editado con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/conceptos'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnEditar.removeAttr("disabled");
+                            $('#errors-edit').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors-edit');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+
+                //ajax del form de eliminar
+                $("#form-delete-concept").bind("submit",function(){
+                    // Capturamnos el boton de envío
+                    var btnEliminar = $("#btnEliminar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEnviar.text("Enviando"); Para button
+                            btnEliminar.val("Enviando"); // Para input de tipo button
+                            btnEliminar.attr("disabled","disabled");
+                        },
+                        complete:function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnEliminar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors-delete').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Concepto eliminado con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/conceptos'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnEliminar.removeAttr("disabled");
+                            $('#errors-delete').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors-delete');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
             });
