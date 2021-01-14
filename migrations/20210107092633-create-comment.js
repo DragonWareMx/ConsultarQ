@@ -8,6 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      ProjectEmployeeId: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Project_Employees',
+          key: 'id',
+        },
+      },
       comment: {
         type: Sequelize.STRING
       },

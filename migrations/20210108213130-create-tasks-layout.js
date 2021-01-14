@@ -8,6 +8,15 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      ProjectRequirementsLayoutId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Project_Requirements',
+          key: 'id',
+        },
+      },
       unit: {
         type: Sequelize.STRING(10)
       },

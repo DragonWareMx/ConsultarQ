@@ -1,46 +1,69 @@
 extends ../main
 
 block head
-    title ConsultarQ - Proyectos Agregar
+    title ConsultarQ - Proyectos Editar
     link(rel="stylesheet" href="/stylesheets/others.css")
     link(rel="stylesheet" href="/stylesheets/addProyect.css")
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Agregar proyecto
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Editar proyecto
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(href="javascript:history.back()" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
         div(id="errors")
-        form(action="/proyectos/create" id="form-create-project" method="POST" class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" enctype="multipart/form-data" uk-grid)
+        form(action="/proyectos/editar/"+project.id id="form-create-project" method="POST" class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" enctype="multipart/form-data" uk-grid)
             div(class="uk-card uk-card-default uk-card-body uk-padding-remove-top uk-padding-remove-bottom uk-flex uk-flex-wrap")
                 div(class="uk-width-1-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
                     div(class="uk-text-primary uk-text-small") DATOS GENERALES
                     .field.uk-margin-bottom.uk-margin-small-top
-                        input(type='text' autocomplete='off' id="nombreP" name="nombreP" value='' maxlength="255" onchange="this.setAttribute('value', this.value);" required='')
+                        input(type='text' autocomplete='off' id="nombreP" name="nombreP" value=project.name maxlength="255" onchange="this.setAttribute('value', this.value);" required='')
                         label(for='nombreP' title='Nombre del proyecto' data-title='Nombre del proyecto')
                     .field.uk-margin-bottom.uk-margin-small-top
                         select(type='select' id="estatus" name="estatus" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            option(value="activo" selected) Activo
-                            option(value="terminado") Terminado
-                            option(value="cancelado") Cancelado
+                            if(project.status=="ACTIVO")
+                                option(value="activo" selected) Activo
+                                option(value="terminado") Terminado
+                                option(value="cancelado") Cancelado
+                            if(project.status=="TERMINADO")
+                                option(value="activo") Activo
+                                option(value="terminado" selected) Terminado
+                                option(value="cancelado") Cancelado
+                            if(project.status=="CANCELADO")
+                               option(value="activo") Activo
+                                option(value="terminado") Terminado
+                                option(value="cancelado" selected) Cancelado 
                         label(for='estatus' title='Estatus' data-title='Estatus')
                     .field.uk-margin-bottom
-                        input(type='date' id="start_date" name="start_date"  onchange="this.setAttribute('value', this.value);" required)
+                        input(type='date' id="start_date" value=project.start_date name="start_date"  onchange="this.setAttribute('value', this.value);" required)
                         label(for='start_date' title='Fecha de inicio' data-title='Fecha de inicio')
-                    .field.uk-margin-bottom(style="display:none" id="end_date_div")
-                        input(type='date' id="end_date" name="end_date"  onchange="this.setAttribute('value', this.value);")
-                        label(for='end_date' title='Fecha de término' data-title='Fecha de término')
+                    
+                    if(project.end_date)
+                        .field.uk-margin-bottom(id="end_date_div")
+                            input(type='date' id="end_date" value=project.end_date name="end_date"  onchange="this.setAttribute('value', this.value);")
+                            label(for='end_date' title='Fecha de término' data-title='Fecha de término')
+                    else
+                        .field.uk-margin-bottom(style="display:none" id="end_date_div")
+                            input(type='date' id="end_date" value=project.end_date name="end_date"  onchange="this.setAttribute('value', this.value);")
+                            label(for='end_date' title='Fecha de término' data-title='Fecha de término')
                     .field.uk-margin-bottom
-                        input(type='date' id="deadline" name="deadline"  onchange="this.setAttribute('value', this.value);" required)
+                        input(type='date' id="deadline" value=project.deadline  name="deadline"  onchange="this.setAttribute('value', this.value);" required)
                         label(for='start_date' title='Fecha límite' data-title='Fecha límite')
                     .field.uk-margin-bottom.uk-margin-small-top
                         select(type='select' id="tipo" name="tipo" value='' onchange="this.setAttribute('value', this.value);")
-                            option(value="" disabled hidden selected) Seleccionar layout
-                            option(value="0") Ninguno
-                            each tipo in proTypes
-                                option(value=tipo.id ) #{tipo.name}
+                            if(!project.ProTypeId)
+                                option(value="" disabled hidden selected) Seleccionar layout
+                                option(value="0") Ninguno
+                                each tipo in proTypes
+                                    option(value=tipo.id ) #{tipo.name}
+                            else
+                                option(value="0") Ninguno
+                                each tipo in proTypes
+                                    if(project.ProTypeId==tipo.id)
+                                        option(value=tipo.id selected) #{tipo.name}
+                                    else
+                                        option(value=tipo.id) #{tipo.name}
                         label(for='tipo' title='Layout' data-title='Layout')
                     div(class="uk-flex uk-flex-wrap uk-flex-between")
                         div(class="uk-text-primary uk-text-small") PROVEEDORES
@@ -87,7 +110,7 @@ block content
                                 input(type="hidden" id="input_miembros" name="input_miembros")
                     div(class="uk-width-1")
                         div(class="uk-text-secondary uk-text-small uk-margin-small-left" style="margin-bottom:3px;") OBSERVACIONES
-                        textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7")
+                        textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7") #{project.observations}
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-bottom")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
