@@ -23,9 +23,9 @@ block content
                 img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
             div(uk-dropdown="mode: click")
                 ul(class="uk-list")
-                    li(onclick="putSearch('name')" class="uk-dropdown-close") Nombre
-                    li(onclick="putSearch('email')" class="uk-dropdown-close") Correo electrónico
-                    li(onclick="putSearch('phone')" class="uk-dropdown-close") Número de teléfono
+                    li(onclick="putSearch('name')" class="uk-dropdown-close" style="cursor:pointer") Nombre
+                    li(onclick="putSearch('email')" class="uk-dropdown-close" style="cursor:pointer") Correo electrónico
+                    li(onclick="putSearch('phone')" class="uk-dropdown-close" style="cursor:pointer") Número de teléfono
         ul(class="uk-child-width-1-2@s items" uk-grid id="items")
             each usuario in usuarios
                 li(class="item")

@@ -17,6 +17,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
+      resetLink: {
+        type: Sequelize.STRING,
+        default: ''
+      },
       picture: {
         type: Sequelize.STRING
       },

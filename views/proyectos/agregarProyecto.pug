@@ -1,0 +1,251 @@
+extends ../main
+
+block head
+    title ConsultarQ - Proyectos Agregar
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/addProyect.css")
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Agregar proyecto
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="javascript:history.back()" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
+                    img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
+                    div Regresar
+        div(id="errors")
+        form(action="/proyectos/create" id="form-create-project" method="POST" class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" enctype="multipart/form-data" uk-grid)
+            div(class="uk-card uk-card-default uk-card-body uk-padding-remove-top uk-padding-remove-bottom uk-flex uk-flex-wrap")
+                div(class="uk-width-1-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
+                    div(class="uk-text-primary uk-text-small") DATOS GENERALES
+                    .field.uk-margin-bottom.uk-margin-small-top
+                        input(type='text' autocomplete='off' id="nombreP" name="nombreP" value='' maxlength="255" onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='nombreP' title='Nombre del proyecto' data-title='Nombre del proyecto')
+                    .field.uk-margin-bottom.uk-margin-small-top
+                        select(type='select' id="estatus" name="estatus" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            option(value="activo" selected) Activo
+                            option(value="terminado") Terminado
+                            option(value="cancelado") Cancelado
+                        label(for='estatus' title='Estatus' data-title='Estatus')
+                    .field.uk-margin-bottom
+                        input(type='date' id="start_date" name="start_date"  onchange="this.setAttribute('value', this.value);" required)
+                        label(for='start_date' title='Fecha de inicio' data-title='Fecha de inicio')
+                    .field.uk-margin-bottom(style="display:none" id="end_date_div")
+                        input(type='date' id="end_date" name="end_date"  onchange="this.setAttribute('value', this.value);")
+                        label(for='end_date' title='Fecha de término' data-title='Fecha de término')
+                    .field.uk-margin-bottom
+                        input(type='date' id="deadline" name="deadline"  onchange="this.setAttribute('value', this.value);" required)
+                        label(for='start_date' title='Fecha límite' data-title='Fecha límite')
+                    .field.uk-margin-bottom.uk-margin-small-top
+                        select(type='select' id="tipo" name="tipo" value='' onchange="this.setAttribute('value', this.value);")
+                            option(value="" disabled hidden selected) Seleccionar layout
+                            option(value="0") Ninguno
+                            each tipo in proTypes
+                                option(value=tipo.id ) #{tipo.name}
+                        label(for='tipo' title='Layout' data-title='Layout')
+                    div(class="uk-flex uk-flex-wrap uk-flex-between")
+                        div(class="uk-text-primary uk-text-small") PROVEEDORES
+                        div(id="agregar_proveedor" class="uk-flex uk-flex-middle" style="cursor:pointer;")
+                            img(src="/icons/more.png" width="10px" style="margin-right:5px;di")
+                            div(class="uk-text-primary" style="font-size: 12px;line-height: 15px;") Agregar
+                    .field.uk-margin-bottom.uk-margin-small-top
+                        input(type='text' list="proveedores" id="proveedor" name="proveedor" placeholder="Proveedores" onchange="this.setAttribute('value', this.value);")
+                        datalist(id="proveedores")
+                            each prestador in prestadores
+                                option(value=prestador.name)
+                    div(id="lista_proveedores" class="uk-child-width-1")
+                        input(type="hidden" id="input_proveedores" name="input_proveedores")
+                div(class="uk-width-3-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
+                    div(class="uk-width-1 uk-flex uk-flex-wrap")
+                        div(class="uk-width-1-3@m  uk-width-1" style="padding-left:10px;")
+                            div(class="uk-text-primary uk-text-small") DATOS DEL CLIENTE
+                            .field.uk-margin-bottom.uk-margin-small-top
+                                select(type='select' id="cliente" name="cliente" value='' onchange="this.setAttribute('value', this.value);")
+                                    option(value="" disabled hidden selected) Seleccionar cliente
+                                    option(value="0") Cliente 1
+                                    option(value="1") Cliente 2
+                                    option(value="2") Cliente 3
+                                label(for='estatus' title='Estatus' data-title='Estatus')
+                            .field.uk-margin-bottom
+                                input(type='file' multiple id="cotizaciones" name="cotizaciones"  onchange="this.setAttribute('value', this.value);")
+                                label(for='cotizaciones' title='Cotización' data-title='Cotización')
+                            .field.uk-margin-bottom
+                                input(type='file' id="contrato" name="contrato"  onchange="this.setAttribute('value', this.value);")
+                                label(for='contrato' title='Contrato' data-title='Contrato')
+                        div(class="uk-width-2-3@m uk-width-1" style="padding-left:10px;")
+                            div(class="uk-width-1-2 uk-flex uk-flex-between")
+                                div(class="uk-text-primary uk-text-small") MIEMBROS DEL PROYECTO
+                                div(id="agregar_miembro" class="uk-flex uk-flex-middle" style="cursor:pointer;")
+                                    img(src="/icons/more.png" width="10px" style="margin-right:5px;")
+                                    div(class="uk-text-primary" style="font-size: 12px;line-height: 15px;") Agregar
+                            div(class="uk-width-1-2@m uk-width-1")
+                                .field.uk-margin-bottom.uk-margin-small-top
+                                        input(type='text' list="miembros" id="miembro" name="miembro" placeholder="Miembros" onchange="this.setAttribute('value', this.value);")
+                                        datalist(id="miembros")
+                                            each miembro in miembros
+                                                option(value=miembro.name)
+                            div(id="lista_miembros" class="uk-child-width-1")
+                                input(type="hidden" id="input_miembros" name="input_miembros")
+                    div(class="uk-width-1")
+                        div(class="uk-text-secondary uk-text-small uk-margin-small-left" style="margin-bottom:3px;") OBSERVACIONES
+                        textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-bottom")
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button") Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
+
+
+
+
+
+    script.
+        $(document).ready(function () {
+            var arrProveedores=[];
+            var arrMiembros=[];
+            $('#estatus').change(function(){
+                if(this.value=="terminado"){
+                    document.getElementById("end_date_div").style.display="block";
+                    $('#end_date_div').hide().slideDown('fast');
+                    document.getElementById("end_date").required=true;
+                }
+                else{
+                    $('#end_date_div').slideUp("fast");
+                    document.getElementById("end_date").required=false;
+                }
+            });
+            $('#agregar_proveedor').click(function(){
+                var input=$('#proveedor');
+                var proveedores=!{ JSON.stringify(prestadores) };
+                for(var key in proveedores){
+                    var obj=proveedores[key];
+                    if(obj["name"] == input.val()){
+                        if($.inArray(obj["id"],arrProveedores)==-1){
+                            $('#lista_proveedores').append('<div id="'+obj['id']+'p" class="uk-flex uk-flex-middle"><img class="delete_proveedor" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="cursor:pointer"><div class="uk-margin-small-left uk-text-small">'+obj["name"]+'</div></div>');
+                            $('#'+obj["id"]+'p').hide().show('normal');
+                            arrProveedores.push(obj["id"]);
+                            $('#input_proveedores').val(arrProveedores);
+                        }
+                        break;
+                    }
+                }
+            });
+            $(document.body).on('click','.delete_proveedor', function(e) {
+                var id=$(this).data('id');
+                arrProveedores = jQuery.grep(arrProveedores, function(value) {
+                    return value != id;
+                });
+                $('#'+id+'p').slideUp('normal');
+                setTimeout(
+                    function()
+                    {
+                        var div = document.getElementById(id+'p');
+                        div.remove();
+                    },
+                500);
+                $('#input_proveedores').val(arrProveedores);
+            });
+            $('#agregar_miembro').click(function(){
+                var input=$('#miembro');
+                var miembros=!{ JSON.stringify(miembros) };
+                for(var key in miembros){
+                    var obj=miembros[key];
+                    if(obj["name"] == input.val()){
+                        if($.inArray(obj["id"],arrMiembros)==-1){
+                            if(obj.User["picture"]){
+                                $('#lista_miembros').append('<div id="'+obj['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj['id']+'" name="rol'+obj['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj['id']+'" name="rolP'+obj['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#'+obj["id"]+'m').hide().show('slow');
+                            }
+                            else{
+                                $('#lista_miembros').append('<div id="'+obj['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj['id']+'" name="rol'+obj['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj['id']+'" name="rolP'+obj['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#'+obj["id"]+'m').hide().show('slow');
+                            }
+                            arrMiembros.push(obj["id"]);
+                            $('#input_miembros').val(arrMiembros);
+                        }
+                        break;
+                    }
+                }
+            });
+            $(document.body).on('click','.delete_miembro', function(e) {
+                var id=$(this).data('id');
+                arrMiembros = jQuery.grep(arrMiembros, function(value) {
+                    return value != id;
+                });
+                $('#'+id+'m').hide('slow');
+                setTimeout(
+                    function()
+                    {
+                        var div = document.getElementById(id+'m');
+                        div.remove();
+                    },
+                500);
+                $('#input_miembros').val(arrProveedores);
+            });
+
+            //ajax del form de nuevo
+            $("#form-create-project").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Rol creado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/roles'
+                        }, 2000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+        });

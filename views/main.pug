@@ -52,33 +52,16 @@ html
                                     ul(class="uk-nav-sub")
                                         li(class="category_item")
                                             a(href="/caja") Ver caja chica
-                                        //- li(class="category_item")
-                                        //-     a(href="#") Ingresos
-                                        //- li(class="category_item")
-                                        //-     a(href="#") Egresos
-                                        //- li(class="category_item")
-                                        //-     a(href="#") Deducibles
-                                        //- li(class="category_item")
-                                        //-     a(href="#") Historial
                                         li(class="category_item")
                                             span(class="category_subdivider") OTROS
                                             a(href="/conceptos") Conceptos
                                         li(class="category_item")
                                             a(href="/tipos_de_pago") Tipos de pago
-                                        //- li(class="category_item")
-                                        //-     span(class="category_subdivider") ACCESOS DIRECTOS
-                                        //-     a(href="/caja/agregar-servicio") Agregar movimiento
                         li(class="category") SERVICIOS
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class="category_item")
                                     a(href="/servicios/") Cartera de servicios
                                         img(src="/icons/package.png" class="category_icon")
-                                    //- ul(class="uk-nav-sub")
-                                    //-     li(class="category_item")
-                                    //-         a(href="/servicios/") Ver cartera de servicios
-                                    //-     li(class="category_item")
-                                    //-         span(class="category_subdivider") ACCESOS DIRECTOS
-                                    //-         a(href="#") Agregar servicio
                                 li(class="category_item")
                                     a(href="/proyectos/activos") Proyectos
                                         img(src="/icons/checklist.png" class="category_icon")
@@ -107,7 +90,7 @@ html
                                         li(class="category_item")
                                             span(class="category_subdivider") ACCESOS DIRECTOS
                                             a(href="/prestadores_externos/areas") Áreas
-                                        
+
 
 
                 div(class="categories_dropdown")
@@ -130,33 +113,14 @@ html
                             ul(class="uk-nav uk-dropdown-nav")
                                 li(class="category_item")
                                     a(href="#") Ver caja chica
-                                li(class="category_item")
-                                    a(href="#") Ingresos
-                                li(class="category_item")
-                                    a(href="#") Egresos
-                                li(class="category_item")
-                                    a(href="#") Deducibles
-                                li(class="category_item")
-                                    a(href="#") Historial
                                 li(class="uk-nav-header category_subdivider") OTROS
                                 li(class="category_item")
                                     a(href="/conceptos") Conceptos
                                 li(class="category_item")
-                                    a(href="/tipos_de_pago") Tipo de pago
-                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
-                                li(class="category_item")
-                                    a(href="#") Agregar movimiento
-
+                                    a(href="/tipos_de_pago") Tipos de pago
                     div(style="width:100%;display:flex;justify-content:center")
-                        a()
+                        a(href="/servicios")
                             img(src="/icons/package.png" class="category_icon")
-                        div(uk-dropdown="pos: right-center; mode: click")
-                            ul(class="uk-nav uk-dropdown-nav")
-                                li(class="category_item")
-                                    a(href="/servicios/") Ver cartera de servicios
-                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
-                                li(class="category_item")
-                                    a(href="/servicios/agregar-servicio") Agregar servicio
                     div(style="width:100%;display:flex;justify-content:center")
                         a()
                             img(src="/icons/checklist.png" class="category_icon")
@@ -195,7 +159,7 @@ html
                                 li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
                                 li(class="category_item")
                                     a(href="/prestadores_externos/areas") Áreas
-                        
+
                     div(style="width:100%;display:flex;justify-content:center;margin-top:30px")
                         a(href="/logout")
                             img(src="/icons/out.png" class="category_icon")

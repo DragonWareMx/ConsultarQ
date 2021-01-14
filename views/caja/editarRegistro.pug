@@ -42,8 +42,8 @@ block content
                     label(for='proyecto' title='Proyecto' data-title='Proyecto')
             div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
                 .field.uk-margin-bottom
-                    input(type='date' autocomplete='on' id="date" name="date" value='' onchange="this.setAttribute('value', this.value);" required='')
-                    label(for='date' title='Fecha de registro' data-title='Fecha de registro')
+                    input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
+                    label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                 .field.uk-margin-bottom
                     select(id="proveedor" name="proveedor" autocomplete='off' value='')
                         option(value="" disabled hidden selected ) Seleccionar
