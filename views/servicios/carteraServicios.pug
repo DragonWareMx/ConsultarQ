@@ -2,6 +2,8 @@ extends ../main
 
 block head
     title ConsultarQ - Servicios
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
 
 block content
     div(class="uk-container")
@@ -95,5 +97,32 @@ block content
                 input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
             div(class="uk-width-1 uk-flex-right uk-flex")
                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+    
+    div(id="modal-agregarServicio" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar servicio
+            div.uk-margin
+                .field.uk-margin-bottom
+                    input(type='text' autocomplete='on' id="name-service" name="name-service" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    label(for='name' title='Nombre del servicio' data-title='Nombre del servicio')
+                div Descripción
+                div(id="editor" style="resize:none !important")
+                    b Elaboración de:
+                    ul
+                        li Complete la información del servicio  
+                script.
+                    CKEDITOR.replace( 'editor' );
+                    $('#modal-agregarServicio').modal('attach events', '.btn-close-modal').modal('show');
+                    var ckeOptions = {
+                        entities: false,
+                        htmlEncodeOutput: false,
+                        htmlDecodeOutput: true
+                    }
+
+                    CKEDITOR.replace('message', ckeOptions);
+                    CKEDITOR.config.extraPlugins = 'justify';
+            div(class="uk-width-1 uk-flex-right uk-flex")
+                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
             

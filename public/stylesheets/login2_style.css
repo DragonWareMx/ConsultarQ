@@ -1,6 +1,7 @@
 .body-login{
     background:        url(/img/background.png);
     background-size:   cover;
+    position: absolute;
     background-repeat: no-repeat;
     display:           flex;
     justify-content:   center;
@@ -34,7 +35,7 @@
     background:    #DBDBDC;
     border:        none;
     border-radius: 5px;
-    outline: none; 
+    outline: none;
     color:         #999999;
     font-family:  'Montserrat';
     font-style:    normal;
@@ -48,7 +49,7 @@
     cursor:     pointer;
     color:      white;
     transition: all ease-in-out 0.25s;
-    outline: none; 
+    outline: none;
 }
 .div-copy, .img-logo-responsive{
     display: none;
@@ -56,16 +57,32 @@
 .txt-alert-login{
     font-style:    normal;
     font-weight:   normal;
-    font-size:     13px;
+    font-size:     12px !important;
+    margin-top: 0px !important;
+    margin-bottom: 2px !important;
     line-height:   16px;
     color:         #DC5454;
     margin-bottom: 0px;
 }
 
+.txt-success-login{
+    font-style:    normal;
+    font-weight:   normal;
+    font-size:     12px !important;
+    margin-top: 0px !important;
+    margin-bottom: 2px !important;
+    line-height:   16px;
+    color:         #54dc88;
+    margin-bottom: 0px;
+}
+.div-reset-pssw{
+    padding-top: 20px;
+}
+
 /* RESPONSIVE */
 @media(max-width:600px){
     .body-login{
-        background:white; 
+        background:white;
     }
     .div-blue-logo img, .div-blue-logo div, .div-blue-logo{
         display: none !important;
@@ -100,5 +117,8 @@
     }
     .text-pssw{
         margin-top: 80px;
+    }
+    .div-reset-pssw{
+        padding-top: 100px;
     }
 }

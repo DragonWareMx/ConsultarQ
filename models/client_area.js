@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Client_Area.hasMany(models.Client)
     }
   };
   Client_Area.init({

@@ -20,8 +20,19 @@ module.exports = {
       rfc: {
         type: Sequelize.STRING
       },
+      picture: {
+        type: Sequelize.STRING
+      },
       status: {
-        type: Sequelize.ENUM('active','inactive')
+        type: Sequelize.ENUM('active', 'inactive')
+      },
+      ClientAreaId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Client_Areas',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,

@@ -1,85 +1,73 @@
 extends ../main
 
 block head
-    title ConsultarQ - Crear Usuario
-
+    title ConsultarQ - Directorio de clientes
+    link(rel="stylesheet" href="/stylesheets/others.css")
 block content
     div(class="uk-container")
-        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Directorio de clientes
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="uk-text-left uk-text-large uk-text-bold uk-text-primary uk-margin-bottom") Directorio de clientes
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake")
-                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                a(href="/servicios/agregar-servicio" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-animation-fast")
+                    img(src="/img/iconos/more.png" style="width:20px;height:20px;margin-top:3px;" class="uk-margin-small-right")
                     div Agregar cliente
-    
-        div(class="uk-child-width-1-2 uk-grid")
-            div(id="card-conteiner" class="uk-padding-small") 
-                div(class="uk-card uk-card-default ")
-                    div(class="uk-card-body uk-padding-small")
-                        div(id="row1" class="uk-flex")
-                            div(id="img" class="uk-padding-small")
-                                img(class="uk-border-circle uk" width="100" height="100" src="/img/iconos/default.png")
-                            div(id="datosClient" class="uk-flex uk-flex-column uk-padding-small") 
-                                div(id="name" class="uk-text-bold uk-text-large")
-                                    |Oscar Quevedo  &nbsp;
-                                    span(class="uk-label uk-label-success uk-text-small") Activo
-                                div(id="phone") 
-                                    img(width="15" height="15" src="/icons/phone.png") 
-                                    |&nbsp;4325980444
-                                div(id="mail")
-                                    img(width="15" height="15" src="/icons/mail.png") 
-                                    |&nbsp;oskiq@micasa.mx
-                                div(id="date-area") 
-                                    img(class="uk-padding-right-small" width="15" height="15" src="/icons/dateGray.png")
-                                    |&nbsp;16/12/2020 &nbsp;
-                                    img(class="uk-padding-rigth-small" width="10" height="10" src="/icons/card.png")
-                                    |&nbsp;Área
-                            a(class="uk-text-right uk-margin-auto-left uk-margin-remove-right uk-flex-inline uk-flex uk-text-primary uk-link-heading uk-animation-shake")
-                                img(src="/icons/edit.png" style="width:15px;height:15px;margin-top:3px" class="uk-margin-small-right")
-                                div Editar
-                        div(id="row2")
-                            div(id="cotizacion" class="uk-flex uk-flex-top") 
-                                div(class="uk-text-bold uk-margin-right") Cotización
-                                div(class="uk-text-small uk-margin-left") cotizacion.pdf &nbsp;
-                                    img(width="10" src="/icons/pdf.png")
-                            div(id="contratos" class="uk-flex uk-flex-top") 
-                                div(class="uk-text-bold uk-margin-right") Contratos
-                                div(class="uk-text-small uk-margin-left") contratonumero.pdf &nbsp;
-                                    img(width="10" src="/icons/pdf.png")
-                    div(class="uk-card-footer uk-padding-small ")
-                        div(class="uk-flex uk-flex-row")
-                            div(class="uk-width-3-4 uk-flex-inline")
-                                div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Proyecto
-                                div(class="uk-text-small uk-text-default") Colegio Novel
-                            div(class="uk-flex uk-flex-inline uk-flex-middle uk-width-1-4")
-                                div(class="uk-text-small uk-text-muted") Estatus:
-                                span(class="uk-label uk-label-success uk-text-small uk-margin-left") Activo
-                        div(style="uk-flex-inline uk-grid")
-                            progress( id="js-progressbar" class="uk-progress uk-width-expand" value="98" max="100")
-                            div(class="uk-width-auto uk-text-small") Progreso 60%                
-                                    //-     div(class="uk-text-small") Progreso 60%
-                                    //-     
-                                    //- div(class="uk-width-1-4@l uk-flex uk-flex-row")
-                                    //-     div(class="uk-text-small uk-text-muted") Estatus:
-                                    //-     span(class="uk-label uk-label-success uk-text-small") Activo
-                                    //-     div(style="flex-basis:100%")
-                                    //-     
-                                    //-     progress( id="js-progressbar" class="uk-progress" value="60" max="100")
-                        div
-                            div(class="uk-text-muted uk-margin-remove-top uk-margin-right" style="margin-bottom:5px") Miembros del proyecto
-                        div(class="uk-flex uk-flex-inline")
-                            img(class="uk-border-circle uk uk-margin-right" width="35" height="35" src="/img/iconos/default.png")
-                            img(class="uk-border-circle uk uk-margin-right" width="35" height="35" src="/img/iconos/default.png")
+        -function prettyDate(dateString){
+                //if it's already a date object and not a string you don't need this line:
+                -var date = new Date(dateString);
+                -var d = date.getDate();
+                -var monthNames = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
+                -var m = monthNames[date.getMonth()];
+                -var y = date.getFullYear();
+                -return d+' '+m+' '+y;
+        -}
+        div(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid)
+            each client in clientes
+                div
+                    div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
+                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
+                            div(class="uk-width-auto@m")
+                                if client.picture
+                                    img(src="/uploads/clients/"+client.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                                else
+                                    img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                            div(class="uk-width-expand@m")
+                                div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
+                                    div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") #{client.name}
+                                    div(class="uk-width-expand@l uk-text-right")
+                                        a.uk-flex-inline.uk-flex-middle(style="text-decoration:none; color:#1e87f0 !important")
+                                            img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                            div(class="uk-text-small") Editar
+                                div.uk-width-1-1.uk-flex.uk-flex-middle
+                                    <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>#{client.phone_number}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all")
+                                    <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>#{client.email}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle
+                                    <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>#{prettyDate(client.createdAt)}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle
+                                    <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>#{client.Client_Area.name}
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div(class="uk-width-1-5@m") Cotización
+                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                    a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div(class="uk-width-1-5@m") Contratos
+                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                    a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+
+                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
+                            div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+                                div(class="uk-width-1-5@m uk-text-truncate") Proyecto
+                                div(class="uk-width-4-5@m uk-text-emphasis")
+                                    div Nombre del proyecto
+                                    div.uk-width-1-1
+                                        progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
+                                    div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                            div(class="uk-width-1-5@m") Estatus
+                            div(class="uk-width-4-5@m btn-status-active") ACTIVO
 
 
-
-
-            
-
-        //- each usuario in usuarios
-        //- uk-grid (papá) e hijos uk-width-n-n
-        //- uk-width-auto
-        //- uk-width-expand
-        //- para responsivo al width al final @s/m/l/xl
-        //- Oscar ya tiene un modal en agregar usuario
-        //- Leo tiene madrecita de avance en usuarios o ver usuarios
+        script.
+            $(document).ready(function(){
+                var clientes=!{ JSON.stringify(clientes) };
+                console.log(clientes);
+            })

@@ -31,6 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     picture: {
       type: DataTypes.STRING
     },
+    resetLink: {
+      type: DataTypes.STRING
+    },
     status: {
       type: DataTypes.ENUM('active', 'inactive'),
       defaultValue: 'active',

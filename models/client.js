@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Client.belongsTo(models.Client_Area);
       Client.hasMany(models.Project)
     }
   };
@@ -19,7 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     phone_number: DataTypes.STRING,
     rfc: DataTypes.STRING,
-    status: DataTypes.ENUM('active','inactive')
+    picture: DataTypes.STRING,
+    status: DataTypes.ENUM('active', 'inactive')
   }, {
     sequelize,
     modelName: 'Client',

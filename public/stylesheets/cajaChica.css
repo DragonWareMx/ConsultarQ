@@ -25,6 +25,7 @@
     background-color: #DBDBDC;
     transition: all ease-in 0.25s; 
 }
+
 .button-caja:hover{
     cursor: pointer;
 }
@@ -46,10 +47,95 @@
     color: black;
     text-transform: initial;
 }
+.btn-filtro-date{
+    width:30%;
+}
+.circle-caja{
+    width: 90px !important;
+    height: 90px !important;
+}
+.circle-caja:before{
+    width: 90% !important;
+    height: 90% !important;
+    left: 4.25% !important;
+    top:4.2% !important;
+}
 
+@media(max-width:1450px){
+    .circle-caja{
+        width: 90px !important;
+        height: 80px !important;
+    }
+}
+@media(max-width:1300px){
+    .button-caja{
+        font-size: 12px !important;
+    }
+    .circle-caja{
+        width: 90px !important;
+        height: 70px !important;
+    }
+}
+@media(max-width:1250px){
+    .circle-caja{
+        width: 90px !important;
+        height: 60px !important;
+    }
+}
+@media(max-width:1200px){
+    .btn-filtro-date{
+        width: 100% !important;
+        margin-bottom: 5px;
+    }
+    .circle-caja{
+        width: 90px !important;
+        height: 90px !important;
+    }
+}
 @media(max-width:960px){
     .div-info-nex-caja{
         padding-bottom: 0px;
         border-bottom: solid 1px rgb(236, 236, 236);
+    }
+    .btn-filtro-date{
+        width: 30% !important;
+        margin-bottom: 0px;
+    }
+    .btn-agregarRegistro{
+        width: 30% !important;
+        margin-right:35%;
+        margin-left: 35%;
+    }
+    .div-year-res{
+        display: none !important;
+    }
+    .div-canvas-historial {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .circle-caja{
+        width: 120px !important;
+        height: 120px !important;
+    }
+    .div-proyectos-inicio{
+        width: 100% !important;
+        background-color: pink;
+        margin-left: 0px;
+        padding-left: 0px;
+    }
+}
+@media(max-width:500px){
+    .btn-agregarRegistro{
+        width: 50% !important;
+        margin-right:25%;
+        margin-left: 25%;
+    }
+}
+@media(max-width:400px){
+    .btn-agregarRegistro{
+        width: 100% !important;
+        margin-right:0%;
+        margin-left: 0%;
     }
 }

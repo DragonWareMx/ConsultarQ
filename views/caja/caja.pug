@@ -4,6 +4,8 @@ block head
     title ConsultarQ - Caja chica
     link(rel="stylesheet" href="/stylesheets/others.css")
     link(rel="stylesheet" href="/stylesheets/cajaChica.css")
+    link(rel="stylesheet" href="/stylesheets/oProgressBar.css")
+    link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
     <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
     
@@ -12,21 +14,22 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Caja chica
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(href="/caja/agregar-registro" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
+                a(href="#modal-agregarRegistro" uk-toggle class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar registro
         div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-            div(class="uk-grid-small uk-child-width-expand@s uk-width-1-1 uk-flex uk-flex-wrap-reverse" uk-height-match="target: > div > .uk-card" uk-grid)
+            div(class="uk-grid-small uk-child-width-expand@m uk-width-1-1 uk-flex uk-flex-wrap-reverse" uk-height-match="target: > div > .uk-card" uk-grid)
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center") 
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Ingresos
                                 img(src="/icons/money.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") 578 registros
-                            a(class=" uk-text-center" href="/caja/agregar-registro"  style="width:100% !important; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
-                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                        div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle uk-padding-remove uk-margin-small-top")
+                            div(class="progress--circle circle-caja progress--100" style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/ingresos" class="uk-flex  uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -36,10 +39,11 @@ block content
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Egresos
                                 img(src="/icons/moneyLess.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") 324 registros
-                            a(class=" uk-text-center" href="/caja/agregar-registro"  style="width:100% !important; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                            div(class="progress--circle circle-caja progress--100" style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/egresos" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -49,10 +53,11 @@ block content
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Deducibles
                                 img(src="/icons/doc.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") 178 registros
-                            a(class=" uk-text-center" href="/caja/agregar-registro"  style="width:100% !important; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                             
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            img(src="/icons/circle.png" style="width:84px; height:84px; ")
+                            div(class="progress--circle circle-caja progress--100" style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/deducibles" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -60,11 +65,11 @@ block content
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap" style="padding:8px")
                         div(style="color:#222238; font-weight:500") FILTRAR INFORMACIÓN
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top" style="justify-content:space-between")
-                            div(class="" style="width:30%")
+                            div(class="btn-filtro-date" style="")
                                 button(class="button-caja uk-width-1-1" style="margin-right:5px") Año
-                            div(class="" style="width:30%")
+                            div(class="btn-filtro-date" style="")
                                 button(class="button-caja uk-width-1-1" style="") Mes
-                            div(class="" style="width:33%")
+                            div(class="btn-filtro-date" style="width:33%")
                                 button(class="button-caja uk-width-1-1" style="") Quincena
                         div(class="uk-width-1-1 uk-margin-small-top")
                             select(class="uk-select uk-width-1-1 uk-remove-padding" style="font-size:14px; ")
@@ -74,10 +79,10 @@ block content
                                 option Proyecto 3
                         div(class="uk-width-1-1 uk-flex uk-flex-center uk-margin-small-top")
                             button(class="button-caja button-caja-s uk-width-1-2" style="") Buscar
-            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;")
-                div(class="uk-width-3-4@s uk-padding-remove")
+            div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;" uk-height-match="target: > div > .uk-card")
+                div(class="uk-width-3-4@m uk-padding-remove")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-small")
-                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle ")
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-align-center") 
                             a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;") 
                                 <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF 
@@ -88,7 +93,7 @@ block content
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="color:#222238") Quincena 1
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center") Nombre del proyecto
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
-                            div(class="uk-width-3-5@m" style="") 
+                            div(class="uk-width-3-5@l" style="") 
                                 <canvas id="chart-general" width="400" height="250"></canvas>
                                 script.
                                     var ctx = document.getElementById('chart-general');
@@ -127,17 +132,17 @@ block content
                                             } 
                                         } 
                                     });
-                            div(class="uk-width-2-5@m " style="padding:6px;")
+                            div(class="uk-width-2-5@l " style="padding:6px;")
                                 div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
                                     div(class="uk-width-1-5@m uk-flex uk-flex-center")
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
-                                            div(class="uk-width-1-3@m" style="color:#222238") Contadores
+                                            div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Contadores
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
-                                            div(class="uk-width-1-3@m") 23 registros
+                                            div(class="uk-width-1-3@m" style="margin-right:3px") 23 registros
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                                 
@@ -146,7 +151,7 @@ block content
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
-                                            div(class="uk-width-1-3@m" style="color:#222238") Arquitectos
+                                            div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Arquitectos
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
@@ -159,7 +164,7 @@ block content
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
                                     div(class="uk-width-expand@m uk-flex uk-flex-wrap" style="font-size:13px")
                                         div(class="uk-flex uk-flex-wrap uk-flex-middle uk-width-1-1")
-                                            div(class="uk-width-1-3@m" style="color:#222238") Administr..
+                                            div(class="uk-width-1-3@m uk-text-truncate" style="color:#222238") Administrador
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="60" max="100" style="height:5px !important")
                                         div(class="uk-flex uk-flex-wrap uk-width-1-1")
@@ -172,7 +177,7 @@ block content
                         div(class="uk-width-1-1 uk-margin-small-top" style="border-top:solid 1px #EEEEEE")
                             div(class="uk-margin-top" style="color:#222238") ÚLTIMOS REGISTROS
                             div(class="uk-margin-small-top uk-overflow-auto uk-width-1-1")
-                                table.uk-table.uk-table-small.table-caja.uk-table-middle
+                                table.uk-table.uk-table-small.table-caja.uk-table-middle.uk-table-responsive
                                     thead
                                         tr
                                             th ID
@@ -227,7 +232,7 @@ block content
                                             th Concepto 1
                                             th $9,000   
                     div(class="uk-card uk-card-default uk-card-body uk-margin-top uk-padding-small")
-                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle ")
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-align-center") 
                             a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;") 
                                 <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF 
@@ -277,7 +282,7 @@ block content
                                             } 
                                         } 
                                     });
-                            div(class="uk-width-2-5@m " style="padding:10px;")
+                            div(class="uk-width-2-5@m div-canvas-historial" style="padding:10px;")
                                 <canvas id="chart-historial-dona" width="" height=""></canvas>
                                 script.
                                     var ctx = document.getElementById('chart-historial-dona');
@@ -301,11 +306,11 @@ block content
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                                 a(href="/caja/historial" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
                                     <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial completo
-                div(class="uk-width-expand")
-                    div(class="uk-card uk-card-default uk-card-body uk-padding-remove" style="height:680px")
+                div(class="uk-width-expand@m div-year-res")
+                    div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px") 
                             a(uk-icon="icon: chevron-left")
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2020
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2020 (%)
                             a(uk-icon="icon: chevron-right")
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                             <canvas id="chart-year-pie" width="400px" height=""></canvas>
@@ -330,7 +335,7 @@ block content
                                     }
                                 });
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") INGRESOS
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") INGRESOS (%)
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                         <canvas id="chart-ingresos-dona" width="400px" height=""></canvas>
                         script.
@@ -355,7 +360,7 @@ block content
                                 }
                             });
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") EGRESOS
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") EGRESOS (%)
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                         <canvas id="chart-egresos-dona" width="400px" height=""></canvas>
                         script.
@@ -378,5 +383,63 @@ block content
                                     
                                 }
                             });
+                        div.uk-padding.uk-text-small.uk-text-center Principales ingresos y egresos del año.
+            
+            div(id="modal-agregarRegistro" uk-modal class="uk-modal-container")
+                div(class="uk-modal-dialog uk-modal-body")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar registro
+                    div(class="uk-width-1-1@s uk-flex uk-flex-wrap uk-padding-remove uk-margin")
+                        div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+                            .field.uk-margin-bottom
+                                select(id="type" name="type" autocomplete='off' value='')
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Ingreso
+                                    option(value="1") Engrero
+                                label(for='type' title='Tipo de movimiento' data-title='Tipo de movimiento')
+                            .field.uk-margin-bottom
+                                select(id="concepto" name="concepto" autocomplete='off' value='')
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Concepto 1
+                                    option(value="1") Concepto 2
+                                label(for='concepto' title='Concepto' data-title='Concepto')
+                            .field.uk-margin-bottom
+                                select(id="pago" name="pago" autocomplete='off' value='')
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Efectivo
+                                    option(value="1") Tarjeta
+                                label(for='pago' title='Tipo de pago' data-title='Tipo de pago')
+                            .field.uk-margin-bottom
+                                select(id="proyecto" name="proyecto" autocomplete='off' value='')
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Proyecto 1
+                                    option(value="1") Proyecto 2
+                                label(for='proyecto' title='Proyecto' data-title='Proyecto')
+                        div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+                            .field.uk-margin-bottom 
+                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
+                                label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
+                            .field.uk-margin-bottom
+                                select(id="proveedor" name="proveedor" autocomplete='off' value='')
+                                    option(value="" disabled hidden selected ) Seleccionar
+                                    option(value="0") Proveedor 1
+                                    option(value="1") Proveedor 2
+                                label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor') 
+                            .uk-margin-bottom
+                                <div class="uk-grid-small uk-child-width-auto uk-flex uk-flex-middle uk-flex-wrap uk-grid"">
+                                    <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="radio2" checked> Deducible</label>
+                                    <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="radio2"> No deducible</label>
+                                </div>
+                            a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarConcepto" uk-toggle)
+                                <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Nuevo concepto
+                            a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarPago" uk-toggle)
+                                <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Nuevo tipo de pago
+                        div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+                            .field.uk-margin-bottom
+                                input(type='number' autocomplete='on' id="monto" name="monto"  step="100.00" min="0" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='monto' title='Monto total' data-title='Monto total')
+                            textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    div(class="uk-width-1 uk-flex-right uk-flex")
+                        button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
+                        button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
                             
 
