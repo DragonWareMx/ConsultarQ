@@ -14,4 +14,14 @@ router.get('/', isLoggedIn, async function (req, res, next) {
     res.render('clientes', { clientes })
 });
 
+router.get('/cliente', isLoggedIn,function(req, res, next) {
+
+    res.render('cliente')
+});
+
+router.get('/generar-cotizacion', isLoggedIn,function(req, res, next) {
+
+    res.render('generarCotizacion')
+});
+
 module.exports = router;
