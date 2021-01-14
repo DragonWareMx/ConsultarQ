@@ -49,10 +49,9 @@ block content
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                     div(tabindex="0")
-                        each tipo in tipos
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar editar-" + tipo.id + "" uk-toggle="target: #modal-editar" data-id=tipo.id)
-                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                div Editar
+                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
+                            img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                            div Editar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 form(class="uk-card-body uk-padding-small")
                     div
@@ -131,10 +130,6 @@ block content
                         span(class="uk-margin-small-left" uk-pagination-next)
         
         script.
-            function ocultar_botones() {
-                $(".editar").hide();
-            }
-
             $('.info').on('click', function() {
                 var userID = $(this).data('id');
                 var users=!{ JSON.stringify(tipos) };
@@ -147,10 +142,9 @@ block content
                     }
                 }
 
-                //Aqui se esconden los botones de editar de los otros modal
-                ocultar_botones();
-                //Aqui se muestra el boton correspondiente
-                $(".editar-" + obj["id"] ).show();
+                //se agrega el id al boton de editar
+                $('#btnEdit').data('id',obj["id"]);
+                $('#btnEdit').data('name',obj["name"]);
 
                 //Aqui se empieza a llenar el modal
                 $('#info-id').val(obj["id"]).change();
@@ -171,11 +165,6 @@ block content
                         break;
                     }
                 }
-
-                //Aqui se esconden los botones de editar de los otros modal
-                ocultar_botones();
-                //Aqui se muestra el boton correspondiente
-                $(".editar-" + obj["id"] ).show();
 
                 //se agrega el id a la ruta del action
                 $('#form-edit-patype').attr('action', '/tipos_de_pago/update/'+obj["id"]);
