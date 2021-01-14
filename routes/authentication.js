@@ -71,12 +71,12 @@ router.post('/password/reset', isNotLoggedIn, async (req, res, next) => {
     } else {
         const token = jwt.sign({ id: user.id }, process.env.RESET_PASSWORD_KEY, { expiresIn: '30min' });
         var transporter = nodemailer.createTransport({
-            host: "smtp.mailtrap.io",
-            port: 2525,
+            host: `${process.env.MAIL_HOST}`,
+            port: `${process.env.MAIL_PORT}`,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: 'a03a4d385a4f7d', // generated ethereal user
-                pass: '9baaf1e878972e', // generated ethereal password
+                user: `${process.env.MAIL_USERNAME}`, // generated ethereal user
+                pass: `${process.env.MAIL_PASSWORD}`, // generated ethereal password
             },
         });
 
