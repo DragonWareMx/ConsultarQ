@@ -445,10 +445,15 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
   const project=await models.Project.findOne({
     where:{
       id: req.params.id
-    }
+    },
+    include:[{
+      model: models.Project_Employee,
+      include:{ model: models.User, include: models.Employee}
+    }]
   })
   const proTypes=await models.Pro_Type.findAll()
   const prestadores=await models.Provider.findAll()
+  const clientes=await models.Client.findAll()
   const miembros = await models.Employee.findAll({
     include: [{
       model: models.User
@@ -457,7 +462,7 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
       ['name','ASC']
     ]
   })
-  res.render('editarProyecto',{project,proTypes,prestadores,miembros});
+  res.render('editarProyecto',{project,proTypes,prestadores,miembros,clientes});
 });
 
 router.get('/layouts', isLoggedIn,async function (req, res, next) {
