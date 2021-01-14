@@ -76,6 +76,10 @@ block content
                             each prestador in prestadores
                                 option(value=prestador.name)
                     div(id="lista_proveedores" class="uk-child-width-1")
+                        each prestador in prestadores
+                            div(id=prestador.id+"p" class="uk-flex uk-flex-middle")
+                                img(class="delete_proveedor" data-id=prestador.id src="/icons/less.png" width="10px" style="cursor:pointer")
+                                div(class="uk-margin-small-left uk-text-small") #{prestador.name}
                         input(type="hidden" id="input_proveedores" name="input_proveedores")
                 div(class="uk-width-3-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
                     div(class="uk-width-1 uk-flex uk-flex-wrap")
@@ -83,11 +87,17 @@ block content
                             div(class="uk-text-primary uk-text-small") DATOS DEL CLIENTE
                             .field.uk-margin-bottom.uk-margin-small-top
                                 select(type='select' id="cliente" name="cliente" value='' onchange="this.setAttribute('value', this.value);")
-                                    option(value="" disabled hidden selected) Seleccionar cliente
-                                    option(value="0") Cliente 1
-                                    option(value="1") Cliente 2
-                                    option(value="2") Cliente 3
-                                label(for='estatus' title='Estatus' data-title='Estatus')
+                                    if(!project.ClientId)
+                                        option(value="" disabled hidden selected) Seleccionar cliente
+                                        each cliente in clientes
+                                            option(value=cliente.id) #{cliente.name}
+                                    else
+                                        each cliente in clientes
+                                            if(cliente.id = project.ClientId)
+                                                option(value=cliente.id selected) #{cliente.name}
+                                            else
+                                                option(value=cliente.id) #{cliente.name}
+                                label(for='cliente' title='Cliente' data-title='Cliente')
                             .field.uk-margin-bottom
                                 input(type='file' multiple id="cotizaciones" name="cotizaciones"  onchange="this.setAttribute('value', this.value);")
                                 label(for='cotizaciones' title='Cotización' data-title='Cotización')
@@ -107,6 +117,20 @@ block content
                                             each miembro in miembros
                                                 option(value=miembro.name)
                             div(id="lista_miembros" class="uk-child-width-1")
+                                each miembro in project.Project_Employees
+                                    div(id=miembro.User.id+"m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500")
+                                        img(class="delete_miembro" data-id=miembro.id src="/icons/less.png" width="10px" style="height:10px;cursor:pointer")
+                                        if(miembro.User.avatar)
+                                            img(src="/uploads/avatar/"+miembro.User.picture class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;")
+                                        else
+                                            img(src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;")
+                                        div(class="uk-margin-small-left uk-text-truncate" style="width:270px;") #{miembro.User.Employee.name}
+                                        div(class="field uk-margin-small-left")
+                                            input(type="text" required id="rol"+miembro.User.id name="rol"+miembro.User.id value="" onchange="this.setAttribute(\'value\', this.value);")
+                                            label(for="rol"+miembro.User.id title="Rol" data-title="Rol")
+                                        div(class="field uk-margin-small-left")
+                                            input(type="number" required id="rolP"+miembro.User.id name="rolP"+miembro.User.id value="" onchange="this.setAttribute(\'value\', this.value);")
+                                            label(for="rolP"+miembro.User.id title="Porcentaje" data-title="Porcentaje")
                                 input(type="hidden" id="input_miembros" name="input_miembros")
                     div(class="uk-width-1")
                         div(class="uk-text-secondary uk-text-small uk-margin-small-left" style="margin-bottom:3px;") OBSERVACIONES
