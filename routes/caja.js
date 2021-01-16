@@ -1,21 +1,30 @@
 var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
-const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
 
 //sequelize models
 const models = require('../models/index');
 
-router.get('/', isLoggedIn, function(req, res, next) {
-    res.render('caja')
+router.get('/', isLoggedIn, async function (req, res, next) {
+    const tipos = await models.Pa_Type.findAll();
+    const conceptos = await models.Concept.findAll();
+    const proyectos = await models.Project.findAll({
+        include: {
+            model: models.Project_Employee,
+            where: { UserId: req.user.id }
+        },
+        where: { status: "activo" }
+    });
+    res.render('caja', { tipos, conceptos, proyectos })
 });
-router.get('/agregar-registro', isLoggedIn, function(req, res, next) {
-    res.render('agregarRegistro') 
-});
-router.get('/editar-registro', isLoggedIn, function(req, res, next) {
-    res.render('editarRegistro') 
+// router.get('/agregar-registro', isLoggedIn, function (req, res, next) {
+//     res.render('agregarRegistro')
+// });
+router.get('/editar-registro', isLoggedIn, function (req, res, next) {
+    res.render('editarRegistro')
 });
 
 
@@ -49,8 +58,8 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                     model: models.Concept
                 }],
                 order: [
-                    ['date','DESC']
-                ], 
+                    ['date', 'DESC']
+                ],
                 where: {
                     T_type: 'egreso'
                 }
@@ -99,8 +108,8 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
                     model: models.Concept
                 }],
                 order: [
-                    ['date','DESC']
-                ], 
+                    ['date', 'DESC']
+                ],
                 where: {
                     T_type: 'ingreso'
                 }
@@ -149,8 +158,8 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
                     model: models.Concept
                 }],
                 order: [
-                    ['date','DESC']
-                ], 
+                    ['date', 'DESC']
+                ],
                 where: {
                     invoice: 1
                 }
@@ -199,7 +208,7 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
                     model: models.Concept
                 }],
                 order: [
-                    ['date','DESC']
+                    ['date', 'DESC']
                 ]
             }).then(transacciones => {
                 return res.render('caja/historial', { transacciones })
@@ -219,4 +228,3 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
 
 
 module.exports = router;
-

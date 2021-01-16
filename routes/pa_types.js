@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
-const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
 
@@ -32,7 +32,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             //TIENE PERMISO DE DESPLEGAR VISTA
             models.Pa_Type.findAll({
                 order: [
-                    ['id','ASC']
+                    ['id', 'ASC']
                 ]
             }).then(tipos => {
                 return res.render('pa_types/pa_types', { tipos })
@@ -82,7 +82,7 @@ router.post('/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso 
+                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso
                     }
                 }
             })
@@ -132,7 +132,7 @@ router.post('/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un tipo de pago nuevo con los siguientes datos:\nnombre: " + editPaType.name + "\ndescripcion: " + editPaType.description +"\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un tipo de pago nuevo con los siguientes datos:\nnombre: " + editPaType.name + "\ndescripcion: " + editPaType.description + "\nCon los permisos:\n"
 
             // var contador = 0
             // for (var key in req.body) {
@@ -162,7 +162,7 @@ router.post('/nuevo',
             if (!editPaType)
                 throw new Error()
 
-            res.status(200).json([{ status: 200 }]);
+            res.status(200).json(editPaType);
             // If the execution reaches this line, no errors were thrown.
             // We commit the transaction.
             await t.commit()
@@ -173,7 +173,7 @@ router.post('/nuevo',
             await t.rollback();
             return res.status(500).json([{ msg: 'No fue posible registrar el tipo de pago, vuelva a intentarlo más tarde.' }])
         }
-        
+
     }
 );
 
@@ -307,7 +307,7 @@ router.post('/update/:id',
             await t.rollback();
             return res.status(500).json([{ msg: 'No fue posible actualizar el tipo de pago, vuelva a intentarlo más tarde.' }])
         }
-});
+    });
 
 //ELIMINAR CONCEPTO
 router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
@@ -389,4 +389,3 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
 
 
 module.exports = router;
-

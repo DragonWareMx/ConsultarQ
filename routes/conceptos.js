@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator/check');
-const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
+const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
 
@@ -55,7 +55,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             //TIENE PERMISO DE DESPLEGAR VISTA
             models.Concept.findAll({
                 order: [
-                    ['id','ASC']
+                    ['id', 'ASC']
                 ]
             }).then(conceptos => {
                 return res.render('conceptos/conceptos', { conceptos })
@@ -105,7 +105,7 @@ router.post('/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso 
+                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso
                     }
                 }
             })
@@ -155,7 +155,7 @@ router.post('/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un concepto nuevo con los siguientes datos:\nnombre: " + newConcept.name + "\ndescripcion: " + newConcept.description +"\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un concepto nuevo con los siguientes datos:\nnombre: " + newConcept.name + "\ndescripcion: " + newConcept.description + "\nCon los permisos:\n"
 
             // var contador = 0
             // for (var key in req.body) {
@@ -185,7 +185,7 @@ router.post('/nuevo',
             if (!newConcept)
                 throw new Error()
 
-            res.status(200).json([{ status: 200 }]);
+            res.status(200).json(newConcept);
             // If the execution reaches this line, no errors were thrown.
             // We commit the transaction.
             await t.commit()
@@ -196,7 +196,7 @@ router.post('/nuevo',
             await t.rollback();
             return res.status(500).json([{ msg: 'No fue posible registrar el concepto, vuelva a intentarlo más tarde.' }])
         }
-        
+
     }
 );
 
@@ -330,7 +330,7 @@ router.post('/update/:id',
             await t.rollback();
             return res.status(500).json([{ msg: 'No fue posible actualizar el concepto, vuelva a intentarlo más tarde.' }])
         }
-});
+    });
 
 //ELIMINAR CONCEPTO
 router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
@@ -411,4 +411,3 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
 });
 
 module.exports = router;
-
