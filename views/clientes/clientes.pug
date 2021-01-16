@@ -11,6 +11,15 @@ block content
                 a(href="#modal-agregarCliente" uk-toggle class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-animation-fast")
                     img(src="/img/iconos/more.png" style="width:20px;height:20px;margin-top:3px;" class="uk-margin-small-right")
                     div Agregar cliente 
+        -function prettyDate(dateString){
+                //if it's already a date object and not a string you don't need this line:
+                -var date = new Date(dateString);
+                -var d = date.getDate();
+                -var monthNames = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
+                -var m = monthNames[date.getMonth()];
+                -var y = date.getFullYear();
+                -return d+' '+m+' '+y;
+        -}
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 span(uk-search-icon type="button")
@@ -26,94 +35,98 @@ block content
                     li(onclick="putSearch('email')" class="uk-dropdown-close" style="cursor:pointer") Correo electrónico
                     li(onclick="putSearch('phone')" class="uk-dropdown-close" style="cursor:pointer") Número de teléfono
         div(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid)
-            div
-                div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
-                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
-                        div(class="uk-width-auto@m")
-                            a(href="/clientes/cliente")
-                                img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px")
-                        div(class="uk-width-expand@m")
-                            div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
-                                div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
-                                    a.uk-link-reset(href="/clientes/cliente") Adrián Leonardo Aguilar Huerta
-                                div(class="uk-width-expand@l uk-text-right")
-                                    a.uk-flex-inline.uk-flex-middle(style="text-decoration:none; color:#1e87f0 !important" href="#modal-editarCliente" uk-toggle)
-                                        img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                        div(class="uk-text-small") Editar
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
-                                <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>4444444444
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
-                                <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>dgmarin61@gmail.com
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Fecha de registro; pos: left")
-                                <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>12 de Noviembre de 2020
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Área; pos: left")
-                                <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>Área de cliente
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
-                                div(class="uk-width-4-5@m btn-status-active") ACTIVO
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                            div(class="uk-width-1-5@m") Cotización
-                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
-                                a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                            div(class="uk-width-1-5@m") Contratos
-                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
-                                a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+            each client in clientes
+                div
+                    div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
+                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
+                            div(class="uk-width-auto@m")
+                                a(href="/clientes/cliente")
+                                    if client.picture
+                                        img(src="/uploads/clients/"+client.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                                    else
+                                        img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                            div(class="uk-width-expand@m")
+                                div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
+                                    div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
+                                        a.uk-link-reset(href="/clientes/cliente") #{client.name}
+                                    div(class="uk-width-expand@l uk-text-right")
+                                        a.uk-flex-inline.uk-flex-middle(style="text-decoration:none; color:#1e87f0 !important" href="#modal-editarCliente" uk-toggle)
+                                            img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                            div(class="uk-text-small") Editar
+                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
+                                    <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>#{client.phone_number}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
+                                    <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>#{client.email}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Fecha de registro; pos: left")
+                                    <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>#{prettyDate(client.createdAt)}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Área; pos: left")
+                                    <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>#{client.Client_Area.name}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
+                                    div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div(class="uk-width-1-5@m") Cotización
+                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
+                                    a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div(class="uk-width-1-5@m") Contratos
+                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                    a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
 
-                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
-                        div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
-                            div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                            div(class="uk-width-4-5@m uk-text-emphasis") 
-                                a.uk-link-reset(href="#") Nombre del proyecto
-                                div.uk-width-1-1
-                                    progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
-                        div(class="uk-width-1-5@m") Estatus
-                        div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                            div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+                                div(class="uk-width-1-5@m uk-text-truncate") Proyecto
+                                div(class="uk-width-4-5@m uk-text-emphasis") 
+                                    a.uk-link-reset(href="#") Nombre del proyecto
+                                    div.uk-width-1-1
+                                        progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
+                                    div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                            div(class="uk-width-1-5@m") Estatus
+                            div(class="uk-width-4-5@m btn-status-active") ACTIVO
                         
-            div
-                div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
-                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
-                        div(class="uk-width-auto@m")
-                            a(href="/clientes/cliente")
-                                img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px")
-                        div(class="uk-width-expand@m")
-                            div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
-                                div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
-                                    a.uk-link-reset(href="/clientes/cliente") Adrián Leonardo Aguilar Huerta
-                                div(class="uk-width-expand@l uk-text-right")
-                                    a.uk-flex-inline.uk-flex-middle(style="text-decoration:none; color:#1e87f0 !important" href="#modal-editarCliente" uk-toggle)
-                                        img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                        div(class="uk-text-small") Editar
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
-                                <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>4444444444
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
-                                <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>dgmarin61@gmail.com
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Fecha de registro; pos: left")
-                                <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>12 de Noviembre de 2020
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Área; pos: left")
-                                <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>Área de cliente
-                            div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
-                                div(class="uk-width-4-5@m btn-status-active") ACTIVO
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                            div(class="uk-width-1-5@m") Cotización
-                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
-                                a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                            div(class="uk-width-1-5@m") Contratos
-                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
-                                a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+            //- div
+            //-     div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
+            //-         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
+            //-             div(class="uk-width-auto@m")
+            //-                 a(href="/clientes/cliente")
+            //-                     img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px")
+            //-             div(class="uk-width-expand@m")
+            //-                 div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
+            //-                     div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
+            //-                         a.uk-link-reset(href="/clientes/cliente") Adrián Leonardo Aguilar Huerta
+            //-                     div(class="uk-width-expand@l uk-text-right")
+            //-                         a.uk-flex-inline.uk-flex-middle(style="text-decoration:none; color:#1e87f0 !important" href="#modal-editarCliente" uk-toggle)
+            //-                             img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+            //-                             div(class="uk-text-small") Editar
+            //-                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
+            //-                     <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>4444444444
+            //-                 div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
+            //-                     <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>dgmarin61@gmail.com
+            //-                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Fecha de registro; pos: left")
+            //-                     <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>12 de Noviembre de 2020
+            //-                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Área; pos: left")
+            //-                     <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>Área de cliente
+            //-                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
+            //-                     div(class="uk-width-4-5@m btn-status-active") ACTIVO
+            //-             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+            //-                 div(class="uk-width-1-5@m") Cotización
+            //-                 div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
+            //-                     a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+            //-             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+            //-                 div(class="uk-width-1-5@m") Contratos
+            //-                 div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+            //-                     a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
 
-                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
-                        div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
-                            div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                            div(class="uk-width-4-5@m uk-text-emphasis") 
-                                div 
-                                a.uk-link-reset(href="#") Nombre del proyecto
-                                div.uk-width-1-1
-                                    progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
-                        div(class="uk-width-1-5@m") Estatus
-                        div(class="uk-width-4-5@m btn-status-active") ACTIVO
+            //-         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+            //-             div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+            //-                 div(class="uk-width-1-5@m uk-text-truncate") Proyecto
+            //-                 div(class="uk-width-4-5@m uk-text-emphasis") 
+            //-                     div 
+            //-                     a.uk-link-reset(href="#") Nombre del proyecto
+            //-                     div.uk-width-1-1
+            //-                         progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
+            //-                     div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+            //-             div(class="uk-width-1-5@m") Estatus
+            //-             div(class="uk-width-4-5@m btn-status-active") ACTIVO
     
     div(id="modal-editarCliente" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
@@ -216,6 +229,11 @@ block content
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
     
     script.
+        $(document).ready(function(){
+            var clientes=!{ JSON.stringify(clientes) };
+            console.log(clientes);
+        })
+
         jQuery(($) => {
             $('#status').on('change', function(){
                 if( $('#status').val() == 'active'){
