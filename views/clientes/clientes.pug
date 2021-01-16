@@ -43,6 +43,7 @@ block content
                 -var y = date.getFullYear();
                 -return d+' '+m+' '+y;
         -}
+        //- listado de todos los clientes
         div(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid)
             each client in clientes
                 div
@@ -96,6 +97,7 @@ block content
                             div(class="uk-width-1-5@m") Estatus
                             div(class="uk-width-4-5@m btn-status-active") ACTIVO
     
+    //- modal edital cliente
     div(id="modal-editarCliente" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar cliente
@@ -144,7 +146,7 @@ block content
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnGuardar" type="submit") Guardar
 
 
-
+    //- modal agregar cliente
     div(id="modal-agregarCliente" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar cliente
@@ -193,7 +195,7 @@ block content
     
     
     
-
+    //- modal eliminar cliente
     div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
@@ -271,76 +273,76 @@ block content
                 }
         }); 
 
+        
+        //- $(document).ready(function () {
+        //-     //ajax del form de nuevo
+        //-     $("#form-new-client").bind("submit",function(){
+        //-         // Capturamnos el boton de envío
+        //-         var btnEnviar = $("#btnEnviar");
 
-        $(document).ready(function () {
-            //ajax del form de nuevo
-            $("#form-new-client").bind("submit",function(){
-                // Capturamnos el boton de envío
-                var btnEnviar = $("#btnEnviar");
+        //-         $.ajax({
+        //-             type: $(this).attr("method"),
+        //-             url: $(this).attr("action"),
+        //-             data: new FormData(this),
+        //-             dataType: "JSON",
+        //-             processData: false,
+        //-             contentType: false,
+        //-             beforeSend: function(data){
+        //-                 /*
+        //-                 * Esta función se ejecuta durante el envió de la petición al
+        //-                 * servidor.
+        //-                 * */
+        //-                 // btnEnviar.text("Enviando"); Para button
+        //-                 btnEnviar.val("Enviando"); // Para input de tipo button
+        //-                 btnEnviar.attr("disabled","disabled");
+        //-             },
+        //-             complete:function(data){
+        //-                 /*
+        //-                 * Se ejecuta al termino de la petición
+        //-                 * */
+        //-                 btnEnviar.val("Enviar formulario");
+        //-             },
+        //-             success: function(data){
+        //-                 /*
+        //-                 * Se ejecuta cuando termina la petición y esta ha sido
+        //-                 * correcta
+        //-                 * */
+        //-                 $('#errors').css('display', 'none');
+        //-                 UIkit.notification({
+        //-                     message: '<span uk-icon=\'icon: check\'></span>Cliente registrado con éxito!',
+        //-                     status: 'success',
+        //-                     pos: 'top-center',
+        //-                     timeout: 2000
+        //-                 });
+        //-                 setTimeout(
+        //-                 function()
+        //-                 {
+        //-                     window.location.href = window.location.origin + '/clientes'
+        //-                 }, 2000);
+        //-             },
+        //-             error: function(data){
+        //-                 /*
+        //-                 * Se ejecuta si la peticón ha sido erronea
+        //-                 * */
+        //-                 btnEnviar.removeAttr("disabled");
+        //-                 $('#errors').css('display', 'block');
+        //-                 var errors = JSON.parse(data.responseText);
+        //-                 var errorsContainer = $('#errors');
+        //-                 errorsContainer.innerHTML = '';
+        //-                 var errorsList = '';
+        //-                 for (var i = 0; i < errors.length; i++) {
+        //-                     //if(errors[i].redirect)
+        //-                         //window.location.href = window.location.origin + '/logout'
+        //-                     errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+        //-                 }
+        //-                 errorsContainer.html(errorsList);
 
-                $.ajax({
-                    type: $(this).attr("method"),
-                    url: $(this).attr("action"),
-                    data: new FormData(this),
-                    dataType: "JSON",
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function(data){
-                        /*
-                        * Esta función se ejecuta durante el envió de la petición al
-                        * servidor.
-                        * */
-                        // btnEnviar.text("Enviando"); Para button
-                        btnEnviar.val("Enviando"); // Para input de tipo button
-                        btnEnviar.attr("disabled","disabled");
-                    },
-                    complete:function(data){
-                        /*
-                        * Se ejecuta al termino de la petición
-                        * */
-                        btnEnviar.val("Enviar formulario");
-                    },
-                    success: function(data){
-                        /*
-                        * Se ejecuta cuando termina la petición y esta ha sido
-                        * correcta
-                        * */
-                        $('#errors').css('display', 'none');
-                        UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente registrado con éxito!',
-                            status: 'success',
-                            pos: 'top-center',
-                            timeout: 2000
-                        });
-                        setTimeout(
-                        function()
-                        {
-                            window.location.href = window.location.origin + '/clientes'
-                        }, 2000);
-                    },
-                    error: function(data){
-                        /*
-                        * Se ejecuta si la peticón ha sido erronea
-                        * */
-                        btnEnviar.removeAttr("disabled");
-                        $('#errors').css('display', 'block');
-                        var errors = JSON.parse(data.responseText);
-                        var errorsContainer = $('#errors');
-                        errorsContainer.innerHTML = '';
-                        var errorsList = '';
-                        for (var i = 0; i < errors.length; i++) {
-                            //if(errors[i].redirect)
-                                //window.location.href = window.location.origin + '/logout'
-                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
-                        }
-                        errorsContainer.html(errorsList);
-
-                        alert("Problemas al tratar de enviar el formulario");
-                    }
-                });
-                // Nos permite cancelar el envio del formulario
-                return false;
-            });
+        //-                 alert("Problemas al tratar de enviar el formulario");
+        //-             }
+        //-         });
+        //-         // Nos permite cancelar el envio del formulario
+        //-         return false;
+        //-     });
         });
 
         
