@@ -8,11 +8,15 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
-//AGREGAR USUARIO
+//CLIENTES
 router.get('/', isLoggedIn, async function (req, res, next) {
     const clientes = await models.Client.findAll({ include: models.Client_Area });
     res.render('clientes', { clientes })
 });
+// router.get('/', isLoggedIn,function(req, res, next) {
+
+//     res.render('clientes')
+// });
 
 router.get('/cliente', isLoggedIn,function(req, res, next) {
 
