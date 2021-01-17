@@ -327,6 +327,20 @@ router.post('/create', upload.any(),
         const t = await models.sequelize.transaction()
         try {
           //se guardan los datos principales
+          var miembros = req.body.input_miembros[0].split(",")
+          var employeeID = []
+
+          console.log(miembros)
+
+          for(var i in miembros){
+            console.log(miembros[i])
+            const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
+            console.log(employee)
+            employeeID.push(employee.id)
+          }
+
+          console.log(employeeID)
+
           var datos = {
             name: req.body.nombreP,
             start_date: req.body.start_date,
@@ -336,7 +350,7 @@ router.post('/create', upload.any(),
 
           //SE GUARDAN LOS NULLABLES
           //tipo de proyecto
-          if(req.body.tipo){
+          if(req.body.tipo && req.body.tipo != 0){
             datos.ProTypeId = req.body.tipo
           }
 
@@ -362,6 +376,10 @@ router.post('/create', upload.any(),
           //GUARDA EL PROYECTO
           const newProject = await models.Project.create(datos, { transaction: t })
 
+          await newProject.setUsers(employeeID, {transaction: t})
+
+          //guarda los empleados relacionados con el proyecto
+
           //SE REGISTRA EL LOG
           //obtenemos el usuario que realiza la transaccion
           const usuario = await models.User.findOne({
@@ -372,7 +390,7 @@ router.post('/create', upload.any(),
           })
 
           //descripcion del log
-          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.status 
+          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status') 
 
           //guardamos los datos del log
           var dataLog = {
@@ -390,11 +408,14 @@ router.post('/create', upload.any(),
           if (!newProject)
               throw new Error()
 
+          console.log(req.body)
+
           res.status(200).json([{ status: 200 }]);
           // If the execution reaches this line, no errors were thrown.
           // We commit the transaction.
           await t.commit()
         } catch (error) {
+          console.log(error)
             // If the execution reaches this line, an error was thrown.
             // We rollback the transaction.
             await t.rollback();

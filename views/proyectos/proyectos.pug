@@ -43,7 +43,7 @@ block content
                         //- NOMBRE, TIPO DE PROYECTO Y ESTATUS
                         div(class="uk-card-header uk-padding-remove uk-flex" style="background:rgba(190, 59, 192, 0.53);")
                             div(class="uk-width-3-5 uk-margin-small-left uk-margin-small-top uk-margin-small-bottom")
-                                div(class="" style="color: #222238;") #{proyecto.name}
+                                div(class="uk-text-truncate" style="color: #222238;") #{proyecto.name}
                                 if proyecto.Pro_Type
                                     div(class="uk-text-small" style="height: 20.8px") #{proyecto.Pro_Type.name}
                                 else
@@ -130,7 +130,7 @@ block content
                         //- MIEMBROS DEL PROYECTO
                         div(class="uk-margin-top uk-margin-small-left uk-text-small") MIEMBROS DEL PROYECTO
                         div(class="uk-width-1 uk-flex uk-flex-wrap")
-                            div(class="uk-width-2-3 uk-flex uk-flex-wrap uk-margin-bottom")
+                            div(class="uk-width-2-3 uk-flex uk-flex-wrap uk-margin-bottom" style="height:43px")
                                 each user , index in proyecto.Users
                                     if user.picture
                                         img(src="/uploads/avatar/"+user.picture uk-tooltip=user.Employee.name width="33px" class="uk-margin-small-left" style="border-radius:50%; height:33px;object-fit:cover;margin-top:10px;")

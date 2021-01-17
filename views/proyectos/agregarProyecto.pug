@@ -35,6 +35,9 @@ block content
                     .field.uk-margin-bottom
                         input(type='date' id="deadline" name="deadline"  onchange="this.setAttribute('value', this.value);" required)
                         label(for='start_date' title='Fecha límite' data-title='Fecha límite')
+                    .field.uk-margin-bottom
+                        input(type='color' value="#3B86D9" id="color" name="color"  onchange="this.setAttribute('value', this.value);"  style="height:50px; padding:10px; background-color:transparent;" required)
+                        label(for='color' title='Color' data-title='Color')
                     .field.uk-margin-bottom.uk-margin-small-top
                         select(type='select' id="tipo" name="tipo" value='' onchange="this.setAttribute('value', this.value);")
                             option(value="" disabled hidden selected) Seleccionar layout
@@ -150,11 +153,11 @@ block content
                     if(obj["name"] == input.val()){
                         if($.inArray(obj["id"],arrMiembros)==-1){
                             if(obj.User["picture"]){
-                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["User"]["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
                                 $('#'+obj["id"]+'m').hide().show('slow');
                             }
                             else{
-                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["User"]["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
                                 $('#'+obj["id"]+'m').hide().show('slow');
                             }
                             arrMiembros.push(obj["User"]["id"]);
@@ -214,7 +217,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Rol creado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Proyecto creado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -222,7 +225,7 @@ block content
                         setTimeout(
                         function()
                         {
-                            window.location.href = window.location.origin + '/roles'
+                            window.location.href = window.location.origin + '/proyectos/activos'
                         }, 2000);
                     },
                     error: function(data){
