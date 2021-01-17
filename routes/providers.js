@@ -54,58 +54,8 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 
 });
 
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//  AREAS DE LOS PRESTADORES EXTERNOS
-//  consulta todas las areas de los prestadores externos
-router.get('/areas', isLoggedIn, async (req, res, next) => {
-
-    try{
-        //VERIFICACION DEL PERMISO
-
-        //obtenemos el usuario, su rol y su permiso
-        let usuario = await models.User.findOne({
-            where: {
-                id: req.user.id
-            },
-            order: [
-                ['status', 'ASC']
-            ],
-            include: {
-                model: models.Role,
-                include: {
-                    model: models.Permission,
-                    where: {name: 'ur'}
-                }
-            }
-        })
-
-        if(usuario && usuario.Role && usuario.Role.Permissions){
-            //TIENE PERMISO DE DESPLEGAR VISTA
-            models.Provider_Area.findAll({
-                order: [
-                    ['id', 'ASC']
-                ]
-            }).then(areas => {
-                    return res.render('prestadores_externos/areas', { areas })
-            });
-        }
-        else{
-            //NO TIENE PERMISOS
-            return res.status(403).json(403)
-        }
-    }
-    catch(error){
-        return res.status(403).json(403)
-    }
-
-});
-
-//AGREAGAR AREA
-router.post('/areas/nuevo',
+//AGREGAR prestador
+router.post('/nuevo',
     [
         check('add_nombre')
             .not().isEmpty().withMessage('Nombre es un campo requerido.')
@@ -457,5 +407,53 @@ router.post('/delete/:id', isLoggedIn,
             return res.status(500).json([{ msg: 'No fue posible eliminar el prestador, vuelva a intentarlo más tarde.' }])
         }
     });
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  AREAS DE LOS PRESTADORES EXTERNOS
+//  consulta todas las areas de los prestadores externos
+router.get('/areas/nuevo', isLoggedIn, async (req, res, next) => {
+
+    try{
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            order: [
+                ['status', 'ASC']
+            ],
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: {name: 'ur'}
+                }
+            }
+        })
+
+        if(usuario && usuario.Role && usuario.Role.Permissions){
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            models.Provider_Area.findAll({
+                order: [
+                    ['id', 'ASC']
+                ]
+            }).then(areas => {
+                    return res.render('prestadores_externos/areas', { areas })
+            });
+        }
+        else{
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch(error){
+        return res.status(403).json(403)
+    }
+
+});
 
 module.exports = router;

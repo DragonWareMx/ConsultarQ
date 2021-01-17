@@ -1,0 +1,399 @@
+extends ../main
+
+block head
+    title ConsultarQ - Áreas Directorio de Clientes
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/oProgressBar.css")
+    link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
+
+block content
+    div(class="uk-container")
+        //- titulo y boton de agregar
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+            div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Áreas Directorio de Clientes
+            div(class="uk-flex uk-flex-between uk-flex-wrap uk-width-1-3@m uk-width-1 uk-margin-small-bottom uk-text-small o-proyect-menu-hide")
+                a(href="/clientes" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") CLIENTES
+                a(href="/clientes/areas" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none; border-bottom: 2px solid #3B86D9; padding-bottom:7px;") ÁREAS
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
+                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Agregar Área
+        //- barra de busqueda
+        form(class="uk-flex")
+            div(class="uk-search uk-search-default uk-width-expand")
+                a(href="#" uk-search-icon)
+                input(class="uk-search-input" type="search" placeholder="Buscar...")
+            //- boton de filtrar
+            button(class="uk-button uk-button-primary uk-width-auto" href="#")
+                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
+            div(uk-dropdown="mode: click")
+                ul(class="uk-list")
+                    li() sugerencia 1
+                    li() sugerencia 2
+                    li() sugerencia 3
+
+        div(class="o-proyect-menu-show uk-width-1")
+            a(href="/clientes" class="o-menu-selected") CLIENTES
+            a(href="/clientes/areas" class="") ÁREAS
+        
+        //- contenido
+        div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
+            div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
+                div(class="uk-card-body uk-text-center")
+                    div(class="uk-overflow-auto uk-margin-top")
+                        table(class="uk-table uk-table-divider")
+                            thead
+                                tr
+                                    th(class="uk-text-center") ID
+                                    th(class="uk-text-center") NOMBRE
+                                    th(class="uk-text-center") DESCRIPCIÓN
+                            tbody
+                                each area in areas
+                                    tr(class="info" uk-toggle="target: #modal-info" data-id=area.id)
+                                        td #{area.id}
+                                        td #{area.name}
+                                        td #{area.description}
+        //- informacion completa
+        div(id="modal-info" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
+                    div(tabindex="0")
+                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
+                            img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                            div Editar
+                button(class="uk-modal-close-default" type="button" uk-close='')
+                form(class="uk-card-body uk-padding-small")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-id" name="info-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-id' title='Id' data-title='Id')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-nombre" name="info-nombre" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-nombre' title='Nombre' data-title='Nombre')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="info-descripcion" name="info-descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='info-descripcion' title='Descripción' data-title='Descripción')
+        //- modal para editar
+        div(id="modal-editar" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar Área
+                    div(tabindex="0")
+                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar")
+                            img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                            div Eliminar
+                button(class="uk-modal-close-default" type="button" uk-close='')
+                div(id="errors-edit")
+                form(class="uk-card-body uk-padding-small" id="form-edit-area" action='/prestadores_externos/areas/update' method="POST")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="editId" name="editId" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                            label(for='editId' title='Id' data-title='Id')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="editNombre" name="editNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='editNombre' title='Nombre' data-title='Nombre')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="editDescripcion" name="editDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='editDescripcion' title='Descripción' data-title='Descripción')
+                        div(class="uk-width-1 uk-flex-right uk-flex")
+                            button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
+        //- modal para eliminar
+        div(id="modal-eliminar" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar Área
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el área?
+                form(class="uk-card-body uk-padding-small" id="form-delete-area" action="/prestadores_externos/areas/delete"  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
+        //- modal para agregar
+        div(id="modal-agregar" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Área
+                button(class="uk-modal-close-default" type="button" uk-close='')
+                div(id="errors")
+                form(class="uk-card-body uk-padding-small" id="form-new-area" action="/prestadores_externos/areas/nuevo" method="POST" enctype="multipart/form-data")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="addNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='addNombre' title='Nombre' data-title='Nombre')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='on' id="addDescripcion" name="addDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='addDescripcion' title='Descripción' data-title='Descripción')
+                        div(class="uk-width-1 uk-flex-right uk-flex")
+                            button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Guardar
+        //- paginacion
+        div(class="uk-width-1-1")
+            ul(class="uk-pagination uk-margin-top")
+                li()
+                    a(href="#")
+                        span(class="uk-margin-small-right" uk-pagination-previous) 
+                        | Anterior
+                li(class="uk-margin-auto-left")
+                    a(href="#") Siguiente
+                        span(class="uk-margin-small-left" uk-pagination-next)
+        
+        script.
+            $('.info').on('click', function() {
+                var userID = $(this).data('id');
+                var users=!{ JSON.stringify(areas) };
+                console.log(users);
+                for(var key in users){
+                    var obj=users[key];
+                    if(obj["id"] == userID){
+                        console.log(obj);
+                        break;
+                    }
+                }
+
+                //se agrega el id al boton de editar
+                $('#btnEdit').data('id',obj["id"]);
+                $('#btnEdit').data('name',obj["name"]);
+
+                //Aqui se empieza a llenar el modal
+                $('#info-id').val(obj["id"]).change();
+                $('#info-nombre').val(obj["name"]).change();
+                $('#info-descripcion').val(obj["description"]).change();
+
+            });
+
+            //esto de abajo es para al momento de abrir el modal de editar cargar los datos
+            $('.editar').on('click', function() {
+                var userID = $(this).data('id');
+                var users=!{ JSON.stringify(areas) };
+                console.log(users);
+                for(var key in users){
+                    var obj=users[key];
+                    if(obj["id"] == userID){
+                        console.log(obj);
+                        break;
+                    }
+                }
+
+                //se agrega el id a la ruta del action
+                $('#form-edit-area').attr('action', '/clientes/areas/update/'+obj["id"]);
+                //se agrega el id al boton de eliminar
+                $('#btnEliminar').data('id',obj["id"]);
+                $('#btnEliminar').data('name',obj["name"]);
+
+                //Aqui se empieza a llenar el modal
+                $('#editId').val(obj["id"]).change();
+                $('#editNombre').val(obj["name"]).change();
+                $('#editDescripcion').val(obj["description"]).change();
+            });
+
+            //esto de abajo es para al momento de abrir el modal de eliminar
+            $('#btnEliminar').on('click', function() {
+                var conceptID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar el área '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-area').attr('action', '/clientes/areas/delete/'+ conceptID);
+            });
+
+            $(document).ready(function () {
+                //  ajax del form de nuevo
+                $("#form-new-area").bind("submit", function() {
+                    // Capturamnos el boton de envío
+                    var btnAgregar = $("#btnAgregar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEnviar.text("Enviando"); Para button
+                            btnAgregar.val("Enviando"); // Para input de tipo button
+                            btnAgregar.attr("disabled","disabled");
+                        },
+                        complete: function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnAgregar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Área registrada con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/clientes/areas'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnAgregar.removeAttr("disabled");
+                            $('#errors').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+
+                //ajax del form de editar
+                $("#form-edit-area").bind("submit",function(){
+                    // Capturamnos el boton de envío
+                    var btnEditar = $("#btnEditar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEditar.text("Enviando"); Para button
+                            btnEditar.val("Enviando"); // Para input de tipo button
+                            btnEditar.attr("disabled","disabled");
+                        },
+                        complete:function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnEditar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Área editada con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/clientes/areas'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnEditar.removeAttr("disabled");
+                            $('#errors-edit').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors-edit');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+
+                //ajax del form de eliminar
+                $("#form-delete-area").bind("submit",function(){
+                    // Capturamnos el boton de envío
+                    var btnEliminar = $("#btnEliminar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEnviar.text("Enviando"); Para button
+                            btnEliminar.val("Enviando"); // Para input de tipo button
+                            btnEliminar.attr("disabled","disabled");
+                        },
+                        complete:function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnEliminar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors-delete').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Área eliminada con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/clientes/areas'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnEliminar.removeAttr("disabled");
+                            $('#errors-delete').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors-delete');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+            });
