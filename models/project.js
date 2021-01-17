@@ -26,6 +26,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.STRING
     },
+    color: {
+      allowNull: false,
+      type: DataTypes.STRING(7)
+    },
     observations: DataTypes.STRING,
     start_date: {
       allowNull: false,

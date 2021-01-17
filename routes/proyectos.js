@@ -140,6 +140,9 @@ router.post('/create', upload.any(),
         .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
         .trim()
         .escape(),
+      check('color')
+        .not().isEmpty().withMessage('El color es un campo requerido.')
+        .isHexColor().withMessage('El color no es válido.'),
       check('estatus')
         .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
       check('start_date')
@@ -255,7 +258,7 @@ router.post('/create', upload.any(),
               throw new Error()
             }
             //se crea el validador, es true porque si no hay rol tambien es valido
-            tipo = tipo[0].split(",")
+            tipo = tipo.split(",")
 
             var validador = true
 
@@ -334,7 +337,7 @@ router.post('/create', upload.any(),
         const t = await models.sequelize.transaction()
         try {
           //se guardan los datos principales
-          var miembros = req.body.input_miembros[0].split(",")
+          var miembros = req.body.input_miembros.split(",")
           var employeeID = []
 
           console.log(miembros)
@@ -352,6 +355,7 @@ router.post('/create', upload.any(),
             name: req.body.nombreP,
             start_date: req.body.start_date,
             deadline: req.body.deadline,
+            color: req.body.color,
             status: req.body.estatus
           }
 

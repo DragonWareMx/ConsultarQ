@@ -16,6 +16,7 @@ module.exports = {
       observations: "El proyecto ya inició",
       start_date: "2020-01-01",
       deadline: "2020-12-12",
+      color: "#3B86D9"
     }], {});
     await queryInterface.bulkInsert('Project_Employees', [{
       UserId: 2,
