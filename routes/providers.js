@@ -282,7 +282,7 @@ router.post('/edit/:id', isLoggedIn,
             .isLength({ max: 50, min: 10 }).withMessage('El número telefónico debe tener al menos 10 dígitos.'),
         check('edit_dro')
             .not().isEmpty().withMessage('DRO es un campo requerido.')
-            .isLength({ max: 255 }).withMessage('Ciudad puede tener un máximo de 255 caracteres.')
+            .isLength({ max: 255 }).withMessage('DRO puede tener un máximo de 255 caracteres.')
             .trim()
             .escape(),
         check('edit_estatus').isIn(['active', 'inactive']).withMessage('El estatus ingresado no es válido.')
