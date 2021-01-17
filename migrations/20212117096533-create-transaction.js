@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       T_type: {
-        type: Sequelize.ENUM('ingreso','egreso')
+        type: Sequelize.ENUM('ingreso', 'egreso')
       },
       date: {
         type: Sequelize.DATEONLY
@@ -30,6 +30,14 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
+      },
+      ProjectEmployeeId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Project_Employees',
+          key: 'id',
+        },
       },
       PaTypeId: {
         type: Sequelize.INTEGER,
