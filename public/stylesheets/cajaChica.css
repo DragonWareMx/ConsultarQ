@@ -60,9 +60,15 @@
     left: 4.25% !important;
     top:4.2% !important;
 }
+
+/* CODIGO DE PROYECTO------------------------------------------- */
 #Comentarios{
     display: none;
 }
+
+
+
+
 
 @media(max-width:1450px){
     .circle-caja{
@@ -93,6 +99,12 @@
     .circle-caja{
         width: 90px !important;
         height: 90px !important;
+    }
+    .div-datos-cliente-proyecto{
+        border-top: 1px solid #EEEEEE;
+    }
+    .div-docs-proyecto{
+        border-bottom: 1px solid #EEEEEE;
     }
 }
 @media(max-width:960px){
