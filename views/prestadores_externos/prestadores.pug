@@ -15,7 +15,7 @@ block content
                 a(href="/prestadores_externos" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none; border-bottom: 2px solid #3B86D9; padding-bottom:7px;") PRESTADORES
                 a(href="/prestadores_externos/areas" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") ÁREAS
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" href="#modal-agregar" uk-toggle)
+                a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar prestador
         //- barra de busqueda
@@ -54,9 +54,11 @@ block content
                                         td(class="area") #{prestador.Provider_Area.name}
                                         td(class="numero") #{prestador.phone_number}
                                         if(prestador.status == 'active')
-                                            td(class="status") Activo
+                                            td(class="status")
+                                                div(class="uk-width-4-5@m btn-status-active uk-align-center") ACTIVO
                                         else
-                                            td(class="status") Inactivo
+                                            td(class="status") 
+                                                div(class="uk-width-4-5@m btn-status-active btn-status-noactive uk-align-center") INACTIVO
             //- informacion completa
             div(id="modal-info" uk-modal)
                 div(class="uk-modal-dialog uk-modal-body")

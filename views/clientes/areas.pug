@@ -85,7 +85,7 @@ block content
                             div Eliminar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-area" action='/prestadores_externos/areas/update' method="POST")
+                form(class="uk-card-body uk-padding-small" id="form-edit-area" action='/clientes/areas/update' method="POST")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="editId" name="editId" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
@@ -106,7 +106,7 @@ block content
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-delete")
                 div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el área?
-                form(class="uk-card-body uk-padding-small" id="form-delete-area" action="/prestadores_externos/areas/delete"  method="POST")
+                form(class="uk-card-body uk-padding-small" id="form-delete-area" action="/clientes/areas/delete"  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
@@ -117,7 +117,7 @@ block content
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Área
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors")
-                form(class="uk-card-body uk-padding-small" id="form-new-area" action="/prestadores_externos/areas/nuevo" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-new-area" action="/clientes/areas/nuevo" method="POST" enctype="multipart/form-data")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="addNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
