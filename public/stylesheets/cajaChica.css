@@ -60,6 +60,9 @@
     left: 4.25% !important;
     top:4.2% !important;
 }
+#Comentarios{
+    display: none;
+}
 
 @media(max-width:1450px){
     .circle-caja{
