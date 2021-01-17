@@ -85,7 +85,8 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           model: models.Project_Requirement,
           include: models.Task
         }
-      ]
+      ],
+      order: [['createdAt','DESC']]
       })
       res.render('proyectos', {proyectos});
     }
@@ -106,7 +107,8 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           model: models.Project_Requirement,
           include: models.Task
         }
-      ]
+        ],
+        order: [['createdAt','DESC']]
       })
       res.render('proyectos', {proyectos});
     }
