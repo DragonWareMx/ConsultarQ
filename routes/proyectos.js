@@ -311,7 +311,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           .escape()
     ]
     , isLoggedIn, async function (req, res, next) {
-        console.log(req.files)
         //si hay errores entonces se muestran
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -380,6 +379,23 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           for(var i in miembros){
             const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
             employeeID.push(employee.id)
+          }
+
+          //verificamos los roles y porcentajes
+          for(var i in employeeID){
+            await check("rol"+employeeID[i]).optional({ checkFalsy: true }).isLength({ max: 100 }).withMessage('El rol de los miembtos de proyecto puede tener un máximo de 100 caracteres.')
+                  .trim()
+                  .escape().run(req);
+            await check("rolP"+employeeID[i]).optional({ checkFalsy: true }).isLength({ max: 3 }).withMessage('El rol de los miembtos de proyecto puede tener un máximo de 3 dígitos.')
+                  .isNumeric().withMessage('Sólo se aceptan números en el porcentaje.')
+                  .trim()
+                  .escape().run(req);
+          }
+
+          const result = validationResult(req);
+          if (!result.isEmpty()) {
+            await t.rollback();
+            return res.status(400).json({ errors: result.array() });
           }
 
           if (/\d/.test(proveedores)) {
