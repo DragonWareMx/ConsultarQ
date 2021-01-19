@@ -1,7 +1,7 @@
 extends ../main
 
 block head
-    title Egresos
+    title ConsultarQ - Egresos
     link(rel="stylesheet" href="/stylesheets/others.css")
 
 block content
@@ -192,6 +192,7 @@ block content
                     //se agrega el id al boton de editar
                     $('#btnEdit').data('id',obj["id"]);
                     $('#btnEdit').data('name',obj["name"]);
+                    $('#btnEdit').attr("href", "/caja/editar-registro/"+obj["id"]);
 
                     //Aqui se empieza a llenar el modal
                     $('#info-id').val(obj["id"]).change();
