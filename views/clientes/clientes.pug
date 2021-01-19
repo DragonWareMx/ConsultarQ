@@ -61,7 +61,7 @@ block content
                     div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
                             div(class="uk-width-auto@m")
-                                a(href="/clientes/cliente")
+                                a(href="/clientes/cliente/"+client.id)
                                     if client.picture
                                         img(src="/uploads/clients/"+client.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
                                     else
@@ -292,7 +292,7 @@ block content
         }); 
 
         jQuery(($) => {
-                //esto de abajo es para al momento de abrir el modal de editar cargar los datos
+            //esto de abajo es para al momento de abrir el modal de editar cargar los datos
             $('.editar').on('click', function() {
                 var clientID = $(this).data('id');
                 var clients=!{ JSON.stringify(clientes) };

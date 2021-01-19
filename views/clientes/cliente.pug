@@ -9,7 +9,7 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left uk-text-large uk-text-bold uk-text-primary uk-margin-bottom") Cliente
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading" style="color:#6B6B72 !important")
                     img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Regresar
         -function prettyDate(dateString){
@@ -27,7 +27,11 @@ block content
                 div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
                         div(class="uk-width-auto@m")
-                            img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px")
+                            a(href="/clientes/cliente/"+client.id)
+                                if client.picture
+                                    img(src="/uploads/clients/"+client.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                                else
+                                    img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
                         div(class="uk-width-expand@m" style="font-size:14px")
                             div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
                                 div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") #{client.name}
@@ -56,6 +60,7 @@ block content
                         div.uk-width-1-1.uk-flex-inline.uk-flex-wrap.uk-flex-middle
                             div(class="uk-width-1-5@m uk-text-truncate") Cotización
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px") 
+                                //-each project,index in client.Projects
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
                                     a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                     div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
@@ -76,16 +81,18 @@ block content
                         div.uk-width-1-1.uk-flex-inline.uk-flex-wrap.uk-flex-middle
                             div(class="uk-width-1-5@m uk-text-truncate") Contratos
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px")
-                                
-                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                    a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
-                                div#MoreCont
-                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                        a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 100
+                                each project,index in client.Projects
+                                    if index == 0
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            a.uk-link-reset(href="#") #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                            div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp; Proyecto: #{project.id}
+                                    else
+                                        div#MoreCont
+                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                                a.uk-link-reset(href="#") #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
                                 //- boton agregar contrato
-                                div.uk-width-1-1.uk-flex.uk-flex-middle#GenerarCont
+                                div.uk-width-1-1.uk-flex.uk-flex-middle#MoreCont
                                     a.uk-flex.uk-flex-middle(href="#modal-adjuntarContrato" uk-toggle style="width:max-content")
                                         <span uk-icon="icon:upload; ratio: 0.8" style="margin-right:5px"></span>Adjuntar contrato
                         div.uk-width-1-1.uk-flex.uk-flex-right.uk-margin-small-top
@@ -156,13 +163,13 @@ block content
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar cliente
             div.width-1-1.uk-margin-top
-                form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-cliente" action=""  method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-client" action="/clientes/edit/"+client.id  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                             a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
-                            input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
+                            input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
                     .field.uk-margin-bottom
                         input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
@@ -180,8 +187,11 @@ block content
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
-                                    each area in client.Client_Area
-                                        option(value=area.id) #{area.name}
+                                    each area in areas
+                                        if client.Client_Area.name == area.name
+                                            option(value=area.id selected) #{area.name}
+                                        else
+                                            option(value=area.id) #{area.name}
                                 label(for='area_edit' title='Área' data-title='Área')
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
@@ -195,7 +205,7 @@ block content
                         <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                     div(class="uk-width-1 uk-flex-right uk-flex")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                        button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
+                        button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnGuardar" type="submit") Guardar
     
     //- modal eliminar
     div(id="delete-form" uk-modal)
@@ -203,11 +213,11 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-delete")
-                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar al cliente Dragonware?
-                form(class="uk-card-body uk-padding-small" id="form-delete-user" action=""  method="POST")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar al cliente #{client.name}?
+                form(class="uk-card-body uk-padding-small" id="form-delete-user" action="/clientes/delete/"+client.id method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editarCliente" uk-toggle data-id="" data-name="") Cancelar
-                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit" data-id=client.id data-name=client.name) Eliminar
     
     
     script.
@@ -228,12 +238,12 @@ block content
             $('#a-MoreCont').on('click', function() {
                  if ($("#MoreCont").is(':visible')) {
                     $("#MoreCont").hide();
-                    $("#GenerarCont").hide();
+                    //$("#GenerarCont").hide();
                     $("#a-MoreCont").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
                 }
                 else{
                     $("#MoreCont").show();
-                    $("#GenerarCont").show();
+                    //$("#GenerarCont").show();
                     $("#a-MoreCont").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
                 }
             });
@@ -246,7 +256,172 @@ block content
                     $('#status-alert').show();
                 }
             });
-        });            
+        });
+
+        jQuery(($) => {
+             //esto es para la foto de perfil
+
+            $('#foto-edit').on('click', function() {
+                $("#fileField_edit").click();
+            });
+
+
+            //el de abajo es igual pero para el avatar a la hora de editar
+            function readURLEdit(input) {
+                $('#avatar-edit').attr('src', "/img/iconos/default.png");
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                    $('#avatar-edit').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]); // convert to base64 string
+                }
+            }
+
+            $("#fileField_edit").change(function() {
+                readURLEdit(this);
+            });
+        });
+
+        $(document).ready(function () {
+            //- ajax para editar un cliente
+            $("#form-edit-client").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnGuardar = $("#btnGuardar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: new FormData(this),
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnGuardar.val("Enviando"); // Para input de tipo button
+                        btnGuardar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnGuardar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-edit').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Cliente actualizado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/clientes'
+                        }, 2000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnGuardar.removeAttr("disabled");
+                        $('#errors-edit').css('display', 'block');
+                        console.log(data.responseText);
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-edit');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+
+            //ajax del form de eliminar
+            $("#form-delete-client").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEliminar = $("#btnEliminar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEliminar.val("Enviando"); // Para input de tipo button
+                        btnEliminar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEliminar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-delete').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Cliente eliminado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/clientes'
+                        }, 2000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEliminar.removeAttr("disabled");
+                        $('#errors-delete').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-delete');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+        });          
 
                         
                     

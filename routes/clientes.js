@@ -115,12 +115,17 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
                                 include: [{
                                     model: models.Employee
                                 }]
-                        }]
+                        }],
+                        order: [
+                            ['createdAt', 'DESC']
+                        ],
                 }]
             })
 
+            const areas = await models.Client_Area.findAll()
+
             if(client){
-                return res.render('cliente', { client })
+                return res.render('cliente', { client , areas })
             }
             else{
                 return res.status(404).json(404)                //  mandar a la vista de error
