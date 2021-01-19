@@ -134,7 +134,7 @@ router.get('/documentacion', isLoggedIn,async function (req, res, next) {
 });
 
 //AGREGAR PROYECTO
-router.post('/create', upload.any(),
+router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {name: 'contrato', maxCount: 1}]),
     [
       check('nombreP')
         .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
@@ -145,6 +145,7 @@ router.post('/create', upload.any(),
         .not().isEmpty().withMessage('El color es un campo requerido.')
         .isHexColor().withMessage('El color no es válido.'),
       check('estatus')
+        .not().isEmpty()
         .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
       check('start_date')
         .not().isEmpty()
@@ -171,11 +172,13 @@ router.post('/create', upload.any(),
             if (tipo) {
                 validador = false
 
+                //busca los tipos de proyecto
                 let ids = await models.Pro_Type.findAll({
                     attributes: ['id'],
                     raw: true
                 })
 
+                //verifica si el id ingresado por el usuario esta en la bd
                 ids.forEach(id => {
                     if (tipo == id.id) {
                         validador = true
@@ -196,12 +199,12 @@ router.post('/create', upload.any(),
 
           var validador = true
 
+          //si existe un numero en el input significa que ingresaron un proveedor
           if (/\d/.test(tipo)) {
               //se crea el validador, es true porque si no hay rol tambien es valido
               tipo = tipo[0].split(",")
-
-              //si no es nulo
-          
+              
+              //encuentra todos los proveedores
               let ids = await models.Provider.findAll({
                   attributes: ['id'],
                   raw: true
@@ -209,6 +212,7 @@ router.post('/create', upload.any(),
 
               validador2 = false
 
+              //si el validador2 no se hace true, el proveedor no existe, no es valido
               tipo.forEach(idB => {
                 ids.forEach(id => {
                   if (idB == id.id) {
@@ -221,6 +225,7 @@ router.post('/create', upload.any(),
                 validador2 = false
               })
 
+              //si se ingreso un 0 significa que no eligieron ninguno
               if (tipo == 0)
                   validador = true
           }
@@ -236,6 +241,7 @@ router.post('/create', upload.any(),
             //se crea el validador, es true porque si no hay rol tambien es valido
             validador = false
 
+            //busca los clientes
             let ids = await models.Client.findAll({
                 attributes: ['id'],
                 raw: true
@@ -301,10 +307,31 @@ router.post('/create', upload.any(),
           .escape()
     ]
     , isLoggedIn, async function (req, res, next) {
+        console.log(req.files)
         //si hay errores entonces se muestran
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(422).send(errors.array());
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          return res.status(422).send(errors.array());
         }
 
         try {
@@ -341,16 +368,11 @@ router.post('/create', upload.any(),
           var miembros = req.body.input_miembros.split(",")
           var employeeID = []
 
-          console.log(miembros)
-
+          //Guarda los ids de los usuarios empleados en un arreglo
           for(var i in miembros){
-            console.log(miembros[i])
             const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
-            console.log(employee)
             employeeID.push(employee.id)
           }
-
-          console.log(employeeID)
 
           var datos = {
             name: req.body.nombreP,
@@ -371,6 +393,11 @@ router.post('/create', upload.any(),
             datos.observations = req.body.observaciones
           }
 
+          //guarda el cliente
+          if(req.body.cliente){
+            datos.ClientId = req.body.cliente
+          }
+
           switch(req.body.estatus){
             case 'terminado':
               if(req.body.end_date)
@@ -385,12 +412,25 @@ router.post('/create', upload.any(),
               throw new Error()
           }
 
+          //guarda el contrato
+          if(req.files.contrato && req.files.contrato[0])
+            datos.contract = req.files.contrato[0].filename
+
           //GUARDA EL PROYECTO
           const newProject = await models.Project.create(datos, { transaction: t })
 
+          //GUARDA LOS PROYECTOS
           await newProject.setUsers(employeeID, {transaction: t})
 
-          //guarda los empleados relacionados con el proyecto
+          //GUARDA LAS COTIZACIONES
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            for(var i in req.files.cotizaciones){
+              await models.Quotation.create({
+                ProjectId: newProject.id,
+                quotation: req.files.cotizaciones[i].filename
+              },{transaction: t})
+            }
+          }
 
           //SE REGISTRA EL LOG
           //obtenemos el usuario que realiza la transaccion
@@ -456,7 +496,9 @@ router.get('/agregar', isLoggedIn,async function (req, res, next) {
 
   const proTypes = await models.Pro_Type.findAll()
 
-  return res.render('agregarProyecto', { prestadores,miembros, proTypes})
+  const Clients = await models.Client.findAll()
+
+  return res.render('agregarProyecto', { prestadores,miembros, proTypes, Clients})
 });
 
 router.get('/documentacion/editar/:id', isLoggedIn,function (req, res, next) {

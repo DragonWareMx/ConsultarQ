@@ -64,9 +64,8 @@ block content
                             .field.uk-margin-bottom.uk-margin-small-top
                                 select(type='select' id="cliente" name="cliente" value='' onchange="this.setAttribute('value', this.value);")
                                     option(value="" disabled hidden selected) Seleccionar cliente
-                                    option(value="0") Cliente 1
-                                    option(value="1") Cliente 2
-                                    option(value="2") Cliente 3
+                                    each cliente in Clients
+                                        option(value=cliente.id) #{cliente.name}
                                 label(for='estatus' title='Cliente' data-title='Cliente')
                             .field.uk-margin-bottom
                                 input(type='file' multiple id="cotizaciones" name="cotizaciones"  onchange="this.setAttribute('value', this.value);")

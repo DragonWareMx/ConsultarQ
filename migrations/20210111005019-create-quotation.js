@@ -8,6 +8,14 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      ProjectId:{
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Projects',
+          key: 'id',
+        },
+      },
       quotation: {
         allowNull: false,
         type: Sequelize.STRING

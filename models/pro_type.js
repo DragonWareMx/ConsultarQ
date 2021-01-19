@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   Pro_Type.init({
     name: {
       allowNull: false,
+      unique: true,
       type: DataTypes.STRING
     }
   }, {
