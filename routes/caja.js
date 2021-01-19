@@ -43,29 +43,90 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ur' }
+                    where: { name: 'cr' }
                 }
             }
         })
 
         if (usuario && usuario.Role && usuario.Role.Permissions) {
             //TIENE PERMISO DE DESPLEGAR VISTA
-            models.Transaction.findAll({
-                include: [{
-                    model: models.Pa_Type
-                },
-                {
-                    model: models.Concept
-                }],
-                order: [
-                    ['date', 'DESC']
-                ],
+            let permiso = await models.User.findOne({
                 where: {
-                    T_type: 'egreso'
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'cu' }
+                    }
                 }
-            }).then(egresos => {
-                return res.render('caja/egresos', { egresos })
+            })
+            const proj = await models.Project.findAll({
+                include: [{
+                    model: models.User,
+                    where: { id: req.user.id }
+                }],
+                raw: true,
+                attributes: ['id']
+            })
+            var lista = []
+            proj.forEach(viledruid => {
+                lista.push(viledruid.id)
             });
+            var egresos
+            if (permiso && permiso.Role && permiso.Role.Permissions) {
+                egresos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project
+                        }]
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        T_type: 'egreso'
+                    }
+                })
+            }
+            else {
+                egresos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project,
+                        }],
+                        where: { ProjectId: lista },
+                        required: true
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        T_type: 'egreso'
+                    }
+                })
+            }
+
+            return res.render('caja/egresos', { egresos })
         }
         else {
             //NO TIENE PERMISOS
