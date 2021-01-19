@@ -36,8 +36,8 @@ block content
                                 img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
                                 div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
                         div(class="uk-card-body uk-padding-small uk-flex")
-                            if layout.Project_Requirements_Layout
-                                div(class="uk-text-small") #{layout.Project_Requirements_Layout.Tasks_Layouts.length} Tareas
+                            if layout.Tasks_Layouts
+                                div(class="uk-text-small") #{layout.Tasks_Layouts.length} Tareas
                             else
                                 div(class="uk-text-small") 0 Tareas
         div(id="layout-form" uk-modal)

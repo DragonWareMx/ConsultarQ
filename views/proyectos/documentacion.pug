@@ -48,8 +48,8 @@ block content
                             -
                                 var realizadas =0;
                                 var noRealizadas =0;
-                                for(var key in project.Project_Requirement.Tasks){
-                                    var obj=project.Project_Requirement.Tasks[key];
+                                for(var key in project.Tasks){
+                                    var obj=project.Tasks[key];
                                     if(obj.check == 1)
                                         realizadas++;
                                     else
@@ -61,18 +61,3 @@ block content
                             div(class="uk-text-small" style="margin-top:-7px") Tareas faltantes
                             div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
                             div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{project.observations}
-            div()
-                div(class="uk-card  uk-card-default")
-                    div(class="uk-card-header uk-padding-small uk-flex")
-                        div(class="uk-width-4-5 uk-text-primary") Casa - Habitación
-                        a(href="/proyectos/documentacion/editar/1" class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
-                            img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
-                            div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
-                    div(class="uk-card-body uk-padding-small")
-                        div(class="uk-text-large uk-text-secondary") 45
-                        div(class="uk-text-small" style="margin-top:-7px") Entregables
-                        div(class="uk-text-large uk-text-secondary uk-margin-small-top") 15
-                        div(class="uk-text-small" style="margin-top:-7px") No entregables
-                        div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
-                        div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.
-            

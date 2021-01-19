@@ -129,8 +129,8 @@ block content
                             var tareasTotales = 0
                             var porcentaje = 100
                             var porcentajeRedondeado = 99
-                        if proyecto.Project_Requirement && proyecto.Project_Requirement.Tasks
-                            each task in proyecto.Project_Requirement.Tasks
+                        if proyecto.Tasks
+                            each task in proyecto.Tasks
                                 -
                                     tareasTotales++
                                     if(task.check)
