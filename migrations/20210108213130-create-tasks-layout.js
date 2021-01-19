@@ -8,12 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ProjectRequirementsLayoutId: {
+      ProTypeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Project_Requirements',
+          model: 'Pro_Types',
           key: 'id',
         },
       },

@@ -27,6 +27,10 @@ module.exports = {
       contract: {
         type: Sequelize.STRING
       },
+      color: {
+        allowNull: false,
+        type: Sequelize.STRING(7)
+      },
       name: {
         allowNull: false,
         type: Sequelize.STRING

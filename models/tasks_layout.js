@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Tasks_Layout.belongsTo(models.Project_Requirements_Layout)
+      Tasks_Layout.belongsTo(models.Pro_Type)
     }
   };
   Tasks_Layout.init({
