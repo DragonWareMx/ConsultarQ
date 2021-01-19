@@ -1,21 +1,21 @@
-extends ../main 
+extends ../main
 
 block head
     title ConsultarQ - Editar registro
     link(rel="stylesheet" href="/stylesheets/others.css")
     link(rel="stylesheet" href="/stylesheets/cajaChica.css")
-    
-    
+
+
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom btn-back") Editar registro
-            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+            div(class="uk-margin-bottom" tabindex="0")
                 a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
                     img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Regresar
         div(class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-margin-top uk-padding-small uk-flex uk-flex-wrap")
-            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
                     select(id="type" name="type" autocomplete='off' value='')
                         option(value="" disabled hidden selected ) Seleccionar
@@ -40,7 +40,7 @@ block content
                         option(value="0") Proyecto 1
                         option(value="1") Proyecto 2
                     label(for='proyecto' title='Proyecto' data-title='Proyecto')
-            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
                     input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
                     label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
@@ -49,7 +49,7 @@ block content
                         option(value="" disabled hidden selected ) Seleccionar
                         option(value="0") Proveedor 1
                         option(value="1") Proveedor 2
-                    label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor') 
+                    label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor')
                 .uk-margin-bottom
                     <div class="uk-grid-small uk-child-width-auto uk-flex uk-flex-middle uk-flex-wrap uk-grid"">
                         <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="radio2" checked> Deducible</label>
@@ -59,16 +59,16 @@ block content
                     <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Nuevo concepto
                 a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarPago" uk-toggle)
                     <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Nuevo tipo de pago
-            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
                     input(type='number' autocomplete='on' id="monto" name="monto"  step="100.00" min="0" value='' onchange="this.setAttribute('value', this.value);" required='')
                     label(for='monto' title='Monto total' data-title='Monto total')
                 textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        
+
             div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
-    
+
     div(id="modal-agregarConcepto" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar concepto
@@ -80,7 +80,7 @@ block content
             div(class="uk-width-1 uk-flex-right uk-flex")
                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
-    
+
     div(id="modal-agregarPago" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tipo de pago
