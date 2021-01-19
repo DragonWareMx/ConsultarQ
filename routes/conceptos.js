@@ -72,7 +72,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 
 });
 
-//AGREAGAR CONCEPTO
+//AGREGAR CONCEPTO
 router.post('/nuevo',
     [
         check('addNombre')
