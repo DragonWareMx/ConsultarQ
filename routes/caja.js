@@ -185,9 +185,9 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
             proj.forEach(viledruid => {
                 lista.push(viledruid.id)
             });
-            var egresos
+            var ingresos
             if (permiso && permiso.Role && permiso.Role.Permissions) {
-                egresos = await models.Transaction.findAll({
+                ingresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
                     },
@@ -211,7 +211,7 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
                 })
             }
             else {
-                egresos = await models.Transaction.findAll({
+                ingresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
                     },
@@ -237,7 +237,7 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
                 })
             }
 
-            return res.render('caja/egresos', { egresos })
+            return res.render('caja/ingresos', { ingresos })
         }
         else {
             //NO TIENE PERMISOS
@@ -296,9 +296,9 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
             proj.forEach(viledruid => {
                 lista.push(viledruid.id)
             });
-            var egresos
+            var deducibles
             if (permiso && permiso.Role && permiso.Role.Permissions) {
-                egresos = await models.Transaction.findAll({
+                deducibles = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
                     },
@@ -322,7 +322,7 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
                 })
             }
             else {
-                egresos = await models.Transaction.findAll({
+                deducibles = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
                     },
@@ -348,7 +348,7 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
                 })
             }
 
-            return res.render('caja/egresos', { egresos })
+            return res.render('caja/deducibles', { deducibles })
         }
         else {
             //NO TIENE PERMISOS

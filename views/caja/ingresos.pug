@@ -14,24 +14,18 @@ block content
                     img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Regresar
         //- barra de busqueda
-        form(class="uk-flex")
+        form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
-                a(href="#" uk-search-icon)
-                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                span(uk-search-icon type="button")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
-            button(class="uk-button uk-button-primary uk-width-auto" href="#")
-                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
-            div(uk-dropdown="mode: click")
-                ul(class="uk-list")
-                    li() sugerencia 1
-                    li() sugerencia 2
-                    li() sugerencia 3
         //- contenido
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
                 div(class="uk-card-body uk-text-center")
                     div(class="uk-overflow-auto uk-margin-top")
-                        table(class="uk-table uk-table-divider")
+                        table(class="uk-table uk-table-divider" id="items")
                             thead
                                 tr
                                     th(class="uk-text-center") ID
@@ -43,17 +37,17 @@ block content
                                     th(class="uk-text-center") FECHA
                             tbody
                                 each ingreso in ingresos
-                                    tr(class="info" uk-toggle="target: #modal-info" data-id=ingreso.id)
-                                        td #{egreso.id}
-                                        td #{egreso.Project_Employee.Project.name}
-                                        td #{egreso.Project_Employee.User.Employee.name}
-                                        td #{egreso.Concept.name}
-                                        td #{egreso.amount}
+                                    tr(class="info item" uk-toggle="target: #modal-info" data-id=ingreso.id)
+                                        td(class="id") #{ingreso.id}
+                                        td(class="project") #{ingreso.Project_Employee.Project.name}
+                                        td(class="name") #{ingreso.Project_Employee.User.Employee.name}
+                                        td(class="concept") #{ingreso.Concept.name}
+                                        td(class="mount") #{ingreso.amount}
                                         if(ingreso.T_type == 'egreso')
-                                            td Egreso
+                                            td(class="ei") Egreso
                                         else
-                                            td Ingreso
-                                        td #{ingreso.date}
+                                            td(class="ei") Ingreso
+                                        td(class="date") #{ingreso.date}
         //- informacion completa
         div(id="modal-info" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -98,14 +92,90 @@ block content
                             label(for='info-deducible' title='Deducible' data-title='Deducible')
         //- paginacion
         div(class="uk-width-1-1")
-            ul(class="uk-pagination uk-margin-top")
-                li()
-                    a(href="#")
-                        span(class="uk-margin-small-right" uk-pagination-previous)
-                        | Anterior
-                li(class="uk-margin-auto-left")
-                    a(href="#") Siguiente
-                        span(class="uk-margin-small-left" uk-pagination-next)
+            ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
+
+        script.
+            function myFunction() {
+                var input, filter, cards, cardContainer, h5, title, i;
+                input = document.getElementById("buscador");
+                filter = input.value.toUpperCase();
+                cardContainer = document.getElementById("items");
+                cards = cardContainer.getElementsByClassName("item");
+                document.getElementById("pagination").style.display = "none";
+                for (i = 0; i < cards.length; i++) {
+                    id = cards[i].querySelector('td[class~="id"]').innerText.toUpperCase().indexOf(filter);
+                    project = cards[i].querySelector('td[class~="project"]').innerText.toUpperCase().indexOf(filter);
+                    name = cards[i].querySelector('td[class~="name"]').innerText.toUpperCase().indexOf(filter);
+                    concept = cards[i].querySelector('td[class~="concept"]').innerText.toUpperCase().indexOf(filter);
+                    mount = cards[i].querySelector('td[class~="mount"]').innerText.toUpperCase().indexOf(filter);
+                    ei = cards[i].querySelector('td[class~="ei"]').innerText.toUpperCase().indexOf(filter);
+                    date = cards[i].querySelector('td[class~="date"]').innerText.toUpperCase().indexOf(filter);
+                    if (id > -1 || project > -1 || name > -1 || concept > -1 || mount > -1 || ei > -1 || date > -1) {
+                        cards[i].style.display = "table-row"
+                        } else {
+                            cards[i].style.display = "none"
+                    }
+                }
+            }
+
+        script.
+            $(document).ready(function () {
+                const $studentItem = $('.item');
+                const $paginationList = $('.uk-pagination');
+                const $studentSearch = $('#buscador');
+                const itemTotal = 20;
+
+                // hide all
+                function hideAll() {
+                    $studentItem.hide();
+                }
+
+                hideAll();
+
+                // display first 10
+                function displayRange(a,b) {
+                    hideAll();
+                    // display 0 - 1 students
+                    $studentItem.slice(a,b).fadeIn();
+                }
+
+                displayRange(0, itemTotal);
+
+                // create pagination links
+                let pagination = '';
+                for(var i = 1; i < $studentItem.length / itemTotal +  1; i ++) {
+                    pagination += `
+                        <li><a class="pagination__num">${i}</a></li>
+                    `;
+                }
+                $paginationList.append(pagination);
+                // click on pagination num
+                // pass into display range
+                // calc and show range
+                $('body').on('click', '.pagination__num', function () {
+
+                    hideAll();
+
+                    // get text number 1 - 5
+                    // get ranges for start and end
+                    let paginationText = Number($(this).text()) - 1;
+                    let startFrom = paginationText * itemTotal;
+                    let end = paginationText * itemTotal + paginationText + itemTotal;
+                    // console.log('start: ' + startFrom + '   end: ' + end)
+                    // display ranges
+                    displayRange(startFrom, end);
+
+                });
+
+                $studentSearch.keyup(function()
+                {
+                    if (!this.value) {
+                    hideAll();
+                    $paginationList.show();
+                    displayRange(0, itemTotal);
+                    }
+                });
+            });
 
         script.
             $('.info').on('click', function() {
