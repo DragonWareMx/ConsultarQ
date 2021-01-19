@@ -118,7 +118,8 @@ block content
         //- COMENTARIOS-----------------------
         div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small"  id="Comentarios")
             div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle
-                div.uk-width-auto COMENTARIOS
+                div.uk-width-auto 
+                    b COMENTARIOS
                 div.uk-width-auto.uk-margin-left.uk-flex.uk-flex-middle
                     <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> 18
                 div.uk-width-expand
@@ -151,9 +152,285 @@ block content
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
         //- OBSERVACIONES-------------
         div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small") 
-            div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle OBSERVACIONES
+            div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle 
+                b OBSERVACIONES
             div.uk-text-small.uk-text-emphasis Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit voluptatibus vitae laborum enim. In pariatur, fuga, eum perspiciatis soluta fugit sunt est magnam saepe inventore quos, ullam vel nihil distinctio.
                 | Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, possimus unde officia doloremque quod assumenda eligendi perferendis magni officiis dignissimos enim earum quae saepe illum tenetur necessitatibus id, nihil cupiditate.
+        //- TAREAS DEL PROYECTO------------------------
+        
+        div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top uk-card-body uk-padding-small")
+            div(class="uk-flex uk-flex-top uk-flex-between")
+                div(class="uk-text-primary uk-margin-bottom ") 
+                    b CASA - HABITACIÓN
+                //- div(class="uk-flex uk-flex-middle")
+                    a.uk-margin-small-right(href="#" uk-toggle="target: #editDocument-form")
+                        <span uk-icon="pencil"></span>
+                    a.uk-margin-small-left(href="#" uk-toggle="target: #deleteDocument-form" style="color:#DC5454")
+                        <span uk-icon="trash"></span>
+            div(class="uk-overflow-auto")
+                table(class="uk-table uk-table-small uk-table-divider uk-table-justify uk-text-small")
+                    thead
+                        tr
+                            th(class="uk-text-center uk-table-shrink") #
+                            th(class="uk-text-truncate uk-table-expand") Concepto
+                            th(class="uk-text-truncate uk-table-expand") Descripción
+                            th(class="uk-text-truncate uk-width-small") Cantidad
+                            th(class="uk-text-truncate uk-width-small") Unidad
+                            th(class="uk-text-truncate  uk-width-small") Costo/U
+                            th(class="uk-text-truncate uk-width-small") Costo/T
+                            th(class="uk-text-truncate uk-width-small") Realizado
+                    tbody
+                        //- each task, index in project.Project_Requirement.Tasks
+                        tr(uk-toggle="target: #editTask-form" class="editar" data-id=1) 
+                            td 1
+                            td Elaborar planos
+                            td Descripción
+                            td 1
+                            td 1
+                            td -
+                            td -
+                            //- if task.check
+                            td Sí 
+                            //- else
+                                td No
+            div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
+                a(href="#" uk-toggle="target: #task-form")
+                        <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Agregar tarea
+        //- FINANZAS DEL PROYECTO--------------------------
+        div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
+            div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
+                div(class="uk-card-body uk-text-center uk-padding-remove")
+                    div(class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove") 
+                        b MOVIMIENTOS DEL PROYECTO
+                    div(class="uk-overflow-auto uk-margin-remove")
+                        table(class="uk-table uk-table-divider uk-text-small")
+                            thead
+                                tr
+                                    th(class="uk-text-center") #
+                                    th(class="uk-text-center") NOMBRE
+                                    th(class="uk-text-center") CONCEPTO
+                                    th(class="uk-text-center") MONTO
+                                    th(class="uk-text-center") MOVIMIENTO
+                                    th(class="uk-text-center") FECHA
+                            tbody
+                                //- each transaccion in transacciones
+                                tr(class="info" uk-toggle="target: #modal-info" data-id=1)
+                                    td 1
+                                    td Nombre completo
+                                    td Concepto
+                                    td Canditad
+                                    //- if(transaccion.T_type == 'egreso')
+                                        td Egreso
+                                    //- else
+                                    td Ingreso
+                                    td 2020-01-02
+
+        
+        //- PROVEEDORES DEL PROYECTO---------------------------
+        div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
+            div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
+                div(class="uk-card-body uk-text-center uk-padding-remove")
+                    div(class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove") 
+                        b PRESTADORES EXTERNOS
+                    div(class="uk-overflow-auto uk-margin-remove")
+                        table(class="uk-table uk-table-divider uk-text-small")
+                            thead
+                                tr
+                                    th(class="uk-text-center") #
+                                    th(class="uk-text-center") NOMBRE
+                                    th(class="uk-text-center") ÁREA
+                                    th(class="uk-text-center") TELÉFONO
+                                    th(class="uk-text-center") ESTATUS
+                            tbody
+                                //- each transaccion in transacciones
+                                tr(class="info" uk-toggle="target: #modal-infoP" data-id=1)
+                                    td 1
+                                    td Nombre del prestador
+                                    td Área
+                                    td 4444444444
+                                    //- if(prestador.status == 'active')
+                                        td(class="status") Activo
+                                    //- else
+                                    td(class="status") Inactivo
+    
+    
+    
+    
+    
+    //- Modal para editar tarea
+    div(id="editTask-form" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-flex uk-flex-between")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar tarea
+                div(class="uk-flex uk-flex-middle uk-text-small")
+                    a.uk-flex.uk-flex-middle(href="#" uk-toggle="target: #deleteTask-form" style="color:#DC5454")
+                        <span uk-icon="icon:trash; ratio:0.8" style="margin-right:5px"></span>Eliminar
+                    //- img(src="/icons/delete.png" width="12px")
+                    //- a(class="uk-text-danger uk-text-small uk-margin-small-left") Eliminar
+            button(type='button' uk-close='' class="uk-modal-close-default")
+            div(id="errors-editTask")
+            form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-edit-task" action="" method="POST" enctype="multipart/form-data")
+                div(class="uk-child-width-1 uk-grid")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='off' id="concepto-edit" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='concepto-edit' title='Concepto' data-title='Concepto')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='off' id="descripcion-edit" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='descripcion-edit' title='Descripcion' data-title='Descripcion')
+                    div
+                        div.uk-grid
+                            div(class="uk-width-1-2@s uk-width-1-1")
+                                .field.uk-margin-bottom
+                                    input(type='number' autocomplete='off'  id="cantidad-edit" name="cantidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='cantidad-edit' title='Cantidad' data-title='Cantidad')
+                            div(class="uk-width-1-2@s uk-width-1-1")
+                                .field.uk-margin-bottom
+                                    input(type='text' autocomplete='off'  id="unidad-edit" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='unidad-edit' title='Unidad' data-title='Unidad')
+                            div(class="uk-width-1-2@s uk-width-1-1")
+                                .field.uk-margin-bottom
+                                    input(type='number' autocomplete='off'  id="costo-edit" name="costo"  value='' onchange="this.setAttribute('value', this.value);")
+                                    label(for='costo-edit' title='Costo' data-title='Costo')
+                            div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-left")
+                                input(type='checkbox' autocomplete='off'  id="realizado-edit" name="realizado" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
+                                label(for='realizado-edit' class="uk-text-primary") Realizado
+                    div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
+                        button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                        button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="editTask" type="submit") Guardar
+    //- Modal para eliminar tarea 
+    div(id="deleteTask-form" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar tarea
+            button(type='button' uk-close='' class="uk-modal-close-default")
+            div(id="errors-deleteTask")
+            div(class="uk-text-left" id="textTask-delete") ¿Estás seguro de que deseas eliminar la tarea?
+            form(class="uk-card-body uk-padding-small" id="form-delete-task" action=""  method="POST")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                    button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="deleteTask" type="submit") Eliminar         
+    //- Modal para agregar tarea
+    div(id="task-form" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tarea
+            button(type='button' uk-close='' class="uk-modal-close-default")
+            div(id="errors-task")
+            form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-new-task" action="/proyectos/documentacion/"+1+"/tarea/agregar" method="POST" enctype="multipart/form-data")
+                div(class="uk-child-width-1 uk-grid")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='off' id="concepto" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='concepto' title='Concepto' data-title='Concepto')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='off' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='descripcion' title='Descripcion' data-title='Descripcion')
+                    div
+                        div.uk-grid
+                            div(class="uk-width-1-2@s uk-width-1-1")
+                                .field.uk-margin-bottom
+                                    input(type='number' autocomplete='off'  id="cantidad" name="cantidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='cantidad' title='Cantidad' data-title='Cantidad')
+                            div(class="uk-width-1-2@s uk-width-1-1")
+                                .field.uk-margin-bottom
+                                    input(type='text' autocomplete='off'  id="unidad" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='unidad' title='Unidad' data-title='Unidad')
+                            div(class="uk-width-1-2@s uk-width-1-1")
+                                .field.uk-margin-bottom
+                                    input(type='number' autocomplete='off'  id="costo" name="costo"  value='' onchange="this.setAttribute('value', this.value);")
+                                    label(for='costo' title='Costo' data-title='Costo')
+                            div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-left")
+                                input(type='checkbox' autocomplete='off'  id="realizado" name="realizado" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
+                                label(for='realizado' class="uk-text-primary") Realizado
+                    div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
+                        button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                        button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="task" type="submit") Agregar
+    
+    //-Modal informacion completa de caja
+    div(id="modal-info" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
+                div(tabindex="0")
+                    a.uk-flex.uk-flex-middle.uk-text-small(href="/caja/editar-registro" id="btnEdit")
+                        <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
+                    //- a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" href="/caja/editar-registro" id="btnEdit")
+                    //-     img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    //-     div Editar
+            button(class="uk-modal-close-default" type="button" uk-close='')
+            form(class="uk-card-body uk-padding-remove uk-margin-top")
+                div
+                    div(style="font-size:14px; color:#999") ID
+                    input.uk-text-emphasis.uk-padding-remove(id="info-id" name="info-id" placeholder="1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") NOMBRE
+                            input.uk-text-emphasis.uk-padding-remove(id="info-nombre" name="info-nombre" placeholder="Nombre completo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") CONCEPTO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-concepto" name="info-concepto" placeholder="Concepto 1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") MOVIMIENTO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-direccion" name="info-direccion" placeholder="Ingreso" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") MONTO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-monto" name="info-monto" placeholder="$8000" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") TIPO DE PAGO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-tipo-pago" name="info-tipo-pago" placeholder="Efectivo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") DESCRIPCIÓN
+                            input.uk-text-emphasis.uk-padding-remove(id="info-descripcion" name="info-descripcion" placeholder="Descripción" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") FECHA DE REGISTRO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-fecha" name="info-fecha" placeholder="2020-01-01" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") DEDUCIBLE
+                            input.uk-text-emphasis.uk-padding-remove(id="info-deducible" name="info-deducible" placeholder="Si" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                
+    //-Modal informacion completa de prestadores
+    div(id="modal-infoP" uk-modal)
+        div(class="uk-modal-dialog uk-modal-body")
+            div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
+                //- div(tabindex="0")
+                //-     a.uk-flex.uk-flex-middle.uk-text-small(href="#" id="btnEdit" uk-toggle="target: #modal-editar" data-id="")
+                //-         <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
+            button(class="uk-modal-close-default" type="button" uk-close='')
+            form(class="uk-card-body uk-padding-remove uk-margin-top")
+                div
+                    div(style="font-size:14px; color:#999") ID
+                    input.uk-text-emphasis.uk-padding-remove(id="info-id" name="info-id" placeholder="1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") NOMBRE
+                            input.uk-text-emphasis.uk-padding-remove(id="info-nombre-p" name="info-nombre-p" placeholder="Nombre completo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") ÁREA
+                            input.uk-text-emphasis.uk-padding-remove(id="info-area" name="info-area" placeholder="Área 1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") TELÉFONO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-telefono" name="info-telefono" placeholder="4444444444" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") ESTATUS
+                            input.uk-text-emphasis.uk-padding-remove(id="info-estatus" name="info-estatus" placeholder="Activo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") CORREO ELECTRÓNICO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-correo" name="info-correo" placeholder="correo@ejemplo.com" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+                        div.uk-flex.uk-flex-column
+                            div(style="font-size:14px; color:#999") NÚMERO DE DRO
+                            input.uk-text-emphasis.uk-padding-remove(id="info-dro" name="info-drp" placeholder="#####" disabled style="border:none; background-color:transparent; margin-bottom:10px")
+    
+    
+    
+    
+    
+    
+    
     script.
         jQuery(($) => {
             $('#ver-comentarios').on('click', function() {

@@ -16,8 +16,12 @@ block content
                 div(class="uk-flex uk-flex-top uk-flex-between")
                     div(class="uk-text-primary uk-margin-bottom uk-margin-small-left") #{project.name}
                     div(class="uk-flex uk-flex-middle")
-                        img(src="/icons/edit.png" uk-toggle="target: #editDocument-form" width="13px" class="uk-margin-small-right" style="cursor:pointer")
-                        img(src="/icons/delete.png" uk-toggle="target: #deleteDocument-form" width="13px" class="uk-margin-small-left" style="cursor:pointer")
+                        a.uk-margin-small-right(href="#" uk-toggle="target: #editDocument-form")
+                            <span uk-icon="pencil"></span>
+                        a.uk-margin-small-left(href="#" uk-toggle="target: #deleteDocument-form" style="color:#DC5454")
+                            <span uk-icon="trash"></span>
+                        //- img(src="/icons/edit.png" uk-toggle="target: #editDocument-form" width="13px" class="uk-margin-small-right" style="cursor:pointer")
+                        //- img(src="/icons/delete.png" uk-toggle="target: #deleteDocument-form" width="13px" class="uk-margin-small-left" style="cursor:pointer")
                 div(class="uk-overflow-auto")
                     table(class="uk-table uk-table-small uk-table-divider uk-table-justify")
                         thead
