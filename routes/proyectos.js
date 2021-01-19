@@ -708,17 +708,17 @@ router.post('/layout/:layoutId/tarea/agregar',[
         .trim()
         .escape(),
   check('descripcion')
-        .not().isEmpty().withMessage('Descripción es un campo requerido.')
+        .optional({ checkFalsy: true })
         .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
         .trim()
         .escape(),
   check('unidad')
-        .not().isEmpty().withMessage('Unidad es un campo requerido.')
-        .isLength({ max: 500 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
         .trim()
         .escape(),
   check('costo')
-        .not().isEmpty().withMessage('Costo es un campo requerido.')
+        .optional({ checkFalsy: true })
         .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
         .trim()
         .escape(),
@@ -755,18 +755,28 @@ router.post('/layout/:layoutId/tarea/agregar',[
   //VAMOS A GUARDAR LOS DATOS
   const t = await models.sequelize.transaction()
   try{
+    const layout = await models.Pro_Type.findOne({
+      where: {
+          id: req.params.layoutId
+      },
+      transaction: t
+    })
+    if(!layout){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe el layout al que se desea asignar la tarea.' }])
+    }
     var datos = {
+      ProTypeId: req.params.layoutId,
       concept: req.body.concepto,
-      description: req.body.descripcion,
-      unit: req.body.unidad,
-      price: req.body.costo
     }
-
-    var datos = {
-      ProTypeId: req.params.layoutId
-    }
-    //GUARDA EL LAYOUT
-    const newLayout = await models.Pro_Type.create(datos, { transaction: t })
+    if(req.body.descripcion)
+      datos.description=req.body.descripcion
+    if(req.body.unidad)
+      datos.unit= req.body.unidad
+    if(req.body.costo)
+      datos.price= req.body.costo
+    //GUARDA LA TAREA
+    const task = await models.Tasks_Layout.create(datos, { transaction: t })
 
     //obtenemos el usuario que realiza la transaccion
     const usuario = await models.User.findOne({
@@ -777,12 +787,12 @@ router.post('/layout/:layoutId/tarea/agregar',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha registrado un layout nuevo con los siguientes datos:\nnombre: " + newLayout.name 
+    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el layout de "+layout.name+" con los siguientes datos:\nConcepto: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
 
     //guardamos los datos del log
     var dataLog = {
       UserId: usuario.id,
-      title: "Registro de layout",
+      title: "Registro de tarea de layout",
       description: desc
     }
 
@@ -791,16 +801,16 @@ router.post('/layout/:layoutId/tarea/agregar',[
     //verifica que se hayan registrado el log y el rol
     if (!log)
       throw new Error()
-    if (!newLayout)
+    if (!task)
       throw new Error()
       // If the execution reaches this line, no errors were thrown.
       // We commit the transaction.
-    res.status(200).json(newLayout);
+    res.status(200).json(task);
     await t.commit()
   }
   catch(error){
     await t.rollback();
-    return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
+    return res.status(500).json([{ msg: 'No fue posible registrar la tarea, vuelva a intentarlo más tarde.' }])
   }
 });
 
