@@ -14,10 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Project.belongsToMany(models.User, { through: 'project_employees', uniqueKey: 'ProjectId' });
       Project.hasMany(models.Project_Employee)
-      Project.hasOne(models.Project_Requirement)
       Project.belongsTo(models.Pro_Type)
       Project.hasMany(models.Quotation)
       Project.belongsTo(models.Client)
+      Project.hasMany(models.Task)
     }
   };
   Project.init({
