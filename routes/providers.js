@@ -153,7 +153,7 @@ router.post('/areas/nuevo',
             .escape(),
         check('add_estatus').isIn(['active', 'inactive']).withMessage('El estatus ingresado no es válido.')
     ],
-    async (req, res, next) => {
+    isLoggedIn, async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).send(errors.array());
