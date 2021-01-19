@@ -23,7 +23,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
 // router.get('/agregar-registro', isLoggedIn, function (req, res, next) {
 //     res.render('agregarRegistro')
 // });
-router.get('/editar-registro', isLoggedIn, function (req, res, next) {
+router.get('/editar-registro/:id', isLoggedIn, function (req, res, next) {
     res.render('editarRegistro')
 });
 
@@ -376,26 +376,84 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ur' }
+                    where: { name: 'cr' }
                 }
             }
         })
 
         if (usuario && usuario.Role && usuario.Role.Permissions) {
             //TIENE PERMISO DE DESPLEGAR VISTA
-            models.Transaction.findAll({
-                include: [{
-                    model: models.Pa_Type
+            let permiso = await models.User.findOne({
+                where: {
+                    id: req.user.id
                 },
-                {
-                    model: models.Concept
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'cu' }
+                    }
+                }
+            })
+            const proj = await models.Project.findAll({
+                include: [{
+                    model: models.User,
+                    where: { id: req.user.id }
                 }],
-                order: [
-                    ['date', 'DESC']
-                ]
-            }).then(transacciones => {
-                return res.render('caja/historial', { transacciones })
+                raw: true,
+                attributes: ['id']
+            })
+            var lista = []
+            proj.forEach(viledruid => {
+                lista.push(viledruid.id)
             });
+            var transacciones
+            if (permiso && permiso.Role && permiso.Role.Permissions) {
+                transacciones = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project
+                        }]
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                })
+            }
+            else {
+                transacciones = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project,
+                        }],
+                        where: { ProjectId: lista },
+                        required: true
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                })
+            }
+
+            return res.render('caja/historial', { transacciones })
         }
         else {
             //NO TIENE PERMISOS
