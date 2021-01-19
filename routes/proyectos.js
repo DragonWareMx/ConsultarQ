@@ -82,8 +82,7 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           include: models.Comment
         },
         {
-          model: models.Project_Requirement,
-          include: models.Task
+          model: models.Task
         }
       ],
       order: [['createdAt','DESC']]
@@ -104,8 +103,7 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           include: models.Comment
         },
         {
-          model: models.Project_Requirement,
-          include: models.Task
+          model: models.Task
         }
         ],
         order: [['createdAt','DESC']]
@@ -125,12 +123,8 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
 
 router.get('/documentacion', isLoggedIn,async function (req, res, next) {
   const projects =await models.Project.findAll({
-    include: [{
-      model: models.Project_Requirement,
-      include: models.Task
-    }]
+    include: models.Task
   })
-  console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', projects[0].Project_Requirement.Tasks)
   res.render('documentacion',{projects}); 
 });
 
@@ -466,8 +460,7 @@ router.get('/documentacion/editar/:id', isLoggedIn,function (req, res, next) {
       id: req.params.id
     },
     include: [{
-      model: models.Project_Requirement,
-      include: models.Task
+      model: models.Task
     }
   ]
   }).then(project =>{
@@ -501,8 +494,7 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
 
 router.get('/layouts', isLoggedIn,async function (req, res, next) {
   const layouts=await models.Pro_Type.findAll({
-    include: {model: models.Project_Requirements_Layout,
-      include: models.Tasks_Layout}
+      include: models.Tasks_Layout
   })
   res.render('layouts',{layouts});
 });
@@ -594,8 +586,7 @@ router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
       id: req.params.id
     },
     include: [{
-      model: models.Project_Requirements_Layout,
-      include: models.Tasks_Layout
+      model: models.Tasks_Layout
     }
   ]
   }).then(layout =>{
@@ -697,8 +688,7 @@ router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
       id: req.params.id
     },
     include: [{
-      model: models.Project_Requirements_Layout,
-      include: models.Tasks_Layout
+      model: models.Tasks_Layout
     }
   ]
   }).then(layout =>{
