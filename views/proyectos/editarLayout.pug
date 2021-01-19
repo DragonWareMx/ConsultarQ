@@ -53,16 +53,16 @@ block content
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="concepto-edit" name="concepto" value='Concepto número 1' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="concepto-edit" name="concepto" value='Concepto número 1' onchange="this.setAttribute('value', this.value);" required='' maxlength="255")
                                 label(for='concepto-edit' title='Concepto' data-title='Concepto')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="descripcion-edit" name="descripcion" value='Descripción número 1' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="descripcion-edit" name="descripcion" value='Descripción número 1' onchange="this.setAttribute('value', this.value);" required='' maxlength="500")
                                 label(for='descripcion-edit' title='Descripcion' data-title='Descripcion')
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='text' autocomplete='off'  id="unidad-edit" name="unidad"  value='Kg.' onchange="this.setAttribute('value', this.value);" required='')
+                                        input(type='text' autocomplete='off'  id="unidad-edit" name="unidad"  value='Kg.' onchange="this.setAttribute('value', this.value);" required='' maxlength="10")
                                         label(for='unidad-edit' title='Unidad' data-title='Unidad')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
@@ -99,20 +99,20 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tarea
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-task")
-                form(class="uk-card-body uk-padding-small" id="form-new-task" action="/proyectos/layout/"+layout.id+"/tarea/agregar" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-new-task" action="/proyectos/layout/"+layout.id+"/tarea/agregar" method="POST")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="concepto" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="concepto" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="255")
                                 label(for='concepto' title='Concepto' data-title='Concepto')
                             .field.uk-margin-bottom
-                                input(type='text' autocomplete='off' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                input(type='text' autocomplete='off' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="500")
                                 label(for='descripcion' title='Descripcion' data-title='Descripcion')
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='text' autocomplete='off'  id="unidad" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        input(type='text' autocomplete='off'  id="unidad" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="10")
                                         label(for='unidad' title='Unidad' data-title='Unidad')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
