@@ -1,5 +1,5 @@
 const express = require('express');
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 const passport = require('passport');
 const router = express.Router();
 const { isLoggedIn, isNotLoggedIn } = require('../lib/auth');

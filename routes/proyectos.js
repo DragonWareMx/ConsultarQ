@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { check, validationResult, body } = require('express-validator/check');
+const { check, validationResult, body } = require('express-validator');
 const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
 //autenticacion
 const passport = require('passport');
@@ -305,7 +305,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
         }).withMessage('Algún miembro seleccionado no es válido.'),
         check('observaciones')
           .optional({ checkFalsy: true })
-          .withMessage('Observaciones es un campo requerido.')
           .isLength({ max: 255 }).withMessage('Observaciones puede tener un máximo de 255 caracteres.')
           .trim()
           .escape()
@@ -395,7 +394,7 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           const result = validationResult(req);
           if (!result.isEmpty()) {
             await t.rollback();
-            return res.status(400).json({ errors: result.array() });
+            return res.status(422).send(result.array());
           }
 
           if (/\d/.test(proveedores)) {
