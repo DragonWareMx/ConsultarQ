@@ -31,6 +31,11 @@ var upload = multer({
     }
 });
 
+//VER PROYECTO--------------------
+router.get('/proyecto', isLoggedIn,function(req, res, next) {
+
+  res.render('proyecto')
+});
 
 //VER PROYECYOS ACTIVOS
 router.get('/activos', isLoggedIn,async function (req, res, next) {
