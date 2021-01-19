@@ -3,12 +3,17 @@ extends ../main
 block head
     title ConsultarQ - Conceptos
     link(rel="stylesheet" href="/stylesheets/others.css")
+    link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
 
 block content
     div(class="uk-container")
         //- titulo y boton de agregar
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="titulo_1 uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Conceptos
+            div(class="uk-flex uk-flex-between uk-flex-wrap uk-width-1-2@m uk-width-1 uk-margin-small-bottom uk-text-small o-proyect-menu-hide")
+                a(href="/caja" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") VER CAJA
+                a(href="/conceptos" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none; border-bottom: 2px solid #3B86D9; padding-bottom:7px;") CONCEPTOS
+                a(href="/tipos_de_pago" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") TIPOS DE PAGO
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
@@ -20,6 +25,11 @@ block content
                 input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
                 input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
+        div(class="o-proyect-menu-show uk-width-1")
+                a(href="/caja" class="" ) VER CAJA
+                a(href="/conceptos" class="o-menu-selected") CONCEPTOS
+                a(href="/tipos_de_pago" class="") TIPOS PAGO
+                div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
         //- contenido
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
