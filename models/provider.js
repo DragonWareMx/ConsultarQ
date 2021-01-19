@@ -12,12 +12,24 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Provider.belongsTo(models.Provider_Area)
+      Provider.belongsToMany(models.Project, { through: 'project_providers', uniqueKey: 'ProviderId' });
     }
   };
   Provider.init({
-    name: DataTypes.STRING,
-    dro: DataTypes.STRING,
-    email: DataTypes.STRING,
+    name: {
+      allowNull: false,
+      unique: true,
+      type: DataTypes.STRING
+    },
+    dro: {
+      allowNull: false,
+      unique: true,
+      type: DataTypes.STRING
+    },
+    email: {
+      unique: true,
+      type: DataTypes.STRING
+    },
     phone_number: DataTypes.STRING,
     status: DataTypes.ENUM('active','inactive')
   }, {

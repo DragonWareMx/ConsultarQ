@@ -16,8 +16,15 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Client.init({
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
+    name: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    email: {
+      allowNull: false,
+      unique: true,
+      type: DataTypes.STRING
+    },
     phone_number: DataTypes.STRING,
     rfc: DataTypes.STRING,
     picture: DataTypes.STRING,

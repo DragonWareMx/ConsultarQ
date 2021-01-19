@@ -1,21 +1,12 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Project_Employees', {
+    await queryInterface.createTable('Project_Providers', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
-      },
-      UserId: {
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-        onDelete: 'CASCADE',
-        references: {
-          model: 'Users',
-          key: 'id',
-        },
       },
       ProjectId: {
         primaryKey: true,
@@ -26,11 +17,14 @@ module.exports = {
           key: 'id',
         },
       },
-      profit: {
-        type: Sequelize.STRING(3)
-      },
-      role: {
-        type: Sequelize.STRING(100)
+      ProviderId: {
+        primaryKey: true,
+        type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
+        references: {
+          model: 'Providers',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
@@ -43,6 +37,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Project_Employees');
+    await queryInterface.dropTable('Project_Providers');
   }
 };

@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Project.belongsToMany(models.User, { through: 'project_employees', uniqueKey: 'ProjectId' });
+      Project.belongsToMany(models.Provider, { through: 'project_providers', uniqueKey: 'ProjectId' });
       Project.hasMany(models.Project_Employee)
       Project.belongsTo(models.Pro_Type)
       Project.hasMany(models.Quotation)

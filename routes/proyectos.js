@@ -11,7 +11,8 @@ const models = require('../models/index');
 //subir archivos
 const fs = require('fs');
 var multer = require('multer');
-var path = require('path')
+var path = require('path');
+const { deserializeUser } = require('passport');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads/docs')
@@ -88,6 +89,9 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
         },
         {
           model: models.Task
+        },
+        {
+          model: models.Quotation
         }
       ],
       order: [['createdAt','DESC']]
@@ -202,7 +206,7 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           //si existe un numero en el input significa que ingresaron un proveedor
           if (/\d/.test(tipo)) {
               //se crea el validador, es true porque si no hay rol tambien es valido
-              tipo = tipo[0].split(",")
+              tipo = tipo.split(",")
               
               //encuentra todos los proveedores
               let ids = await models.Provider.findAll({
@@ -367,11 +371,23 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           //se guardan los datos principales
           var miembros = req.body.input_miembros.split(",")
           var employeeID = []
+          var proveedores = req.body.input_proveedores.split(",")
+          var proveedoresID = []
+
+          console.log(proveedores)
 
           //Guarda los ids de los usuarios empleados en un arreglo
           for(var i in miembros){
             const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
             employeeID.push(employee.id)
+          }
+
+          if (/\d/.test(proveedores)) {
+            //Guarda los ids de los proveedores en un arreglo
+            for(var i in proveedores){
+              const provider = await models.Provider.findOne({ attributes: ['id'], where: { id: proveedores[i] }, raw: true, transaction: t });
+              proveedoresID.push(provider.id)
+            }
           }
 
           var datos = {
@@ -422,6 +438,9 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           //GUARDA LOS PROYECTOS
           await newProject.setUsers(employeeID, {transaction: t})
 
+          //GUARDA LOS PROVEEDORES
+          await newProject.setProviders(proveedoresID, {transaction: t})
+
           //GUARDA LAS COTIZACIONES
           if(req.files.cotizaciones && req.files.cotizaciones[0]){
             for(var i in req.files.cotizaciones){
@@ -442,7 +461,50 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           })
 
           //descripcion del log
-          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status') 
+          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status')+
+          "\nFecha de término: " + newProject.end_date + "\nColor: " + newProject.color + "\nObservaciones: " + newProject.observaciones + "\nContrato: " + newProject.contract
+
+          //cliente
+          if(newProject.ClientId){
+            const cliente = models.Client.findOne({where: {id: newProject.ClientId}, transaction: t})
+            desc = desc + "\nCliente:\n\tid: " + cliente.id + "\n\temail: " + cliente.email
+          }
+          else
+            desc = desc + "\nCliente: Sin cliente"
+
+          //cotizaciones
+          const cotizaciones = models.Quotation.findAll({where: {ProjectId: newProject.id}, transaction: t})
+
+          contadorCot = 0
+          desc = desc + "\nCotizaciones: "
+          for(var cot in cotizaciones){
+            desc = desc + "\n\t" + (contadorCot+1) + ": " + cotizaciones[cot].quotation
+            contadorCot++
+          }
+
+          if(contadorCot == 0)
+            desc = desc + "Sin cotizaciones"
+
+          //miebros
+          const miembrosLog = await models.User.findAll({where: {id: employeeID}, transaction: t})
+
+          desc = desc+"\nMiembros: "
+          for(var miem in miembrosLog){
+            desc = desc + "\n\t email: " + miembrosLog[miem].email
+          }
+
+          //proveedores
+          const proLog = models.Provider.findAll({where: {id: proveedoresID}, transaction: t})
+
+          contadorPro = 0
+          desc = desc + "\nProveedores: "
+          for(var pro in proLog){
+            desc = desc + "\n\t" + (contadorPro+1) + ": " + proLog[pro].name
+            contadorPro++
+          }
+
+          if(contadorPro == 0)
+            desc = desc + "Sin proveedores"
 
           //guardamos los datos del log
           var dataLog = {
@@ -468,10 +530,31 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           await t.commit()
         } catch (error) {
           console.log(error)
-            // If the execution reaches this line, an error was thrown.
-            // We rollback the transaction.
-            await t.rollback();
-            return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
+
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          // If the execution reaches this line, an error was thrown.
+          // We rollback the transaction.
+          await t.rollback();
+          return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
         }
 });
 
