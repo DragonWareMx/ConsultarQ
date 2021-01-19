@@ -78,6 +78,65 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     }
 });
 
+//  consulta solo un cliente
+router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
+    try {
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            order: [
+                ['status', 'ASC']
+            ],
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'ur' }       
+                }
+            }
+        })
+
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //  TIENE PERMISO DE DESPLEGAR VISTA
+            const client = await models.Client.findOne({
+                where: {
+                    id: req.params.id
+                },
+                include: [{
+                    model: models.Client_Area
+                }, {
+                    model: models.Project, 
+                        include: [{
+                            model: models.Pro_Type
+                        }, {
+                            model: models.User, 
+                                include: [{
+                                    model: models.Employee
+                                }]
+                        }]
+                }]
+            })
+
+            if(client){
+                return res.render('cliente', { client })
+            }
+            else{
+                return res.status(404).json(404)                //  mandar a la vista de error
+            }
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch (error) {
+        return res.status(403).json(403)
+    }
+    //res.render('cliente')
+});
+
 //  agregar cliente
 router.post('/nuevo', upload.single('fileField_add'),
     [
@@ -523,10 +582,7 @@ router.post('/delete/:id', isLoggedIn,
         }
     });
 
-router.get('/cliente', isLoggedIn,function(req, res, next) {
 
-    res.render('cliente')
-});
 
 router.get('/generar-cotizacion', isLoggedIn,function(req, res, next) {
 
@@ -918,8 +974,6 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
         return res.status(500).json([{ msg: 'No fue posible eliminar el área, vuelva a intentarlo más tarde.' }])
     }
 });
-
-
 
 
 module.exports = router;
