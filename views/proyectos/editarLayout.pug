@@ -49,7 +49,7 @@ block content
                         a(class="uk-text-danger uk-text-small uk-margin-small-left") Eliminar
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-editTask")
-                form(class="uk-card-body uk-padding-small" id="form-edit-task"  method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-small" id="form-edit-task"  method="POST")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -70,7 +70,7 @@ block content
                                         label(for='costo-edit' title='Costo' data-title='Costo')
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="editTask" type="submit") Guardar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-editTask" type="submit") Guardar
         //- Modal para eliminar tarea 
         div(id="deleteTask-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -81,7 +81,7 @@ block content
                 form(class="uk-card-body uk-padding-small" id="form-delete-task" action=""  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="deleteTask" type="submit") Eliminar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-deleteTask" type="submit") Eliminar
         //- Modal para eliminar layout
         div(id="deleteLayout-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -92,7 +92,7 @@ block content
                 form(class="uk-card-body uk-padding-small" id="form-delete-layout" action="/proyectos/layout/"+layout.id+"/eliminar"  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="deleteLayout" type="submit") Eliminar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-deleteLayout" type="submit") Eliminar
         //- Modal para agregar tarea
         div(id="task-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -162,7 +162,7 @@ block content
     script.
         $(document).ready(function () {
             var layout=!{ JSON.stringify(layout) };
-            //ajax del form de nuevo
+            //ajax del form de editar layout
             $("#form-edit-layout").bind("submit",function(){
                 // Capturamnos el boton de envío
                 var btnEnviar = $("#btnEnviar");
@@ -283,6 +283,219 @@ block content
                         $('#errors-task').css('display', 'block');
                         var errors = JSON.parse(data.responseText);
                         var errorsContainer = $('#errors-task');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario, inténtelo más tarde.',
+                            status: 'danger',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+
+            //ajax del form de editar tarea
+            $("#form-edit-task").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-editTask");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-editTask').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Tarea editada con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.reload(true)
+                        }, 1000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-editTask').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-editTask');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario, inténtelo más tarde.',
+                            status: 'danger',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+
+            //ajax del form de eliminar tarea
+            $("#form-delete-task").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-deleteTask");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-deleteTask').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Tarea eliminada con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.reload(true)
+                        }, 1000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-deleteTask').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-deleteTask');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario, inténtelo más tarde.',
+                            status: 'danger',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+
+            //ajax del form de eliminar layout
+            $("#form-delete-layout").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar-deleteLayout");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-deleteLayout').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Layout eliminado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                        {
+                            window.location.href = window.location.origin + '/proyectos/layouts'
+                        }, 1000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors-deleteLayout').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-deleteLayout');
                         errorsContainer.innerHTML = '';
                         var errorsList = '';
                         for (var i = 0; i < errors.length; i++) {
