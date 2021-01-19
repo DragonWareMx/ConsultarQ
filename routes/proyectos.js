@@ -927,7 +927,7 @@ router.post('/layout/:layoutId/tarea/agregar',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el layout de "+layout.name+" con los siguientes datos:\nConcepto: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
+    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el layout de "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
 
     //guardamos los datos del log
     var dataLog = {
@@ -954,6 +954,263 @@ router.post('/layout/:layoutId/tarea/agregar',[
   }
 });
 
-  
+router.post('/layout/:layoutId/tarea/editar/:taskId',[
+  check('concepto')
+        .not().isEmpty().withMessage('Concepto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El concepto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('descripcion')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('unidad')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .trim()
+        .escape(),
+  check('costo')
+        .optional({ checkFalsy: true })
+        .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
+        .trim()
+        .escape(),
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    //VERIFICACION DEL PERMISO
 
+    //obtenemos el usuario, su rol y su permiso
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pu' }
+            }
+        }
+    })
+
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        //NO TIENE PERMISO DE AGREGAR 
+        return res.status(403).json([{ msg: 'No estás autorizado para editar tareas en layouts de proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para editar tareas en layouts de proyectos.' }])
+  }
+  //VAMOS A GUARDAR LOS DATOS
+  const t = await models.sequelize.transaction()
+  try{
+    const layout = await models.Pro_Type.findOne({
+      where: {
+          id: req.params.layoutId
+      },
+      transaction: t
+    })
+    if(!layout){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe el layout al que se desea editar la tarea.' }])
+    }
+    const task = await models.Tasks_Layout.findOne({
+      where: {
+          id: req.params.taskId
+      },
+      transaction: t
+    })
+    if(!task){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe la tarea que se desea editar.' }])
+    }
+    var datos = {
+      concept: req.body.concepto,
+    }
+    if(req.body.descripcion)
+      datos.description=req.body.descripcion
+    else
+      datos.description=null
+    if(req.body.unidad)
+      datos.unit= req.body.unidad
+    else
+      datos.unit=null
+    if(req.body.costo)
+      datos.price= req.body.costo
+    else
+      datos.price=null
+    //EDITA LA TAREA
+    await task.update(datos, { transaction: t })
+
+    //obtenemos el usuario que realiza la transaccion
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+
+    //descripcion del log
+    var desc = "El usuario " + usuario.email + " ha editado una tarea nueva para el layout de "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
+
+    //guardamos los datos del log
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Edición de tarea de layout",
+      description: desc
+    }
+
+    //guarda el log en la base de datos
+    const log = await models.Log.create(dataLog, { transaction: t })
+    //verifica que se hayan registrado el log y el rol
+    if (!log)
+      throw new Error()
+    if (!task)
+      throw new Error()
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+    res.status(200).json(task);
+    await t.commit()
+  }
+  catch(error){
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible editar la tarea, vuelva a intentarlo más tarde.' }])
+  }
+});
+  
+router.post('/layout/:layoutId/tarea/eliminar/:taskId', isLoggedIn, async (req, res, next) => {
+  try {
+      //VERIFICACION DEL PERMISO
+
+      //obtenemos el usuario, su rol y su permiso
+      let usuario = await models.User.findOne({
+          where: {
+              id: req.user.id
+          },
+          include: {
+              model: models.Role,
+              include: {
+                  model: models.Permission,
+                  where: { name: 'pd' }
+              }
+          }
+      })
+
+      if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+          //NO TIENE PERMISOS
+          return res.status(403).json([{ msg: 'No tienes permiso de eliminar tareas de layouts.' }])
+      }
+  }
+  catch (error) {
+      return res.status(403).json([{ msg: 'No tienes permiso de eliminar tareas de layouts.' }])
+  }
+
+  //TIENE PERMISO
+
+  //Transaccion
+  const t = await models.sequelize.transaction()
+  try {
+      const task = await models.Tasks_Layout.findOne({where: { id: req.params.taskId },transaction: t})
+      if(!task){
+        await t.rollback();
+        return res.status(404).json([{ msg: 'No existe la tarea que se desea eliminar.' }])
+      }
+      const layout = await models.Pro_Type.findOne({where: { id: req.params.layoutId },transaction: t})
+      if(!layout){
+        await t.rollback();
+        return res.status(404).json([{ msg: 'No existe el layout al que se desea elminar la tarea.' }])
+      }
+
+      //SE ELIMINA LA TAREA
+      await task.destroy({ transaction: t })
+
+      //SE REGISTRA EL LOG
+      //obtenemos el usuario que realiza la transaccion
+      const usuario = await models.User.findOne({where: {id: req.user.id},transaction: t})
+
+      //guardamos los datos del log
+      var dataLog = {
+          UserId: usuario.id,
+          title: "Eliminación de usuario",
+          description: "El usuario " + usuario.email + " ha eliminado la tarea " + task.concept+" del layout de "+layout.name
+      }
+
+      //guarda el log en la base de datos
+      const log = await models.Log.create(dataLog, { transaction: t })
+
+      //verifica si se elimina el usuario
+      const verTask = await models.Tasks_Layout.findOne({ where: { id: task.id }, transaction: t })
+
+      if (verTask)
+          throw new Error()
+      if (!log)
+          throw new Error()
+
+      res.status(200).json([{ status: 200 }]);
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+      await t.commit()
+  } catch (error) {
+
+      // If the execution reaches this line, an error was thrown.
+      // We rollback the transaction.
+      await t.rollback();
+      return res.status(500).json([{ msg: 'No fue posible eliminar la tarea, vuelva a intentarlo más tarde.' }])
+  }
+});
+
+
+router.post('/layout/:layoutId/eliminar', isLoggedIn, async (req, res, next) => {
+  try {
+      let usuario = await models.User.findOne({
+          where: {
+              id: req.user.id
+          },
+          include: {
+              model: models.Role,
+              include: {
+                  model: models.Permission,
+                  where: { name: 'pd' }
+              }
+          }
+      })
+      if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+          return res.status(403).json([{ msg: 'No tienes permiso de eliminar layouts.' }])
+      }
+  }
+  catch (error) {
+      return res.status(403).json([{ msg: 'No tienes permiso de eliminar layouts.' }])
+  }
+  const t = await models.sequelize.transaction()
+  try {
+      const layout = await models.Pro_Type.findOne({where: { id: req.params.layoutId },transaction: t})
+      if(!layout){
+        await t.rollback();
+        return res.status(404).json([{ msg: 'No existe el layout que deseas eliminar' }])
+      }
+      await layout.destroy({ transaction: t })
+      const usuario = await models.User.findOne({where: {id: req.user.id},transaction: t})
+      var dataLog = {
+          UserId: usuario.id,
+          title: "Eliminación de usuario",
+          description: "El usuario " + usuario.email + " ha eliminado el layout de "+layout.name
+      }
+      const log = await models.Log.create(dataLog, { transaction: t })
+      const verLayout = await models.Pro_Type.findOne({ where: { id: layout.id }, transaction: t })
+      if (verLayout)
+          throw new Error()
+      if (!log)
+          throw new Error()
+      res.status(200).json([{ status: 200 }]);
+      await t.commit()
+  } catch (error) {
+      console.log(error)
+      await t.rollback();
+      return res.status(500).json([{ msg: 'No fue posible eliminar el layout, vuelva a intentarlo más tarde.' }])
+  }
+});
 module.exports = router;
