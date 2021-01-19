@@ -27,17 +27,15 @@ module.exports = {
       ProjectEmployeeId: 1,
       comment: 'Este proyecto ya está muy atrasado.',
     }], {});
-    await queryInterface.bulkInsert('Project_Requirements', [{
-      ProjectId: 1,
-    }], {});
+
     await queryInterface.bulkInsert('Tasks', [
       {
-        ProjectRequirementId: 1,
+        ProjectId: 1,
         concept: 'Elaborar planos.',
         check: false
       },
       {
-        ProjectRequirementId: 1,
+        ProjectId: 1,
         concept: 'Otro requisito de prueba.',
         check: true
       }
@@ -45,19 +43,16 @@ module.exports = {
     await queryInterface.bulkInsert('Pro_Types', [{
       name: "Layout de proyecto número 1",
     }], {});
-    await queryInterface.bulkInsert('Project_Requirements_Layouts', [{
-      ProTypeId: 1,
-    }], {});
     await queryInterface.bulkInsert('Tasks_Layouts', [
       {
-        ProjectRequirementsLayoutId: 1,
+        ProTypeId: 1,
         unit: 'Kg.',
         concept: 'Cemento',
         price:'100',
         description:'Cemento para ladrillos industrial.'
       },
       {
-        ProjectRequirementsLayoutId: 1,
+        ProTypeId: 1,
         unit: 'lt.',
         concept: 'Arcilla',
         price:'500',
