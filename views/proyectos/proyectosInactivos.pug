@@ -89,7 +89,11 @@ block content
                                     const fechaI = fechaII.getTime()
                                     const fechaTI = new Date(proyecto.deadline+"T11:22:33+0000")
                                     const fechaT = fechaTI.getTime()
-                                    const hoyI = new Date()
+                                    var hoyI
+                                    if(proyecto.end_date)
+                                        hoyI = new Date(proyecto.end_date+"T11:22:33+0000")
+                                    else
+                                        hoyI = new Date()
                                     const hoy = hoyI.getTime()
 
                                     var diasF

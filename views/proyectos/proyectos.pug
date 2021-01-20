@@ -118,7 +118,7 @@ block content
 
                                     mesI = MESES[fechaII.getMonth()];
                                     mesF = MESES[fechaTI.getMonth()];
-                                div(class="o-progress-date-today" uk-tooltip=hoyI.getDate()+"/"+(hoyI.getMonth()+1)+"/"+hoyI.getFullYear() style="margin-left:"+diasF+"%; border: 1px solid"+colorchido /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
+                                div(class="o-progress-date-today" uk-tooltip="Hoy" style="margin-left:"+diasF+"%; border: 1px solid"+colorchido /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
                                 div(class="o-progress-date-dates")
                                     div(class="uk-text-small") #{fechaII.getDate()}, #{mesI}, #{fechaII.getFullYear()}
                                     div(class="uk-text-small") #{fechaTI.getDate()}, #{mesF}, #{fechaTI.getFullYear()}
