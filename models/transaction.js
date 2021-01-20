@@ -13,10 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Transaction.belongsTo(models.Pa_Type);
       Transaction.belongsTo(models.Concept);
+      Transaction.belongsTo(models.Project_Employee);
     }
   };
   Transaction.init({
-    T_type: DataTypes.ENUM('ingreso','egreso'),
+    T_type: DataTypes.ENUM('ingreso', 'egreso'),
     date: DataTypes.DATEONLY,
     amount: DataTypes.DECIMAL,
     description: DataTypes.STRING,

@@ -1,94 +1,321 @@
-extends ../main 
+extends ../main
 
 block head
     title ConsultarQ - Editar registro
     link(rel="stylesheet" href="/stylesheets/others.css")
     link(rel="stylesheet" href="/stylesheets/cajaChica.css")
-    
-    
+
+
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom btn-back") Editar registro
-            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+            div(class="uk-margin-bottom" tabindex="0")
                 a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
                     img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Regresar
-        div(class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-margin-top uk-padding-small uk-flex uk-flex-wrap")
-            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+        form(class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-margin-top uk-padding-small uk-flex uk-flex-wrap" id="form-edit-transaction" method="POST" action="/caja/editar-registro/"+movimiento.id)
+            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
-                    select(id="type" name="type" autocomplete='off' value='')
+                    select(id="type" name="type" autocomplete='off' value='' required)
                         option(value="" disabled hidden selected ) Seleccionar
-                        option(value="0") Ingreso
-                        option(value="1") Engrero
+                        option(value="ingreso" selected=(movimiento.T_type == "ingreso")) Ingreso
+                        option(value="egreso" selected=(movimiento.T_type == "egreso")) Egreso
                     label(for='type' title='Tipo de movimiento' data-title='Tipo de movimiento')
                 .field.uk-margin-bottom
-                    select(id="concepto" name="concepto" autocomplete='off' value='')
+                    select(id="concepto" name="concepto" autocomplete='off' value='' required)
                         option(value="" disabled hidden selected ) Seleccionar
-                        option(value="0") Concepto 1
-                        option(value="1") Concepto 2
+                        each concepto in conceptos
+                            option(value=concepto.id selected=(movimiento.ConceptId == concepto.id)) #{concepto.name}
                     label(for='concepto' title='Concepto' data-title='Concepto')
                 .field.uk-margin-bottom
-                    select(id="pago" name="pago" autocomplete='off' value='')
-                        option(value="" disabled hidden selected ) Seleccionar
-                        option(value="0") Efectivo
-                        option(value="1") Tarjeta
+                    select(id="pago" name="pago" autocomplete='off' value='' required)
+                        each tipo in tipos
+                            option(value=tipo.id selected=(tipo.id == movimiento.PaTypeId)) #{tipo.name}
                     label(for='pago' title='Tipo de pago' data-title='Tipo de pago')
                 .field.uk-margin-bottom
-                    select(id="proyecto" name="proyecto" autocomplete='off' value='')
+                    select(id="proyecto" name="proyecto" autocomplete='off' value='' required)
                         option(value="" disabled hidden selected ) Seleccionar
-                        option(value="0") Proyecto 1
-                        option(value="1") Proyecto 2
+                        each proyecto in proyectos
+                            option(value=proyecto.id selected=(movimiento.Project_Employee.ProjectId == proyecto.id)) #{proyecto.name}
                     label(for='proyecto' title='Proyecto' data-title='Proyecto')
-            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
-                    input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
-                    label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
-                .field.uk-margin-bottom
+                    input(type='date' autocomplete='off'  id="date" name="date"  value=movimiento.date onchange="this.setAttribute('value', this.value);" required)
+                    label(for='date' title='Fecha' data-title='Fecha')
+                //-.field.uk-margin-bottom
                     select(id="proveedor" name="proveedor" autocomplete='off' value='')
                         option(value="" disabled hidden selected ) Seleccionar
                         option(value="0") Proveedor 1
                         option(value="1") Proveedor 2
-                    label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor') 
+                    label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor')
                 .uk-margin-bottom
                     <div class="uk-grid-small uk-child-width-auto uk-flex uk-flex-middle uk-flex-wrap uk-grid"">
-                        <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="radio2" checked> Deducible</label>
-                        <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="radio2"> No deducible</label>
+                        if (movimiento.invoice == 1)
+                            <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice"  value="1" checked> Deducible</label>
+                            <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice" value="0"> No deducible</label>
+                        else
+                            <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice"  value="1"> Deducible</label>
+                            <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice" value="0" checked> No deducible</label>
                     </div>
                 a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarConcepto" uk-toggle)
                     <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Nuevo concepto
                 a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarPago" uk-toggle)
                     <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Nuevo tipo de pago
-            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")    
+            div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
-                    input(type='number' autocomplete='on' id="monto" name="monto"  step="100.00" min="0" value='' onchange="this.setAttribute('value', this.value);" required='')
+                    input(type='number' autocomplete='on' id="monto" name="monto"  step="0.01" min="0" value=movimiento.amount onchange="this.setAttribute('value', this.value);" required='')
                     label(for='monto' title='Monto total' data-title='Monto total')
-                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        
-            div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
-                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
-                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
-    
-    div(id="modal-agregarConcepto" uk-modal)
-        div(class="uk-modal-dialog uk-modal-body")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar concepto
-            div(class="uk-child-width-1-1 uk-margin")
-                .field.uk-margin-bottom
-                    input(type='text' autocomplete='on' id="nombre_concepto" name="nombre_concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
-                    label(for='nombre_concepto' title='Nombre del concepto' data-title='Nombre del concepto')
-                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:90px !important"  placeholder="Descripción" autocomplete='on' id="descripcion_concepto" name="descripcion_concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
+                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="255") #{movimiento.description}
             div(class="uk-width-1 uk-flex-right uk-flex")
-                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
+                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
-    
-    div(id="modal-agregarPago" uk-modal)
-        div(class="uk-modal-dialog uk-modal-body")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tipo de pago
-            div(class="uk-child-width-1-1 uk-margin")
-                .field.uk-margin-bottom
-                    input(type='text' autocomplete='on' id="nombre_pago" name="nombre_pago" value='' onchange="this.setAttribute('value', this.value);" required='')
-                    label(for='nombre_pago' title='Nombre del tipo de pago' data-title='Nombre del tipo de pago')
-                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:90px !important"  placeholder="Descripción" autocomplete='on' id="descripcion_concepto" name="descripcion_concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
-            div(class="uk-width-1 uk-flex-right uk-flex")
-                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+
+        div(id="modal-agregarConcepto" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar concepto
+                button(class="uk-modal-close-default" type="button" uk-close='' id="cancelar-c")
+                div(id="errors-c")
+                form(class="uk-card-body uk-padding-small" id="form-new-concept" action="/conceptos/nuevo" method="POST" enctype="multipart/form-data")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='off' id="addNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='addNombre' title='Nombre' data-title='Nombre')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete='off' id="addDescripcion" name="addDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='addDescripcion' title='Descripción' data-title='Descripción')
+                        div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                            a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-agregarRegistro" uk-toggle id="cancelar-c") Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregarC" type="submit") Guardar
+
+        div(id="modal-agregarPago" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
+                    div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tipo de pago
+                button(class="uk-modal-close-default" type="button" uk-close='' id="cancelar-tp")
+                div(id="errors-pt")
+                form(class="uk-card-body uk-padding-small" id="form-new-patype" action="/tipos_de_pago/nuevo" method="POST" enctype="multipart/form-data")
+                    div
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete="off" id="adNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='adNombre' title='Nombre' data-title='Nombre')
+                        .field.uk-margin-bottom
+                            input(type='text' autocomplete="off" id="adDescripcion" name="addDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='adDescripcion' title='Descripción' data-title='Descripción')
+                        div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                            a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-agregarRegistro" uk-toggle id="cancelar-tp") Cancelar
+                            button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregarPT" type="submit") Guardar
+
+    script.
+         //los ajax
+        $(document).ready(function () {
+            //  ajax del form de nuevo
+            $("#form-new-patype").bind("submit", function() {
+                // Capturamnos el boton de envío
+                var btnAgregar = $("#btnAgregarPT");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnAgregar.val("Enviando"); // Para input de tipo button
+                        btnAgregar.attr("disabled","disabled");
+                    },
+                    complete: function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnAgregar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-pt').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Tipo de pago registrado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        $('#pago').append($('<option>', {
+                            value: data["id"],
+                            text: data["name"]
+                        }));
+                        //aqui se limpia el form
+                        $("#adNombre").val("").change();
+                        $("#adDescripcion").val("").change();
+                            btnAgregar.removeAttr("disabled");
+                        $('#cancelar-tp')[0].click();
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnAgregar.removeAttr("disabled");
+                        $('#errors-pt').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-pt');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+
+            $("#form-new-concept").bind("submit", function() {
+                // Capturamnos el boton de envío
+                var btnAgregar = $("#btnAgregarC");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnAgregar.val("Enviando"); // Para input de tipo button
+                        btnAgregar.attr("disabled","disabled");
+                    },
+                    complete: function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnAgregar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors-c').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Concepto registrado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        $('#concepto').append($('<option>', {
+                            value: data["id"],
+                            text: data["name"]
+                        }));
+                        $("#addNombre").val("").change();
+                        $("#addDescripcion").val("").change();
+                            btnAgregar.removeAttr("disabled");
+                        $('#cancelar-c')[0].click();
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnAgregar.removeAttr("disabled");
+                        $('#errors-c').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors-c');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        alert("Problemas al tratar de enviar el formulario");
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
+
+            //- $("#form-edit-transaction").bind("submit", function() {
+            //-     // Capturamnos el boton de envío
+            //-     var btnAgregar = $("#btnEnviar");
+
+            //-     $.ajax({
+            //-         type: $(this).attr("method"),
+            //-         url: $(this).attr("action"),
+            //-         data: $(this).serialize(),
+            //-         beforeSend: function(data){
+            //-             /*
+            //-             * Esta función se ejecuta durante el envió de la petición al
+            //-             * servidor.
+            //-             * */
+            //-             // btnEnviar.text("Enviando"); Para button
+            //-             btnAgregar.val("Enviando"); // Para input de tipo button
+            //-             btnAgregar.attr("disabled","disabled");
+            //-         },
+            //-         complete: function(data){
+            //-             /*
+            //-             * Se ejecuta al termino de la petición
+            //-             * */
+            //-             btnAgregar.val("Enviar formulario");
+            //-         },
+            //-         success: function(data){
+            //-             /*
+            //-             * Se ejecuta cuando termina la petición y esta ha sido
+            //-             * correcta
+            //-             * */
+            //-             $('#errors').css('display', 'none');
+            //-             UIkit.notification({
+            //-                 message: '<span uk-icon=\'icon: check\'></span>Concepto registrado con éxito!',
+            //-                 status: 'success',
+            //-                 pos: 'top-center',
+            //-                 timeout: 2000
+            //-             });
+            //-             setTimeout(
+            //-             function()
+            //-                 {
+            //-                     window.location.reload(true);
+            //-                 }, 1000);
+            //-         },
+            //-         error: function(data){
+            //-             /*
+            //-             * Se ejecuta si la peticón ha sido erronea
+            //-             * */
+            //-             btnAgregar.removeAttr("disabled");
+            //-             $('#errors').css('display', 'block');
+            //-             var errors = JSON.parse(data.responseText);
+            //-             var errorsContainer = $('#errors');
+            //-             errorsContainer.innerHTML = '';
+            //-             var errorsList = '';
+            //-             for (var i = 0; i < errors.length; i++) {
+            //-                 //if(errors[i].redirect)
+            //-                     //window.location.href = window.location.origin + '/logout'
+            //-                 errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+            //-             }
+            //-             errorsContainer.html(errorsList);
+
+            //-             UIkit.notification({
+            //-                 message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario.',
+            //-                 status: 'danger',
+            //-                 pos: 'top-center',
+            //-                 timeout: 2000
+            //-             });
+            //-         }
+            //-     });
+            //-     // Nos permite cancelar el envio del formulario
+            //-     return false;
+            //- });
+
+        });
