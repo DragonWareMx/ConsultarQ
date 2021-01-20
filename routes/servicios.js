@@ -218,4 +218,12 @@ router.post('/editar-servicio/update/:id',
         }
 });
 
+// EDITAR SERVICIO--------------
+// router.post('/editarPDF',
+//     [
+//         check('filePDF')
+//             .not().isEmpty().withMessage('PDF requerido.')
+//     ], 
+//     isLoggedIn, async (req, res, next) => {
+
 module.exports = router;

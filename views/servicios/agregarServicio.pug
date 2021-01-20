@@ -35,6 +35,9 @@ block content
             $(document).ready(function () {    
                 // ajax para agregar un nuevo servicio
                 $("#add-form").bind("submit",function(){
+                    //- Actualizar el ckeditor
+                    for (instance in CKEDITOR.instances) 
+                        CKEDITOR.instances[instance].updateElement();
                     // Capturamos el boton de envío
                     var btnAgregar = $("#btnAgregar");
 
