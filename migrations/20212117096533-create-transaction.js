@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.DATEONLY
       },
       amount: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL(10, 2),
       },
       description: {
         type: Sequelize.STRING
@@ -51,7 +51,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Pa_Types',
+          model: 'Concepts',
           key: 'id',
         },
       }

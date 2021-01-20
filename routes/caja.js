@@ -23,10 +23,76 @@ router.get('/', isLoggedIn, async function (req, res, next) {
 // router.get('/agregar-registro', isLoggedIn, function (req, res, next) {
 //     res.render('agregarRegistro')
 // });
-router.get('/editar-registro/:id', isLoggedIn, function (req, res, next) {
-    res.render('editarRegistro')
+router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
+    try {
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            order: [
+                ['status', 'ASC']
+            ],
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'cu' }
+                }
+            }
+        })
+
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //  TIENE PERMISO DE DESPLEGAR VISTA
+            const movimiento = await models.Transaction.findOne({
+                include: [{
+                    model: models.Pa_Type
+                },
+                {
+                    model: models.Concept
+                }, {
+                    model: models.Project_Employee,
+                    include: [{
+                        model: models.User,
+                        include: models.Employee
+                    }, {
+                        model: models.Project
+                    }]
+                }],
+                where: {
+                    id: req.params.id
+                }
+            })
+            const tipos = await models.Pa_Type.findAll();
+            const conceptos = await models.Concept.findAll();
+            if (movimiento) {
+                const proyectos = await models.Project.findAll({
+                    include: {
+                        model: models.Project_Employee,
+                        where: { UserId: movimiento.Project_Employee.UserId }
+                    },
+                    where: { status: "activo" }
+                });
+                return res.render('editarRegistro', { movimiento, tipos, conceptos, proyectos })
+            }
+            else {
+                return res.status(404).json(404)                //  mandar a la vista de error
+            }
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch (error) {
+        return res.status(403).json(403)
+    }
 });
 
+//aqui se editan los registros xdd
+router.post('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
+    res.send(req.body);
+})
 
 //  se consultan solo los egresos
 router.get('/egresos', isLoggedIn, async (req, res, next) => {

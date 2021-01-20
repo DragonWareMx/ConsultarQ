@@ -181,11 +181,9 @@ block content
             $('.info').on('click', function() {
                     var userID = $(this).data('id');
                     var users=!{ JSON.stringify(ingresos) };
-                    console.log(users);
                     for(var key in users){
                         var obj=users[key];
                         if(obj["id"] == userID){
-                            console.log(obj);
                             break;
                         }
                     }
