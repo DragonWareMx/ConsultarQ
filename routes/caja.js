@@ -9,16 +9,255 @@ const passport = require('passport');
 const models = require('../models/index');
 
 router.get('/', isLoggedIn, async function (req, res, next) {
-    const tipos = await models.Pa_Type.findAll();
-    const conceptos = await models.Concept.findAll();
-    const proyectos = await models.Project.findAll({
-        include: {
-            model: models.Project_Employee,
-            where: { UserId: req.user.id }
-        },
-        where: { status: "activo" }
-    });
-    res.render('caja', { tipos, conceptos, proyectos })
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'cr' }
+                }
+            }
+        })
+
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            let permiso = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'cu' }
+                    }
+                }
+            })
+            const proj = await models.Project.findAll({
+                include: [{
+                    model: models.User,
+                    where: { id: req.user.id }
+                }],
+                raw: true,
+                attributes: ['id']
+            })
+            var lista = []
+            proj.forEach(viledruid => {
+                lista.push(viledruid.id)
+            });
+            const tipos = await models.Pa_Type.findAll();
+            const conceptos = await models.Concept.findAll();
+            const proyectos = await models.Project.findAll({
+                include: {
+                    model: models.Project_Employee,
+                    where: { UserId: req.user.id }
+                },
+                where: { status: "activo" }
+            });
+            var egresos
+            var ingresos
+            var deducibles
+            var todos
+            if (permiso && permiso.Role && permiso.Role.Permissions) {
+                egresos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project
+                        }]
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        T_type: 'egreso'
+                    }
+                })
+                ingresos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project
+                        }]
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        T_type: 'ingreso'
+                    }
+                })
+                deducibles = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project
+                        }]
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        invoice: 1
+                    }
+                })
+                todos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project
+                        }]
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                })
+            }
+            else {
+                egresos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project,
+                        }],
+                        where: { ProjectId: lista },
+                        required: true
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        T_type: 'egreso'
+                    }
+                })
+                ingresos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project,
+                        }],
+                        where: { ProjectId: lista },
+                        required: true
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        T_type: 'ingreso'
+                    }
+                })
+                deducibles = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project,
+                        }],
+                        where: { ProjectId: lista },
+                        required: true
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                    where: {
+                        invoice: 1
+                    }
+                })
+                todos = await models.Transaction.findAll({
+                    include: [{
+                        model: models.Pa_Type
+                    },
+                    {
+                        model: models.Concept
+                    }, {
+                        model: models.Project_Employee,
+                        include: [{
+                            model: models.User,
+                            include: models.Employee
+                        }, {
+                            model: models.Project,
+                        }],
+                        where: { ProjectId: lista },
+                        required: true
+                    }],
+                    order: [
+                        ['date', 'DESC']
+                    ],
+                })
+            }
+
+            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos })
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch (error) {
+        return res.status(403).json(403)
+    }
 });
 // router.get('/agregar-registro', isLoggedIn, function (req, res, next) {
 //     res.render('agregarRegistro')

@@ -27,18 +27,25 @@ block content
                 a(href="/tipos_de_pago" class="") TIPOS PAGO
                 div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
         div(class="uk-width-1-1 uk-flex uk-flex-wrap")
-            div(class="uk-grid-small uk-child-width-expand@m uk-width-1-1 uk-flex uk-flex-wrap-reverse" uk-height-match="target: > div > .uk-card" uk-grid)
+            div(class="uk-grid-small uk-child-width-expand@m uk-width-1-1 uk-flex uk-flex-wrap" uk-height-match="target: > div > .uk-card" uk-grid)
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Ingresos
                                 img(src="/icons/money.png" style="width:18px; height:18px; margin-left:10px")
-                            div.uk-margin-small-bottom(style="color:#222238") 578 registros
+                            div.uk-margin-small-bottom(style="color:#222238") #{ingresos.length} registros
                             a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
-
+                        -
+                            porIngre = (ingresos.length * 100)/(ingresos.length + egresos.length)
+                            porIngre=Math.round(porIngre)
+                            porIngreRed = porIngre % 5
+                            if (porIngreRed > 2)
+                                porIngreRed = porIngre + (5 - porIngreRed)
+                            else
+                                porIngreRed = porIngre - porIngreRed
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle uk-padding-remove uk-margin-small-top")
-                            div(class="progress--circle circle-caja progress--100" style="")
-                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
+                            div(class="progress--circle circle-caja progress--"+porIngreRed style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") #{porIngre}%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/ingresos" class="uk-flex  uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -47,12 +54,19 @@ block content
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Egresos
                                 img(src="/icons/moneyLess.png" style="width:18px; height:18px; margin-left:10px")
-                            div.uk-margin-small-bottom(style="color:#222238") 324 registros
+                            div.uk-margin-small-bottom(style="color:#222238") #{egresos.length} registros
                             a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
-
+                        -
+                            porEgre = (egresos.length * 100)/(ingresos.length + egresos.length)
+                            porEgre=Math.round(porEgre)
+                            porEgreRed = porEgre % 5
+                            if (porEgreRed > 2)
+                                porEgreRed = porEgre + (5 - porEgreRed)
+                            else
+                                porEgreRed = porEgre - porEgreRed
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            div(class="progress--circle circle-caja progress--100" style="")
-                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
+                            div(class="progress--circle circle-caja progress--"+porEgreRed style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") #{porEgre}%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/egresos" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -61,12 +75,19 @@ block content
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Deducibles
                                 img(src="/icons/doc.png" style="width:18px; height:18px; margin-left:10px")
-                            div.uk-margin-small-bottom(style="color:#222238") 178 registros
+                            div.uk-margin-small-bottom(style="color:#222238") #{deducibles.length} registros
                             a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
-
+                        -
+                            porDedu = (deducibles.length * 100)/(ingresos.length + egresos.length)
+                            porDedu=Math.round(porDedu)
+                            porDeduRed = porDedu % 5
+                            if (porDeduRed > 2)
+                                porDeduRed = porDedu + (5 - porDeduRed)
+                            else
+                                porDeduRed = porDedu - porDeduRed
                         div(class="uk-width-expand uk-flex uk-flex-wrap uk-flex-center uk-flex-middle")
-                            div(class="progress--circle circle-caja progress--100" style="")
-                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") 78%
+                            div(class="progress--circle circle-caja progress--" + porDeduRed style="")
+                                div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") #{porDedu}%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/deducibles" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
@@ -189,57 +210,31 @@ block content
                                 table.uk-table.uk-table-small.table-caja.uk-table-middle.uk-table-responsive
                                     thead
                                         tr
-                                            th ID
-                                            th USUARIO
-                                            th MOVIMIENTO
-                                            th CONCEPTO
-                                            th MONTO
+                                            th.uk-text-center ID
+                                            th.uk-text-center USUARIO
+                                            th.uk-text-center MOVIMIENTO
+                                            th.uk-text-center CONCEPTO
+                                            th.uk-text-center MONTO
                                     tbody
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |María Flores Escobedo
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |Solo 5 registros aquí
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |María Flores Escobedo
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |Solo 5 registros aquí
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |Solo 5 registros aquí
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000
+                                        each registro, index in todos
+                                            tr
+                                                th.uk-text-center #{registro.id}
+                                                th.uk-flex.uk-flex-middle.uk-flex-center
+                                                    if (registro.Project_Employee.User.picture)
+                                                        img(src="/uploads/avatar/"+registro.Project_Employee.User.picture style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                    else
+                                                        img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                    | &nbsp; #{registro.Project_Employee.User.Employee.name}
+                                                th.uk-text-center
+                                                    if (registro.T_type == "ingreso")
+                                                        | Ingreso
+                                                    else
+                                                        | Egreso
+                                                th.uk-text-center #{registro.Concept.name}
+                                                th.uk-text-center $ #{registro.amount}
+                                            if index >= 4
+                                                - break
+
                     div(class="uk-card uk-card-default uk-card-body uk-margin-top uk-padding-small")
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-align-center")
