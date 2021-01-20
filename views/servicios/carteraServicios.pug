@@ -30,15 +30,15 @@ block content
                                     |Editar pdf
                         div(class="uk-width-2-5@l uk-flex uk-flex-wrap div-compartir-service div-service-res")
                             div(class="uk-width-1-1 uk-text-mute uk-text-bold") Compartir en:
-                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;") 
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;" target="_blank" href="https://wa.me/?text=Te%20invitamos%20a%20conocer%20la%20cartera%20de%20servicios%20de%20ConsultarQ%20en:%20") 
                                 img(src="/img/iconos/whats.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
                                 |WhatsApp
-                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;")
-                                img(src="/img/iconos/mssg.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
-                                |Messenger
-                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;")
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;" target="_blank" href="https://www.facebook.com/sharer/sharer.php?t=Te invitamos a conocer la cartera de servicios de ConsultarQ en: &u=google.com.mx")
+                                img(src="/img/iconos/fb.png" style="width:15px;height:15px;" class="uk-margin-small-right" ) 
+                                |Facebook
+                            a(class="uk-width-1-1 uk-flex uk-flex-middle" style="color:#666;" id="copiarPP" data-toggle="tooltip" title="¡Link copiado al portapapeles!")
                                 img(src="/img/iconos/gmail.png" style="width:15px;height:15px;" class="uk-margin-small-right") 
-                                |Correo electrónico
+                                |Copiar link
             //- FOREACH
             each service in servicios
                 div
@@ -77,6 +77,33 @@ block content
     script.
 
         $(document).ready(function () {
+
+            //- COPIAR
+            $('#copiarPP').tooltip('disable');
+
+            $('#copiarPP').click(function (e) {
+                e.preventDefault();
+                var copyText = $(this).attr('href');
+
+                document.addEventListener('copy', function(e) {
+                    e.clipboardData.setData('text/plain', copyText);
+                    e.preventDefault();
+                }, true);
+
+                document.execCommand('copy');
+
+                console.log("Enlace copiado.");
+            });
+
+            //- function ttCopiar(){
+            //-     var copyText = '{{ url()->current() }}';
+            //-     copyText.select();
+            //-     copyText.setSelectionRange(0, 99999);
+            //-     document.execCommand("copy");
+            //-     $('#copiarPP').tooltip('show');
+            //- }
+
+
             //- ajax para editar EL PDF
             $("#add-pdf-form").bind("submit",function(){
                 // Capturamnos el boton de envío
