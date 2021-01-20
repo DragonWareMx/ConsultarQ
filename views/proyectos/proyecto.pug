@@ -17,33 +17,129 @@ block content
         div(class="uk-grid-collapse uk-child-width-1-1 uk-grid-row-large" uk-grid)
             div()
                 div(class="uk-card uk-card-default")
-                    div(class="uk-card-header uk-padding-remove uk-flex" style="background:rgba(253, 245, 52, 0.53);" /* va cambiando el background*/)
+                    -
+                        var h = proyecto.color
+                        var colorchido = h
+
+                        let r = 0, g = 0, b = 0;
+
+                        // 3 digits
+                        if (h.length == 4) {
+                            r = "0x" + h[1] + h[1];
+                            g = "0x" + h[2] + h[2];
+                            b = "0x" + h[3] + h[3];
+
+                        // 6 digits
+                        } else if (h.length == 7) {
+                            r = "0x" + h[1] + h[2];
+                            g = "0x" + h[3] + h[4];
+                            b = "0x" + h[5] + h[6];
+                        }
+
+                        if(r > 200 && g > 200 && b > 200){
+                            colorchido = '#000000'
+                        }
+                        
+                        var color =  "rgba("+ +r + "," + +g + "," + +b + ",0.53)";
+                    //- COLOR
+                    div(class="uk-card-header uk-padding-remove uk-flex" style="background:"+color /* va cambiando el background*/)
+                        //- NOMBRE
                         div(class="uk-width-3-5 uk-margin-small-left uk-margin-small-top uk-margin-small-bottom")
-                            div(class="" style="color: #222238;") Nombre del proyecto
-                            div(class="uk-text-small") Tipo de proyecto 1
+                            div(class="" style="color: #222238;") #{proyecto.name}
+                            if proyecto.Pro_Type
+                                div(class="uk-text-small" style="min-height: 20.8px") #{proyecto.Pro_Type.name}
+                            else
+                                div(class="uk-text-small" style="min-height: 20.8px") 
+                        //- ESTATUS
                         div(class="uk-width-2-5 uk-flex uk-flex-right uk-flex-middle")
-                            button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px;" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) EN TIEMPO
+                            if proyecto.status == 'ATRASADO' || proyecto.status == 'CANCELADO'
+                                button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px;") ATRASADO
+                            else if proyecto.status == 'EN TIEMPO' || proyecto.status == 'ACTIVO'
+                                button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px;" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
                     div(class="uk-width-1-1 uk-flex uk-flex-wrap")    
                         div(class="uk-width-1-3@l" style="border-right: 1px solid #EEEEEE; padding:5px")
+                            //- FECHAS
                             div(class="uk-card-body uk-padding-remove")
                                 div(class="uk-width-1 uk-margin-small-top")
                                     div(class="o-progress-date-line")
                                     //- EL COLOR DE LAS BOLITAS DEBE IR CAMBIANDO
-                                    div(class="o-progress-date-start" style="background: #FDF534;")
-                                    div(class="o-progress-date-end" style="background: #FDF534;")
-                                    div(class="o-progress-date-today" uk-tooltip="06/01/2020" style="margin-left:70%; border: 1px solid #FDF534;" /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
+                                    div(class="o-progress-date-start" style="background:"+colorchido)
+                                    div(class="o-progress-date-end" style="background:"+colorchido)
+                                    -
+                                        const fechaII = new Date(proyecto.start_date+"T11:22:33+0000")
+                                        const fechaI = fechaII.getTime()
+                                        const fechaTI = new Date(proyecto.deadline+"T11:22:33+0000")
+                                        const fechaT = fechaTI.getTime()
+                                        var hoyI
+                                        if(proyecto.end_date)
+                                            hoyI = new Date(proyecto.end_date+"T11:22:33+0000")
+                                        else
+                                            hoyI = new Date()
+                                        const hoy = hoyI.getTime()
+
+                                        var diasF
+                                        diasF = ((hoy-fechaI)/(fechaT-fechaI))*100
+
+                                        if(diasF > 91)
+                                            diasF = 91
+                                        else if(diasF < 5)
+                                            diasF = 5
+
+                                        const MESES = [
+                                        "ENE",
+                                        "FEB",
+                                        "MAR",
+                                        "ABR",
+                                        "MAY",
+                                        "JUN",
+                                        "JUL",
+                                        "AGO",
+                                        "SEP",
+                                        "OCT",
+                                        "NOV",
+                                        "DIC",
+                                        ];
+                                        const f = new Date();
+
+                                        mesI = MESES[fechaII.getMonth()];
+                                        mesF = MESES[fechaTI.getMonth()];
+                                    if proyecto.end_date
+                                        div(class="o-progress-date-today" uk-tooltip=hoyI.getDate()+"/"+(hoyI.getMonth()+1)+"/"+hoyI.getFullYear() style="margin-left:"+diasF+"%; border: 1px solid"+colorchido /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
+                                    else
+                                        div(class="o-progress-date-today" uk-tooltip="Hoy" style="margin-left:"+diasF+"%; border: 1px solid"+colorchido /*Aquí en el margin va el valor del avance, calcularlo de alguna forma, pero no debe pasar de 93% ni ser menos de 5%*/)
                                     div(class="o-progress-date-dates")
-                                        div(class="uk-text-small") 27, DIC, 2020
-                                        div(class="uk-text-small") 04, MAR, 2021
+                                        div(class="uk-text-small") #{fechaII.getDate()}, #{mesI}, #{fechaII.getFullYear()}
+                                        div(class="uk-text-small") #{fechaTI.getDate()}, #{mesF}, #{fechaTI.getFullYear()}
+                            //- AVANCES TAREAS
+                            -
+                                var tareasListas = 0
+                                var tareasFaltantes = 0
+                                var tareasTotales = 0
+                                var porcentaje = 100
+                                var porcentajeRedondeado = 99
+                            if proyecto.Tasks
+                                each task in proyecto.Tasks
+                                    -
+                                        tareasTotales++
+                                        if(task.check)
+                                            tareasListas++
+                                        else
+                                            tareasFaltantes++
+                                if tareasTotales > 0
+                                    -
+                                        porcentaje = parseInt((tareasListas/tareasTotales)*100)
+                                        porcentajeRedondeado = Math.ceil(porcentaje/5)*5;
+                                        if(porcentajeRedondeado >= 100)
+                                            porcentajeRedondeado = 99
                             div(class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top")
                                 div(class="uk-width-2-5 uk-flex uk-flex-middle uk-flex-center")
-                                    div(class="progress--circle progress--99 " style="margin-top:0px" /*LOS VALORES DEBEN SER REDONDEADOS A MULTIPLOS DE 5, para el 100 porciento se ve mejor si se uusa unvalor diferente como por ejemplo 99*/)
-                                        div(class="progress__number") 100%
+                                    div(class="progress--circle progress--"+porcentajeRedondeado style="margin-top:0px" /*LOS VALORES DEBEN SER REDONDEADOS A MULTIPLOS DE 5, para el 100 porciento se ve mejor si se uusa unvalor diferente como por ejemplo 99*/)
+                                        div(class="progress__number") #{porcentaje}%
                                 div(class="uk-width-3-5 uk-width-1@s uk-width-3-5")
-                                    div(class="uk-text-large" style="color: #222238;") 77
-                                    div(class="uk-text-small") Tareas / Documentos listos
-                                    div(class="uk-text-large" style="color: #222238;") 0
-                                    div(class="uk-text-small") Tareas / Documentos faltantes
+                                    div(class="uk-text-large" style="color: #222238;") #{tareasListas}
+                                    div(class="uk-text-small") Tareas listas
+                                    div(class="uk-text-large" style="color: #222238;") #{tareasFaltantes}
+                                    div(class="uk-text-small") Tareas faltantes
                         div(class="uk-width-1-3@l uk-flex uk-flex-wrap" style="border-right: 1px solid #EEEEEE")
                             div(class="uk-width-1-1 uk-padding-small div-datos-cliente-proyecto" style="border-bottom: 1px solid #EEEEEE;")
                                 div.uk-width-1-1.uk-text-small.uk-margin-small-bottom DATOS DEL CLIENTE

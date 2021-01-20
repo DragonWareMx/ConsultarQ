@@ -67,7 +67,7 @@ block content
                         //- NOMBRE, TIPO DE PROYECTO Y ESTATUS
                         div(class="uk-card-header uk-padding-remove uk-flex" style="background:"+color)
                             div(class="uk-width-3-5 uk-margin-small-left uk-margin-small-top uk-margin-small-bottom")
-                                a.uk-link-reset(href="/proyectos/proyecto")
+                                a.uk-link-reset(href="/proyectos/proyecto/"+proyecto.id)
                                     div(class="uk-text-truncate" uk-tooltip=proyecto.name style="color: #222238;") #{proyecto.name}
                                 if proyecto.Pro_Type
                                     div(class="uk-text-small" style="height: 20.8px") #{proyecto.Pro_Type.name}

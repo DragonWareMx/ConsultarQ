@@ -33,9 +33,76 @@ var upload = multer({
 });
 
 //VER PROYECTO--------------------
-router.get('/proyecto', isLoggedIn,function(req, res, next) {
+router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
+  try {
+    //VERIFICACION DEL PERMISO
 
-  res.render('proyecto')
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      const proyecto = await models.Project.findOne({
+        where: {
+          id: req.params.id
+        },
+        include: [{
+          model: models.User,
+          include: models.Employee
+        },{
+          model: models.Pro_Type
+        },
+        {
+          model: models.Project_Employee,
+          include: models.Comment
+        },
+        {
+          model: models.Task
+        },
+        {
+          model: models.Quotation
+        }
+        ],
+      })
+      res.render('proyecto', {proyecto});
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.status(403).json(403)
+    }
+  }
+  catch (error) {
+    console.log(error)
+      return res.status(403).json(403)
+  }
 });
 
 //VER PROYECYOS ACTIVOS
