@@ -48,7 +48,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'er' }       
+                    where: { name: 'ur' }       
                 }
             }
         })
@@ -58,6 +58,15 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             models.Client.findAll({
                 include: [{
                     model: models.Client_Area
+                }, {
+                    model: models.Project,
+                        limit: 1,
+                        include: [{
+                            model: models.Quotation
+                        }],
+                        order: [
+                            ['createdAt','DESC']
+                        ]
                 }],
                 order: [
                     ['status', 'ASC']

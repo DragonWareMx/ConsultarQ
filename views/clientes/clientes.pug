@@ -88,25 +88,39 @@ block content
                                         div(class="uk-width-4-5@m btn-status-active") ACTIVO
                                     else 
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
+                            //-each quotation in client.Projects.Quotation                                        
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                 div(class="uk-width-1-5@m") Cotización
                                 div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
-                                    a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                                div(class="uk-width-1-5@m") Contratos
-                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
-                                    a.uk-link-reset(href="#") Nombre del contrato.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
-                            div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
-                                div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                                div(class="uk-width-4-5@m uk-text-emphasis") 
-                                    a.uk-link-reset(href="#") Nombre del proyecto
-                                    div.uk-width-1-1
-                                        progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                    div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
-                            div(class="uk-width-1-5@m") Estatus
-                            div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                                    a.uk-link-reset(href="#") .PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                            if client.Projects
+                                each project in client.Projects
+                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                        div(class="uk-width-1-5@m") Contratos
+                                        div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                            a.uk-link-reset(href="#") #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                            if !client.Projects
+                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                        div(class="uk-width-1-5@m") Contratos
+                                        div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
+                                            | No hay contratos registrados.
+                        //-if client.Projects.ClientId == client.id
+                        each project in client.Projects
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                                div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+                                    div(class="uk-width-1-5@m uk-text-truncate") Proyecto
+                                    div(class="uk-width-4-5@m uk-text-emphasis") 
+                                        a.uk-link-reset(href="#") #{project.name}
+                                        div.uk-width-1-1
+                                            progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
+                                        div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                                div(class="uk-width-1-5@m") Estatus
+                                div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                        //-else 
+                            k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                                    div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+                                        div(class="uk-width-1-1@m ") No hay contratos registrados
+                                        
     
     //- modal editar cliente
     div(id="modal-editarCliente" uk-modal)
