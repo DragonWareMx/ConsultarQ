@@ -90,9 +90,37 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
 });
 
 //aqui se editan los registros xdd
-router.post('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
-    res.send(req.body);
-})
+router.post('/editar-registro/:id', isLoggedIn,
+    [
+        check('type').isIn(['ingreso', 'egreso']).withMessage('El tipo de movimiento ingresado no es válido.'),
+        check('concepto')
+            .not().isEmpty().withMessage('Concepto es un campo requerido.'),
+        check('pago')
+            .not().isEmpty().withMessage('Tipo de pago es un campo requerido.'),
+        check('proyecto')
+            .not().isEmpty().withMessage('Proyecto es un campo requerido.'),
+        check('date')
+            .not().isEmpty().custom(date => {
+                return !isNaN(Date.parse(date));
+            }
+            ).withMessage('La fecha no es válida.'),
+        check('invoice').isIn(['1', '0']).withMessage('Deducible o no deducible ingresado no es válido.'),
+        check('monto')
+            .not().isEmpty().isNumeric().custom(monto => {
+                if (monto < 0)
+                    throw new Error('El monto ingresado no puede ser un número negativo.');
+                else
+                    return true
+            }).withMessage('El monto ingresado no es válido.'),
+        check('descripcion')
+            .not().isEmpty().withMessage('Descripción es un campo requerido.')
+            .isLength({ max: 255 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
+            .trim()
+            .escape(),
+    ],
+    async function (req, res, next) {
+        res.send(req.body);
+    })
 
 //  se consultan solo los egresos
 router.get('/egresos', isLoggedIn, async (req, res, next) => {
