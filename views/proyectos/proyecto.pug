@@ -113,7 +113,7 @@ block content
                                         div(class="uk-width-auto@m" style="font-size:14px; font-weight:400") Líder - 40%
                             
                             div.uk-width-1-1.uk-text-small.uk-flex.uk-flex-right 
-                                a.uk-flex.uk-flex-middle.uk-text-small.uk-link-heading(href="#" id="ver-comentarios" uk-tooltip="title: Comentarios; pos: left")
+                                a.uk-flex.uk-flex-middle.uk-text-small.uk-link-heading(id="ver-comentarios" uk-tooltip="title: Comentarios; pos: left")
                                     <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> 18
         //- COMENTARIOS-----------------------
         div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small"  id="Comentarios")
@@ -123,7 +123,7 @@ block content
                 div.uk-width-auto.uk-margin-left.uk-flex.uk-flex-middle
                     <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> 18
                 div.uk-width-expand
-                    a.uk-flex.uk-flex-middle(href="#" id="nover-comentarios" style="width:max-content; float:right")
+                    a.uk-flex.uk-flex-middle(id="nover-comentarios" style="width:max-content; float:right")
                         <img src="/icons/notEye.png" style="width:15px;height:15px; margin-right:5px">
                         |Ocultar
             //- COMENTARIO
@@ -435,18 +435,18 @@ block content
         jQuery(($) => {
             $('#ver-comentarios').on('click', function() {
                 if ($("#Comentarios").is(':visible')) {
-                    $("#Comentarios").hide();
+                    $("#Comentarios").slideUp('fast');
                 }
                 else{
-                    $("#Comentarios").show();                    
+                    $("#Comentarios").slideDown('fast');                    
                 }
             });
             $('#nover-comentarios').on('click', function() {
                 if ($("#Comentarios").is(':visible')) {
-                    $("#Comentarios").hide();
+                    $("#Comentarios").slideUp('fast');
                 }
                 else{
-                    $("#Comentarios").show();                    
+                    $("#Comentarios").slideDown('fast');                    
                 }
             });
         });
