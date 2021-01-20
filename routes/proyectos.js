@@ -534,6 +534,7 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
             datos.ClientId = req.body.cliente
           }
 
+          //estatus
           switch(req.body.estatus){
             case 'terminado':
               if(req.body.end_date)
@@ -551,6 +552,9 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           //guarda el contrato
           if(req.files.contrato && req.files.contrato[0])
             datos.contract = req.files.contrato[0].filename
+
+          if(req.body.tipo && req.body.tipo != 0)
+            datos.ProTypeId = req.body.tipo
 
           //GUARDA EL PROYECTO
           const newProject = await models.Project.create(datos, { transaction: t })
@@ -578,6 +582,31 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
             }
           }
 
+          var layout
+
+          //GUARDA LAS TAREAS
+          if(newProject.ProTypeId){
+            layout = await models.Pro_Type.findOne({where: {id: newProject.ProTypeId}, include: models.Tasks_Layout})
+
+            for (const i in layout.Tasks_Layouts) {
+              if (Object.hasOwnProperty.call(layout.Tasks_Layouts, i)) {
+                const element = layout.Tasks_Layouts[i];
+                const datosTask = {
+                  ProjectId: newProject.id,
+                  concept: element.concept
+                }
+                if(element.unit)
+                  datosTask.unit = element.unit
+                if(element.price)
+                  datosTask.unit = element.price
+                if(element.description)
+                  datosTask.unit = element.description
+
+                await models.Task.create(datosTask, {transaction: t})
+              }
+            }
+          }
+
           //SE REGISTRA EL LOG
           //obtenemos el usuario que realiza la transaccion
           const usuario = await models.User.findOne({
@@ -591,6 +620,16 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio: " + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status')+
           "\nFecha de término: " + newProject.end_date + "\nColor: " + newProject.color + "\nObservaciones: " + newProject.observations + "\nContrato: " + newProject.contract
 
+          //cotizaciones
+          const cotizaciones = await models.Quotation.findAll({where: {ProjectId: newProject.id}, transaction: t})
+
+          contadorCot = 0
+          desc = desc + "\nCotizaciones: "
+          for(var cot in cotizaciones){
+            desc = desc + "\n\t" + cotizaciones[cot].id + ": " + cotizaciones[cot].quotation
+            contadorCot++
+          }
+
           //cliente
           if(newProject.ClientId){
             const cliente = await models.Client.findOne({where: {id: newProject.ClientId}, transaction: t})
@@ -598,16 +637,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           }
           else
             desc = desc + "\nCliente: Sin cliente"
-
-          //cotizaciones
-          const cotizaciones = await models.Quotation.findAll({where: {ProjectId: newProject.id}, transaction: t})
-
-          contadorCot = 0
-          desc = desc + "\nCotizaciones: "
-          for(var cot in cotizaciones){
-            desc = desc + "\n\t" + (contadorCot+1) + ": " + cotizaciones[cot].quotation
-            contadorCot++
-          }
 
           if(contadorCot == 0)
             desc = desc + "Sin cotizaciones"
@@ -636,12 +665,33 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           contadorPro = 0
           desc = desc + "\nProveedores: "
           for(var pro in proLog){
-            desc = desc + "\n\t" + (contadorPro+1) + ": " + proLog[pro].name
+            desc = desc + "\n\t" +  proLog[pro].id + ": " + proLog[pro].name
             contadorPro++
           }
 
           if(contadorPro == 0)
             desc = desc + "Sin proveedores"
+
+          //tipo de proyecto
+          if(layout){
+            desc = desc + "\nLayout"+layout.id+": " + layout.name
+
+            if(layout.Tasks_Layouts){
+              for(var i in layout.Tasks_Layouts){
+                desc = desc + "\n\tTarea " + layout.Tasks_Layouts[i].id + ":"
+                + "\n\t\tConcepto: " + layout.Tasks_Layouts[i].concept
+                + "\n\t\tDescripcion: " + layout.Tasks_Layouts[i].description
+                + "\n\t\tUnidad: " + layout.Tasks_Layouts[i].unit
+                + "\n\t\tPrecio: " + layout.Tasks_Layouts[i].price
+              }
+            }
+            else{
+              desc = desc + "\n\tSin tareas"
+            }
+          }
+          else{
+            desc = desc + "\nSin Layout"
+          }
 
           //guardamos los datos del log
           var dataLog = {
