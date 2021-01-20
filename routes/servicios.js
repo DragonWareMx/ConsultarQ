@@ -340,4 +340,86 @@ router.post('/editarPDF', upload.single('filePDF'),
         }
 });
 
+// ELIMINAR SERVICIO
+router.post('/delete/:id', isLoggedIn,
+    async (req, res, next) => {
+        try {
+            //VERIFICACION DEL PERMISO
+
+            //obtenemos el usuario, su rol y su permiso
+            let usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'ed' }
+                    }
+                }
+            })
+
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+                //NO TIENE PERMISO DE AGREGAR rol
+                return res.status(403).json([{ msg: 'No estás autorizado para eliminar servicios.' }])
+            }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para eliminar servicios.' }])
+        }
+        //aqui va la transaccion pero no se como hacerla xdd
+        const t = await models.sequelize.transaction()
+        try {
+            //GUARDA EL CLIENTE
+            //se busca el cliente
+            const serviceD = await models.Service.findOne({
+                where: { id: req.params.id }, transaction: t
+            })
+
+            await serviceD.destroy({ transaction: t })
+
+            //SE REGISTRA EL LOG
+            //obtenemos el usuario que realiza la transaccion
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                transaction: t
+            })
+
+            //descripcion del log
+            var desc = "El usuario " + usuario.email + " ha eliminado el servicio con el id " + serviceD.id + " de nombre " + serviceD.name
+
+            //guardamos los datos del log
+            var dataLog = {
+                UserId: usuario.id,
+                title: "Eliminacion de servicio",
+                description: desc
+            }
+
+            //guarda el log en la base de datos
+            const log = await models.Log.create(dataLog, { transaction: t })
+
+            //verifica si se elimina el prestador
+            const verSer = await models.Service.findOne({ where: { id: req.params.id }, transaction: t })
+
+            if (verSer)
+                throw new Error()
+            if (!log)
+                throw new Error()
+
+            res.status(200).json([{ status: 200 }]);
+            // If the execution reaches this line, no errors were thrown.
+            // We commit the transaction.
+            await t.commit()
+        } catch (error) {
+
+            // If the execution reaches this line, an error was thrown.
+            // We rollback the transaction.
+            await t.rollback();
+            return res.status(500).json([{ msg: 'No fue posible eliminar el servicio, vuelva a intentarlo más tarde.' }])
+        }
+    });
+
 module.exports = router;

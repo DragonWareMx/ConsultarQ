@@ -23,12 +23,31 @@ block content
                 textarea(class="" type="text" name="descripcionE" id="descripcionE" required style="width:100%;") #{service.description}
                 script.
                     CKEDITOR.replace( 'descripcionE' );
+                a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top" id="btnEliminar" href="#delete-form" uk-toggle)
+                    <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" type="button" onclick="window.history.go(-1); return false;") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
-                
+
+    //- modal eliminar cliente
+    div(id="delete-form" uk-modal)
+        each service in servicio
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
+                button(type='button' uk-close='' class="uk-modal-close-default")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el servicio "#{service.name}"?
+                form(class="uk-card-body uk-padding-small" id="form-delete-service" action="/servicios/delete/"+service.id+""  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
+
+
+
+
     script.
         jQuery(($) => {
+
             $(document).ready(function () {    
                 // ajax para agregar un editar servicio
 
@@ -65,7 +84,7 @@ block content
                             * */
                             $('#errors-edit').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Servicio actualizado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Servicio actualizado con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -85,6 +104,72 @@ block content
                             console.log(data.responseText);
                             var errors = JSON.parse(data.responseText);
                             var errorsContainer = $('#errors-edit');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            alert("Problemas al tratar de enviar el formulario");
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+
+                //ajax del form de eliminar
+                $("#form-delete-service").bind("submit",function(){
+                    // Capturamnos el boton de envío
+                    var btnEliminar = $("#btnEliminar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEnviar.text("Enviando"); Para button
+                            btnEliminar.val("Enviando"); // Para input de tipo button
+                            btnEliminar.attr("disabled","disabled");
+                        },
+                        complete:function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnEliminar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors-delete').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span> Servicio eliminado con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                            setTimeout(
+                            function()
+                            {
+                                window.location.href = window.location.origin + '/servicios'
+                            }, 2000);
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnEliminar.removeAttr("disabled");
+                            $('#errors-delete').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors-delete');
                             errorsContainer.innerHTML = '';
                             var errorsList = '';
                             for (var i = 0; i < errors.length; i++) {
