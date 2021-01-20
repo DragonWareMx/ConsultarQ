@@ -81,9 +81,6 @@ block content
             $("#add-pdf-form").bind("submit",function(){
                 // Capturamnos el boton de envío
                 var btnGuardar = $("#btnEnviar");
-                var file = $("#fileDF");
-                file.updateElement();
-                alert(file.val());
 
                 $.ajax({
                     type: $(this).attr("method"),

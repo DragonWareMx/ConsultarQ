@@ -8,35 +8,13 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
-// //subir archivos
-// const fs = require('fs');
-// var multer = require('multer');
-// var path = require('path')
-// var storage = multer.diskStorage({
-//     destination: function (req, file, cb) {
-//         cb(null, 'public/uploads/doc_services')
-//     },
-//     filename: function (req, file, cb) {
-//         cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
-//     }
-// })
-// var upload = multer({
-//     storage: storage, fileFilter: (req, file, cb) => {
-//         if (file.mimetype == "application/pdf") {
-//             cb(null, true);
-//         } else {
-//             cb(null, false);
-//             return cb(new Error('Only .pdf format allowed!'));
-//         }
-//     }
-// });
-
+//subir archivos
 const fs = require('fs');
 var multer = require('multer');
 var path = require('path')
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/uploads/clients')
+        cb(null, 'public/uploads/doc_services')
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
@@ -44,11 +22,11 @@ var storage = multer.diskStorage({
 })
 var upload = multer({
     storage: storage, fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg" || file.mimetype == "image/gif") {
+        if (file.mimetype == "application/pdf") {
             cb(null, true);
         } else {
             cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+            return cb(new Error('Only .pdf format allowed!'));
         }
     }
 });
@@ -267,7 +245,7 @@ router.post('/editar-servicio/update/:id',
 });
 
 // EDITAR PDF--------------
-router.post('/editarPDF', upload.fields([{name: 'filePDF', maxCount: 1}]),
+router.post('/editarPDF', upload.single('filePDF'),
     [
         check('filePDF')
             .not().isEmpty().withMessage('PDF requerido.')
@@ -311,16 +289,15 @@ router.post('/editarPDF', upload.fields([{name: 'filePDF', maxCount: 1}]),
             const pdfVar = await models.Service_Portfolio.findAll({ transaction: t
             })
             // BORRAR EL VIEJO PDF-----
-            fs.unlink('public/uploads/doc_services/' + pdfVar.filename, (err) => {
+            fs.unlink('public/uploads/doc_services/' + pdfVar.pdf, (err) => {
                 if (err) {
                     console.log("failed to delete local pdf:" + err);
                 } else {
                     console.log('successfully deleted local pdf');
                 }
-
             });
 
-            await pdfVar.update(req.files.filePDF , { transaction: t })
+            await pdfVar.update(req.file.filePDF , { transaction: t })
 
             //SE REGISTRA EL LOG
             //obtenemos el usuario que realiza la transaccion
