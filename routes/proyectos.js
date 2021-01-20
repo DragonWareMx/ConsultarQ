@@ -94,9 +94,104 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           model: models.Quotation
         }
       ],
+      where: {status : 'activo'},
       order: [['createdAt','DESC']]
       })
       res.render('proyectos', {proyectos});
+    }
+    else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
+      const proyectos = await models.Project.findAll({
+        include: [{
+          model: models.User,
+          include: models.Employee,
+          where: {id: usuario.id}
+        },{
+          model: models.Pro_Type
+        },
+        {
+          model: models.Project_Employee,
+          include: models.Comment
+        },
+        {
+          model: models.Task
+        }
+        ],
+        order: [['createdAt','DESC']]
+      })
+      res.render('proyectos', {proyectos});
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.status(403).json(403)
+    }
+  }
+  catch (error) {
+    console.log(error)
+      return res.status(403).json(403)
+  }
+});
+
+
+router.get('/inactivos', isLoggedIn,async function (req, res, next) {
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR && pC) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      const proyectos = await models.Project.findAll({
+        include: [{
+          model: models.User,
+          include: models.Employee
+        },{
+          model: models.Pro_Type
+        },
+        {
+          model: models.Project_Employee,
+          include: models.Comment
+        },
+        {
+          model: models.Task
+        },
+        {
+          model: models.Quotation
+        }
+      ],
+      where: {status : ['terminado','cancelado']},
+      order: [['createdAt','DESC']]
+      })
+      console.log(proyectos[0].status)
+      res.render('proyectosInactivos', {proyectos});
     }
     else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
       const proyectos = await models.Project.findAll({
