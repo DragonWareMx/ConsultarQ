@@ -902,16 +902,14 @@ router.post('/layout/:idLayout/editar',[
   const t = await models.sequelize.transaction()
   try{
     var datos = {
-      name: req.body.tipo
+      name: req.body.titulo
     }
     //EDITA EL LAYOUT
     const layout = await models.Pro_Type.findOne({
       where: { id: req.params.idLayout }, transaction: t
     })
 
-    await layout.update({
-      name: req.body.titulo
-    }, { transaction: t })
+    await layout.update(datos, { transaction: t })
 
     //obtenemos el usuario que realiza la transaccion
     const usuario = await models.User.findOne({
@@ -922,7 +920,7 @@ router.post('/layout/:idLayout/editar',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha ediato un layout nuevo con los siguientes datos:\nnombre: " + layout.name 
+    var desc = "El usuario " + usuario.email + " ha ediato un layout con los siguientes datos:\nnombre: " + layout.name 
 
     //guardamos los datos del log
     var dataLog = {
@@ -945,7 +943,7 @@ router.post('/layout/:idLayout/editar',[
   }
   catch(error){
     await t.rollback();
-    return res.status(500).json([{ msg: 'No fue posible editar el proyecto, vuelva a intentarlo más tarde.' }])
+    return res.status(500).json([{ msg: 'No fue posible editar el layout, vuelva a intentarlo más tarde.' }])
   }
 });
 
@@ -963,6 +961,7 @@ router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
   });
 });
 
+//Agregar tarea de layout
 router.post('/layout/:layoutId/tarea/agregar',[
   check('concepto')
         .not().isEmpty().withMessage('Concepto es un campo requerido.')
@@ -971,7 +970,7 @@ router.post('/layout/:layoutId/tarea/agregar',[
         .escape(),
   check('descripcion')
         .optional({ checkFalsy: true })
-        .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
+        .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 500 caracteres.')
         .trim()
         .escape(),
   check('unidad')
@@ -1076,6 +1075,7 @@ router.post('/layout/:layoutId/tarea/agregar',[
   }
 });
 
+//Editar tarea de layout
 router.post('/layout/:layoutId/tarea/editar/:taskId',[
   check('concepto')
         .not().isEmpty().withMessage('Concepto es un campo requerido.')
@@ -1177,7 +1177,7 @@ router.post('/layout/:layoutId/tarea/editar/:taskId',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha editado una tarea nueva para el layout de "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
+    var desc = "El usuario " + usuario.email + " ha editado una tarea para el layout de "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
 
     //guardamos los datos del log
     var dataLog = {
@@ -1203,7 +1203,8 @@ router.post('/layout/:layoutId/tarea/editar/:taskId',[
     return res.status(500).json([{ msg: 'No fue posible editar la tarea, vuelva a intentarlo más tarde.' }])
   }
 });
-  
+
+//Eliminar tarea de layout
 router.post('/layout/:layoutId/tarea/eliminar/:taskId', isLoggedIn, async (req, res, next) => {
   try {
       //VERIFICACION DEL PERMISO
@@ -1257,7 +1258,7 @@ router.post('/layout/:layoutId/tarea/eliminar/:taskId', isLoggedIn, async (req, 
       //guardamos los datos del log
       var dataLog = {
           UserId: usuario.id,
-          title: "Eliminación de usuario",
+          title: "Eliminación de tarea de layout",
           description: "El usuario " + usuario.email + " ha eliminado la tarea " + task.concept+" del layout de "+layout.name
       }
 
@@ -1285,7 +1286,7 @@ router.post('/layout/:layoutId/tarea/eliminar/:taskId', isLoggedIn, async (req, 
   }
 });
 
-
+//Eliminar layout
 router.post('/layout/:layoutId/eliminar', isLoggedIn, async (req, res, next) => {
   try {
       let usuario = await models.User.findOne({
@@ -1330,9 +1331,406 @@ router.post('/layout/:layoutId/eliminar', isLoggedIn, async (req, res, next) => 
       res.status(200).json([{ status: 200 }]);
       await t.commit()
   } catch (error) {
-      console.log(error)
       await t.rollback();
       return res.status(500).json([{ msg: 'No fue posible eliminar el layout, vuelva a intentarlo más tarde.' }])
   }
 });
+
+//Editar documentación de proyecto nombre y observaciones
+router.post('/documentacion/:idProject/editar',[
+  check('titulo')
+        .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('observaciones')
+        .not().isEmpty().withMessage('Observaciones es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('Observaciones puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape()
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pu' }
+            }
+        }
+    })
+
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        //NO TIENE PERMISO DE AGREGAR 
+        return res.status(403).json([{ msg: 'No estás autorizado para editar proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para editar proyectos.' }])
+  }
+  //VAMOS A GUARDAR LOS DATOS
+  const t = await models.sequelize.transaction()
+  try{
+    var datos = {
+      name: req.body.titulo
+    }
+    if(req.body.observaciones)
+      datos.observations = req.body.observaciones
+    else
+      datos.observations=null
+    //EDITA EL LAYOUT
+    const project = await models.Project.findOne({
+      where: { id: req.params.idProject }, transaction: t
+    })
+
+    await project.update(datos, { transaction: t })
+
+    //obtenemos el usuario que realiza la transaccion
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+
+    //descripcion del log
+    var desc = "El usuario " + usuario.email + " ha editado un proyecto con los siguientes datos:\nnombre: " + project.name+"\nObservaciones: "+project.observations 
+
+    //guardamos los datos del log
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Actualización de proyecto",
+      description: desc
+    }
+
+    //guarda el log en la base de datos
+    const log = await models.Log.create(dataLog, { transaction: t })
+    //verifica que se hayan registrado el log y el rol
+    if (!log)
+      throw new Error()
+    if (!project)
+      throw new Error()
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+    res.status(200).json([{ status: 200 }]);
+    await t.commit()
+  }
+  catch(error){
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible editar el proyecto, vuelva a intentarlo más tarde.' }])
+  }
+});
+
+//Agregar tarea de proyecto
+router.post('/documentacion/:projectId/tarea/agregar',[
+  check('concepto')
+        .not().isEmpty().withMessage('Concepto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El concepto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('descripcion')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 500 caracteres.')
+        .trim()
+        .escape(),
+  check('cantidad')
+        .optional({ checkFalsy: true })
+        .isNumeric().withMessage('Sólo se aceptan números en el campo Cantidad')
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 16 dígitos.')
+        .trim()
+        .escape(),
+  check('unidad')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .trim()
+        .escape(),
+  check('costo')
+        .optional({ checkFalsy: true })
+        .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 dígitos.')
+        .trim()
+        .escape(),
+  check('realizado')
+        .optional({ checkFalsy: true })
+        .isNumeric()
+        .trim()
+        .escape()
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pu' }
+            }
+        }
+    })
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        return res.status(403).json([{ msg: 'No estás autorizado para registrar tareas en proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para registrar tareas en proyectos.' }])
+  }
+  const t = await models.sequelize.transaction()
+  try{
+    const project = await models.Project.findOne({
+      where: {
+          id: req.params.projectId
+      },
+      transaction: t
+    })
+    if(!project){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe el proyecto al que se desea asignar la tarea.' }])
+    }
+    var datos = {
+      ProjectId: req.params.projectId,
+      concept: req.body.concepto,
+    }
+    if(req.body.descripcion)
+      datos.description=req.body.descripcion
+    if(req.body.unidad)
+      datos.unit= req.body.unidad
+    if(req.body.costo)
+      datos.price= req.body.costo
+    if(req.body.cantidad)
+      datos.units=req.body.cantidad
+    if(req.body.realizado)
+      datos.check=req.body.realizado
+    else
+      datos.check=0
+    //GUARDA LA TAREA
+    const task = await models.Task.create(datos, { transaction: t })
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el proyecto de "+project.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price+"\nCantidad: "+task.units+"\nRealizado: "+task.check 
+
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Registro de tarea de proyecto",
+      description: desc
+    }
+    const log = await models.Log.create(dataLog, { transaction: t })
+    if (!log)
+      throw new Error()
+    if (!task)
+      throw new Error()
+    res.status(200).json(task);
+    await t.commit()
+  }
+  catch(error){
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible registrar la tarea, vuelva a intentarlo más tarde.' }])
+  }
+});
+
+//Editar tarea de proyecto
+router.post('/documentacion/:projectId/tarea/editar/:taskId',[
+  check('concepto')
+        .not().isEmpty().withMessage('Concepto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El concepto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('descripcion')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 500 caracteres.')
+        .trim()
+        .escape(),
+  check('cantidad')
+        .optional({ checkFalsy: true })
+        .isNumeric().withMessage('Sólo se aceptan números en el campo Cantidad')
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 16 dígitos.')
+        .trim()
+        .escape(),
+  check('unidad')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .trim()
+        .escape(),
+  check('costo')
+        .optional({ checkFalsy: true })
+        .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
+        .trim()
+        .escape(),
+  check('realizado')
+        .optional({ checkFalsy: true })
+        .isNumeric()
+        .trim()
+        .escape()
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pu' }
+            }
+        }
+    })
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        return res.status(403).json([{ msg: 'No estás autorizado para editar tareas de proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para editar tareas de proyectos.' }])
+  }
+  const t = await models.sequelize.transaction()
+  try{
+    const project = await models.Project.findOne({
+      where: {
+          id: req.params.projectId
+      },
+      transaction: t
+    })
+    if(!project){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe el proyecto al que se desea editar la tarea.' }])
+    }
+    const task = await models.Task.findOne({
+      where: {
+          id: req.params.taskId,
+          ProjectId:req.params.projectId
+      },
+      transaction: t
+    })
+    if(!task){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe la tarea que se desea editar.' }])
+    }
+    var datos = {
+      concept: req.body.concepto,
+    }
+    if(req.body.descripcion)
+      datos.description=req.body.descripcion
+    else
+      datos.description=null
+    if(req.body.unidad)
+      datos.unit= req.body.unidad
+    else
+      datos.unit=null
+    if(req.body.costo)
+      datos.price= req.body.costo
+    else
+      datos.price=null
+    if(req.body.cantidad)
+      datos.units=req.body.cantidad
+    else
+      datos.units=null
+    if(req.body.realizado)
+      datos.check=req.body.realizado
+    else
+      datos.check=0
+    await task.update(datos, { transaction: t })
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+
+    var desc = "El usuario " + usuario.email + " ha editado una tarea del proyecto "+project.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price+"\nCantidad: "+task.units+"\nRealizado: "+task.check
+
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Edición de tarea de layout",
+      description: desc
+    }
+    const log = await models.Log.create(dataLog, { transaction: t })
+    if (!log)
+      throw new Error()
+    if (!task)
+      throw new Error()
+    res.status(200).json(task);
+    await t.commit()
+  }
+  catch(error){
+    console.log(error)
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible editar la tarea, vuelva a intentarlo más tarde.' }])
+  }
+});
+
+//Eliminar tarea de proyecto
+router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, async (req, res, next) => {
+  try {
+      let usuario = await models.User.findOne({
+          where: {
+              id: req.user.id
+          },
+          include: {
+              model: models.Role,
+              include: {
+                  model: models.Permission,
+                  where: { name: 'pd' }
+              }
+          }
+      })
+      if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+          //NO TIENE PERMISOS
+          return res.status(403).json([{ msg: 'No tienes permiso de eliminar tareas de proyectos.' }])
+      }
+  }
+  catch (error) {
+      return res.status(403).json([{ msg: 'No tienes permiso de eliminar tareas de proyectos.' }])
+  }
+  const t = await models.sequelize.transaction()
+  try {
+      const task = await models.Task.findOne({where: { id: req.params.taskId,ProjectId: req.params.projectId },transaction: t})
+      if(!task){
+        await t.rollback();
+        return res.status(404).json([{ msg: 'No existe la tarea que se desea eliminar.' }])
+      }
+      const project = await models.Project.findOne({where: { id: req.params.projectId },transaction: t})
+      await task.destroy({ transaction: t })
+      const usuario = await models.User.findOne({where: {id: req.user.id},transaction: t})
+      var dataLog = {
+          UserId: usuario.id,
+          title: "Eliminación de tarea de proyecto",
+          description: "El usuario " + usuario.email + " ha eliminado la tarea " + task.concept+" del proyecto "+project.name
+      }
+      const log = await models.Log.create(dataLog, { transaction: t })
+      const verTask = await models.Task.findOne({ where: { id: task.id }, transaction: t })
+      if (verTask)
+          throw new Error()
+      if (!log)
+          throw new Error()
+      res.status(200).json([{ status: 200 }]);
+      await t.commit()
+  } catch (error) {
+      await t.rollback();
+      return res.status(500).json([{ msg: 'No fue posible eliminar la tarea, vuelva a intentarlo más tarde.' }])
+  }
+});
+
 module.exports = router;

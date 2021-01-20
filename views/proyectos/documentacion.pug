@@ -35,12 +35,12 @@ block content
                 a(href="/proyectos/activos" class="") ACTIVOS
                 a(href="/proyectos/inactivos" class="") INACTIVOS
                 div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-        div(class="uk-grid-small uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-row-large" uk-grid)
+        div(class="uk-grid-small  uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-row-large" uk-grid uk-height-match="target: > div > .uk-card")
             each project in projects
                 div()
                     div(class="uk-card  uk-card-default" style="min-height:290px;")
                         div(class="uk-card-header uk-padding-small uk-flex")
-                            div(class="uk-width-4-5 uk-text-primary") #{project.name}
+                            div(class="uk-width-4-5 uk-text-primary uk-text-truncate") #{project.name}
                             a(href="/proyectos/documentacion/editar/"+project.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
                                 img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
                                 div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
@@ -60,4 +60,12 @@ block content
                             div(class="uk-text-large uk-text-secondary uk-margin-small-top") #{noRealizadas}
                             div(class="uk-text-small" style="margin-top:-7px") Tareas faltantes
                             div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
-                            div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{project.observations}
+                            if project.observations.length > 170
+                                -
+                                    observations = project.observations.substr(0,155) + '...';
+                            else
+                                -   
+                                    observations = project.observations;
+                            div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{observations}
+                            
+                                
