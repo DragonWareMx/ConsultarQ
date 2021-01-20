@@ -87,10 +87,10 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           include: models.Comment
         },
         {
-          model: models.Project_Requirement,
-          include: models.Task
+          model: models.Task
         }
-      ]
+      ],
+      order: [['createdAt','DESC']]
       })
       res.render('proyectos', {proyectos});
     }
@@ -108,10 +108,10 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           include: models.Comment
         },
         {
-          model: models.Project_Requirement,
-          include: models.Task
+          model: models.Task
         }
-      ]
+        ],
+        order: [['createdAt','DESC']]
       })
       res.render('proyectos', {proyectos});
     }
@@ -126,19 +126,26 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
   }
 });
 
-router.get('/documentacion', isLoggedIn,function (req, res, next) {
-  res.render('documentacion'); 
+router.get('/documentacion', isLoggedIn,async function (req, res, next) {
+  const projects =await models.Project.findAll({
+    include: models.Task
+  })
+  res.render('documentacion',{projects}); 
 });
 
 //AGREGAR PROYECTO
-router.post('/create', upload.any(),
+router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {name: 'contrato', maxCount: 1}]),
     [
       check('nombreP')
         .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
         .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
         .trim()
         .escape(),
+      check('color')
+        .not().isEmpty().withMessage('El color es un campo requerido.')
+        .isHexColor().withMessage('El color no es válido.'),
       check('estatus')
+        .not().isEmpty()
         .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
       check('start_date')
         .not().isEmpty()
@@ -165,11 +172,13 @@ router.post('/create', upload.any(),
             if (tipo) {
                 validador = false
 
+                //busca los tipos de proyecto
                 let ids = await models.Pro_Type.findAll({
                     attributes: ['id'],
                     raw: true
                 })
 
+                //verifica si el id ingresado por el usuario esta en la bd
                 ids.forEach(id => {
                     if (tipo == id.id) {
                         validador = true
@@ -190,12 +199,12 @@ router.post('/create', upload.any(),
 
           var validador = true
 
+          //si existe un numero en el input significa que ingresaron un proveedor
           if (/\d/.test(tipo)) {
               //se crea el validador, es true porque si no hay rol tambien es valido
               tipo = tipo[0].split(",")
-
-              //si no es nulo
-          
+              
+              //encuentra todos los proveedores
               let ids = await models.Provider.findAll({
                   attributes: ['id'],
                   raw: true
@@ -203,6 +212,7 @@ router.post('/create', upload.any(),
 
               validador2 = false
 
+              //si el validador2 no se hace true, el proveedor no existe, no es valido
               tipo.forEach(idB => {
                 ids.forEach(id => {
                   if (idB == id.id) {
@@ -215,6 +225,7 @@ router.post('/create', upload.any(),
                 validador2 = false
               })
 
+              //si se ingreso un 0 significa que no eligieron ninguno
               if (tipo == 0)
                   validador = true
           }
@@ -230,6 +241,7 @@ router.post('/create', upload.any(),
             //se crea el validador, es true porque si no hay rol tambien es valido
             validador = false
 
+            //busca los clientes
             let ids = await models.Client.findAll({
                 attributes: ['id'],
                 raw: true
@@ -253,7 +265,7 @@ router.post('/create', upload.any(),
               throw new Error()
             }
             //se crea el validador, es true porque si no hay rol tambien es valido
-            tipo = tipo[0].split(",")
+            tipo = tipo.split(",")
 
             var validador = true
 
@@ -295,10 +307,31 @@ router.post('/create', upload.any(),
           .escape()
     ]
     , isLoggedIn, async function (req, res, next) {
+        console.log(req.files)
         //si hay errores entonces se muestran
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return res.status(422).send(errors.array());
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          return res.status(422).send(errors.array());
         }
 
         try {
@@ -332,22 +365,37 @@ router.post('/create', upload.any(),
         const t = await models.sequelize.transaction()
         try {
           //se guardan los datos principales
+          var miembros = req.body.input_miembros.split(",")
+          var employeeID = []
+
+          //Guarda los ids de los usuarios empleados en un arreglo
+          for(var i in miembros){
+            const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
+            employeeID.push(employee.id)
+          }
+
           var datos = {
             name: req.body.nombreP,
             start_date: req.body.start_date,
             deadline: req.body.deadline,
+            color: req.body.color,
             status: req.body.estatus
           }
 
           //SE GUARDAN LOS NULLABLES
           //tipo de proyecto
-          if(req.body.tipo){
+          if(req.body.tipo && req.body.tipo != 0){
             datos.ProTypeId = req.body.tipo
           }
 
           //si hay observaciones
           if(req.body.observaciones){
             datos.observations = req.body.observaciones
+          }
+
+          //guarda el cliente
+          if(req.body.cliente){
+            datos.ClientId = req.body.cliente
           }
 
           switch(req.body.estatus){
@@ -364,8 +412,25 @@ router.post('/create', upload.any(),
               throw new Error()
           }
 
+          //guarda el contrato
+          if(req.files.contrato && req.files.contrato[0])
+            datos.contract = req.files.contrato[0].filename
+
           //GUARDA EL PROYECTO
           const newProject = await models.Project.create(datos, { transaction: t })
+
+          //GUARDA LOS PROYECTOS
+          await newProject.setUsers(employeeID, {transaction: t})
+
+          //GUARDA LAS COTIZACIONES
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            for(var i in req.files.cotizaciones){
+              await models.Quotation.create({
+                ProjectId: newProject.id,
+                quotation: req.files.cotizaciones[i].filename
+              },{transaction: t})
+            }
+          }
 
           //SE REGISTRA EL LOG
           //obtenemos el usuario que realiza la transaccion
@@ -377,7 +442,7 @@ router.post('/create', upload.any(),
           })
 
           //descripcion del log
-          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.status 
+          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status') 
 
           //guardamos los datos del log
           var dataLog = {
@@ -395,11 +460,14 @@ router.post('/create', upload.any(),
           if (!newProject)
               throw new Error()
 
+          console.log(req.body)
+
           res.status(200).json([{ status: 200 }]);
           // If the execution reaches this line, no errors were thrown.
           // We commit the transaction.
           await t.commit()
         } catch (error) {
+          console.log(error)
             // If the execution reaches this line, an error was thrown.
             // We rollback the transaction.
             await t.rollback();
@@ -428,7 +496,9 @@ router.get('/agregar', isLoggedIn,async function (req, res, next) {
 
   const proTypes = await models.Pro_Type.findAll()
 
-  return res.render('agregarProyecto', { prestadores,miembros, proTypes})
+  const Clients = await models.Client.findAll()
+
+  return res.render('agregarProyecto', { prestadores,miembros, proTypes, Clients})
 });
 
 router.get('/documentacion/editar/:id', isLoggedIn,function (req, res, next) {
@@ -437,8 +507,7 @@ router.get('/documentacion/editar/:id', isLoggedIn,function (req, res, next) {
       id: req.params.id
     },
     include: [{
-      model: models.Project_Requirement,
-      include: models.Task
+      model: models.Task
     }
   ]
   }).then(project =>{
@@ -472,10 +541,90 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
 
 router.get('/layouts', isLoggedIn,async function (req, res, next) {
   const layouts=await models.Pro_Type.findAll({
-    include: {model: models.Project_Requirements_Layout,
-      include: models.Tasks_Layout}
+      include: models.Tasks_Layout
   })
   res.render('layouts',{layouts});
+});
+
+router.post('/layout/create',[
+  check('tipo')
+        .not().isEmpty().withMessage('Nombre del layout es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El nombre del layout puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape()
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pc' }
+            }
+        }
+    })
+
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        //NO TIENE PERMISO DE AGREGAR 
+        return res.status(403).json([{ msg: 'No estás autorizado para registrar layouts de proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para registrar layouts de proyectos.' }])
+  }
+  //VAMOS A GUARDAR LOS DATOS
+  const t = await models.sequelize.transaction()
+  try{
+    var datos = {
+      name: req.body.tipo
+    }
+    //GUARDA EL LAYOUT
+    const newLayout = await models.Pro_Type.create(datos, { transaction: t })
+
+    //obtenemos el usuario que realiza la transaccion
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+
+    //descripcion del log
+    var desc = "El usuario " + usuario.email + " ha registrado un layout nuevo con los siguientes datos:\nnombre: " + newLayout.name 
+
+    //guardamos los datos del log
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Registro de layout",
+      description: desc
+    }
+
+    //guarda el log en la base de datos
+    const log = await models.Log.create(dataLog, { transaction: t })
+    //verifica que se hayan registrado el log y el rol
+    if (!log)
+      throw new Error()
+    if (!newLayout)
+      throw new Error()
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+    res.status(200).json(newLayout);
+    await t.commit()
+  }
+  catch(error){
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
+  }
 });
 
 router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
@@ -484,8 +633,7 @@ router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
       id: req.params.id
     },
     include: [{
-      model: models.Project_Requirements_Layout,
-      include: models.Tasks_Layout
+      model: models.Tasks_Layout
     }
   ]
   }).then(layout =>{
@@ -493,9 +641,221 @@ router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
   });
 });
 
-router.post('/layout/nuevo', isLoggedIn,function (req, res, next) {
-  
+
+router.post('/layout/:idLayout/editar',[
+  check('titulo')
+        .not().isEmpty().withMessage('Nombre del layout es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El nombre del layout puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape()
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pu' }
+            }
+        }
+    })
+
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        //NO TIENE PERMISO DE AGREGAR 
+        return res.status(403).json([{ msg: 'No estás autorizado para editar layouts de proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para editar layouts de proyectos.' }])
+  }
+  //VAMOS A GUARDAR LOS DATOS
+  const t = await models.sequelize.transaction()
+  try{
+    var datos = {
+      name: req.body.tipo
+    }
+    //EDITA EL LAYOUT
+    const layout = await models.Pro_Type.findOne({
+      where: { id: req.params.idLayout }, transaction: t
+    })
+
+    await layout.update({
+      name: req.body.titulo
+    }, { transaction: t })
+
+    //obtenemos el usuario que realiza la transaccion
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+
+    //descripcion del log
+    var desc = "El usuario " + usuario.email + " ha ediato un layout nuevo con los siguientes datos:\nnombre: " + layout.name 
+
+    //guardamos los datos del log
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Actualización de layout",
+      description: desc
+    }
+
+    //guarda el log en la base de datos
+    const log = await models.Log.create(dataLog, { transaction: t })
+    //verifica que se hayan registrado el log y el rol
+    if (!log)
+      throw new Error()
+    if (!layout)
+      throw new Error()
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+    res.status(200).json([{ status: 200 }]);
+    await t.commit()
+  }
+  catch(error){
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible editar el proyecto, vuelva a intentarlo más tarde.' }])
+  }
 });
+
+router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
+  models.Pro_Type.findOne({
+    where: {
+      id: req.params.id
+    },
+    include: [{
+      model: models.Tasks_Layout
+    }
+  ]
+  }).then(layout =>{
+    res.render('editarLayout',{layout});
+  });
+});
+
+router.post('/layout/:layoutId/tarea/agregar',[
+  check('concepto')
+        .not().isEmpty().withMessage('Concepto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El concepto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('descripcion')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 500 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+  check('unidad')
+        .optional({ checkFalsy: true })
+        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .trim()
+        .escape(),
+  check('costo')
+        .optional({ checkFalsy: true })
+        .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
+        .trim()
+        .escape(),
+  ], isLoggedIn, async function (req, res, next) {
+  const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send(errors.array());
+    }
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    let usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission,
+                where: { name: 'pu' }
+            }
+        }
+    })
+
+    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+        //NO TIENE PERMISO DE AGREGAR 
+        return res.status(403).json([{ msg: 'No estás autorizado para registrar tareas en layouts de proyectos.' }])
+    }
+  }
+  catch (error) {
+    return res.status(403).json([{ msg: 'No estás autorizado para registrar tareas en layouts de proyectos.' }])
+  }
+  //VAMOS A GUARDAR LOS DATOS
+  const t = await models.sequelize.transaction()
+  try{
+    const layout = await models.Pro_Type.findOne({
+      where: {
+          id: req.params.layoutId
+      },
+      transaction: t
+    })
+    if(!layout){
+      await t.rollback();
+      return res.status(404).json([{ msg: 'No existe el layout al que se desea asignar la tarea.' }])
+    }
+    var datos = {
+      ProTypeId: req.params.layoutId,
+      concept: req.body.concepto,
+    }
+    if(req.body.descripcion)
+      datos.description=req.body.descripcion
+    if(req.body.unidad)
+      datos.unit= req.body.unidad
+    if(req.body.costo)
+      datos.price= req.body.costo
+    //GUARDA LA TAREA
+    const task = await models.Tasks_Layout.create(datos, { transaction: t })
+
+    //obtenemos el usuario que realiza la transaccion
+    const usuario = await models.User.findOne({
+      where: {
+          id: req.user.id
+      },
+      transaction: t
+    })
+
+    //descripcion del log
+    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el layout de "+layout.name+" con los siguientes datos:\nConcepto: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
+
+    //guardamos los datos del log
+    var dataLog = {
+      UserId: usuario.id,
+      title: "Registro de tarea de layout",
+      description: desc
+    }
+
+    //guarda el log en la base de datos
+    const log = await models.Log.create(dataLog, { transaction: t })
+    //verifica que se hayan registrado el log y el rol
+    if (!log)
+      throw new Error()
+    if (!task)
+      throw new Error()
+      // If the execution reaches this line, no errors were thrown.
+      // We commit the transaction.
+    res.status(200).json(task);
+    await t.commit()
+  }
+  catch(error){
+    await t.rollback();
+    return res.status(500).json([{ msg: 'No fue posible registrar la tarea, vuelva a intentarlo más tarde.' }])
+  }
+});
+
   
 
 module.exports = router;

@@ -70,26 +70,12 @@ html
                                         img(src="/icons/checklist.png" class="category_icon")
                         li(class="category") CLIENTES Y PROVEEDORES
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
-                                li(class="uk-parent category_item")
-                                    a(href="#") Directorio de clientes
+                                li(class=" category_item")
+                                    a(href="/clientes") Directorio de clientes
                                         img(src="/icons/directorio.png" class="category_icon")
-                                    ul(class="uk-nav-sub")
-                                        li(class="category_item")
-                                            a(href="/clientes") Ver directorio
-                                        li(class="category_item")
-                                            span(class="category_subdivider") ACCESOS DIRECTOS
-                                            a(href="/clientes/generar-cotizacion") Generar cotización
                                 li(class="category_item")
                                     a(href="/prestadores_externos") Prestadores externos
                                         img(src="/icons/userHand.png" class="category_icon")
-                                    ul(class="uk-nav-sub")
-                                        li(class="category_item")
-                                            a(href="/prestadores_externos") Ver prestadores externos
-                                        li(class="category_item")
-                                            span(class="category_subdivider") ACCESOS DIRECTOS
-                                            a(href="/prestadores_externos/areas") Áreas
-
-
 
                 div(class="categories_dropdown")
                     div(style="width:100%;display:flex;justify-content:center")
@@ -136,25 +122,11 @@ html
                                 li(class="category_item")
                                     a(href="#") Agregar proyecto
                     div(style="width:100%;display:flex;justify-content:center")
-                        a()
+                        a(href="/clientes")
                             img(src="/icons/userStar.png" class="category_icon")
-                        div(uk-dropdown="pos: right-center; mode: click")
-                            ul(class="uk-nav uk-dropdown-nav")
-                                li(class="category_item")
-                                    a(href="/clientes") Ver directorio
-                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
-                                li(class="category_item")
-                                    a(href="/clientes/generar-cotizacion") Generar cotización
                     div(style="width:100%;display:flex;justify-content:center")
-                        a()
+                        a(href="/prestadores_externos")
                             img(src="/icons/userHand.png" class="category_icon")
-                        div(uk-dropdown="pos: right-center; mode: click")
-                            ul(class="uk-nav uk-dropdown-nav")
-                                li(class="category_item")
-                                    a(href="/prestadores_externos") Ver prestadores externos
-                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
-                                li(class="category_item")
-                                    a(href="/prestadores_externos/areas") Áreas
 
                     div(style="width:100%;display:flex;justify-content:center;margin-top:30px")
                         a(href="/logout")

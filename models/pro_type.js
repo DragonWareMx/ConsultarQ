@@ -12,12 +12,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Pro_Type.hasMany(models.Project)
-      Pro_Type.hasOne(models.Project_Requirements_Layout)
+      Pro_Type.hasMany(models.Tasks_Layout)
     }
   };
   Pro_Type.init({
     name: {
       allowNull: false,
+      unique: true,
       type: DataTypes.STRING
     }
   }, {

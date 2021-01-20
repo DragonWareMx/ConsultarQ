@@ -8,12 +8,12 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ProjectRequirementId: {
+      ProjectId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',
         references: {
-          model: 'Project_Requirements',
+          model: 'Projects',
           key: 'id',
         },
       },

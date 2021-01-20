@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Task.belongsTo(models.Project_Requirement)
+      Task.belongsTo(models.Project)
     }
   };
   Task.init({
