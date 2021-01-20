@@ -336,6 +336,16 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           return res.status(422).send(errors.array());
         }
 
+        //comprueba las fechas
+        var fechaI = new Date(req.body.start_date)
+        var fechaD = new Date(req.body.deadline)
+
+        fechaI.getTime()
+        fechaD.getTime()
+
+        if(fechaI >= fechaD)
+          return res.status(422).json([{ msg: 'La fecha de inicio no puede ser mayor o igual a la fecha límite.' }])
+
         try {
             //VERIFICACION DEL PERMISO
 
@@ -450,8 +460,15 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           //GUARDA EL PROYECTO
           const newProject = await models.Project.create(datos, { transaction: t })
 
-          //GUARDA LOS PROYECTOS
+          //GUARDA LOS USUARIOS
           await newProject.setUsers(employeeID, {transaction: t})
+
+          for(var j in employeeID){
+            if(req.body["rol"+employeeID[j]])
+              await models.Project_Employee.update({role: req.body["rol"+employeeID[j]]},{where: {Userid: employeeID[j], ProjectId: newProject.id}, transaction: t})
+            if(req.body["rolP"+employeeID[j]])
+              await models.Project_Employee.update({profit: req.body["rolP"+employeeID[j]]},{where: {Userid: employeeID[j], ProjectId: newProject.id}, transaction: t})
+          }
 
           //GUARDA LOS PROVEEDORES
           await newProject.setProviders(proveedoresID, {transaction: t})
@@ -476,19 +493,19 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           })
 
           //descripcion del log
-          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio:" + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status')+
-          "\nFecha de término: " + newProject.end_date + "\nColor: " + newProject.color + "\nObservaciones: " + newProject.observaciones + "\nContrato: " + newProject.contract
+          var desc = "El usuario " + usuario.email + " ha registrado un proyecto nuevo con los siguientes datos:\nnombre: " + newProject.name + "\nFecha de inicio: " + newProject.start_date + "\nFecha límite: " + newProject.deadline + "\nStatus: " + newProject.getDataValue('status')+
+          "\nFecha de término: " + newProject.end_date + "\nColor: " + newProject.color + "\nObservaciones: " + newProject.observations + "\nContrato: " + newProject.contract
 
           //cliente
           if(newProject.ClientId){
-            const cliente = models.Client.findOne({where: {id: newProject.ClientId}, transaction: t})
+            const cliente = await models.Client.findOne({where: {id: newProject.ClientId}, transaction: t})
             desc = desc + "\nCliente:\n\tid: " + cliente.id + "\n\temail: " + cliente.email
           }
           else
             desc = desc + "\nCliente: Sin cliente"
 
           //cotizaciones
-          const cotizaciones = models.Quotation.findAll({where: {ProjectId: newProject.id}, transaction: t})
+          const cotizaciones = await models.Quotation.findAll({where: {ProjectId: newProject.id}, transaction: t})
 
           contadorCot = 0
           desc = desc + "\nCotizaciones: "
@@ -505,11 +522,21 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
 
           desc = desc+"\nMiembros: "
           for(var miem in miembrosLog){
-            desc = desc + "\n\t email: " + miembrosLog[miem].email
+            desc = desc + "\n\t"+miembrosLog[miem].id+":\n\t\temail: " + miembrosLog[miem].email +
+            "\n\t\tRol: "
+            if(req.body["rol"+miembrosLog[miem].id])
+              desc = desc + req.body["rol"+miembrosLog[miem].id]
+            else
+              desc = desc + "Sin rol"
+            desc = desc + "\n\t\tPorcentaje: "
+            if(req.body["rolP"+miembrosLog[miem].id])
+              desc = desc + req.body["rolP"+miembrosLog[miem].id]
+            else
+              desc = desc + "Sin porcentaje"
           }
 
           //proveedores
-          const proLog = models.Provider.findAll({where: {id: proveedoresID}, transaction: t})
+          const proLog = await models.Provider.findAll({where: {id: proveedoresID}, transaction: t})
 
           contadorPro = 0
           desc = desc + "\nProveedores: "
