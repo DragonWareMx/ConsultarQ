@@ -111,6 +111,8 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
                         include: [{
                             model: models.Pro_Type
                         }, {
+                            model: models.Quotation
+                        }, {
                             model: models.User, 
                                 include: [{
                                     model: models.Employee

@@ -60,15 +60,15 @@ block content
                         div.uk-width-1-1.uk-flex-inline.uk-flex-wrap.uk-flex-middle
                             div(class="uk-width-1-5@m uk-text-truncate") Cotización
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px") 
-                                //-each project,index in client.Projects
-                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                    a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
-                                div#MoreCot
+                                each project,index in client.Projects
                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                        a.uk-link-reset(href="#") Nombre de la cotización.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto 47
-                                div.uk-width-1-1.uk-flex.uk-flex-middle#GenerarCot
+                                        a.uk-link-reset(href="#") #{project.Quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
+                                    div#MoreCot
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            a.uk-link-reset(href="#") #{project.Quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                            div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle
                                     a.uk-flex.uk-flex-middle(href="/clientes/generar-cotizacion" style="width:max-content")
                                         <span uk-icon="icon:file-pdf; ratio: 0.8" style="margin-right:5px"></span>Generar
                         div.uk-width-1-1.uk-flex.uk-flex-right.uk-margin-small-top
@@ -92,7 +92,7 @@ block content
                                                 a.uk-link-reset(href="#") #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                                 div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
                                 //- boton agregar contrato
-                                div.uk-width-1-1.uk-flex.uk-flex-middle#MoreCont
+                                div.uk-width-1-1.uk-flex.uk-flex-middle
                                     a.uk-flex.uk-flex-middle(href="#modal-adjuntarContrato" uk-toggle style="width:max-content")
                                         <span uk-icon="icon:upload; ratio: 0.8" style="margin-right:5px"></span>Adjuntar contrato
                         div.uk-width-1-1.uk-flex.uk-flex-right.uk-margin-small-top
