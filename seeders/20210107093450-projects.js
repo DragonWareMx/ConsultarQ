@@ -26,6 +26,7 @@ module.exports = {
     await queryInterface.bulkInsert('Comments', [{
       ProjectEmployeeId: 1,
       comment: 'Este proyecto ya está muy atrasado.',
+      createdAt: Date.now(), updatedAt: Date.now()
     }], {});
 
     await queryInterface.bulkInsert('Tasks', [

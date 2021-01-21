@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Client_Area.init({
-    name: DataTypes.STRING,
+    name: {
+      allowNull: false,
+      unique: true,
+      type: DataTypes.STRING
+    },
     description: DataTypes.STRING
   }, {
     sequelize,

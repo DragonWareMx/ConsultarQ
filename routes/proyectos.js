@@ -74,25 +74,52 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
         where: {
           id: req.params.id
         },
-        include: [{
-          model: models.User,
-          include: models.Employee
-        },{
-          model: models.Pro_Type
-        },
-        {
-          model: models.Project_Employee,
-          include: models.Comment
-        },
-        {
-          model: models.Task
-        },
-        {
-          model: models.Quotation
-        }
+        include: 
+        [
+          {
+            model: models.User,
+            include: models.Employee,
+          },
+          {
+            model: models.Pro_Type
+          },
+          {
+            model: models.Project_Employee,
+            include: models.Comment
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Quotation
+          },
+          {
+            model: models.Client,
+            include: models.Client_Area
+          }
         ],
       })
-      res.render('proyecto', {proyecto});
+
+      var comentID = []
+      for (const i in proyecto.Project_Employees) {
+        if (Object.hasOwnProperty.call(proyecto.Project_Employees, i)) {
+          const element = proyecto.Project_Employees[i];
+          comentID.push(element.id)
+        }
+      }
+      const comentarios = await models.Comment.findAll({
+        where: {ProjectEmployeeId: comentID},
+        order: [['createdAt','DESC']],
+        include: {
+          model: models.Project_Employee,
+          include: {
+            model: models.User,
+            include: models.Employee
+          }
+        }
+      })
+      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',comentarios)
+      res.render('proyecto', {proyecto, comentarios});
     }
     else {
         //NO TIENE PERMISOS
