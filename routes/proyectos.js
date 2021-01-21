@@ -162,6 +162,84 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
   }
 });
 
+//AGREGAR COMENTARIO
+router.post('/proyecto/:id/comment',
+    [
+      check('descripcion')
+        .not().isEmpty().withMessage('El comentario es requerido.')
+        .isLength({ max: 150 }).withMessage('El comentario puede tener un máximo de 150 caracteres.')
+        .trim()
+        .escape(),
+    ]
+    , isLoggedIn, async function (req, res, next) {
+        console.log('si llega')
+        //si hay errores entonces se muestran
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          return res.status(422).send(errors.array());
+        }
+
+        try {
+            //VERIFICACION DEL PERMISO
+
+            //obtenemos el usuario, su rol y su permiso
+            let usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'pc' }
+                    }
+                }
+            })
+
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+                //NO TIENE PERMISO DE AGREGAR rol
+                return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+            }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+        }
+
+        //TIENE PERMISO
+        //Transaccion
+        const t = await models.sequelize.transaction()
+        try {
+          const ProjectEm = await models.Project_Employee.findOne({where: {
+            ProjectId: req.params.id,
+            UserId: req.user.id
+          }, transaction: t})
+
+          if(!ProjectEm)
+            throw new Error()
+
+          //se guardan los datos principales
+          var datos = {
+            comment: req.body.descripcion,
+            ProjectEmployeeId: ProjectEm.id
+          }
+
+          //GUARDA EL COMENTARIO
+          const newProject = await models.Comment.create(datos, { transaction: t })
+
+          res.status(200).json([{ status: 200 }]);
+          // If the execution reaches this line, no errors were thrown.
+          // We commit the transaction.
+          await t.commit()
+        } catch (error) {
+          console.log(error)
+
+          // If the execution reaches this line, an error was thrown.
+          // We rollback the transaction.
+          await t.rollback();
+          return res.status(500).json([{ msg: 'No fue posible enviar el comentario, vuelva a intentarlo más tarde.' }])
+        }
+});
+
 //VER PROYECYOS ACTIVOS
 router.get('/activos', isLoggedIn,async function (req, res, next) {
   try {
@@ -723,9 +801,9 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
                 if(element.unit)
                   datosTask.unit = element.unit
                 if(element.price)
-                  datosTask.unit = element.price
+                  datosTask.price = element.price
                 if(element.description)
-                  datosTask.unit = element.description
+                  datosTask.description = element.description
 
                 await models.Task.create(datosTask, {transaction: t})
               }

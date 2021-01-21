@@ -241,30 +241,33 @@ block content
                     a.uk-flex.uk-flex-middle(id="nover-comentarios" style="width:max-content; float:right")
                         <img src="/icons/notEye.png" style="width:15px;height:15px; margin-right:5px">
                         |Ocultar
-            -function prettyDate(dateString){
-                //if it's already a date object and not a string you don't need this line:
-                -var date = new Date(dateString);
-                -var d = date.getDate();
-                -var monthNames = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
-                -var m = monthNames[date.getMonth()];
-                -var y = date.getFullYear();
-                -return d+' de '+m+' del '+y;
-            -}
-            each comentario in comentarios                
-                div.uk-width-1-1.uk-margin-small.uk-padding-small.uk-flex.uk.flex.wrap(style="border: solid 1px #EEEEEE; boder-radius:2px")
-                    div(class="uk-width-auto")
-                        img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover")
-                    div(class="uk-width-expand uk-text-small uk-flex uk-flex-column")
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle.uk-flex-between
-                            div(class="uk-width-auto@s" style="color:#222238; margin-right:5px") #{comentario.Project_Employee.User.Employee.name}
-                            div(class="uk-width-auto@s" style="font-size:12px;") #{prettyDate(comentario.createdAt)}
-                        div.uk-width-1-1 #{comentario.comment}
+            div#comentDiv
+                -function prettyDate(dateString){
+                    //if it's already a date object and not a string you don't need this line:
+                    -var date = new Date(dateString);
+                    -var d = date.getDate();
+                    -var monthNames = [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ];
+                    -var m = monthNames[date.getMonth()];
+                    -var y = date.getFullYear();
+                    -return d+' de '+m+' del '+y;
+                -}
+                each comentario in comentarios                
+                    div.uk-width-1-1.uk-margin-small.uk-padding-small.uk-flex.uk.flex.wrap(style="border: solid 1px #EEEEEE; boder-radius:2px")
+                        div(class="uk-width-auto")
+                            img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover")
+                        div(class="uk-width-expand uk-text-small uk-flex uk-flex-column")
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle.uk-flex-between
+                                div(class="uk-width-auto@s" style="color:#222238; margin-right:5px") #{comentario.Project_Employee.User.Employee.name}
+                                div(class="uk-width-auto@s" style="font-size:12px;") #{prettyDate(comentario.createdAt)}
+                            div.uk-width-1-1 #{comentario.comment}
             //- AGREGAR COMENTARIO
-            div.uk-text-primary.uk-margin-small-bottom(style="font-size:13px") Agregar comentario
-            textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
-            div(class="uk-width-1 uk-flex-right uk-flex uk-margin-small-top")
-                //- button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
-                button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+            form(id="form-create-comment" action="/proyectos/proyecto/"+proyecto.id+"/comment" method="POST")
+                div.uk-text-primary.uk-margin-small-bottom(style="font-size:13px") Agregar comentario
+                div(id="errors")
+                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="150")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-small-top")
+                    //- button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
         //- OBSERVACIONES-------------
         if proyecto.observations
             div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small") 
@@ -518,5 +521,76 @@ block content
                 else{
                     $("#Comentarios").slideDown('fast');                    
                 }
+            });
+        });
+
+        $(document).ready(function () {
+            //ajax del form de nuevo
+            $("#form-create-comment").bind("submit",function(){
+                // Capturamnos el boton de envío
+                var btnEnviar = $("#btnEnviar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnEnviar.val("Enviando"); // Para input de tipo button
+                        btnEnviar.attr("disabled","disabled");
+                    },
+                    complete:function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnEnviar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Comentario enviado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 1000
+                        });
+                        $( "#comentDiv" ).load(location.href + " #comentDiv");
+                        btnEnviar.removeAttr("disabled");
+                        $("#descripcion").val("");
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnEnviar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: close\'></span>Comentario enviado con éxito!',
+                            status: 'danger',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
             });
         });
