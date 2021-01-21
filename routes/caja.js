@@ -85,7 +85,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'egreso'
+                        T_type: 'egreso',
+                        status: 'active'
                     }
                 })
                 ingresos = await models.Transaction.findAll({
@@ -107,7 +108,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'ingreso'
+                        T_type: 'ingreso',
+                        status: 'active'
                     }
                 })
                 deducibles = await models.Transaction.findAll({
@@ -129,7 +131,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         ['date', 'DESC']
                     ],
                     where: {
-                        invoice: 1
+                        invoice: 1,
+                        status: 'active'
                     }
                 })
                 todos = await models.Transaction.findAll({
@@ -150,6 +153,9 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     order: [
                         ['date', 'DESC']
                     ],
+                    where: {
+                        status: 'active'
+                    }
                 })
             }
             else {
@@ -174,7 +180,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'egreso'
+                        T_type: 'egreso',
+                        status: 'active'
                     }
                 })
                 ingresos = await models.Transaction.findAll({
@@ -198,7 +205,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'ingreso'
+                        T_type: 'ingreso',
+                        status: 'active'
                     }
                 })
                 deducibles = await models.Transaction.findAll({
@@ -222,7 +230,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         ['date', 'DESC']
                     ],
                     where: {
-                        invoice: 1
+                        invoice: 1,
+                        status: 'active'
                     }
                 })
                 todos = await models.Transaction.findAll({
@@ -245,6 +254,9 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     order: [
                         ['date', 'DESC']
                     ],
+                    where: {
+                        status: 'active'
+                    }
                 })
             }
 
@@ -591,7 +603,8 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'egreso'
+                        T_type: 'egreso',
+                        status: 'active'
                     }
                 })
             }
@@ -617,7 +630,8 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'egreso'
+                        T_type: 'egreso',
+                        status: 'active'
                     }
                 })
             }
@@ -702,7 +716,8 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'ingreso'
+                        T_type: 'ingreso',
+                        status: 'active'
                     }
                 })
             }
@@ -728,7 +743,8 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
                         ['date', 'DESC']
                     ],
                     where: {
-                        T_type: 'ingreso'
+                        T_type: 'ingreso',
+                        status: 'active'
                     }
                 })
             }
@@ -813,7 +829,8 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
                         ['date', 'DESC']
                     ],
                     where: {
-                        invoice: 1
+                        invoice: 1,
+                        status: 'active'
                     }
                 })
             }
@@ -839,7 +856,8 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
                         ['date', 'DESC']
                     ],
                     where: {
-                        invoice: 1
+                        invoice: 1,
+                        status: 'active'
                     }
                 })
             }
@@ -923,6 +941,9 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
                     order: [
                         ['date', 'DESC']
                     ],
+                    where: {
+                        status: 'active'
+                    }
                 })
             }
             else {
@@ -946,6 +967,9 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
                     order: [
                         ['date', 'DESC']
                     ],
+                    where: {
+                        status: 'active'
+                    }
                 })
             }
 
