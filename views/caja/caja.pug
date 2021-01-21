@@ -12,6 +12,9 @@ block head
 block content
     div(class="uk-container")
         script.
+            var days = function(month,year) {
+                return new Date(year, month, 0).getDate();
+            };
             var todos = !{ JSON.stringify(todos) };
             var fechaActual = !{JSON.stringify(hoy)};
             var ingreConceptos = !{JSON.stringify(ingreConceptos)};
@@ -33,6 +36,16 @@ block content
                 {count: 0, name: "-"},
                 {count: 0, name: "-"},
             ]
+            var monthEgre=[];
+            var monthIngre=[];
+            var cantDays=days(fechaActual.getMonth()+1,fechaActual.getFullYear());
+            var listaDays=[];
+            for(var j=1;j<=cantDays;j++){
+                listaDays.push(j.toString());
+                monthEgre.push(0)
+                monthIngre.push(0)
+            }
+            console.log(monthEgre);
             for(var key in todos){
                 var obj=todos[key];
                 var fecha= new Date(obj['date'])
@@ -40,10 +53,16 @@ block content
                     if(obj['T_type']=='ingreso'){
                         totalIngre=totalIngre+ parseFloat(obj['amount']);
                         numIngre++;
+                        if(fecha.getMonth() == fechaActual.getMonth()){
+                            monthIngre[fecha.getDate()-1]=monthIngre[fecha.getDate()-1] + obj['amount'];
+                        }
                     }
                     if(obj['T_type']=='egreso'){
                         totalEgre=totalEgre+ parseFloat(obj['amount']);
                         numEgre++;
+                        if(fecha.getMonth() == fechaActual.getMonth()){
+                            monthEgre[fecha.getDate()-1]=monthEgre[fecha.getDate()-1] + obj['amount'];
+                        }
                     }
                 }
             }
@@ -81,12 +100,12 @@ block content
         div(class="uk-width-1-1 uk-flex uk-flex-wrap")
             div(class="uk-grid-small uk-child-width-expand@m uk-width-1-1 uk-flex uk-flex-wrap" uk-height-match="target: > div > .uk-card" uk-grid)
                 div
-                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:1rem")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Ingresos
                                 img(src="/icons/money.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") #{ingresos.length} registros
-                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" id="agregar-ingreso" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                         -
                             porIngre = (ingresos.length * 100)/(ingresos.length + egresos.length)
                             porIngre=Math.round(porIngre)
@@ -102,12 +121,12 @@ block content
                             a(href="/caja/ingresos" class="uk-flex  uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
-                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:1rem")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Egresos
                                 img(src="/icons/moneyLess.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") #{egresos.length} registros
-                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" id="agregar-egreso" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                         -
                             porEgre = (egresos.length * 100)/(ingresos.length + egresos.length)
                             porEgre=Math.round(porEgre)
@@ -123,12 +142,12 @@ block content
                             a(href="/caja/egresos" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
                                 <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
-                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
+                    div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:1rem")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Deducibles
                                 img(src="/icons/doc.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") #{deducibles.length} registros
-                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center"  id="agregar-deducible" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                         -
                             porDedu = (deducibles.length * 100)/(ingresos.length + egresos.length)
                             porDedu=Math.round(porDedu)
@@ -174,17 +193,15 @@ block content
                             a(uk-icon="icon: chevron-left")
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px; text-transform: capitalize") #{moment(hoy).format('MMMM')}
                             a(uk-icon="icon: chevron-right")
-                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="color:#222238") Quincena 1
-                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center") Nombre del proyecto
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
-                            div(class="uk-width-3-5@l" style="")
+                            div(class="uk-width-1-1@l" style="")
                                 <canvas id="chart-general" width="400" height="250"></canvas>
                                 script.
                                     //esta es la tabla la primera
                                     var ctx = document.getElementById('chart-general');
                                     var dataFirst = {
                                         label: "Ingresos",
-                                        data: [9562, 5975, 7544, 2073, 1000, 5400, 4000],
+                                        data: monthIngre,
                                         borderColor: "#1e87f0",
                                         fill: false,
                                         lineTension: 0,
@@ -193,7 +210,7 @@ block content
 
                                     var dataSecond = {
                                         label: "Egresos",
-                                        data: [2000, 7600, 6000, 3654, 7622, 1000, 1800],
+                                        data: monthEgre,
                                         borderColor: "#222238",
                                         fill: false,
                                         lineTension: 0,
@@ -201,7 +218,7 @@ block content
                                     };
 
                                     var dataGeneral = {
-                                    labels: ["0", "1", "2", "3", "4", "5", "6"],
+                                    labels: listaDays,
                                     datasets: [dataFirst, dataSecond]
                                     };
                                     var myLineChart = new Chart(ctx, {
@@ -217,7 +234,7 @@ block content
                                             }
                                         }
                                     });
-                            div(class="uk-width-2-5@l " style="padding:6px;")
+                            //-div(class="uk-width-2-5@l " style="padding:6px;")
                                 div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
                                     div(class="uk-width-1-5@m uk-flex uk-flex-center")
                                         img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
@@ -487,7 +504,7 @@ block content
                                 label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor')
                             .uk-margin-bottom
                                 <div class="uk-grid-small uk-child-width-auto uk-flex uk-flex-middle uk-flex-wrap uk-grid"">
-                                    <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice"  value="1"> Deducible</label>
+                                    <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" id="deducible" name="invoice"  value="1"> Deducible</label>
                                     <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice" value="0" checked> No deducible</label>
                                 </div>
                             a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarConcepto" uk-toggle)
@@ -542,6 +559,15 @@ block content
     script.
         //los ajax
         $(document).ready(function () {
+                $("#agregar-ingreso").click(function(){
+                    $('#type option[value="ingreso"]').prop("selected", true);
+                })
+                $("#agregar-egreso").click(function(){
+                    $('#type option[value="egreso"]').prop("selected", true);
+                })
+                $("#agregar-deducible").click(function(){
+                    $('#deducible').prop('checked', true);
+                })
                 //  ajax del form de nuevo
                 $("#form-new-patype").bind("submit", function() {
                     // Capturamnos el boton de envío
