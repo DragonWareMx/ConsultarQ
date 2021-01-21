@@ -328,64 +328,81 @@ block content
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
                 div(class="uk-card-body uk-text-center uk-padding-remove")
                     div(class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove") 
-                        b MOVIMIENTOS DEL PROYECTO
+                        if movimientos.length > 0
+                            b MOVIMIENTOS DEL PROYECTO
+                        else
+                            b SIN MOVIMIENTOS
                     div(class="uk-overflow-auto uk-margin-remove")
-                        table(class="uk-table uk-table-divider uk-text-small")
-                            thead
-                                tr
-                                    th(class="uk-text-center") #
-                                    th(class="uk-text-center") NOMBRE
-                                    th(class="uk-text-center") CONCEPTO
-                                    th(class="uk-text-center") MONTO
-                                    th(class="uk-text-center") MOVIMIENTO
-                                    th(class="uk-text-center") FECHA
-                            tbody
-                                //- each transaccion in transacciones
-                                tr(class="info" uk-toggle="target: #modal-info" data-id=1)
-                                    td 1
-                                    td Nombre completo
-                                    td Concepto
-                                    td Canditad
-                                    //- if(transaccion.T_type == 'egreso')
-                                        td Egreso
-                                    //- else
-                                    td Ingreso
-                                    td 2020-01-02
+                        if movimientos.length > 0
+                            table(class="uk-table uk-table-divider uk-text-small")
+                                thead
+                                    tr
+                                        th(class="uk-text-center") #
+                                        th(class="uk-text-center") MIEMBRO
+                                        th(class="uk-text-center") CONCEPTO
+                                        th(class="uk-text-center") DESCRIPCIÓN
+                                        th(class="uk-text-center") MONTO
+                                        th(class="uk-text-center") TIPO DE PAGO
+                                        th(class="uk-text-center") MOVIMIENTO
+                                        th(class="uk-text-center") DEDUCIBLE
+                                        th(class="uk-text-center") FECHA
+                                tbody
+                                    each transaccion in movimientos
+                                        tr(class="info")
+                                            td #{transaccion.id}
+                                            td #{transaccion.Project_Employee.User.Employee.name}
+                                            td #{transaccion.Concept.name}
+                                            td #{transaccion.description}
+                                            td $#{transaccion.amount}
+                                            td #{transaccion.Pa_Type.name}
+                                            if(transaccion.T_type == 'egreso')
+                                                td Egreso
+                                            else
+                                                td Ingreso
+                                            if transaccion.invoce
+                                                td Sí
+                                            else
+                                                td No
+                                            td #{transaccion.date}
 
         
         //- PROVEEDORES DEL PROYECTO---------------------------
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
                 div(class="uk-card-body uk-text-center uk-padding-remove")
-                    div(class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove") 
-                        b PRESTADORES EXTERNOS
+                    div(class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove")
+                        if proyecto.Providers.length > 0
+                            b PRESTADORES EXTERNOS
+                        else
+                            b SIN PRESTADORES EXTERNOS
                     div(class="uk-overflow-auto uk-margin-remove")
-                        table(class="uk-table uk-table-divider uk-text-small")
-                            thead
-                                tr
-                                    th(class="uk-text-center") #
-                                    th(class="uk-text-center") NOMBRE
-                                    th(class="uk-text-center") ÁREA
-                                    th(class="uk-text-center") TELÉFONO
-                                    th(class="uk-text-center") CORREO ELECTRÓNICO
-                                    th(class="uk-text-center") NÚMERO DE DRO
-                                    th(class="uk-text-center") ESTATUS
-                            tbody
-                                each proveedor in proyecto.Providers
-                                    tr(class="info")
-                                        td #{proveedor.id}
-                                        td #{proveedor.name}
-                                        if proveedor.Provider_Area
-                                            td #{proveedor.Provider_Area.name}
-                                        else
-                                            td SIN ÁREA
-                                        td #{proveedor.phone_number}
-                                        td #{proveedor.email}
-                                        td #{proveedor.dro}
-                                        if proveedor.status == 'active'
-                                            td(class="status") Activo
-                                        else
-                                            td(class="status") Inactivo
+                        if proyecto.Providers.length > 0
+                            table(class="uk-table uk-table-divider uk-text-small")
+                                thead
+                                    tr
+                                        th(class="uk-text-center") #
+                                        th(class="uk-text-center") NOMBRE
+                                        th(class="uk-text-center") ÁREA
+                                        th(class="uk-text-center") TELÉFONO
+                                        th(class="uk-text-center") CORREO ELECTRÓNICO
+                                        th(class="uk-text-center") NÚMERO DE DRO
+                                        th(class="uk-text-center") ESTATUS
+                                tbody
+                                    each proveedor in proyecto.Providers
+                                        tr(class="info")
+                                            td #{proveedor.id}
+                                            td #{proveedor.name}
+                                            if proveedor.Provider_Area
+                                                td #{proveedor.Provider_Area.name}
+                                            else
+                                                td SIN ÁREA
+                                            td #{proveedor.phone_number}
+                                            td #{proveedor.email}
+                                            td #{proveedor.dro}
+                                            if proveedor.status == 'active'
+                                                td(class="status") Activo
+                                            else
+                                                td(class="status") Inactivo
     
     
     
@@ -478,52 +495,6 @@ block content
                     div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                         button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="task" type="submit") Agregar
-    
-    //-Modal informacion completa de caja
-    div(id="modal-info" uk-modal)
-        div(class="uk-modal-dialog uk-modal-body")
-            div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
-                div(tabindex="0")
-                    a.uk-flex.uk-flex-middle.uk-text-small(href="/caja/editar-registro" id="btnEdit")
-                        <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
-                    //- a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" href="/caja/editar-registro" id="btnEdit")
-                    //-     img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    //-     div Editar
-            button(class="uk-modal-close-default" type="button" uk-close='')
-            form(class="uk-card-body uk-padding-remove uk-margin-top")
-                div
-                    div(style="font-size:14px; color:#999") ID
-                    input.uk-text-emphasis.uk-padding-remove(id="info-id" name="info-id" placeholder="1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") NOMBRE
-                            input.uk-text-emphasis.uk-padding-remove(id="info-nombre" name="info-nombre" placeholder="Nombre completo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") CONCEPTO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-concepto" name="info-concepto" placeholder="Concepto 1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") MOVIMIENTO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-direccion" name="info-direccion" placeholder="Ingreso" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") MONTO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-monto" name="info-monto" placeholder="$8000" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") TIPO DE PAGO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-tipo-pago" name="info-tipo-pago" placeholder="Efectivo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") DESCRIPCIÓN
-                            input.uk-text-emphasis.uk-padding-remove(id="info-descripcion" name="info-descripcion" placeholder="Descripción" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") FECHA DE REGISTRO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-fecha" name="info-fecha" placeholder="2020-01-01" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") DEDUCIBLE
-                            input.uk-text-emphasis.uk-padding-remove(id="info-deducible" name="info-deducible" placeholder="Si" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                
     
     
     

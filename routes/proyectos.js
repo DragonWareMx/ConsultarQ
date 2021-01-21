@@ -127,17 +127,29 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
         }
       })
 
-      /*
       const movimientos = await models.Transaction.findAll({
-        include: {
-          model: models.Project_Employee,
-          where: {ProjectId: proyecto.id},
-          required: true
-        },
-        order: ['date','DESC']
-      })*/
+        include: [
+          {
+            model: models.Project_Employee,
+            include: {
+              model: models.User,
+              include: models.Employee
+            },
+            where: {ProjectId: proyecto.id},
+            required: true,
+          },
+          {
+            model: models.Concept
+          },
+          {
+            model: models.Pa_Type
+          }
+        ],
+        order: [['date','DESC']]
+      })
+
       console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',comentarios)
-      res.render('proyecto', {proyecto, comentarios});
+      res.render('proyecto', {proyecto, comentarios, movimientos});
     }
     else {
         //NO TIENE PERMISOS
