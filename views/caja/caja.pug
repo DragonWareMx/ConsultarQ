@@ -40,12 +40,13 @@ block content
             var monthIngre=[];
             var cantDays=days(fechaActual.getMonth()+1,fechaActual.getFullYear());
             var listaDays=[];
+            var yearEgre=[0,0,0,0,0,0,0,0,0,0,0,0]
+            var yearIngre=[0,0,0,0,0,0,0,0,0,0,0,0]
             for(var j=1;j<=cantDays;j++){
                 listaDays.push(j.toString());
                 monthEgre.push(0)
                 monthIngre.push(0)
             }
-            console.log(monthEgre);
             for(var key in todos){
                 var obj=todos[key];
                 var fecha= new Date(obj['date'])
@@ -53,15 +54,17 @@ block content
                     if(obj['T_type']=='ingreso'){
                         totalIngre=totalIngre+ parseFloat(obj['amount']);
                         numIngre++;
+                        yearIngre[fecha.getMonth()]= yearIngre[fecha.getMonth()]+parseFloat(obj['amount'])
                         if(fecha.getMonth() == fechaActual.getMonth()){
-                            monthIngre[fecha.getDate()-1]=monthIngre[fecha.getDate()-1] + obj['amount'];
+                            monthIngre[fecha.getDate()-1]=monthIngre[fecha.getDate()-1] + parseFloat(obj['amount']);
                         }
                     }
                     if(obj['T_type']=='egreso'){
                         totalEgre=totalEgre+ parseFloat(obj['amount']);
                         numEgre++;
+                        yearEgre[fecha.getMonth()]= yearEgre[fecha.getMonth()]+parseFloat(obj['amount'])
                         if(fecha.getMonth() == fechaActual.getMonth()){
-                            monthEgre[fecha.getDate()-1]=monthEgre[fecha.getDate()-1] + obj['amount'];
+                            monthEgre[fecha.getDate()-1]=monthEgre[fecha.getDate()-1] + parseFloat(obj['amount']);
                         }
                     }
                 }
@@ -190,9 +193,56 @@ block content
                             a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;")
                                 <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
-                            a(uk-icon="icon: chevron-left")
+                            -
+                                var fechaLink=new Date(hoy);
+                                var monthLink=fechaLink.getMonth() + 1;
+                                var yearLink=fechaLink.getFullYear();
+                                var yearLink2=yearLink
+                                var year=yearLink
+                                var mLAfter=0;
+                                var mLBefore=0;
+                                var yLAfter=0;
+                                var yLBefore=0;
+                                if(monthLink==1){
+                                    mLAfter=12;
+                                    yearLink=yearLink-1;
+                                }
+                                else{
+                                    mLAfter=monthLink - 1;
+                                }
+                                if(monthLink==12){
+                                    mLBefore=1;
+                                    yearLink2=yearLink+1;
+                                }
+                                else{
+                                    mLBefore=monthLink + 1;
+                                }
+
+                                if(mLAfter<10){
+                                    mLAfter="0"+mLAfter;
+                                }
+                                if(mLBefore<10){
+                                    mLBefore="0"+mLBefore;
+                                }
+                                if(year==2000){
+                                    yLBefore=2040;
+                                }
+                                else{
+                                    yLBefore=year-1;
+                                }
+                                if(year==2040){
+                                    yLAfter=2000;
+                                }
+                                else{
+                                    yLAfter=year+1;
+                                }
+                                if(monthLink<10){
+                                    monthLink="0"+monthLink;
+                                }
+
+                            a(uk-icon="icon: chevron-left" href="/caja?m="+mLAfter+"&y="+ yearLink)
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px; text-transform: capitalize") #{moment(hoy).format('MMMM')}
-                            a(uk-icon="icon: chevron-right")
+                            a(uk-icon="icon: chevron-right" href="/caja?m="+mLBefore+"&y="+ yearLink2)
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
                             div(class="uk-width-1-1@l" style="")
                                 <canvas id="chart-general" width="400" height="250"></canvas>
@@ -313,7 +363,7 @@ block content
                             a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;")
                                 <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") HISTORIAL
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") HISTORIAL #{moment(hoy).format('YYYY')}
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
                             div(class="uk-width-3-5@m" style="")
                                 <canvas id="chart-historial" width="" height=""></canvas>
@@ -321,7 +371,7 @@ block content
                                     var ctx = document.getElementById('chart-historial');
                                     var dataFirst = {
                                         label: "Ingresos",
-                                        data: [9562, 5975, 7544, 2073, 1000, 5400, 4000,2073, 1000, 5400, 4000,5441,1254],
+                                        data: yearIngre,
                                         borderColor: "#1e87f0",
                                         fill: false,
                                         lineTension: 0,
@@ -330,7 +380,7 @@ block content
 
                                     var dataSecond = {
                                         label: "Egresos",
-                                        data: [4571,5893,4756,3210, 7400, 4000,5975, 7544, 2073, 1000,3500,4122],
+                                        data: yearEgre,
                                         borderColor: "#222238",
                                         fill: false,
                                         lineTension: 0,
@@ -385,9 +435,9 @@ block content
                 div(class="uk-width-expand@m div-year-res")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px")
-                            a(uk-icon="icon: chevron-left")
+                            a(uk-icon="icon: chevron-left" href="/caja?m="+monthLink+"&y="+ yLBefore)
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") #{moment(hoy).format('YYYY')} (%)
-                            a(uk-icon="icon: chevron-right")
+                            a(uk-icon="icon: chevron-right" href="/caja?m="+monthLink+"&y="+ yLAfter)
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                             <canvas id="chart-year-pie" width="400px" height=""></canvas>
                             script.

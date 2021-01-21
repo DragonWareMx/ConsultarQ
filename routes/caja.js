@@ -111,7 +111,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         valido = true
                         break;
                 }
-                if (req.query.y < 2040 && req.query.y > 2000) {
+                if (req.query.y < 2041 && req.query.y > 1999) {
                     year = true
                 }
                 if (valido && year)
@@ -366,6 +366,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         status: 'active'
                     }
                 })
+
             }
 
             res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos, hoy, ingreConceptos, egreConceptos })
