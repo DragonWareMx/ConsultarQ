@@ -8,17 +8,17 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Editar documentación de proyecto
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(href="/proyectos/documentacion" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
-        div(class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" uk-grid)
-            div(class="uk-card uk-card-default uk-card-body uk-padding-remove-bottom uk-margin-small-bottom")
-                div(class="uk-flex uk-flex-top uk-flex-between")
-                    div(class="uk-text-primary uk-margin-bottom uk-margin-small-left") #{project.name}
-                    div(class="uk-flex uk-flex-middle")
-                        a(class="uk-button-small uk-button-primary uk-border-rounded" href="/proyectos/proyecto/"+project.id) Ver proyecto
+        div(class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-small-top" uk-grid)
+            div(class="uk-card uk-card-default uk-card-body uk-padding-remove-bottom uk-padding-small-top uk-margin-small-bottom")
+                div(class="uk-flex uk-flex-between uk-margin-small-bottom uk-flex-wrap")
+                    div(class="uk-text-primary uk-margin-bottom") #{project.name}
+                    div(class="uk-flex uk-flex-middle" style="margin-right:0px !important")
+                        a(class="uk-button-small uk-button-primary uk-border-rounded uk-link-reset" style="color:white !important" href="/proyectos/proyecto/"+project.id) Ver proyecto
                 div(class="uk-overflow-auto")
-                    table(class="uk-table uk-table-small uk-table-divider uk-table-justify")
+                    table(class="uk-table uk-table-small uk-table-divider uk-text-small uk-table-justify")
                         thead
                             tr
                                 th(class="uk-text-center uk-table-shrink") #
@@ -43,20 +43,21 @@ block content
                                         td Sí 
                                     else
                                         td No
-                div(class="uk-flex uk-flex-right  uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
-                    img(src="/icons/more.png" width="20px" style="margin-top:3px; margin-right:5px;")
-                    a(uk-toggle="target: #task-form") Agregar Tarea
+
+                div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-small-top uk-margin-bottom")
+                    a(uk-toggle="target: #task-form")
+                        <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Agregar tarea
         //- Modal para editar tarea
         div(id="editTask-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar tarea
                     div(class="uk-flex uk-flex-middle" uk-toggle="target: #deleteTask-form")
-                        img(src="/icons/delete.png" width="12px")
-                        a(class="uk-text-danger uk-text-small uk-margin-small-left") Eliminar
+                        a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top")
+                            <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-editTask")
-                form(class="uk-card-body uk-padding-small" id="form-edit-task" action="" method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-edit-task" action="" method="POST")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -79,7 +80,7 @@ block content
                                     .field.uk-margin-bottom
                                         input(type='number' autocomplete='off'  id="costo-edit" name="costo"  value='' onchange="this.setAttribute('value', this.value);" maxlength="10")
                                         label(for='costo-edit' title='Costo' data-title='Costo')
-                                div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-right")
+                                div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-left")
                                     input(type='checkbox' autocomplete='off'  id="realizado-edit" name="realizado" value="1" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
                                     label(for='realizado-edit' class="uk-text-primary") Realizado
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
@@ -113,7 +114,7 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tarea
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-task")
-                form(class="uk-card-body uk-padding-small" id="form-new-task" action="/proyectos/documentacion/"+project.id+"/tarea/agregar" method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-new-task" action="/proyectos/documentacion/"+project.id+"/tarea/agregar" method="POST")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -136,7 +137,7 @@ block content
                                     .field.uk-margin-bottom
                                         input(type='number' autocomplete='off'  id="costo" name="costo"  value='' onchange="this.setAttribute('value', this.value);" maxlength="10" )
                                         label(for='costo' title='Costo' data-title='Costo')
-                                div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-right")
+                                div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-left")
                                     input(type='checkbox' autocomplete='off'  id="realizado" name="realizado" value="1" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
                                     label(for='realizado' class="uk-text-primary") Realizado
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")

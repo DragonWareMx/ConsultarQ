@@ -44,20 +44,20 @@ block content
                     //- COLOR
                     div(class="uk-card-header uk-padding-remove uk-flex" style="background:"+color /* va cambiando el background*/)
                         //- NOMBRE
-                        div(class="uk-width-3-5 uk-margin-small-left uk-margin-small-top uk-margin-small-bottom")
+                        div(class="uk-width-3-5@m uk-margin-small-left uk-margin-small-top uk-margin-small-bottom")
                             div(class="" style="color: #222238;") #{proyecto.name}
                             if proyecto.Pro_Type
                                 div(class="uk-text-small" style="min-height: 20.8px") #{proyecto.Pro_Type.name}
                             else
                                 div(class="uk-text-small" style="min-height: 20.8px") 
                         //- ESTATUS
-                        div(class="uk-width-2-5 uk-flex uk-flex-right uk-text-right uk-flex-middle uk-flex-wrap-reverse")
-                            div(class="uk-width-1-5@l")
+                        div(class="uk-width-2-5@m uk-flex uk-flex-right uk-flex-wrap-reverse")
+                            div(class="uk-width-auto@l uk-flex uk-flex-right uk-flex-middle")
                                 if proyecto.status == 'ATRASADO' || proyecto.status == 'CANCELADO'
-                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px;") #{proyecto.status}
+                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px; outline:none") #{proyecto.status}
                                 else if proyecto.status == 'EN TIEMPO' || proyecto.status == 'ACTIVO'
-                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px;" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
-                            div(class="uk-width-1-5@l uk-flex uk-flex-right")
+                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
+                            div(class="uk-width-auto@l uk-flex uk-flex-right")
                                 a.uk-flex.uk-flex-middle.uk-text-small(href="/proyectos/editar/"+proyecto.id id="btnEdit" style="margin-right:10px")
                                     <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
                     div(class="uk-width-1-1 uk-flex uk-flex-wrap")    
@@ -175,7 +175,8 @@ block content
                                                     div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
                                 else
                                     div(class="uk-text-center uk-margin-medium-top") 
-                                        a.uk-link-reset.uk-text-truncate SIN CLIENTE REGISTRADO
+                                        div.uk-link-reset.uk-text-truncate 
+                                            b SIN CLIENTE REGISTRADO
                             div(class="uk-width-1-1 uk-padding-small uk-text-small div-docs-proyecto") 
                                 //-COTIZACIONES
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
@@ -324,7 +325,7 @@ block content
                                         td No
             div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
                 a(href="/proyectos/documentacion/editar/"+proyecto.id)
-                        <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Agregar tarea
+                    <span uk-icon="icon: settings; ratio: 0.8" style="margin-right:5px"></span>Administrar tareas
         //- FINANZAS DEL PROYECTO--------------------------
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
