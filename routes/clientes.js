@@ -55,14 +55,18 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 
         if (usuario && usuario.Role && usuario.Role.Permissions) {
             //TIENE PERMISO DE DESPLEGAR VISTA
-            models.Client.findAll({
+            const clientes = await models.Client.findAll({
                 include: [{
                     model: models.Client_Area
                 }, {
                     model: models.Project,
                         limit: 1,
                         include: [{
-                            model: models.Quotation
+                            model: models.Quotation,
+                                limit: 1,
+                                order:[
+                                    ['createdAt','DESC']
+                                ]
                         }],
                         order: [
                             ['createdAt','DESC']
@@ -71,11 +75,16 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 order: [
                     ['status', 'ASC']
                 ]
-            }).then(clientes => {
-                models.Client_Area.findAll().then(areas => {
-                    return res.render('clientes', { clientes, areas })
-                });
-            });
+            })
+
+            const areas = await models.Client_Area.findAll()
+            
+            if(clientes){
+                return res.render('clientes', { clientes , areas })
+            }
+            else{
+                return res.status(404).json(404)                //  mandar a la vista de error
+            }
         }
         else {
             //NO TIENE PERMISOS
