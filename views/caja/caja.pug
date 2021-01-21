@@ -86,7 +86,7 @@ block content
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Ingresos
                                 img(src="/icons/money.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") #{ingresos.length} registros
-                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" id="agregar-ingreso" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                         -
                             porIngre = (ingresos.length * 100)/(ingresos.length + egresos.length)
                             porIngre=Math.round(porIngre)
@@ -107,7 +107,7 @@ block content
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Egresos
                                 img(src="/icons/moneyLess.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") #{egresos.length} registros
-                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" id="agregar-egreso" uk-toggle  style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                         -
                             porEgre = (egresos.length * 100)/(ingresos.length + egresos.length)
                             porEgre=Math.round(porEgre)
@@ -128,7 +128,7 @@ block content
                             div(class="uk-margin-small-bottom uk-flex-inline uk-flex-middle" style="font-size:18px;") Deducibles
                                 img(src="/icons/doc.png" style="width:18px; height:18px; margin-left:10px")
                             div.uk-margin-small-bottom(style="color:#222238") #{deducibles.length} registros
-                            a(class="btn-agregarRegistro uk-text-center" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
+                            a(class="btn-agregarRegistro uk-text-center"  id="agregar-deducible" href="#modal-agregarRegistro" uk-toggle style="width:100%; padding:2px; border-radius:2px; font-size:14px; border: solid 1px #1e87f0; text-decoration:none") Agregar registro
                         -
                             porDedu = (deducibles.length * 100)/(ingresos.length + egresos.length)
                             porDedu=Math.round(porDedu)
@@ -487,7 +487,7 @@ block content
                                 label(for='proveedor' title='Proveedor (Opcional)' data-title='Proveedor')
                             .uk-margin-bottom
                                 <div class="uk-grid-small uk-child-width-auto uk-flex uk-flex-middle uk-flex-wrap uk-grid"">
-                                    <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice"  value="1"> Deducible</label>
+                                    <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" id="deducible" name="invoice"  value="1"> Deducible</label>
                                     <label class="uk-flex uk-flex-middle uk-text-small"><input class="uk-radio uk-margin-remove" style="margin-right:5px !important" type="radio" name="invoice" value="0" checked> No deducible</label>
                                 </div>
                             a(class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-margin-small-bottom" style="width:max-content" href="#modal-agregarConcepto" uk-toggle)
@@ -542,6 +542,15 @@ block content
     script.
         //los ajax
         $(document).ready(function () {
+                $("#agregar-ingreso").click(function(){
+                    $('#type option[value="ingreso"]').prop("selected", true);
+                })
+                $("#agregar-egreso").click(function(){
+                    $('#type option[value="egreso"]').prop("selected", true);
+                })
+                $("#agregar-deducible").click(function(){
+                    $('#deducible').prop('checked', true);
+                })
                 //  ajax del form de nuevo
                 $("#form-new-patype").bind("submit", function() {
                     // Capturamnos el boton de envío
