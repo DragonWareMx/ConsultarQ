@@ -339,7 +339,8 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
 
 router.get('/documentacion', isLoggedIn,async function (req, res, next) {
   const projects =await models.Project.findAll({
-    include: models.Task
+    include: models.Task,
+    order: [['createdAt','DESC']]
   })
   res.render('documentacion',{projects}); 
 });
