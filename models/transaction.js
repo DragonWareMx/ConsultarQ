@@ -21,7 +21,12 @@ module.exports = (sequelize, DataTypes) => {
     date: DataTypes.DATEONLY,
     amount: DataTypes.DECIMAL,
     description: DataTypes.STRING,
-    invoice: DataTypes.BOOLEAN
+    invoice: DataTypes.BOOLEAN,
+    status: {
+      type: DataTypes.ENUM('active', 'inactive'),
+      defaultValue: 'active',
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Transaction',
