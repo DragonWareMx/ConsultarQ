@@ -11,6 +11,58 @@ block head
 
 block content
     div(class="uk-container")
+        script.
+            var todos = !{ JSON.stringify(todos) };
+            var fechaActual = !{JSON.stringify(hoy)};
+            var ingreConceptos = !{JSON.stringify(ingreConceptos)};
+            var egreConceptos = !{JSON.stringify(egreConceptos)};
+            fechaActual = new Date(fechaActual);
+            var totalIngre=0;
+            var totalEgre=0;
+            var numIngre=0;
+            var numEgre=0;
+            var conceptosIngre=[
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+            ]
+            var conceptosEgre=[
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+            ]
+            for(var key in todos){
+                var obj=todos[key];
+                var fecha= new Date(obj['date'])
+                if(fecha.getFullYear() == fechaActual.getFullYear()){
+                    if(obj['T_type']=='ingreso'){
+                        totalIngre=totalIngre+ parseFloat(obj['amount']);
+                        numIngre++;
+                    }
+                    if(obj['T_type']=='egreso'){
+                        totalEgre=totalEgre+ parseFloat(obj['amount']);
+                        numEgre++;
+                    }
+                }
+            }
+            var i=0;
+            for(var key in ingreConceptos){
+                 var obj=ingreConceptos[key];
+                conceptosIngre[i]['count']=obj['count'];
+                conceptosIngre[i]['name']=obj['Concept']['name'];
+                i++;
+            }
+            i=0;
+            for(var key in egreConceptos){
+                 var obj=egreConceptos[key];
+                conceptosEgre[i]['count']=obj['count'];
+                conceptosEgre[i]['name']=obj['Concept']['name'];
+                i++;
+            }
+            var porcentajeEgre= (100* numEgre) / (numEgre+numIngre);
+            var porcentajeIngre= (100* numIngre) / (numEgre+numIngre);
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Caja chica
             div(class="uk-flex uk-flex-between uk-flex-wrap uk-width-1-2@m uk-width-1 uk-margin-small-bottom uk-text-small o-proyect-menu-hide")
@@ -109,28 +161,8 @@ block content
                                 option Proyecto 3
                         div(class="uk-width-1-1 uk-flex uk-flex-center uk-margin-small-top")
                             button(class="button-caja button-caja-s uk-width-1-2" style="") Buscar
-            script.
-                var todos = !{ JSON.stringify(todos) };
-                var fechaActual = !{JSON.stringify(hoy)};
-                fechaActual = new Date(fechaActual);
-                var totalIngre=0;
-                var totalEgre=0;
-                var numIngre=0;
-                var numEgre=0;
-                for(var key in todos){
-                    var obj=todos[key];
-                    var fecha= new Date(obj['date'])
-                    if(fecha.getFullYear() == fechaActual.getFullYear()){
-                        if(obj['T_type']=='ingreso')
-                            totalIngre=totalIngre+ parseFloat(obj['amount']);
-                            numIngre++;
-                        if(obj['T_type']=='egreso')
-                            totalEgre=totalEgre+ parseFloat(obj['amount']);
-                            numEgre++;
-                    }
-                }
-                var porcentajeEgre= (100* numEgre) / (numEgre+numIngre);
-                var porcentajeIngre= (100* numIngre) / (numEgre+numIngre);
+
+
             div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;" uk-height-match="target: > div > .uk-card")
                 div(class="uk-width-3-4@m uk-padding-remove")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-small")
@@ -148,6 +180,7 @@ block content
                             div(class="uk-width-3-5@l" style="")
                                 <canvas id="chart-general" width="400" height="250"></canvas>
                                 script.
+                                    //esta es la tabla la primera
                                     var ctx = document.getElementById('chart-general');
                                     var dataFirst = {
                                         label: "Ingresos",
@@ -369,10 +402,10 @@ block content
                             var myPieChart = new Chart(ctx, {
                                 type: 'doughnut',
                                 data:{
-                                    labels: ["Concepto 1", "Concepto 2", "Concepto 3", "Concepto 4"],
+                                    labels: [conceptosIngre[0]['name'], conceptosIngre[1]['name'], conceptosIngre[2]['name'], conceptosIngre[3]['name']],
                                     datasets: [{
                                         backgroundColor: ["#1e87f0", "#9CCAFE","#0D4481","#9898BF"],
-                                        data: [62.5,25,13.8,35.4],
+                                        data: [conceptosIngre[0]['count'],conceptosIngre[1]['count'],conceptosIngre[2]['count'],conceptosIngre[3]['count']],
                                         borderWidth:4
                                     }],
                                 },
@@ -394,10 +427,10 @@ block content
                             var myPieChart = new Chart(ctx, {
                                 type: 'doughnut',
                                 data:{
-                                    labels: ["Concepto 1", "Concepto 2", "Concepto 3", "Concepto 4"],
+                                    labels: [conceptosEgre[0]['name'], conceptosEgre[1]['name'], conceptosEgre[2]['name'], conceptosEgre[3]['name']],
                                     datasets: [{
                                         backgroundColor: ["#222238","#40408D","#7272E1","#95ADA9"],
-                                        data: [62.5,25,13.8,35.4]
+                                        data: [conceptosEgre[0]['count'],conceptosEgre[1]['count'],conceptosEgre[2]['count'],conceptosEgre[3]['count']]
                                     }],
                                 },
                                 options: {

@@ -7,6 +7,7 @@ const passport = require('passport');
 
 //sequelize models
 const models = require('../models/index');
+const sequelize = require('sequelize');
 moment = require('moment');
 moment.locale('es-mx');
 
@@ -67,6 +68,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
             var ingresos
             var deducibles
             var todos
+            var ingreConceptos
+            var egreConceptos
             if (req.query.y && req.query.m) {
                 var valido = false
                 var year = false
@@ -218,6 +221,50 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         status: 'active'
                     }
                 })
+                ingreConceptos = await models.Transaction.findAll({
+                    group: [
+                        ['ConceptId']
+                    ],
+                    attributes: ['Concept.name', [sequelize.fn('COUNT', 'Transaction.ConceptId'), 'count']],
+                    include: [
+                        {
+                            model: models.Concept,
+                            required: true
+                        }, {
+                            model: models.Project_Employee,
+                            include: [{
+                                model: models.Project,
+                                required: true
+                            }]
+                        }],
+                    where: {
+                        T_type: 'ingreso',
+                        status: 'active',
+                        where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.getFullYear())
+                    },
+                })
+                egreConceptos = await models.Transaction.findAll({
+                    group: [
+                        ['ConceptId']
+                    ],
+                    attributes: ['Concept.name', [sequelize.fn('COUNT', 'Transaction.ConceptId'), 'count']],
+                    include: [
+                        {
+                            model: models.Concept,
+                            required: true
+                        }, {
+                            model: models.Project_Employee,
+                            include: [{
+                                model: models.Project,
+                                required: true
+                            }]
+                        }],
+                    where: {
+                        T_type: 'egreso',
+                        status: 'active',
+                        where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.getFullYear())
+                    },
+                })
             }
             else {
                 egresos = await models.Transaction.findAll({
@@ -321,7 +368,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                 })
             }
 
-            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos, hoy })
+            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos, hoy, ingreConceptos, egreConceptos })
         }
         else {
             //NO TIENE PERMISOS
