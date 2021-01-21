@@ -88,7 +88,8 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
             include: models.Comment
           },
           {
-            model: models.Task
+            model: models.Task,
+            order: ['check','ASC']
           },
           {
             model: models.Quotation
@@ -96,6 +97,13 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
           {
             model: models.Client,
             include: models.Client_Area
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Provider,
+            include: models.Provider_Area
           }
         ],
       })
@@ -118,6 +126,16 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
           }
         }
       })
+
+      /*
+      const movimientos = await models.Transaction.findAll({
+        include: {
+          model: models.Project_Employee,
+          where: {ProjectId: proyecto.id},
+          required: true
+        },
+        order: ['date','DESC']
+      })*/
       console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',comentarios)
       res.render('proyecto', {proyecto, comentarios});
     }

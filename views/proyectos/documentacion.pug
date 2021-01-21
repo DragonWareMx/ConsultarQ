@@ -59,13 +59,16 @@ block content
                             div(class="uk-text-small" style="margin-top:-7px") Tareas realizadas
                             div(class="uk-text-large uk-text-secondary uk-margin-small-top") #{noRealizadas}
                             div(class="uk-text-small" style="margin-top:-7px") Tareas faltantes
-                            div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
-                            if project.observations.length > 170
-                                -
-                                    observations = project.observations.substr(0,155) + '...';
+                            if project.observations
+                                div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
+                                    if project.observations.length > 170
+                                        -
+                                            observations = project.observations.substr(0,155) + '...';
+                                    else
+                                        -   
+                                            observations = project.observations;
+                                    div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{observations}
                             else
-                                -   
-                                    observations = project.observations;
-                            div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{observations}
+                                div(class="uk-margin-small-top uk-text-light uk-text-small") SIN OBSERVACIONES
                             
                                 

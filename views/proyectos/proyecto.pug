@@ -266,50 +266,62 @@ block content
                 //- button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
         //- OBSERVACIONES-------------
-        div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small") 
-            div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle 
-                b OBSERVACIONES
-            div.uk-text-small.uk-text-emphasis Lorem ipsum, dolor sit amet consectetur adipisicing elit. Velit voluptatibus vitae laborum enim. In pariatur, fuga, eum perspiciatis soluta fugit sunt est magnam saepe inventore quos, ullam vel nihil distinctio.
-                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, possimus unde officia doloremque quod assumenda eligendi perferendis magni officiis dignissimos enim earum quae saepe illum tenetur necessitatibus id, nihil cupiditate.
+        if proyecto.observations
+            div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small") 
+                div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle 
+                    b OBSERVACIONES
+                div.uk-text-small.uk-text-emphasis #{proyecto.observations}
+        else
+            div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small") 
+                div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle 
+                    b SIN OBSERVACIONES
+                div.uk-text-small.uk-text-emphasis 
         //- TAREAS DEL PROYECTO------------------------
         
         div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top uk-card-body uk-padding-small")
             div(class="uk-flex uk-flex-top uk-flex-between")
-                div(class="uk-text-primary uk-margin-bottom ") 
-                    b CASA - HABITACIÓN
+                div(class="uk-text-primary uk-margin-bottom ")
+                    if proyecto.Tasks.length > 0 
+                        b TAREAS
+                    else
+                        b SIN TAREAS
                 //- div(class="uk-flex uk-flex-middle")
                     a.uk-margin-small-right(href="#" uk-toggle="target: #editDocument-form")
                         <span uk-icon="pencil"></span>
                     a.uk-margin-small-left(href="#" uk-toggle="target: #deleteDocument-form" style="color:#DC5454")
                         <span uk-icon="trash"></span>
             div(class="uk-overflow-auto")
-                table(class="uk-table uk-table-small uk-table-divider uk-table-justify uk-text-small")
-                    thead
-                        tr
-                            th(class="uk-text-center uk-table-shrink") #
-                            th(class="uk-text-truncate uk-table-expand") Concepto
-                            th(class="uk-text-truncate uk-table-expand") Descripción
-                            th(class="uk-text-truncate uk-width-small") Cantidad
-                            th(class="uk-text-truncate uk-width-small") Unidad
-                            th(class="uk-text-truncate  uk-width-small") Costo/U
-                            th(class="uk-text-truncate uk-width-small") Costo/T
-                            th(class="uk-text-truncate uk-width-small") Realizado
-                    tbody
-                        //- each task, index in project.Project_Requirement.Tasks
-                        tr(uk-toggle="target: #editTask-form" class="editar" data-id=1) 
-                            td 1
-                            td Elaborar planos
-                            td Descripción
-                            td 1
-                            td 1
-                            td -
-                            td -
-                            //- if task.check
-                            td Sí 
-                            //- else
-                                td No
+                if proyecto.Tasks.length > 0 
+                    table(class="uk-table uk-table-small uk-table-divider uk-table-justify uk-text-small")
+                        thead
+                            tr
+                                th(class="uk-text-center uk-table-shrink") #
+                                th(class="uk-text-truncate uk-table-expand") Concepto
+                                th(class="uk-text-truncate uk-table-expand") Descripción
+                                th(class="uk-text-truncate uk-width-small") Cantidad
+                                th(class="uk-text-truncate uk-width-small") Unidad
+                                th(class="uk-text-truncate  uk-width-small") Costo/U
+                                th(class="uk-text-truncate uk-width-small") Costo/T
+                                th(class="uk-text-truncate uk-width-small") Realizado
+                        tbody
+                            each task, index in proyecto.Tasks
+                                tr(uk-toggle="target: #editTask-form" class="editar" data-id=1) 
+                                    td #{index+1}
+                                    td #{task.concept}
+                                    td #{task.description}
+                                    td #{task.units}
+                                    td #{task.unit}
+                                    td #{task.price}
+                                    if task.price*task.units > 0
+                                        td #{task.price*task.units}
+                                    else
+                                        td
+                                    if task.check
+                                        td Sí 
+                                    else
+                                        td No
             div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
-                a(href="#" uk-toggle="target: #task-form")
+                a(href="/proyectos/documentacion/editar/"+proyecto.id)
                         <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Agregar tarea
         //- FINANZAS DEL PROYECTO--------------------------
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
@@ -355,18 +367,25 @@ block content
                                     th(class="uk-text-center") NOMBRE
                                     th(class="uk-text-center") ÁREA
                                     th(class="uk-text-center") TELÉFONO
+                                    th(class="uk-text-center") CORREO ELECTRÓNICO
+                                    th(class="uk-text-center") NÚMERO DE DRO
                                     th(class="uk-text-center") ESTATUS
                             tbody
-                                //- each transaccion in transacciones
-                                tr(class="info" uk-toggle="target: #modal-infoP" data-id=1)
-                                    td 1
-                                    td Nombre del prestador
-                                    td Área
-                                    td 4444444444
-                                    //- if(prestador.status == 'active')
-                                        td(class="status") Activo
-                                    //- else
-                                    td(class="status") Inactivo
+                                each proveedor in proyecto.Providers
+                                    tr(class="info")
+                                        td #{proveedor.id}
+                                        td #{proveedor.name}
+                                        if proveedor.Provider_Area
+                                            td #{proveedor.Provider_Area.name}
+                                        else
+                                            td SIN ÁREA
+                                        td #{proveedor.phone_number}
+                                        td #{proveedor.email}
+                                        td #{proveedor.dro}
+                                        if proveedor.status == 'active'
+                                            td(class="status") Activo
+                                        else
+                                            td(class="status") Inactivo
     
     
     
@@ -505,41 +524,6 @@ block content
                             div(style="font-size:14px; color:#999") DEDUCIBLE
                             input.uk-text-emphasis.uk-padding-remove(id="info-deducible" name="info-deducible" placeholder="Si" disabled style="border:none; background-color:transparent; margin-bottom:10px")
                 
-    //-Modal informacion completa de prestadores
-    div(id="modal-infoP" uk-modal)
-        div(class="uk-modal-dialog uk-modal-body")
-            div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
-                //- div(tabindex="0")
-                //-     a.uk-flex.uk-flex-middle.uk-text-small(href="#" id="btnEdit" uk-toggle="target: #modal-editar" data-id="")
-                //-         <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
-            button(class="uk-modal-close-default" type="button" uk-close='')
-            form(class="uk-card-body uk-padding-remove uk-margin-top")
-                div
-                    div(style="font-size:14px; color:#999") ID
-                    input.uk-text-emphasis.uk-padding-remove(id="info-id" name="info-id" placeholder="1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") NOMBRE
-                            input.uk-text-emphasis.uk-padding-remove(id="info-nombre-p" name="info-nombre-p" placeholder="Nombre completo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") ÁREA
-                            input.uk-text-emphasis.uk-padding-remove(id="info-area" name="info-area" placeholder="Área 1" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") TELÉFONO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-telefono" name="info-telefono" placeholder="4444444444" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") ESTATUS
-                            input.uk-text-emphasis.uk-padding-remove(id="info-estatus" name="info-estatus" placeholder="Activo" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                    div(class="uk-child-auto@m uk-flex uk-flex-wrap uk-flex-between")    
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") CORREO ELECTRÓNICO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-correo" name="info-correo" placeholder="correo@ejemplo.com" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-                        div.uk-flex.uk-flex-column
-                            div(style="font-size:14px; color:#999") NÚMERO DE DRO
-                            input.uk-text-emphasis.uk-padding-remove(id="info-dro" name="info-drp" placeholder="#####" disabled style="border:none; background-color:transparent; margin-bottom:10px")
-    
     
     
     
