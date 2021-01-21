@@ -392,7 +392,6 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
       where: {status : ['terminado','cancelado']},
       order: [['createdAt','DESC']]
       })
-      console.log(proyectos[0].status)
       res.render('proyectosInactivos', {proyectos});
     }
     else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
