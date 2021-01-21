@@ -172,7 +172,6 @@ router.post('/proyecto/:id/comment',
         .escape(),
     ]
     , isLoggedIn, async function (req, res, next) {
-        console.log('si llega')
         //si hay errores entonces se muestran
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
