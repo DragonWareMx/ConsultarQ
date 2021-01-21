@@ -111,7 +111,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         valido = true
                         break;
                 }
-                if (req.query.y < 2040 && req.query.y > 2000) {
+                if (req.query.y < 2041 && req.query.y > 1999) {
                     year = true
                 }
                 if (valido && year)
@@ -365,6 +365,54 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     where: {
                         status: 'active'
                     }
+                })
+                ingreConceptos = await models.Transaction.findAll({
+                    group: [
+                        ['ConceptId']
+                    ],
+                    attributes: ['Concept.name', [sequelize.fn('COUNT', 'Transaction.ConceptId'), 'count']],
+                    include: [
+                        {
+                            model: models.Concept,
+                            required: true
+                        }, {
+                            model: models.Project_Employee,
+                            include: [{
+                                model: models.Project,
+                                required: true
+                            }],
+                            where: { ProjectId: lista },
+                            required: true
+                        }],
+                    where: {
+                        T_type: 'ingreso',
+                        status: 'active',
+                        where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.getFullYear())
+                    },
+                })
+                egreConceptos = await models.Transaction.findAll({
+                    group: [
+                        ['ConceptId']
+                    ],
+                    attributes: ['Concept.name', [sequelize.fn('COUNT', 'Transaction.ConceptId'), 'count']],
+                    include: [
+                        {
+                            model: models.Concept,
+                            required: true
+                        }, {
+                            model: models.Project_Employee,
+                            include: [{
+                                model: models.Project,
+                                required: true
+                            }],
+                            where: { ProjectId: lista },
+                            required: true
+                        }],
+                    where: {
+                        T_type: 'egreso',
+                        status: 'active',
+                        where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.getFullYear())
+                    },
                 })
             }
 
