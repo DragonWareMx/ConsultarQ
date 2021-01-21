@@ -81,7 +81,7 @@ block content
                             each prestador in prestadores
                                 option(value=prestador.name)
                     div(id="lista_proveedores" class="uk-child-width-1")
-                        each prestador in prestadores
+                        each prestador in project.Providers
                             div(id=prestador.id+"p" class="uk-flex uk-flex-middle")
                                 img(class="delete_proveedor" data-id=prestador.id src="/icons/less.png" width="10px" style="cursor:pointer")
                                 div(class="uk-margin-small-left uk-text-small") #{prestador.name}
@@ -153,7 +153,7 @@ block content
 
     script.
         $(document).ready(function () {
-            var proveedoresP=!{ JSON.stringify(prestadores) };
+            var proveedoresP=!{ JSON.stringify(project.Providers) };
             var arrProveedores=[];
             for(var key in proveedoresP){
                 var obj=proveedoresP[key];

@@ -24,7 +24,8 @@ module.exports = {
       profit: "100"
     }], {});
     await queryInterface.bulkInsert('Comments', [{
-      ProjectEmployeeId: 1,
+      ProjectId: 1,
+      UserId: 2,
       comment: 'Este proyecto ya está muy atrasado.',
       createdAt: Date.now(), updatedAt: Date.now()
     }], {});

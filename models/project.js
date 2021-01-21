@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       Project.hasMany(models.Quotation)
       Project.belongsTo(models.Client)
       Project.hasMany(models.Task)
+      Project.hasMany(models.Comment)
     }
   };
   Project.init({
