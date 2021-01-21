@@ -75,9 +75,9 @@ block content
                                     div(class="uk-text-small" style="height: 20.8px") 
                             div(class="uk-width-2-5 uk-flex uk-flex-right uk-flex-middle") 
                                 if proyecto.status == 'ATRASADO' || proyecto.status == 'CANCELADO'
-                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px;") #{proyecto.status}
+                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px; outline:none") #{proyecto.status}
                                 else if proyecto.status == 'EN TIEMPO' || proyecto.status == 'ACTIVO'
-                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px;" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
+                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
                         //- FECHAS
                         div(class="uk-card-body uk-padding-remove")
                             div(class="uk-width-1 uk-margin-small-top")
