@@ -14,6 +14,7 @@ block content
                 a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading uk-animation-shake" style="color:#6B6B72 !important")
                     img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Regresar
+        div(id="errors")
         form(class="uk-card uk-card-default uk-card-body uk-width-1-1@m uk-margin-top uk-padding-small uk-flex uk-flex-wrap" id="form-edit-transaction" method="POST" action="/caja/editar-registro/"+movimiento.id)
             div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
@@ -67,9 +68,11 @@ block content
                     input(type='number' autocomplete='on' id="monto" name="monto"  step="0.01" min="0" value=movimiento.amount onchange="this.setAttribute('value', this.value);" required='')
                     label(for='monto' title='Monto total' data-title='Monto total')
                 textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="255") #{movimiento.description}
-            div(class="uk-width-1 uk-flex-right uk-flex")
-                button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
+            div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="javascript:history.back(-1);"  ) Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
+            a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
 
         div(id="modal-agregarConcepto" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -86,7 +89,7 @@ block content
                             input(type='text' autocomplete='off' id="addDescripcion" name="addDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
                             label(for='addDescripcion' title='Descripción' data-title='Descripción')
                         div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
-                            a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-agregarRegistro" uk-toggle id="cancelar-c") Cancelar
+                            a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" ) Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregarC" type="submit") Guardar
 
         div(id="modal-agregarPago" uk-modal)
@@ -104,8 +107,22 @@ block content
                             input(type='text' autocomplete="off" id="adDescripcion" name="addDescripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
                             label(for='adDescripcion' title='Descripción' data-title='Descripción')
                         div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
-                            a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-agregarRegistro" uk-toggle id="cancelar-tp") Cancelar
+                            a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" uk-toggle id="cancelar-tp") Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregarPT" type="submit") Guardar
+
+    //modal para eliminar
+    div(id="delete-form" uk-modal)
+            div(class="uk-modal-dialog uk-modal-body")
+                div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar registro
+                button(type='button' uk-close='' class="uk-modal-close-default" id="cerrar-modal-eliminar")
+                div(id="errors-delete")
+                div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el registro?
+                form(class="uk-card-body uk-padding-small" id="form-delete-transaction" action="/caja/borrar-registro/delete/"+movimiento.id  method="POST")
+                    div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
+                        input(type="hidden", name="id" value=movimiento.id)
+                        a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" href="#edit-form") Cancelar
+                        button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEnviar-delete" type="submit") Eliminar
+
 
     script.
          //los ajax
@@ -248,74 +265,146 @@ block content
                 return false;
             });
 
-            //- $("#form-edit-transaction").bind("submit", function() {
-            //-     // Capturamnos el boton de envío
-            //-     var btnAgregar = $("#btnEnviar");
+            $("#form-edit-transaction").bind("submit", function() {
+                // Capturamnos el boton de envío
+                var btnAgregar = $("#btnEnviar");
 
-            //-     $.ajax({
-            //-         type: $(this).attr("method"),
-            //-         url: $(this).attr("action"),
-            //-         data: $(this).serialize(),
-            //-         beforeSend: function(data){
-            //-             /*
-            //-             * Esta función se ejecuta durante el envió de la petición al
-            //-             * servidor.
-            //-             * */
-            //-             // btnEnviar.text("Enviando"); Para button
-            //-             btnAgregar.val("Enviando"); // Para input de tipo button
-            //-             btnAgregar.attr("disabled","disabled");
-            //-         },
-            //-         complete: function(data){
-            //-             /*
-            //-             * Se ejecuta al termino de la petición
-            //-             * */
-            //-             btnAgregar.val("Enviar formulario");
-            //-         },
-            //-         success: function(data){
-            //-             /*
-            //-             * Se ejecuta cuando termina la petición y esta ha sido
-            //-             * correcta
-            //-             * */
-            //-             $('#errors').css('display', 'none');
-            //-             UIkit.notification({
-            //-                 message: '<span uk-icon=\'icon: check\'></span>Concepto registrado con éxito!',
-            //-                 status: 'success',
-            //-                 pos: 'top-center',
-            //-                 timeout: 2000
-            //-             });
-            //-             setTimeout(
-            //-             function()
-            //-                 {
-            //-                     window.location.reload(true);
-            //-                 }, 1000);
-            //-         },
-            //-         error: function(data){
-            //-             /*
-            //-             * Se ejecuta si la peticón ha sido erronea
-            //-             * */
-            //-             btnAgregar.removeAttr("disabled");
-            //-             $('#errors').css('display', 'block');
-            //-             var errors = JSON.parse(data.responseText);
-            //-             var errorsContainer = $('#errors');
-            //-             errorsContainer.innerHTML = '';
-            //-             var errorsList = '';
-            //-             for (var i = 0; i < errors.length; i++) {
-            //-                 //if(errors[i].redirect)
-            //-                     //window.location.href = window.location.origin + '/logout'
-            //-                 errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
-            //-             }
-            //-             errorsContainer.html(errorsList);
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnAgregar.val("Enviando"); // Para input de tipo button
+                        btnAgregar.attr("disabled","disabled");
+                    },
+                    complete: function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnAgregar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Movimiento editado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                            {
+                                $('#errors').css('display', 'block');
+                                $('#errors').html('<div class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ "El movimiento se ha editado con éxito" +'</p></div>');
+                            }, 1000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnAgregar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
 
-            //-             UIkit.notification({
-            //-                 message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario.',
-            //-                 status: 'danger',
-            //-                 pos: 'top-center',
-            //-                 timeout: 2000
-            //-             });
-            //-         }
-            //-     });
-            //-     // Nos permite cancelar el envio del formulario
-            //-     return false;
-            //- });
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario.',
+                            status: 'danger',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
 
+            $("#form-delete-transaction").bind("submit", function() {
+                // Capturamnos el boton de envío
+                var btnAgregar = $("#btnEnviar");
+
+                $.ajax({
+                    type: $(this).attr("method"),
+                    url: $(this).attr("action"),
+                    data: $(this).serialize(),
+                    beforeSend: function(data){
+                        /*
+                        * Esta función se ejecuta durante el envió de la petición al
+                        * servidor.
+                        * */
+                        // btnEnviar.text("Enviando"); Para button
+                        btnAgregar.val("Enviando"); // Para input de tipo button
+                        btnAgregar.attr("disabled","disabled");
+                    },
+                    complete: function(data){
+                        /*
+                        * Se ejecuta al termino de la petición
+                        * */
+                        btnAgregar.val("Enviar formulario");
+                    },
+                    success: function(data){
+                        /*
+                        * Se ejecuta cuando termina la petición y esta ha sido
+                        * correcta
+                        * */
+                        $('#errors').css('display', 'none');
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: check\'></span>Movimiento eliminado con éxito!',
+                            status: 'success',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                        setTimeout(
+                        function()
+                            {
+                                $('#errors').css('display', 'block');
+                                $('#cerrar-modal-eliminar').click()
+                                $('#errors').html('<div class="uk-alert-success" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ "El movimiento se ha eliminado con éxito" +'</p></div>');
+                            }, 1000);
+                    },
+                    error: function(data){
+                        /*
+                        * Se ejecuta si la peticón ha sido erronea
+                        * */
+                        btnAgregar.removeAttr("disabled");
+                        $('#errors').css('display', 'block');
+                        var errors = JSON.parse(data.responseText);
+                        var errorsContainer = $('#errors');
+                        errorsContainer.innerHTML = '';
+                        var errorsList = '';
+                        for (var i = 0; i < errors.length; i++) {
+                            //if(errors[i].redirect)
+                                //window.location.href = window.location.origin + '/logout'
+                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                        }
+                        errorsContainer.html(errorsList);
+
+                        UIkit.notification({
+                            message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario.',
+                            status: 'danger',
+                            pos: 'top-center',
+                            timeout: 2000
+                        });
+                    }
+                });
+                // Nos permite cancelar el envio del formulario
+                return false;
+            });
         });

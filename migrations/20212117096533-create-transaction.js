@@ -23,6 +23,11 @@ module.exports = {
       invoice: {
         type: Sequelize.BOOLEAN
       },
+      status: {
+        type: Sequelize.ENUM('active', 'inactive'),
+        defaultValue: 'active',
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
