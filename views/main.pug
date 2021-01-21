@@ -20,11 +20,14 @@ html
                 //- perfil
                 div(class="profile_container")
                     if user.picture
-                        img(src="/uploads/avatar/"+user.picture class="profile_image")
+                        a(href="/perfil")
+                            img(src="/uploads/avatar/"+user.picture class="profile_image")
                     else
-                        img(src="/img/iconos/default.png" class="profile_image")
+                        a(href="/perfil")
+                            img(src="/img/iconos/default.png" class="profile_image")
                     div(class="profile_info")
-                        b(class="profile_name") #{ user.Employee.name }
+                        a(href="/perfil")
+                            b(class="profile_name") #{ user.Employee.name }
                         br
                         a(href="/logout") Cerrar sesión
                 //- listado de categorias
@@ -35,9 +38,9 @@ html
                                 li(class="category_item")
                                     a(href="/inicio" ) Inicio
                                         img(src="/icons/house.png" class="category_icon")
-                                li(class="category_item")
-                                    a(href="/perfil" ) Perfil
-                                        img(src="/icons/user.png" class="category_icon")
+                                //- li(class="category_item")
+                                //-     a(href="/perfil" ) Perfil
+                                //-         img(src="/icons/user.png" class="category_icon")
                                 if uR
                                     li(class="category_item")
                                         a(href="/usuarios" ) Usuarios
@@ -73,9 +76,9 @@ html
                     div(style="width:100%;display:flex;justify-content:center")
                         a(href="/inicio")
                             img(src="/icons/house.png" class="category_icon")
-                    div(style="width:100%;display:flex;justify-content:center")
-                        a(href="/perfil")
-                            img(src="/icons/user.png" class="category_icon")
+                    //- div(style="width:100%;display:flex;justify-content:center")
+                    //-     a(href="/perfil")
+                    //-         img(src="/icons/user.png" class="category_icon")
                     div(style="width:100%;display:flex;justify-content:center")
                         a(href="/usuarios")
                             img(src="/icons/users-logo.png" class="category_icon")
