@@ -201,6 +201,7 @@ router.post('/proyecto/:id/comment',
             }
         }
         catch (error) {
+          console.log(error)
             return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
         }
 
@@ -223,7 +224,7 @@ router.post('/proyecto/:id/comment',
           }
 
           //GUARDA EL COMENTARIO
-          const newProject = await models.Comment.create(datos, { transaction: t })
+          const newComment = await models.Comment.create(datos, { transaction: t })
 
           res.status(200).json([{ status: 200 }]);
           // If the execution reaches this line, no errors were thrown.
