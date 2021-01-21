@@ -7,6 +7,8 @@ const passport = require('passport');
 
 //sequelize models
 const models = require('../models/index');
+moment = require('moment');
+moment.locale('es-mx');
 
 router.get('/', isLoggedIn, async function (req, res, next) {
     try {
@@ -65,6 +67,65 @@ router.get('/', isLoggedIn, async function (req, res, next) {
             var ingresos
             var deducibles
             var todos
+            if (req.query.y && req.query.m) {
+                var valido = false
+                var year = false
+                switch (req.query.m) {
+                    case '01':
+                        valido = true
+                        break;
+                    case '02':
+                        valido = true
+                        break;
+                    case '03':
+                        valido = true
+                        break;
+                    case '04':
+                        valido = true
+                        break;
+                    case '05':
+                        valido = true
+                        break;
+                    case '06':
+                        valido = true
+                        break;
+                    case '07':
+                        valido = true
+                        break;
+                    case '08':
+                        valido = true
+                        break;
+                    case '09':
+                        valido = true
+                        break;
+                    case '10':
+                        valido = true
+                        break;
+                    case '11':
+                        valido = true
+                        break;
+                    case '12':
+                        valido = true
+                        break;
+                }
+                if (req.query.y < 2040 && req.query.y > 2000) {
+                    year = true
+                }
+                if (valido && year)
+                    var hoy = moment(req.query.y + "-" + req.query.m + "-01").toDate()
+                else {
+                    var mes = moment().month() + 1
+                    if (mes < 10)
+                        mes = "0" + mes
+                    return res.redirect('/caja?m=' + mes + '&y=' + moment().year())
+                }
+            }
+            else {
+                var mes = moment().month() + 1
+                if (mes < 10)
+                    mes = "0" + mes
+                return res.redirect('/caja?m=' + mes + '&y=' + moment().year())
+            }
             if (permiso && permiso.Role && permiso.Role.Permissions) {
                 egresos = await models.Transaction.findAll({
                     include: [{
@@ -151,7 +212,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         }]
                     }],
                     order: [
-                        ['date', 'DESC']
+                        ['createdAt', 'DESC']
                     ],
                     where: {
                         status: 'active'
@@ -252,7 +313,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                         required: true
                     }],
                     order: [
-                        ['date', 'DESC']
+                        ['createdAt', 'DESC']
                     ],
                     where: {
                         status: 'active'
@@ -260,7 +321,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                 })
             }
 
-            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos })
+            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos, hoy })
         }
         else {
             //NO TIENE PERMISOS
@@ -268,6 +329,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
         }
     }
     catch (error) {
+        console.log(error)
         return res.status(403).json(403)
     }
 });

@@ -48,7 +48,7 @@ block content
                                 div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") #{porIngre}%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/ingresos" class="uk-flex  uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
-                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                                <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
@@ -69,7 +69,7 @@ block content
                                 div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") #{porEgre}%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/egresos" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
-                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                                <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                 div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap uk-flex-center" style="padding:8px")
                         div(class="uk-width-3-5@l uk-child-width-1-1@s uk-flex uk-flex-wrap uk-flex-center")
@@ -90,8 +90,8 @@ block content
                                 div(class="progress__number" style="font-size:15px !important; widith:20px; height;20px") #{porDedu}%
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                             a(href="/caja/deducibles" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content")
-                                <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
-                div
+                                <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                //-div
                     div(class="uk-card uk-card-default uk-card-body uk-flex uk-flex-wrap" style="padding:8px")
                         div(style="color:#222238; font-weight:500") FILTRAR INFORMACIÓN
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top" style="justify-content:space-between")
@@ -109,6 +109,28 @@ block content
                                 option Proyecto 3
                         div(class="uk-width-1-1 uk-flex uk-flex-center uk-margin-small-top")
                             button(class="button-caja button-caja-s uk-width-1-2" style="") Buscar
+            script.
+                var todos = !{ JSON.stringify(todos) };
+                var fechaActual = !{JSON.stringify(hoy)};
+                fechaActual = new Date(fechaActual);
+                var totalIngre=0;
+                var totalEgre=0;
+                var numIngre=0;
+                var numEgre=0;
+                for(var key in todos){
+                    var obj=todos[key];
+                    var fecha= new Date(obj['date'])
+                    if(fecha.getFullYear() == fechaActual.getFullYear()){
+                        if(obj['T_type']=='ingreso')
+                            totalIngre=totalIngre+ parseFloat(obj['amount']);
+                            numIngre++;
+                        if(obj['T_type']=='egreso')
+                            totalEgre=totalEgre+ parseFloat(obj['amount']);
+                            numEgre++;
+                    }
+                }
+                var porcentajeEgre= (100* numEgre) / (numEgre+numIngre);
+                var porcentajeIngre= (100* numIngre) / (numEgre+numIngre);
             div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;" uk-height-match="target: > div > .uk-card")
                 div(class="uk-width-3-4@m uk-padding-remove")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-small")
@@ -118,7 +140,7 @@ block content
                                 <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
                             a(uk-icon="icon: chevron-left")
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") NOVIEMBRE
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px; text-transform: capitalize") #{moment(hoy).format('MMMM')}
                             a(uk-icon="icon: chevron-right")
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="color:#222238") Quincena 1
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center") Nombre del proyecto
@@ -202,8 +224,8 @@ block content
                                             div(class="uk-width-expand@m uk-flex uk-flex-middle")
                                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                             div(class="uk-width-1-1 uk-flex uk-flex-right")
-                                a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
-                                    <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
+                                a(href="/caja/historial" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
+                                    <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                         div(class="uk-width-1-1 uk-margin-small-top" style="border-top:solid 1px #EEEEEE")
                             div(class="uk-margin-top" style="color:#222238") ÚLTIMOS REGISTROS
                             div(class="uk-margin-small-top uk-overflow-auto uk-width-1-1")
@@ -296,7 +318,7 @@ block content
                                             labels: ["Ingresos", "Egresos"],
                                             datasets: [{
                                                 backgroundColor: ["#1e87f0", "#222238"],
-                                                data: [55,45]
+                                                data: [totalIngre,totalEgre]
                                             }],
                                         },
                                         options: {
@@ -309,12 +331,12 @@ block content
                                     });
                         div(class="uk-width-1-1 uk-flex uk-flex-right")
                                 a(href="/caja/historial" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
-                                    <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial completo
+                                    <span uk-icon="icon: history; ratio: 0.8" style="margin-right:5px"></span>Ver historial completo
                 div(class="uk-width-expand@m div-year-res")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-remove")
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px")
                             a(uk-icon="icon: chevron-left")
-                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2020 (%)
+                            div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") #{moment(hoy).format('YYYY')} (%)
                             a(uk-icon="icon: chevron-right")
                         div(class="uk-width-1-1 uk-margin-small-top" style="")
                             <canvas id="chart-year-pie" width="400px" height=""></canvas>
@@ -326,7 +348,7 @@ block content
                                         labels: ["Ingresos", "Egresos"],
                                         datasets: [{
                                             backgroundColor: ["#1e87f0", "#222238"],
-                                            data: [55,45]
+                                            data: [porcentajeIngre,porcentajeEgre]
                                         }],
                                     },
                                     options: {
