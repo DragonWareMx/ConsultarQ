@@ -76,9 +76,9 @@ block content
 
         div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top uk-grid-small uk-margin-bottom" uk-grid)
             //- FOREACH
-            if usuario.Project_Employees
+            if usuario.Project_Employees.length > 0
                 each project_employee in usuario.Project_Employees
-                    if project_employee.Project
+                    if project_employee.Project 
                         div
                             div(class="uk-card uk-card-default uk-card-body uk-padding-small")
                                 div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") #{project_employee.Project.name}
@@ -233,9 +233,8 @@ block content
                                     .field.uk-margin-bottom
                                         input(type='password' autocomplete='new-password'  id="password-confirm-edit" onkeyup="validatePasswordEdit()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
                                         label(for='password-confirm-edit' title='Confirmar contraseña' data-title='Confirmar contraseña')
-                        if pD
-                            a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" href="#delete-form" uk-toggle style="width:max-content")
-                                <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
+                        a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" href="#delete-form" uk-toggle style="width:max-content" data-id=usuario.Employee.id  data-name=usuario.Employee.name)
+                            <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                         div(class="uk-width-1 uk-flex-right uk-flex")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
@@ -333,6 +332,16 @@ block content
                 else{
                     $("#pass-div").show();
                 }
+            });
+
+            //este es para al momento de abrir el modal de eliminar mandar los datos
+            $('#btnEliminar').on('click', function() {
+                var userID = $(this).data('id');
+                var name = $(this).data('name');
+
+                $('#text-delete').text('¿Estás seguro de que deseas eliminar al usuario '+ name +'?');
+                //esto es para poner el id en el action del form
+                $('#form-delete-user').attr('action', '/usuarios/delete/'+ userID);
             });
         });
 
