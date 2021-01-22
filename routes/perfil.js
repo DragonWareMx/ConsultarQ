@@ -33,13 +33,13 @@ var upload = multer({
 });
 
 router.get('/', isLoggedIn, async function(req, res, next) {
-    const proyectos = await models.User
+    const userData = await models.User
         .findOne({
             where: { id: req.user.id }, 
-            include: { model: models.Project}
+            include: [{ model: models.Project}, { model: models.Transaction}]
         })
     // console.log(usuario)
-    res.render('perfil', {proyectos})
+    res.render('perfil', {userData})
 });
 
 router.post('/edit/:id', upload.single('fileField'),

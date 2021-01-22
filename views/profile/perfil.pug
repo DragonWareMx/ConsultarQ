@@ -34,6 +34,7 @@ block content
             -
                 var PA = 0;
                 var PT = 0;
+                var ingresos = 0;
             each pro in userData.Projects
                 if (pro.status == 'ACTIVO' || pro.status == 'ATRASADO') 
                     - 
@@ -41,6 +42,11 @@ block content
                 else
                     -
                         PT++;
+            
+            each ing in userData.Transactions
+                if (ing.T_type == 'ingreso')
+                    -
+                        ingresos += parseFloat(ing.amount);
 
             div(class="uk-width-expand@l uk-padding-small uk-child-width-1-1")
                 div.uk-flex.uk-flex-wrap.uk-margin-small-bottom
@@ -51,7 +57,7 @@ block content
                     div.uk-text-emphasis #{PT}
                 div.uk-flex.uk-flex-wrap
                     div(style="margin-right:5px") Ingresos registrados
-                    div.uk-text-emphasis $1444
+                    div.uk-text-emphasis $ #{ingresos}
 
         //- ÚLTIMOS PROYECTOS MAX 4
         //- div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
