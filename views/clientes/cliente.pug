@@ -61,20 +61,24 @@ block content
                             div(class="uk-width-1-5@m uk-text-truncate") Cotización
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px") 
                                 if client.Projects.length > 0
-                                    each project in client.Projects
-                                        each quotation,index in project.Quotations
-                                            if index == 0
-                                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                    a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
-                                                return
-                                            div#MoreCot
-                                                each quotation,index in project.Quotations     
-                                                    if index != 0
-                                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                            a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span> 
-                                                            div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
-                                        return
+                                    -   
+                                        var bandera = false;
+                                    if quotations.length > 0
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            a.uk-link-reset(target="_blank"  href="/uploads/doc_services/"+quotations[0].quotation) #{quotations[0].quotation}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                            div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{quotations[0].Project.id}
+                                        div#MoreCot
+                                            each quotation in quotations
+                                                if bandera 
+                                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                                        a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+quotation.quotation ) #{quotation.quotation}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{quotation.Project.id}
+                                                    //-return
+                                                -
+                                                    bandera = true;
+                                    else
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            span.uk-link-reset No hay cotizaciones registradas
                                     //-if 
                                         if project.Quotations.length > 0
                                             each quotation,index in project.Quotations
@@ -82,11 +86,12 @@ block content
                                                     each quotation,index in project.Quotations     
                                                         if index != 0
                                                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                                a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span> 
+                                                                a.uk-link-reset(href="#") #{quotation.quotation}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span> 
                                                                 div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
                                 else
                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                        a.uk-link-reset(href="#") No hay cotizaciones registradas
+                                        span.uk-link-reset No hay cotizaciones registradas
+                            //- boton generar cotizacion
                                 div.uk-width-1-1.uk-flex.uk-flex-middle
                                     a.uk-flex.uk-flex-middle(href="/clientes/generar-cotizacion" style="width:max-content")
                                         <span uk-icon="icon:file-pdf; ratio: 0.8" style="margin-right:5px"></span>Generar
@@ -102,21 +107,25 @@ block content
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px")
                                 if client.Projects.length > 0
                                     each project,index in client.Projects
-                                        if index == 0
-                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                                div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp; Proyecto: #{project.id}
-                                            return
-                                    div#MoreCont
-                                        each project,index in client.Projects
-                                            if index != 0
+                                        if project.contract
+                                            if index == 0
                                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                    a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
+                                                    a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+project.contract) #{project.contract}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp; Proyecto: #{project.id}
+                                                return
+                                        else
+                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            span.uk-link-reset(href="#") No hay contratos registrados
+                                        div#MoreCont
+                                            each project,index in client.Projects
+                                                if index != 0
+                                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                                        a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+project.contract) #{project.contract}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
                                 else
                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                        a.uk-link-reset(href="#") No hay contratos registrados
-                                //- boton agregar contrato
+                                        span.uk-link-reset(href="#") No hay contratos registrados
+                            //- boton agregar contrato
                                 div.uk-width-1-1.uk-flex.uk-flex-middle
                                     a.uk-flex.uk-flex-middle(href="#modal-adjuntarContrato" uk-toggle style="width:max-content")
                                         <span uk-icon="icon:upload; ratio: 0.8" style="margin-right:5px"></span>Adjuntar contrato
@@ -125,52 +134,71 @@ block content
                                 img(src="/icons/eye.png" style="width:15px;height:15px; margin-right:5px") 
                                 |Ver más
 
-            //- tarjetas de proyectos
-            div(class="uk-text-left uk-text-large uk-text-bold uk-text-primary") Proyectos
-            //- si no hay ningun proyecto debe mostrarse un mensaje
-            if client.Projects
+        //- PROYECTOS
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Proyectos
+
+        div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top uk-grid-small uk-margin-bottom" uk-grid)
+            if client.Projects.length > 0
                 each project in client.Projects
-                    div(class="uk-width-1-1@m uk-flex")
-                        div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
-                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
-                                div.uk-width-1-1 Proyecto #{project.id}
-                                div.uk-width-1-1.uk-text-truncate.uk-text-emphasis 
-                                    a.uk-link-reset(href="#") #{project.name}
-                                div.uk-width-1-1
-                                    progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
-                                div.uk-width-1-1 Estatus
-                                div.uk-width-1-1.uk-flex.uk-flex-middle
-                                    if project.status === "ACTIVO" || project.status === "TERMINADO"
-                                        div(class="uk-width-4-5@m btn-status-active") #{project.status}
-                                    else 
-                                        div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
-                                div.uk-width-1-1 Tipo
+                    div
+                        div(class="uk-card uk-card-default uk-card-body uk-padding-small")
+                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px")
+                                a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
+                                //- script barra de porcentaje
+                                -
+                                    var tareasListas = 0
+                                    var tareasFaltantes = 0
+                                    var tareasTotales = 0
+                                    var porcentaje = 100
+                                if project.Tasks
+                                    each task in project.Tasks
+                                        -
+                                            tareasTotales++
+                                            if(task.check)
+                                                tareasListas++
+                                            else
+                                                tareasFaltantes++
+                                    if tareasTotales > 0
+                                        -
+                                            porcentaje = parseInt((tareasListas/tareasTotales)*100)
+                            div.uk-width-1-1
+                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
+                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso #{porcentaje}%
+                            //- div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Estatus
+                            div.uk-width-1-1.uk-flex.uk-flex-middle
+                                if project.status === "ACTIVO" || project.status === "TERMINADO"
+                                    div(class="uk-width-4-5@m btn-status-active") #{project.status}
+                                else 
+                                    div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
+                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Tipo
                                 if (project.Pro_Type && project.Pro_Type.name)
                                     div.uk-width-1-1.uk-text-truncate.uk-text-emphasis #{project.Pro_Type.name}
                                 else
-                                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis No tiene
-                                div.uk-width-1-1 Fecha de inicio
-                                div.uk-width-1-1.uk-text-truncate.uk-text-emphasis #{prettyDate(project.start_date)}
-                                div.uk-width-1-1 Fecha de término
-                                div.uk-width-1-1.uk-text-truncate.uk-text-emphasis #{prettyDate(project.deadline)}
-                                div.uk-width-1-1 Miembros del proyecto
-                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
-                                    each user,index in project.Users
-                                        if user.picture
-                                            img(src="/uploads/avatar/"+user.picture uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
-                                        else
-                                            img(src="/img/iconos/default.png" uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
-                                        if index == 4
-                                            - break
-                                    if project.Users.length > 5
-                                        div(class="uk-right uk-margin-top") #{project.Users.length - 5} más...
-                                        //-img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis Sin tipo
+                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Fecha de inicio
+                            div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small #{prettyDate(project.start_date)}
+                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Fecha de término
+                            div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small #{prettyDate(project.deadline)}
+                            div.uk-width-1-1.uk-text-truncate.uk-text-small(style="color:#6B6B72") Miembros del proyecto
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                                each user,index in project.Users
+                                    if user.picture
+                                        img(src="/uploads/avatar/"+user.picture uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
+                                    else
+                                        img(src="/img/iconos/default.png" uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
+                                    if index == 4
+                                        - break
+                                if project.Users.length > 5
+                                    div(class="uk-right uk-margin-top") #{project.Users.length - 5} más...
             else
                 div(class="uk-width-1-1@m uk-flex")
                     div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
-                            | No se tienen proyectos registrados
+                            | No hay proyectos registrados
+
+                
 
     div(id="modal-adjuntarContrato" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
@@ -191,24 +219,33 @@ block content
                 form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-client" action="/clientes/edit/"+client.id  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")
-                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            a(href="/clientes/cliente/"+client.id)
+                            if client.picture
+                                img(src="/uploads/clients/"+client.picture class="uk-border-circle uk-margin-auto uk-flex" id="avatar-edit" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            else
+                                img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto uk-flex" id="avatar-edit" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                             a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='name_edit' title='Nombre Completo' data-title='Nombre Completo')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="email_edit" name="email_edit" value=client.email onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='tel' id="phone_edit" name="phone_edit" value=client.phone_number onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='rfc' id="rfc_edit" name="rfc_edit" value=client.rfc onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='rfc_edit' title='RFC' data-title='RFC')
                     div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name_edit' title='Nombre o razón social' data-title='Nombre o razón social')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="email_edit" name="email_edit" value=client.email onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='tel' id="phone_edit" name="phone_edit" value=client.phone_number onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='rfc' id="rfc_edit" name="rfc_edit" value=client.rfc onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='rfc_edit' title='RFC' data-title='RFC')
+                    
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
@@ -248,26 +285,26 @@ block content
     script.
         jQuery(($) => {
             $('#a-MoreCot').on('click', function() {
-                 if ($("#MoreCot").is(':visible')) {
-                    $("#MoreCot").hide();
-                    $("#GenerarCot").hide();
+                
+
+                if ($("#MoreCot").is(':visible')) {
+                    $("#MoreCot").hide('fast');
                     $("#a-MoreCot").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
                 }
                 else{
-                    $("#MoreCot").show();
-                    $("#GenerarCot").show();
+                    $("#MoreCot").show('fast');
                     $("#a-MoreCot").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
                 }
             });
 
             $('#a-MoreCont').on('click', function() {
                  if ($("#MoreCont").is(':visible')) {
-                    $("#MoreCont").hide();
+                    $("#MoreCont").hide('fast');
                     //$("#GenerarCont").hide();
                     $("#a-MoreCont").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
                 }
                 else{
-                    $("#MoreCont").show();
+                    $("#MoreCont").show('fast');
                     //$("#GenerarCont").show();
                     $("#a-MoreCont").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
                 }
@@ -285,7 +322,6 @@ block content
 
         jQuery(($) => {
              //esto es para la foto de perfil
-
             $('#foto-edit').on('click', function() {
                 $("#fileField_edit").click();
             });
@@ -345,7 +381,7 @@ block content
                         * */
                         $('#errors-edit').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente actualizado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente actualizado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -412,7 +448,7 @@ block content
                         * */
                         $('#errors-delete').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

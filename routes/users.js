@@ -81,6 +81,18 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                     model: models.Employee
                 }, {
                     model: models.Role
+                }, {
+                    model: models.Project_Employee,
+                        include: {
+                            model: models.Project,
+                            include: {
+                                model: models.Task,
+                                
+                            }
+                        },
+                        order: [
+                            ['createdAt','DESC']
+                        ],
                 }],
                 where: { email: { [Op.ne]: "DragonWareOficial@hotmail.com" } },
                 order: [
@@ -100,6 +112,10 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     catch (error) {
         return res.status(403).json(403)
     }
+});
+
+router.get('/usuario', isLoggedIn, async (req, res, next) => {
+    res.render('usuario')
 });
 
 //UPDATE USUARIO ID

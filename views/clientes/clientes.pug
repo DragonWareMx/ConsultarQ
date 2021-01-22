@@ -88,24 +88,38 @@ block content
                                         div(class="uk-width-4-5@m btn-status-active") ACTIVO
                                     else 
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
+                            //- cotizacion
                             if client.Projects.length > 0
                                 each project in client.Projects
-                                    each quotation in project.Quotations
+                                    if project.Quotations.length > 0
+                                        each quotation in project.Quotations
+                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                                div(class="uk-width-1-5@m") Cotización
+                                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
+                                                    a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+quotation.quotation) #{quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>                       
+                                    else
                                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                             div(class="uk-width-1-5@m") Cotización
-                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
-                                                a.uk-link-reset(href="#") #{quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>                       
+                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                | No hay cotizaciones registrados.
                             else
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                         div(class="uk-width-1-5@m") Cotización
                                         div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
                                             | No hay cotizaciones registrados.
+                            //- proyecto
                             if client.Projects.length > 0
                                 each project in client.Projects
-                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                                        div(class="uk-width-1-5@m") Contratos
-                                        div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
-                                            a.uk-link-reset(href="#") #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                    if project.contract
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                            div(class="uk-width-1-5@m") Contratos
+                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+project.contract) #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                    else
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                            div(class="uk-width-1-5@m") Contratos
+                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                | No hay contratos registrados.
                             else
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                     div(class="uk-width-1-5@m") Contratos
@@ -117,12 +131,32 @@ block content
                                     div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                         div(class="uk-width-1-5@m uk-text-truncate") Proyecto
                                         div(class="uk-width-4-5@m uk-text-emphasis") 
-                                            a.uk-link-reset(href="#") #{project.name}
+                                            a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
+                                            //- script barra de porcentaje
+                                            -
+                                                var tareasListas = 0
+                                                var tareasFaltantes = 0
+                                                var tareasTotales = 0
+                                                var porcentaje = 100
+                                            if project.Tasks
+                                                each task in project.Tasks
+                                                    -
+                                                        tareasTotales++
+                                                        if(task.check)
+                                                            tareasListas++
+                                                        else
+                                                            tareasFaltantes++
+                                                if tareasTotales > 0
+                                                    -
+                                                        porcentaje = parseInt((tareasListas/tareasTotales)*100)
                                             div.uk-width-1-1
-                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
+                                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso #{porcentaje}%
                                     div(class="uk-width-1-5@m") Estatus
-                                    div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                                    if project.status === "ACTIVO" || project.status === "TERMINADO"
+                                        div(class="uk-width-4-5@m btn-status-active") #{project.status}
+                                    else 
+                                        div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
                         else
                             k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
                                 div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
@@ -139,28 +173,33 @@ block content
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar cliente
             button(type='button' uk-close='' class="uk-modal-close-default")
             div(id="errors-edit")
-            div.width-1-1.uk-margin-top
-                form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-client" action=""  method="POST" enctype="multipart/form-data")
-                    div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
+            div.width-1-1
+                form(class="uk-card-body uk-padding-small uk-padding-remove" id="form-edit-client" action=""  method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-remove") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                             a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="name_edit" name="name_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='name_edit' title='Nombre Completo' data-title='Nombre Completo')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="phone_edit" name="phone_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="email_edit" name="email_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="rfc_edit" name="rfc_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='rfc_edit' title='RFC' data-title='RFC')
                     div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name_edit" name="name_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name_edit' title='Nombre o razón social' data-title='Nombre o razón social')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="phone_edit" name="phone_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="email_edit" name="email_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="rfc_edit" name="rfc_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='rfc_edit' title='RFC' data-title='RFC')
+                   
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
@@ -175,7 +214,7 @@ block content
                                 label(for='status_edit' title='Estatus' data-title='Estatus')
                     div(class="uk-alert-danger uk-margin-remove" uk-alert style="display:none" id="status-alert")
                         p(class="uk-text-small") Si el estatus del cliente es inactivo, no podrá ser asignado a nuevos proyectos.
-                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top" id="btnEliminar" href="#delete-form" uk-toggle)
+                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" href="#delete-form" uk-toggle style="width:max-content")
                         <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                     div(class="uk-width-1 uk-flex-right uk-flex")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
@@ -188,7 +227,7 @@ block content
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar cliente
             button(type='button' uk-close='' class="uk-modal-close-default")
             div(id="errors")
-            div.width-1-1.uk-margin-top
+            div.width-1-1
                 form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-new-client" action="/clientes/nuevo"  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")
@@ -197,19 +236,24 @@ block content
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Agregar foto
                             input(name="fileField_add" type="file" id="fileField_add" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='name' title='Nombre Completo' data-title='Nombre Completo')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="email" name="email" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='email' title='Correo electrónico' data-title='Correo electrónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="rfc" name="rfc" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='rfc' title='RFC' data-title='RFC')
                     div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name' title='Nombre o razón social' data-title='Nombre Completo')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="email" name="email" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="rfc" name="rfc" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='rfc' title='RFC' data-title='RFC')
+                    
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area" name="area" autocomplete='off' value='' required)
@@ -398,7 +442,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente registrado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente registrado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -468,7 +512,7 @@ block content
                         * */
                         $('#errors-edit').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente actualizado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente actualizado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -535,7 +579,7 @@ block content
                         * */
                         $('#errors-delete').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

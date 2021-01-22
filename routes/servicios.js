@@ -199,7 +199,7 @@ router.post('/editar-servicio/update/:id',
             })
 
             await serviceU.update({
-                name: req.body.nameServiceS,
+                name: req.body.nameServiceE,
                 description: req.body.descripcionE,
             }, { transaction: t })
 
@@ -297,7 +297,7 @@ router.post('/editarPDF', upload.single('filePDF'),
                 }
             });
 
-            await pdfVar.update(req.file.filePDF , { transaction: t })
+            await pdfVar.update(req.file.filename , { transaction: t })
 
             //SE REGISTRA EL LOG
             //obtenemos el usuario que realiza la transaccion

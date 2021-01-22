@@ -26,8 +26,7 @@ html
                         a(href="/perfil")
                             img(src="/img/iconos/default.png" class="profile_image")
                     div(class="profile_info")
-                        a(href="/perfil")
-                            b(class="profile_name") #{ user.Employee.name }
+                        b(class="profile_name") #{ user.Employee.name }
                         br
                         a(href="/logout") Cerrar sesión
                 //- listado de categorias
@@ -62,7 +61,7 @@ html
                                         img(src="/icons/checklist.png" class="category_icon")
                                 li(class="category_item")
                                     a(href="/proyectos/layouts") Layouts de proyectos
-                                        img(src="/icons/checklist.png" class="category_icon")
+                                        img(src="/icons/layout.png" class="category_icon")
                         li(class="category") CLIENTES Y PROVEEDORES
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class=" category_item")
@@ -92,21 +91,27 @@ html
                         a(href="/servicios")
                             img(src="/icons/package.png" class="category_icon")
                     div(style="width:100%;display:flex;justify-content:center")
-                        a()
+                        a(href="/proyectos/activos")
                             img(src="/icons/checklist.png" class="category_icon")
-                        div(uk-dropdown="pos: right-center; mode: click")
-                            ul(class="uk-nav uk-dropdown-nav")
-                                li(class="category_item")
-                                    a(href="#") Ver proyectos
-                                li(class="category_item")
-                                    a(href="#") Documentación
-                                li(class="category_item")
-                                    a(href="#") Activos
-                                li(class="category_item")
-                                    a(href="#") Inactivos
-                                li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
-                                li(class="category_item")
-                                    a(href="#") Agregar proyecto
+                    div(style="width:100%;display:flex;justify-content:center")
+                        a(href="/proyectos/layouts")
+                            img(src="/icons/layout.png" class="category_icon")
+                    //- div(style="width:100%;display:flex;justify-content:center")
+                    //-     a()
+                    //-         img(src="/icons/checklist.png" class="category_icon")
+                    //-     div(uk-dropdown="pos: right-center; mode: click")
+                    //-         ul(class="uk-nav uk-dropdown-nav")
+                    //-             li(class="category_item")
+                    //-                 a(href="#") Ver proyectos
+                    //-             li(class="category_item")
+                    //-                 a(href="#") Documentación
+                    //-             li(class="category_item")
+                    //-                 a(href="#") Activos
+                    //-             li(class="category_item")
+                    //-                 a(href="#") Inactivos
+                    //-             li(class="uk-nav-header category_subdivider") ACCESOS DIRECTOS
+                    //-             li(class="category_item")
+                    //-                 a(href="#") Agregar proyecto
                     div(style="width:100%;display:flex;justify-content:center")
                         a(href="/clientes")
                             img(src="/icons/userStar.png" class="category_icon")

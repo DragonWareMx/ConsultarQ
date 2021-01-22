@@ -13,12 +13,12 @@ block content
                 div.uk-width-auto.div-profile-photo(style="margin-right:15px")
                     if user.picture
                         img(src="/uploads/avatar/"+user.picture class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
-                    else
+                    else 
                         img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                     a(class="uk-flex uk-flex-center uk-flex-middle uk-margin-remove uk-width-1 uk-flex-wrap editar" style="width:max-content; font-size:13px; margin-top:5px" href="#modal-editarPerfil" uk-toggle)
                         <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar perfil
                 div(class="uk-width-expand@l uk-child-width-1-1 ")
-                    div(class="uk-text-emphasis uk-text-bold uk-text-center" uk-tooltip="title: Nombre; pos: left") #{user.Employee.name}
+                    div(class="uk-text-emphasis uk-text-bold text-role-profile" uk-tooltip="title: Nombre; pos: left") #{user.Employee.name}
                     div(class="uk-text-emphasis uk-text-small text-role-profile" uk-tooltip="title: Rol; pos: left") #{user.Role.name}
                     if user.status === "active"
                         div(class="btn-status-active btn-status-perfil uk-text-center" style="margin-top:10px;" uk-tooltip="title: Estatus; pos: left") ACTIVO
@@ -31,110 +31,103 @@ block content
                     <span uk-icon="location" class="uk-margin-small-right"></span> #{user.Employee.suburb}, #{user.Employee.street}
                 div(class="uk-width-1-1 uk-text-emphasis uk-text-break")
                     <span uk-icon="mail" class="uk-margin-small-right"></span>#{user.email}
+            -
+                var PA = 0;
+                var PT = 0;
+                var ingresos = 0;
+            each pro in userData.Projects
+                if (pro.status == 'ACTIVO' || pro.status == 'ATRASADO') 
+                    - 
+                        PA++;
+                else
+                    -
+                        PT++;
+            
+            each ing in userData.Transactions
+                if (ing.T_type == 'ingreso')
+                    -
+                        ingresos += parseFloat(ing.amount);
+
             div(class="uk-width-expand@l uk-padding-small uk-child-width-1-1")
                 div.uk-flex.uk-flex-wrap.uk-margin-small-bottom
-                    div(style="margin-right:5px") Proyectos completados
-                    div.uk-text-emphasis 12
+                    div(style="margin-right:5px") Proyectos activos
+                    div.uk-text-emphasis #{PA}
                 div.uk-flex.uk-flex-wrap.uk-margin-small-bottom
                     div(style="margin-right:5px") Proyectos terminados
-                    div.uk-text-emphasis 12
+                    div.uk-text-emphasis #{PT}
                 div.uk-flex.uk-flex-wrap
                     div(style="margin-right:5px") Ingresos registrados
-                    div.uk-text-emphasis $1444
-
-        //- ÚLTIMOS PROYECTOS MAX 4
-        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Proyectos recientes
-
-        div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top uk-grid-small uk-margin-bottom" uk-grid)
-            //- FOREACH
-            div
-                div(class="uk-card uk-card-default uk-card-body uk-padding-small")
-                    div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
-                    div.uk-width-1-1
-                        progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                    div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
-                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                        div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
-                        div.btn-status-active.btn-status-noactive INACTIVO 
-                    div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
-                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
-                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-
+                    div.uk-text-emphasis $ #{ingresos}
 
     div(id="modal-editarPerfil" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar perfil
             button(type='button' uk-close='' class="uk-modal-close-default")
             div(id="errors-edit")
-            form(class="uk-card-body uk-padding-small uk-padding-remove" id="formEditProfile" action=""  method="POST" enctype="multipart/form-data")
+            form(class="uk-card-body uk-padding-small uk-padding-remove" id="formEditProfile" action="/perfil/edit/"+user.id  method="POST" enctype="multipart/form-data")
                 div(class="uk-text-left uk-text-primary uk-margin-remove") FOTO DE PERFIL
                     div(class="form-group uk-margin-remove uk-border-circle uk-padding-remove")
                         if user.picture
                             img(src="/uploads/avatar/"+user.picture alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                         else
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
-                        a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
+                        a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap uk-text-small" style="width:max-content;")
                             <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
-                        input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
+                        input(name="fileField" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                 div(class="uk-child-width-1-1 uk-grid")
                     div
                         div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
                         div.uk-grid
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="name-edit" name="name" value=user.Employee.name onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
+                                    input(type='text' autocomplete='on' id="name" name="name" value=user.Employee.name onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='name' title='Nombre Completo' data-title='Nombre Completo')
                             div(class="uk-width-1-2@s uk-width-1-1")    
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='tel' id="phone_number-edit" name="phone_number" value=user.Employee.phone_number onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='phone_number-edit' title='Número telefónico' data-title='Número telefónico')
+                                    input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value=user.Employee.phone_number onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="city-edit" name="city" value=user.Employee.city onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='city-edit' title='Ciudad' data-title='Ciudad')
+                                    input(type='text' autocomplete='on' id="city" name="city" value=user.Employee.city onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='city' title='Ciudad' data-title='Ciudad')
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom 
-                                    input(type='text' autocomplete='on' id="state-edit" name="state" value=user.Employee.state onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='state-edit' title='Estado' data-title='Estado')
+                                    input(type='text' autocomplete='on' id="state" name="state" value=user.Employee.state onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='state' title='Estado' data-title='Estado')
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on'  id="suburb-edit" name="suburb"  value=user.Employee.suburb onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='suburb-edit' title='Colonia' data-title='Colonia')
+                                    input(type='text' autocomplete='on'  id="suburb" name="suburb"  value=user.Employee.suburb onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='suburb' title='Colonia' data-title='Colonia')
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on'  id="street-edit" name="street"  value=user.Employee.street onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='street-edit' title='Calle' data-title='Calle')
+                                    input(type='text' autocomplete='on'  id="street" name="street"  value=user.Employee.street onchange="this.setAttribute('value', this.value);" required='')
+                                    label(for='street' title='Calle' data-title='Calle')
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on'  id="ext_number-edit" name="ext_number"  value=user.Employee.ext_number onchange="this.setAttribute('value', this.value);")
-                                    label(for='ext_number-edit' title='No. Exterior' data-title='No. Exterior')
+                                    input(type='text' autocomplete='on'  id="ext_number" name="ext_number"  value=user.Employee.ext_number onchange="this.setAttribute('value', this.value);" required)
+                                    label(for='ext_number' title='No. Exterior' data-title='No. Exterior')
                             div(class="uk-width-1-2@s uk-width-1-1")
                                 .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value=user.Employee.int_number onchange="this.setAttribute('value', this.value);")
-                                    label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior')
+                                    input(type='text' autocomplete='on'  id="int_number" name="int_number"  value=user.Employee.int_number onchange="this.setAttribute('value', this.value);")
+                                    label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
                         .field.uk-margin-bottom
-                            input(type='email' autocomplete="no"  id="email-edit" name="email"  value=user.email onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
+                            input(type='email' disabled autocomplete="no"  id="email-edit" name="email"  value=user.email onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='email-edit'  title='Correo electrónico' data-title='Correo electrónico')
                         a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-flex-wrap uk-margin-bottom" style="width:max-content")
                             <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar contraseña
                         div(style="display:none" id="pass-div")
                             .field.uk-margin-bottom
-                                input(type='password' autocomplete='no'  id="passActual" name="passActual"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
+                                input(type='password' autocomplete='off'  id="passActual" name="passActual"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
                                 label(for='passActual' title='Contraseña actual' data-title='Contraseña actual')
                             div.uk-grid
-                                div(class="uk-width-1-2@s uk-width-1-1")
+                                div(class="uk-width-1-2@s uk-width-1-1") 
                                     .field.uk-margin-bottom
-                                        input(type='password' autocomplete='no'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
+                                        input(type='password' autocomplete='off'  id="password" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
                                         label(for='password' title='Contraseña nueva' data-title='Contraseña')
                                 div(class="uk-width-1-2@s uk-width-1-1")    
                                     .field.uk-margin-bottom 
-                                        input(type='password' autocomplete='new-password'  id="cfmPassword" name="cfmPassword"  value='' onchange="this.setAttribute('value', this.value);" )
-                                        label(for='cfmPassword' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                                        input(type='password' autocomplete='off'  id="cfmPassword" name="cfmPassword"  value='' onkeyup="validatePasswordEdit()" onchange="this.setAttribute('value', this.value);" )
+                                        label(for='cfmPassword' title='Confirmar contraseña' data-title='Confirmar contraseña' placeholder="jdfd")
                         div(class="uk-width-1 uk-flex-right uk-flex")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
@@ -152,76 +145,28 @@ block content
             }
         });  
 
-        //- COMPROBAR LLENADO DE CONTRASEÑAS Y COINCIDENCIAS
-        $("#formEditProfile").validate({
-            rules: {
-                password: { 
-                required: true,
-                    minlength: 8,
-                    maxlength: 10,
+        var password_edit = document.getElementById("password")
+        , confirm_password_edit = document.getElementById("cfmPassword");
 
-                } , 
-                passActual: { 
-                required: true
-                } ,
-
-                    cfmPassword: { 
-                    equalTo: "#password",
-                    minlength: 8,
-                    maxlength: 10
-                }
-
-
-            },
-            messages:{
-                password: { 
-                        required:" Contraseña requerida",
-                        minlength: " Mínimo 8 caracteres",
-                        maxlength: " Máximo 10 caracteres"
-                        },
-
-                passActual: { 
-                        required:" Contraseña requerida",
-                        },
-                cfmPassword: { 
-                        required:" Contraseña requerida",
-                        equalTo: " Las contraseñas no coinciden",
-                        minlength: " Mínimo 8 caracteres",
-                        maxlength: " Máximo 10 caracteres"
-                }
+        function validatePasswordEdit(){
+            if(password_edit.value != confirm_password_edit.value) {
+                confirm_password_edit.setCustomValidity("Las contraseñas no coinciden");
+                confirm_password_edit.reportValidity();
+            } else {
+                confirm_password_edit.setCustomValidity('');
+                confirm_password_edit.reportValidity();
             }
-
-        });
+        }
 
     script.
         jQuery(($) => {
              //esto es para la foto de perfil
-            $('#foto-add').on('click', function() {
-                $("#fileField_add").click();
-            });
 
             $('#foto-edit').on('click', function() {
                 $("#fileField_edit").click();
             });
 
-            function readURL(input) {
-                $('#avatar').attr('src', "/img/iconos/default.png");
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function(e) {
-                    $('#avatar').attr('src', e.target.result);
-                    }
-
-                    reader.readAsDataURL(input.files[0]); // convert to base64 string
-                }
-            }
-
-            $("#fileField_add").change(function() {
-                readURL(this);
-            });
-
-            //el de abajo es igual pero para el avatar a la hora de editar
+            //el de abajo es  para el avatar a la hora de editar
             function readURLEdit(input) {
                 $('#avatar-edit').attr('src', "/img/iconos/default.png");
                 if (input.files && input.files[0]) {
@@ -240,7 +185,7 @@ block content
             });
 
             $(document).ready(function () {
-                //- ajax para editar un cliente
+                //- ajax para editar perfil
                 $("#formEditProfile").bind("submit",function(){
                     // Capturamnos el boton de envío
                     var btnGuardar = $("#btnEnviar-edit");
@@ -274,7 +219,7 @@ block content
                             * */
                             $('#errors-edit').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Perfil actualizado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Perfil actualizado con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000

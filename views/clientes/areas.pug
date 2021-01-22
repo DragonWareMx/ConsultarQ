@@ -17,7 +17,7 @@ block content
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" href="#modal-agregar" uk-toggle)
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Agregar Área
+                    div Agregar área
         //- barra de busqueda
         form(class="uk-flex")
             div(class="uk-search uk-search-default uk-width-expand")
@@ -58,12 +58,15 @@ block content
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
-                    div(tabindex="0")
-                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
-                            img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                            div Editar
+                    div(class="uk-flex uk-flex-middle")
+                        a(class="uk-flex uk-flex-middle uk-link-reset  uk-margin-small-top uk-text-center uk-text-small editar" style="color: #1e87f0 !important;" uk-toggle="target: #modal-editar" id="btnEdit" data-id="")
+                            <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar
+                    //- div(tabindex="0")
+                    //-     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
+                    //-         img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    //-         div Editar 
                 button(class="uk-modal-close-default" type="button" uk-close='')
-                form(class="uk-card-body uk-padding-small")
+                form(class="uk-card-body uk-padding-remove uk-margin-top")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="info-id" name="info-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
@@ -79,13 +82,16 @@ block content
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar Área
-                    div(tabindex="0")
-                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar")
-                            img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                            div Eliminar
+                    div(class="uk-flex uk-flex-middle" )
+                        a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-center uk-text-small" uk-toggle="target: #modal-eliminar")
+                            <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
+                    //- div(tabindex="0")
+                    //-     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar")
+                    //-         img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    //-         div Eliminar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-area" action='/clientes/areas/update' method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-edit-area" action='/clientes/areas/update' method="POST")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="editId" name="editId" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
@@ -117,7 +123,7 @@ block content
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Área
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors")
-                form(class="uk-card-body uk-padding-small" id="form-new-area" action="/clientes/areas/nuevo" method="POST" enctype="multipart/form-data")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-new-area" action="/clientes/areas/nuevo" method="POST" enctype="multipart/form-data")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="addNombre" name="addNombre" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -230,7 +236,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Área registrada con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Área registrada con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -296,7 +302,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Área editada con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Área editada con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -362,7 +368,7 @@ block content
                             * */
                             $('#errors-delete').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Área eliminada con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Área eliminada con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
