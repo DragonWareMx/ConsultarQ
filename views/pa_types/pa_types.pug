@@ -52,12 +52,15 @@ block content
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
-                    div(tabindex="0")
-                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
-                            img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                            div Editar
+                    div(class="uk-flex uk-flex-middle")
+                        a(class="uk-flex uk-flex-middle uk-link-reset  uk-margin-small-top uk-text-center uk-text-small editar" style="color: #1e87f0 !important;" uk-toggle="target: #modal-editar" id="btnEdit" data-id="")
+                            <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar
+                    //- div(tabindex="0")
+                    //-     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
+                    //-         img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    //-         div Editar
                 button(class="uk-modal-close-default" type="button" uk-close='')
-                form(class="uk-card-body uk-padding-small")
+                form(class="uk-card-body uk-padding-remove uk-margin-top")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="info-id" name="info-id" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
@@ -73,13 +76,16 @@ block content
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar concepto
-                    div(tabindex="0")
-                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar" id="btnDel")
-                            img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                            div Eliminar
+                    div(class="uk-flex uk-flex-middle" )
+                        a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-center uk-text-small" id="btnDel" uk-toggle="target: #modal-eliminar")
+                            <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
+                    //- div(tabindex="0")
+                    //-     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar" uk-toggle="target: #modal-eliminar" id="btnDel")
+                    //-         img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    //-         div Eliminar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small" id="form-edit-patype" action="/tipos_de_pago/update" method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-edit-patype" action="/tipos_de_pago/update" method="POST")
                     div
                         .field.uk-margin-bottom
                             input(type='text' autocomplete='on' id="editId" name="editId" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
@@ -100,7 +106,7 @@ block content
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-delete")
                 div(class="uk-text-left" id="text-delete") ¿Estás seguro de que deseas eliminar el tipo de pago?
-                form(class="uk-card-body uk-padding-small" id="form-delete-patype" action="/tipos_de_pago/delete"  method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-delete-patype" action="/tipos_de_pago/delete"  method="POST")
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editar" uk-toggle data-id="" data-name="") Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="btnEliminar" type="submit") Eliminar
@@ -292,7 +298,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Tipo de pago registrado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Tipo de pago registrado con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -358,7 +364,7 @@ block content
                             * */
                             $('#errors').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Tipo de pago editado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Tipo de pago editado con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
@@ -425,7 +431,7 @@ block content
                             * */
                             $('#errors-delete').css('display', 'none');
                             UIkit.notification({
-                                message: '<span uk-icon=\'icon: check\'></span>Tipo de pago eliminado con éxito!',
+                                message: '<span uk-icon=\'icon: check\'></span> Tipo de pago eliminado con éxito!',
                                 status: 'success',
                                 pos: 'top-center',
                                 timeout: 2000
