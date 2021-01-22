@@ -40,10 +40,10 @@ block content
                 div()
                     div(class="uk-card  uk-card-default" style="min-height:290px;")
                         div(class="uk-card-header uk-padding-small uk-flex")
-                            div(class="uk-width-4-5 uk-text-primary uk-text-truncate") #{project.name}
+                            div(class="uk-width-4-5 uk-text-emphasis uk-text-truncate") #{project.name}
                             a(href="/proyectos/documentacion/editar/"+project.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
-                                img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
-                                div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
+                                img(src="/icons/edit.png" width="12px" style="margin-right:5px;")
+                                div(class="uk-text-primary uk-text-small ") Editar
                         div(class="uk-card-body uk-padding-small")
                             -
                                 var realizadas =0;
