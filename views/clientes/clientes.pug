@@ -139,9 +139,9 @@ block content
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar cliente
             button(type='button' uk-close='' class="uk-modal-close-default")
             div(id="errors-edit")
-            div.width-1-1.uk-margin-top
-                form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-client" action=""  method="POST" enctype="multipart/form-data")
-                    div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
+            div.width-1-1
+                form(class="uk-card-body uk-padding-small uk-padding-remove" id="form-edit-client" action=""  method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-remove") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                             a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
@@ -175,7 +175,7 @@ block content
                                 label(for='status_edit' title='Estatus' data-title='Estatus')
                     div(class="uk-alert-danger uk-margin-remove" uk-alert style="display:none" id="status-alert")
                         p(class="uk-text-small") Si el estatus del cliente es inactivo, no podrá ser asignado a nuevos proyectos.
-                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top" id="btnEliminar" href="#delete-form" uk-toggle)
+                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" href="#delete-form" uk-toggle style="width:max-content")
                         <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                     div(class="uk-width-1 uk-flex-right uk-flex")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
@@ -188,7 +188,7 @@ block content
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar cliente
             button(type='button' uk-close='' class="uk-modal-close-default")
             div(id="errors")
-            div.width-1-1.uk-margin-top
+            div.width-1-1
                 form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-new-client" action="/clientes/nuevo"  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")

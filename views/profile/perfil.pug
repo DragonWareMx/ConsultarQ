@@ -13,12 +13,12 @@ block content
                 div.uk-width-auto.div-profile-photo(style="margin-right:15px")
                     if user.picture
                         img(src="/uploads/avatar/"+user.picture class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
-                    else
+                    else 
                         img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                     a(class="uk-flex uk-flex-center uk-flex-middle uk-margin-remove uk-width-1 uk-flex-wrap editar" style="width:max-content; font-size:13px; margin-top:5px" href="#modal-editarPerfil" uk-toggle)
                         <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar perfil
                 div(class="uk-width-expand@l uk-child-width-1-1 ")
-                    div(class="uk-text-emphasis uk-text-bold uk-text-center" uk-tooltip="title: Nombre; pos: left") #{user.Employee.name}
+                    div(class="uk-text-emphasis uk-text-bold text-role-profile" uk-tooltip="title: Nombre; pos: left") #{user.Employee.name}
                     div(class="uk-text-emphasis uk-text-small text-role-profile" uk-tooltip="title: Rol; pos: left") #{user.Role.name}
                     if user.status === "active"
                         div(class="btn-status-active btn-status-perfil uk-text-center" style="margin-top:10px;" uk-tooltip="title: Estatus; pos: left") ACTIVO
@@ -95,7 +95,7 @@ block content
                             img(src="/uploads/avatar/"+user.picture alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                         else
                             img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
-                        a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
+                        a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap uk-text-small" style="width:max-content;")
                             <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                         input(name="fileField" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                 div(class="uk-child-width-1-1 uk-grid")
