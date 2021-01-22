@@ -565,9 +565,9 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
               throw new Error('Uno de los proveedores seleccionados no existe.');
         }).withMessage('Hubo un error con alguno de los proveedores seleccionados, reinténtelo más tarde.'),
       check('cliente')
+        .not().isEmpty().withMessage('El cliente es un campo requerido.')
         .custom(async (tipo) => {
-          if(tipo){
-            //se crea el validador, es true porque si no hay rol tambien es valido
+            //se crea el validador
             validador = false
 
             //busca los clientes
@@ -585,8 +585,8 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
             if (validador) {
                 return true
             }
-          }
-          else return true
+            else
+              return false
         }).withMessage('El Cliente seleccionado no es válido.'),
         check('input_miembros')
           .custom(async (tipo) => {

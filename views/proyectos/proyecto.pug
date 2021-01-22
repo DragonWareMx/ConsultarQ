@@ -6,6 +6,14 @@ block head
     link(rel="stylesheet" href="/stylesheets/oProgressBar.css")
     link(rel="stylesheet" href="/stylesheets/oProyectMenu.css")
     link(rel="stylesheet" href="/stylesheets/cajaChica.css")
+    style(type="text/css").
+        #scrollCom::-webkit-scrollbar {
+        width: 4px;
+        }
+        #scrollCom::-webkit-scrollbar-thumb {
+        background-color: #c1c1c1;
+        border-radius: 4px;
+        }
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
@@ -242,7 +250,15 @@ block content
                     a.uk-flex.uk-flex-middle(id="nover-comentarios" style="width:max-content; float:right")
                         <img src="/icons/notEye.png" style="width:15px;height:15px; margin-right:5px">
                         |Ocultar
-            div#comentDiv
+            //- AGREGAR COMENTARIO
+            form(id="form-create-comment" action="/proyectos/proyecto/"+proyecto.id+"/comment" method="POST")
+                div.uk-text-primary.uk-margin-small-bottom(style="font-size:13px") Agregar comentario
+                div(id="errors")
+                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="150")
+                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-small-bottom")
+                    //- button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
+                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Comentar
+            div#comentDiv(data-simplebar)
                 -function prettyDate(dateString){
                     //if it's already a date object and not a string you don't need this line:
                     -var date = new Date(dateString);
@@ -252,23 +268,17 @@ block content
                     -var y = date.getFullYear();
                     -return d+' de '+m+' del '+y;
                 -}
-                each comentario in comentarios                
-                    div.uk-width-1-1.uk-margin-small.uk-padding-small.uk-flex.uk.flex.wrap(style="border: solid 1px #EEEEEE; boder-radius:2px")
-                        div(class="uk-width-auto")
-                            img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover")
-                        div(class="uk-width-expand uk-text-small uk-flex uk-flex-column")
-                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle.uk-flex-between
-                                div(class="uk-width-auto@s" style="color:#222238; margin-right:5px") #{comentario.User.Employee.name}
-                                div(class="uk-width-auto@s" style="font-size:12px;") #{prettyDate(comentario.createdAt)}
-                            div.uk-width-1-1 #{comentario.comment}
-            //- AGREGAR COMENTARIO
-            form(id="form-create-comment" action="/proyectos/proyecto/"+proyecto.id+"/comment" method="POST")
-                div.uk-text-primary.uk-margin-small-bottom(style="font-size:13px") Agregar comentario
-                div(id="errors")
-                textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="150")
-                div(class="uk-width-1 uk-flex-right uk-flex uk-margin-small-top")
-                    //- button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
-                    button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
+                div(style="max-height: 491.6px; overflow-y:scroll" id="scrollCom")
+                    each comentario in comentarios                
+                        div.uk-width-1-1.uk-margin-small.uk-padding-small.uk-flex.uk.flex.wrap(style="border: solid 1px #EEEEEE; boder-radius:2px")
+                            div(class="uk-width-auto")
+                                img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover")
+                            div(class="uk-width-expand uk-text-small uk-flex uk-flex-column")
+                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle.uk-flex-between
+                                    div(class="uk-width-auto@s" style="color:#222238; margin-right:5px") #{comentario.User.Employee.name}
+                                    div(class="uk-width-auto@s" style="font-size:12px;") #{prettyDate(comentario.createdAt)}
+                                div.uk-width-1-1 #{comentario.comment}
+            
         //- OBSERVACIONES-------------
         if proyecto.observations
             div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small") 
