@@ -87,7 +87,6 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                             model: models.Project,
                             include: {
                                 model: models.Task,
-                                
                             }
                         },
                         order: [
@@ -114,8 +113,79 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     }
 });
 
-router.get('/usuario', isLoggedIn, async (req, res, next) => {
-    res.render('usuario')
+//  consultar un solo usuario
+router.get('/usuario/:id', isLoggedIn, async (req, res, next) => {
+    try {
+        //obtenemos el usuario, su rol y su permiso
+        let usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            order: [
+                ['status', 'ASC']
+            ],
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission,
+                    where: { name: 'ur' }       
+                }
+            }
+        })
+
+        if (usuario && usuario.Role && usuario.Role.Permissions) {
+            //  TIENE PERMISO DE DESPLEGAR VISTA
+            const usuario = await models.User.findOne({
+                where: {
+                    id: req.params.id
+                },
+                include: [{
+                    model: models.Employee
+                }, {
+                    model: models.Transaction
+                },
+                {
+                    model: models.Role
+                }, {
+                    model: models.Project_Employee, 
+                        include: {
+                            model: models.Project,
+                            include: [{
+                                model: models.Task
+                            }, {
+                                model: models.Pro_Type
+                            },{
+                                model: models.User,
+                                    include: [{
+                                        model: models.Employee
+                                    }]
+                            }]
+                        },
+                        order: [
+                            ['createdAt', 'DESC']
+                        ],
+                }]
+            })
+
+            const roles = await models.Role.findAll({
+                where: { name: { [Op.ne]: "DragonWare" } }
+            })
+
+            if(usuario){
+                return res.render('usuario', { usuario , roles })
+            }
+            else{
+                return res.status(404).json(404)                //  mandar a la vista de error
+            }
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.status(403).json(403)
+        }
+    }
+    catch (error) {
+        return res.status(403).json(403)
+    }
 });
 
 //UPDATE USUARIO ID
@@ -126,10 +196,10 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
             .isLength({ max: 255 }).withMessage('El nombre puede tener un máximo de 255 caracteres.')
             .trim()
             .escape(),
-        check('email')
-            .not().isEmpty().withMessage('Correo electrónico es un campo requerido.')
-            .isEmail().withMessage('Correo electrónico no válido.')
-            .normalizeEmail(),
+        // check('email')
+        //     .not().isEmpty().withMessage('Correo electrónico es un campo requerido.')
+        //     .isEmail().withMessage('Correo electrónico no válido.')
+        //     .normalizeEmail(),
         check('password')
             .optional({ checkFalsy: true })
             .trim()

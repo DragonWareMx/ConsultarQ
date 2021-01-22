@@ -35,7 +35,7 @@ block content
                         div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
                                 div(class="uk-width-auto@m")
-                                    a(href="/usuarios/usuario")
+                                    a(href="/usuarios/usuario/"+usuario.id)
                                         if usuario.picture
                                             img(src="/uploads/avatar/"+usuario.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
                                         else
@@ -43,7 +43,7 @@ block content
                                 div(class="uk-width-expand@m uk-margin-small-bottom")
                                     div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
                                         div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
-                                            a.uk-link-reset(href="/usuarios/usuario") #{usuario.Employee.name} 
+                                            a.uk-link-reset(href="/usuarios/usuario/"+usuario.id) #{usuario.Employee.name} 
                                         div(class="uk-width-expand@l uk-text-right")
                                             if pU
                                                 a.uk-flex-inline.uk-flex-middle.editar(style="text-decoration:none; color:#1e87f0 !important" uk-toggle="target: #edit-form" data-id=usuario.id)
@@ -212,7 +212,7 @@ block content
                                         label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom 
-                                        input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
                                         label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
                                 div(class="uk-width-1-2@s uk-width-1-1")        
                                     .field.uk-margin-bottom
@@ -423,7 +423,7 @@ block content
         });
     script.
          jQuery(($) => {
-             //esto es para la foto de perfil
+            //esto es para la foto de perfil
             $('#foto').on('click', function() {
                 $("#fileField").click();
             });

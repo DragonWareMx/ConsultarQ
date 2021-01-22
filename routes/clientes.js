@@ -165,8 +165,6 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
                 ]
             })
 
-            console.log(quotations)
-
             if(client){
                 return res.render('cliente', { client , areas , quotations })
             }
