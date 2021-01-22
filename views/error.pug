@@ -1,6 +1,14 @@
-extends layout
+extends ./main
 
+block head
+    title ConsultarQ - Proyectos
+    link(rel="stylesheet" href="/stylesheets/error.css")
 block content
-  h1= message
-  h2= error.status
-  pre #{error.stack}
+  div(class="error-container")
+    div(class="error-title") ERROR #{error}
+    div(class="error-num uk-text-primary") #{error}
+    if error == 404
+      div(class="error-msg") La página que buscas no existe...
+    a(href="javascript:history.back()" class="error-back") Regresar 
+
+    

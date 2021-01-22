@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const { check, validationResult, body } = require('express-validator');
 const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
+var html_to_pdf = require('html-pdf-node');
+require('dotenv').config();
 //autenticacion
 const passport = require('passport');
 
@@ -13,6 +15,7 @@ const fs = require('fs');
 var multer = require('multer');
 var path = require('path');
 const { deserializeUser } = require('passport');
+const { render } = require('pug');
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'public/uploads/docs')
@@ -156,6 +159,370 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
     console.log(error)
       return res.status(403).json(403)
   }
+});
+
+//VER PROYECTO--------------------
+router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
+  let options = { format: 'A4' };
+  // Example of options with args //
+  // let options = { format: 'A4', args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+
+  const url = process.env.CLIENT_URL
+  console.log(url)
+  const ht = `<!DOCTYPE html>
+  <!-- saved from url=(0042)http://127.0.0.1:3000/proyectos/proyecto/4 -->
+  <html>
+     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="`+ url +`/img/logos/favicon.png">
+        <link rel="stylesheet" href="`+ url +`/uikit/css/uikit.min.css">
+        <link rel="stylesheet" href="`+ url +`/stylesheets/objetos.css">
+        <link rel="stylesheet" href="`+ url +`/stylesheets/main_style.css">
+        <link rel="preconnect" href="https://fonts.gstatic.com/">
+        <link rel="stylesheet" href="./ConsultarQ - Proyecto_files/css2">
+        <script src="`+ url +`/uikit/js/jquery.min.js.descargar"></script><script src="`+ url +`/uikit/js/uikit.min.js.descargar"></script><script src="`+ url +`/uikit/js/uikit-icons.min.js.descargar"></script><script src="`+ url +`/uikit/js/menu.js.descargar"></script>
+        <title>ConsultarQ - Proyecto</title>
+        <link rel="stylesheet" href="`+ url +`/stylesheets/others.css">
+        <link rel="stylesheet" href="`+ url +`/stylesheets/oProgressBar.css">
+        <link rel="stylesheet" href="`+ url +`/stylesheets/oProyectMenu.css">
+        <link rel="stylesheet" href="`+ url +`/stylesheets/cajaChica.css">
+        <style type="text/css">#scrollCom::-webkit-scrollbar {
+           width: 4px;
+           }
+           #scrollCom::-webkit-scrollbar-thumb {
+           background-color: #c1c1c1;
+           border-radius: 4px;
+           }
+        </style>
+     </head>
+     <body>
+                  <div class="uk-container">
+                    <div class="uk-grid-collapse uk-child-width-1-1 uk-grid-row-large uk-grid uk-grid-stack" uk-grid="">
+                       <div class="uk-first-column">
+                          <div class="uk-card uk-card-default">
+                             <div class="uk-card-header uk-padding-remove uk-flex" style="background:rgba(217,58,138,0.53)">
+                                <div class="uk-width-3-5@m uk-margin-small-left uk-margin-small-top uk-margin-small-bottom">
+                                   <div style="color: #222238;">CON TODO</div>
+                                   <div class="uk-text-small" style="min-height: 20.8px">Layout de proyecto número 1</div>
+                                </div>
+                                <div class="uk-width-2-5@m uk-flex uk-flex-right uk-flex-wrap-reverse">
+                                   <div class="uk-width-auto@l uk-flex uk-flex-right uk-flex-middle"><button class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" title="" aria-expanded="false">ACTIVO</button></div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-flex uk-flex-wrap">
+                                <div class="uk-width-1-3@l" style="border-right: 1px solid #EEEEEE; padding:5px">
+                                   <div class="uk-card-body uk-padding-remove">
+                                      <div class="uk-width-1 uk-margin-small-top">
+                                         <div class="o-progress-date-line"></div>
+                                         <div class="o-progress-date-start" style="background:#d93a8a"></div>
+                                         <div class="o-progress-date-end" style="background:#d93a8a"></div>
+                                         <div class="o-progress-date-today" uk-tooltip="Hoy" style="margin-left:71.89915341634739%; border: 1px solid#d93a8a" title="" aria-expanded="false"></div>
+                                         <div class="o-progress-date-dates">
+                                            <div class="uk-text-small">1, ENE, 2021</div>
+                                            <div class="uk-text-small">30, ENE, 2021</div>
+                                         </div>
+                                      </div>
+                                   </div>
+                                   <div class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top">
+                                      <div class="uk-width-2-5 uk-flex uk-flex-middle uk-flex-center">
+                                         <div class="progress--circle progress--0" style="margin-top:0px">
+                                            <div class="progress__number">0%</div>
+                                         </div>
+                                      </div>
+                                      <div class="uk-width-3-5 uk-width-1@s uk-width-3-5">
+                                         <div class="uk-text-large" style="color: #222238;">0</div>
+                                         <div class="uk-text-small">Tareas listas</div>
+                                         <div class="uk-text-large" style="color: #222238;">2</div>
+                                         <div class="uk-text-small">Tareas faltantes</div>
+                                      </div>
+                                   </div>
+                                </div>
+                                <div class="uk-width-1-3@l uk-flex uk-flex-wrap" style="border-right: 1px solid #EEEEEE">
+                                   <div class="uk-width-1-1 uk-padding-small div-datos-cliente-proyecto" style="border-bottom: 1px solid #EEEEEE;">
+                                      <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom">DATOS DEL CLIENTE</div>
+                                      <div class="uk-width-1-1 uk-flex uk-flex-wrap">
+                                         <div class="uk-width-auto@s"><img src="`+ url +`/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                         <div class="uk-width-expand@s uk-text-small">
+                                            <div class="uk-flex uk-width-1-1">
+                                               <div class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400"> <a class="uk-link-reset uk-text-truncate" href="http://127.0.0.1:3000/clientes/cliente/4">Agustin Adrian Marin</a></div>
+                                            </div>
+                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Teléfono; pos: left" title="" aria-expanded="false">
+                                               <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px" class="uk-icon">
+                                                  <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="receiver">
+                                                     <path fill="none" stroke="#000" stroke-width="1.01" d="M6.189,13.611C8.134,15.525 11.097,18.239 13.867,18.257C16.47,18.275 18.2,16.241 18.2,16.241L14.509,12.551L11.539,13.639L6.189,8.29L7.313,5.355L3.76,1.8C3.76,1.8 1.732,3.537 1.7,6.092C1.667,8.809 4.347,11.738 6.189,13.611"></path>
+                                                  </svg>
+                                               </span>
+                                               1122339966
+                                            </div>
+                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left" title="" aria-expanded="false">
+                                               <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px" class="uk-icon">
+                                                  <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="mail">
+                                                     <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
+                                                     <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
+                                                  </svg>
+                                               </span>
+                                               agusAA@gmail.com
+                                            </div>
+                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Área; pos: left" title="" aria-expanded="false">
+                                               <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px" class="uk-icon">
+                                                  <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="thumbnails">
+                                                     <rect fill="none" stroke="#000" x="3.5" y="3.5" width="5" height="5"></rect>
+                                                     <rect fill="none" stroke="#000" x="11.5" y="3.5" width="5" height="5"></rect>
+                                                     <rect fill="none" stroke="#000" x="11.5" y="11.5" width="5" height="5"></rect>
+                                                     <rect fill="none" stroke="#000" x="3.5" y="11.5" width="5" height="5"></rect>
+                                                  </svg>
+                                               </span>
+                                               Textiles
+                                            </div>
+                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Estatus; pos: left" title="" aria-expanded="false">
+                                               <div class="uk-width-4-5@m btn-status-active">ACTIVO</div>
+                                            </div>
+                                         </div>
+                                      </div>
+                                   </div>
+                                   <div class="uk-width-1-1 uk-padding-small uk-text-small div-docs-proyecto">
+                                      <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle">
+                                         <div class="uk-width-auto@s uk-text-truncate" style="margin-right:5px">Cotización</div>
+                                         <div class="uk-width-expand@s uk-text-emphasis" style="font-size:14px;"><a class="uk-link-reset uk-text-truncate">Sin cotizaciones</a></div>
+                                      </div>
+                                      <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top uk-flex-middle">
+                                         <div class="uk-width-auto@s" style="margin-right:5px">Contrato</div>
+                                         <div class="uk-width-expand@s uk-text-emphasis" style="font-size:14px"><a class="uk-link-reset uk-text-truncate">Sin contrato</a></div>
+                                      </div>
+                                   </div>
+                                </div>
+                                <div class="uk-width-1-3@l uk-padding-small" style="border-right: 1px solid #EEEEEE;">
+                                   <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom">MIEMBROS DEL PROYECTO</div>
+                                   <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom uk-flex uk-flex-middle">
+                                      <div class="uk-width-auto"><img src="`+ url +`/img/iconos/default.png" width="33px" uk-tooltip="John Doe" style="width:30px; height:30px; border-radius:50px; margin-right:15px;object-fit:cover" title="" aria-expanded="false"></div>
+                                      <div class="uk-width-expand uk-text-small">
+                                         <div class="uk-flex uk-width-1-1">
+                                            <div class="uk-width-auto@m" style="color:#222238; font-size:14px; font-weight:400"> <a class="uk-link-reset uk-text-truncate">John Doe</a></div>
+                                         </div>
+                                         <div class="uk-flex uk-width-1-1">
+                                            <div class="uk-width-auto@m" style="font-size:14px; font-weight:400">Líder - Sin porcentaje</div>
+                                         </div>
+                                      </div>
+                                   </div>
+                                   <div class="uk-width-1-1 uk-text-small uk-flex uk-flex-middle uk-flex-between uk-flex-wrap">
+                                   </div>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small" id="Comentarios">
+                       <div class="width-1-1 uk-text-small uk-flex uk-flex-wrap-reverse uk-flex-middle">
+                          <div class="uk-width-auto"> <b>COMENTARIOS</b></div>
+                          <div class="uk-width-auto uk-margin-left uk-flex uk-flex-middle">
+                             <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px" class="uk-icon">
+                                <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="commenting">
+                                   <polygon fill="none" stroke="#000" points="1.5,1.5 18.5,1.5 18.5,13.5 10.5,13.5 6.5,17.5 6.5,13.5 1.5,13.5"></polygon>
+                                   <circle cx="10" cy="8" r="1"></circle>
+                                   <circle cx="6" cy="8" r="1"></circle>
+                                   <circle cx="14" cy="8" r="1"></circle>
+                                </svg>
+                             </span>
+                          </div>
+                          <div class="uk-width-expand"><a class="uk-flex uk-flex-middle" id="nover-comentarios" style="width:max-content; float:right"><img src="./ConsultarQ - Proyecto_files/notEye.png" style="width:15px;height:15px; margin-right:5px">Ocultar</a></div>
+                       </div>
+                       <form id="form-create-comment" action="http://127.0.0.1:3000/proyectos/proyecto/4/comment" method="POST">
+                          <div class="uk-text-primary uk-margin-small-bottom" style="font-size:13px">Agregar comentario</div>
+                          <div id="errors"></div>
+                          <textarea class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete="on" id="descripcion" name="descripcion" value="" onchange="this.setAttribute(&#39;value&#39;, this.value);" required="" maxlength="150"></textarea>
+                          <div class="uk-width-1 uk-flex-right uk-flex uk-margin-small-bottom"><button class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button">Actualizar</button><button class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit">Comentar</button></div>
+                       </form>
+                       <div id="comentDiv" data-simplebar="">
+                          <div style="max-height: 491.6px; overflow-y:scroll" id="scrollCom">
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">CHINGUE A SU MADRE EL AMERICA!!!!!</div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">ahuevo, si jala</div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">feliz día del niño</div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">a quien le dices joto puto??!!!</div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">kyte joto</div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">trabajando duro o durando en el trabajo?</div>
+                                </div>
+                             </div>
+                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                                   </div>
+                                   <div class="uk-width-1-1">Que onda amigos!!!</div>
+                                </div>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small">
+                       <div class="width-1-1 uk-text-small uk-flex uk-flex-wrap-reverse uk-flex-middle"> <b>OBSERVACIONES</b></div>
+                       <div class="uk-text-small uk-text-emphasis">Ya casi terminamos</div>
+                    </div>
+                    <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top uk-card-body uk-padding-small">
+                       <div class="uk-flex uk-flex-top uk-flex-between">
+                          <div class="uk-text-primary uk-margin-bottom "><b>TAREAS</b></div>
+                       </div>
+                       <div class="uk-overflow-auto">
+                          <table class="uk-table uk-table-small uk-table-divider uk-table-justify uk-text-small">
+                             <thead>
+                                <tr>
+                                   <th class="uk-text-center uk-table-shrink">#</th>
+                                   <th class="uk-text-truncate uk-table-expand">Concepto</th>
+                                   <th class="uk-text-truncate uk-table-expand">Descripción</th>
+                                   <th class="uk-text-truncate uk-width-small">Cantidad</th>
+                                   <th class="uk-text-truncate uk-width-small">Unidad</th>
+                                   <th class="uk-text-truncate  uk-width-small">Costo/U</th>
+                                   <th class="uk-text-truncate uk-width-small">Costo/T</th>
+                                   <th class="uk-text-truncate uk-width-small">Realizado</th>
+                                </tr>
+                             </thead>
+                             <tbody>
+                                <tr class="editar" uk-toggle="target: #editTask-form" data-id="1">
+                                   <td>1</td>
+                                   <td>Cemento</td>
+                                   <td>Cemento para ladrillos industrial.</td>
+                                   <td></td>
+                                   <td>Kg.</td>
+                                   <td>100</td>
+                                   <td></td>
+                                   <td>No</td>
+                                </tr>
+                                <tr class="editar" uk-toggle="target: #editTask-form" data-id="1">
+                                   <td>2</td>
+                                   <td>Arcilla</td>
+                                   <td>Arcilla líquida para hacer manualidades.</td>
+                                   <td></td>
+                                   <td>lt.</td>
+                                   <td>500</td>
+                                   <td></td>
+                                   <td>No</td>
+                                </tr>
+                             </tbody>
+                          </table>
+                       </div>
+                      
+                    </div>
+                    <div class="uk-flex uk-flex-wrap-reverse uk-width-1-1">
+                       <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top">
+                          <div class="uk-card-body uk-text-center uk-padding-remove">
+                             <div class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove"> <b>SIN MOVIMIENTOS</b></div>
+                             <div class="uk-overflow-auto uk-margin-remove"></div>
+                          </div>
+                       </div>
+                    </div>
+                    <div class="uk-flex uk-flex-wrap-reverse uk-width-1-1">
+                       <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top">
+                          <div class="uk-card-body uk-text-center uk-padding-remove">
+                             <div class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove"><b>PRESTADORES EXTERNOS</b></div>
+                             <div class="uk-overflow-auto uk-margin-remove">
+                                <table class="uk-table uk-table-divider uk-text-small">
+                                   <thead>
+                                      <tr>
+                                         <th class="uk-text-center">#</th>
+                                         <th class="uk-text-center">NOMBRE</th>
+                                         <th class="uk-text-center">ÁREA</th>
+                                         <th class="uk-text-center">TELÉFONO</th>
+                                         <th class="uk-text-center">CORREO ELECTRÓNICO</th>
+                                         <th class="uk-text-center">NÚMERO DE DRO</th>
+                                         <th class="uk-text-center">ESTATUS</th>
+                                      </tr>
+                                   </thead>
+                                   <tbody>
+                                      <tr class="info">
+                                         <td>1</td>
+                                         <td>Adolfo Lemus</td>
+                                         <td>Plomeria</td>
+                                         <td>4455667788</td>
+                                         <td>adolfo@ejemplo.com</td>
+                                         <td>12345678</td>
+                                         <td class="status">Inactivo</td>
+                                      </tr>
+                                      <tr class="info">
+                                         <td>2</td>
+                                         <td>Oscar Huerta</td>
+                                         <td>Herreria</td>
+                                         <td>5566778899</td>
+                                         <td>oscar@ejemplo.com</td>
+                                         <td>23456789</td>
+                                         <td class="status">Activo</td>
+                                      </tr>
+                                   </tbody>
+                                </table>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
+     </body>
+  </html>`
+
+  let file = { content: ht };
+
+  html_to_pdf.generatePdf(file, options).then(output => {
+    console.log(output);
+
+    fs.writeFileSync('public/uploads/pdfs/proyecto'+req.params.id+'.pdf', output)
+
+    fs.readFile('./public/uploads/pdfs/proyecto'+req.params.id+'.pdf', {root: __dirname} , function (err,data){
+      res.contentType("application/pdf");
+      console.log(err)
+      res.send(data);
+    });
+  });
 });
 
 //AGREGAR COMENTARIO
@@ -565,9 +932,9 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
               throw new Error('Uno de los proveedores seleccionados no existe.');
         }).withMessage('Hubo un error con alguno de los proveedores seleccionados, reinténtelo más tarde.'),
       check('cliente')
+        .not().isEmpty().withMessage('El cliente es un campo requerido.')
         .custom(async (tipo) => {
-          if(tipo){
-            //se crea el validador, es true porque si no hay rol tambien es valido
+            //se crea el validador
             validador = false
 
             //busca los clientes
@@ -585,8 +952,8 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
             if (validador) {
                 return true
             }
-          }
-          else return true
+            else
+              return false
         }).withMessage('El Cliente seleccionado no es válido.'),
         check('input_miembros')
           .custom(async (tipo) => {
@@ -940,6 +1307,562 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
               throw new Error()
 
           console.log(req.body)
+
+          res.status(200).json([{ status: 200 }]);
+          // If the execution reaches this line, no errors were thrown.
+          // We commit the transaction.
+          await t.commit()
+        } catch (error) {
+          console.log(error)
+
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          // If the execution reaches this line, an error was thrown.
+          // We rollback the transaction.
+          await t.rollback();
+          return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
+        }
+});
+
+
+//EDITAR PROYECTO
+router.post('/update/:projectId', upload.fields([{name: 'cotizaciones', maxCount: 10}, {name: 'contrato', maxCount: 1}]),
+    [
+      check('nombreP')
+        .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+      check('color')
+        .not().isEmpty().withMessage('El color es un campo requerido.')
+        .isHexColor().withMessage('El color no es válido.'),
+      check('estatus')
+        .not().isEmpty()
+        .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
+      check('agregarCotizacion')
+        .not().isEmpty()
+        .isIn(['agregar', 'reemplazar']).withMessage('Selecciona agregar o reemplazar.'),
+      check('start_date')
+        .not().isEmpty()
+        .custom(date => {
+            return !isNaN(Date.parse(date));
+        }).withMessage('La fecha de inicio no es válida.'),
+      check('end_date')
+        .optional({ checkFalsy: true })
+        .custom(date => {
+          return !isNaN(Date.parse(date));
+        }).withMessage('La fecha de término no es válida.'),
+      check('deadline')
+        .not().isEmpty()
+        .custom(date => {
+          return !isNaN(Date.parse(date));
+        }).withMessage('La fecha límite no es válida.'),
+      check('tipo')
+        .optional({ checkFalsy: true })
+        .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            var validador = true
+
+            //si no es nulo
+            if (tipo) {
+                validador = false
+
+                //busca los tipos de proyecto
+                let ids = await models.Pro_Type.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                //verifica si el id ingresado por el usuario esta en la bd
+                ids.forEach(id => {
+                    if (tipo == id.id) {
+                        validador = true
+                    }
+                });
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('El servicio existe.');
+        }).withMessage('El servicio seleccionado no es válido.'),
+      check('input_proveedores')
+        .custom(async (tipo) => {
+
+          var validador = true
+
+          //si existe un numero en el input significa que ingresaron un proveedor
+          if (/\d/.test(tipo)) {
+              //se crea el validador, es true porque si no hay rol tambien es valido
+              tipo = tipo.split(",")
+              
+              //encuentra todos los proveedores
+              let ids = await models.Provider.findAll({
+                  attributes: ['id'],
+                  raw: true
+              })
+
+              validador2 = false
+
+              //si el validador2 no se hace true, el proveedor no existe, no es valido
+              tipo.forEach(idB => {
+                ids.forEach(id => {
+                  if (idB == id.id) {
+                    validador2 = true
+                  }
+                })
+
+                if(validador2 == false)
+                  validador = false
+                validador2 = false
+              })
+
+              //si se ingreso un 0 significa que no eligieron ninguno
+              if (tipo == 0)
+                  validador = true
+          }
+          if (validador) {
+              return true
+          }
+          else
+              throw new Error('Uno de los proveedores seleccionados no existe.');
+        }).withMessage('Hubo un error con alguno de los proveedores seleccionados, reinténtelo más tarde.'),
+      check('cliente')
+        .not().isEmpty().withMessage('El cliente es un campo requerido.')
+        .custom(async (tipo) => {
+            //se crea el validador
+            validador = false
+
+            //busca los clientes
+            let ids = await models.Client.findAll({
+                attributes: ['id'],
+                raw: true
+            })
+
+            ids.forEach(id => {
+                if (tipo == id.id) {
+                  validador = true
+                }
+            })
+
+            if (validador) {
+                return true
+            }
+            else
+              return false
+        }).withMessage('El Cliente seleccionado no es válido.'),
+        check('input_miembros')
+          .custom(async (tipo) => {
+            if (!(/\d/.test(tipo))) {
+              throw new Error()
+            }
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            tipo = tipo.split(",")
+
+            var validador = true
+
+            //si no es nulo
+            if (tipo && tipo[0] != '') {
+                let ids = await models.Employee.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                validador2 = false
+
+                tipo.forEach(idB => {
+                  ids.forEach(id => {
+                    if (idB == id.id) {
+                      validador2 = true
+                    }
+                  })
+
+                  if(validador2 == false)
+                    validador = false
+                  validador2 = false
+                })
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('Algún miembro seleccionado no es válido.');
+        }).withMessage('Algún miembro seleccionado no es válido.'),
+        check('observaciones')
+          .optional({ checkFalsy: true })
+          .isLength({ max: 255 }).withMessage('Observaciones puede tener un máximo de 255 caracteres.')
+          .trim()
+          .escape()
+    ]
+    , isLoggedIn, async function (req, res, next) {
+        //si hay errores entonces se muestran
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          return res.status(422).send(errors.array());
+        }
+
+        //comprueba las fechas
+        var fechaI = new Date(req.body.start_date)
+        var fechaD = new Date(req.body.deadline)
+
+        fechaI.getTime()
+        fechaD.getTime()
+
+        if(fechaI >= fechaD)
+          return res.status(422).json([{ msg: 'La fecha de inicio no puede ser mayor o igual a la fecha límite.' }])
+
+        try {
+            //VERIFICACION DEL PERMISO
+
+            //obtenemos el usuario, su rol y su permiso
+            let usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'pu' }
+                    }
+                }
+            })
+
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+                //NO TIENE PERMISO DE AGREGAR rol
+                return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+            }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+        }
+        //TIENE PERMISO
+        //Transaccion
+        const t = await models.sequelize.transaction()
+        try {
+          const project = await models.Project.findOne({
+            where: {
+                id: req.params.projectId
+              },
+            include: {
+                model: models.Quotation
+              },
+            transaction: t
+          })
+          const layoutAntiguo = project.ProTypeId
+          //se guardan los datos principales
+          var miembros = req.body.input_miembros.split(",")
+          var employeeID = []
+          var proveedores = req.body.input_proveedores.split(",")
+          var proveedoresID = []
+
+          //Guarda los ids de los usuarios empleados en un arreglo
+          for(var i in miembros){
+            const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
+            employeeID.push(employee.id)
+          }
+
+          //verificamos los roles y porcentajes
+          for(var i in employeeID){
+            await check("rol"+employeeID[i]).optional({ checkFalsy: true }).isLength({ max: 100 }).withMessage('El rol de los miembtos de proyecto puede tener un máximo de 100 caracteres.')
+                  .trim()
+                  .escape().run(req);
+            await check("rolP"+employeeID[i]).optional({ checkFalsy: true }).isLength({ max: 3 }).withMessage('El rol de los miembtos de proyecto puede tener un máximo de 3 dígitos.')
+                  .isNumeric().withMessage('Sólo se aceptan números en el porcentaje.')
+                  .trim()
+                  .escape().run(req);
+          }
+
+          const result = validationResult(req);
+          if (!result.isEmpty()) {
+            await t.rollback();
+            return res.status(422).send(result.array());
+          }
+
+          if (/\d/.test(proveedores)) {
+            //Guarda los ids de los proveedores en un arreglo
+            for(var i in proveedores){
+              const provider = await models.Provider.findOne({ attributes: ['id'], where: { id: proveedores[i] }, raw: true, transaction: t });
+              proveedoresID.push(provider.id)
+            }
+          }
+
+          var datos = {
+            name: req.body.nombreP,
+            start_date: req.body.start_date,
+            deadline: req.body.deadline,
+            color: req.body.color,
+            status: req.body.estatus
+          }
+
+          //SE GUARDAN LOS NULLABLES
+          //tipo de proyecto
+          if(req.body.tipo && req.body.tipo != 0){
+            datos.ProTypeId = req.body.tipo
+          }
+          else{
+            datos.ProTypeId = null
+          }
+
+          //si hay observaciones
+          if(req.body.observaciones){
+            datos.observations = req.body.observaciones
+          }
+          else{
+            datos.observations=null
+          }
+
+          //guarda el cliente
+          if(req.body.cliente){
+            datos.ClientId = req.body.cliente
+          }
+          else{
+            datos.ClientId = null
+          }
+
+          //estatus
+          switch(req.body.estatus){
+            case 'terminado':
+              if(req.body.end_date)
+                datos.end_date = req.body.end_date
+              else
+                throw new Error()
+              break
+            case 'cancelado':
+            case 'activo':
+              break
+            default:
+              throw new Error()
+          }
+
+
+          //guarda el contrato
+          if(req.files.contrato && req.files.contrato[0]){
+            datos.contract = req.files.contrato[0].filename
+            fs.unlink('public/uploads/docs/' + project.contract, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          
+
+          //GUARDA EL PROYECTO
+          await project.update(datos, { transaction: t })
+
+          //GUARDA LOS USUARIOS
+          await project.setUsers(employeeID, {transaction: t})
+
+          for(var j in employeeID){
+            if(req.body["rol"+employeeID[j]])
+              await models.Project_Employee.update({role: req.body["rol"+employeeID[j]]},{where: {Userid: employeeID[j], ProjectId: project.id}, transaction: t})
+            if(req.body["rolP"+employeeID[j]])
+              await models.Project_Employee.update({profit: req.body["rolP"+employeeID[j]]},{where: {Userid: employeeID[j], ProjectId: project.id}, transaction: t})
+          }
+
+          //GUARDA LOS PROVEEDORES
+          await project.setProviders(proveedoresID, {transaction: t})
+
+          //GUARDA LAS COTIZACIONES
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            if(req.body.agregarCotizacion != 'agregar'){
+              const quotationsD = await models.Quotation.findAll({
+                where:{
+                  ProjectId:project.id
+                },
+                transaction:t
+              })
+              for( var j in quotationsD){
+                fs.unlink('public/uploads/docs/' + quotationsD[j].quotation, (err) => {
+                  if (err) {
+                      console.log("failed to delete local image:" + err);
+                  } else {
+                      console.log('successfully deleted local image');
+                  }
+                });
+                await quotationsD[j].destroy({transaction:t})
+              }
+            }
+            for(var i in req.files.cotizaciones){
+              await models.Quotation.create({
+                ProjectId: project.id,
+                quotation: req.files.cotizaciones[i].filename
+              },{transaction: t})
+            }
+          }
+
+          var layout
+
+          //GUARDA LAS TAREAS
+          if(project.ProTypeId && project.ProTypeId != layoutAntiguo){
+            layout = await models.Pro_Type.findOne({where: {id: project.ProTypeId}, include: models.Tasks_Layout})
+
+            for (const i in layout.Tasks_Layouts) {
+              if (Object.hasOwnProperty.call(layout.Tasks_Layouts, i)) {
+                const element = layout.Tasks_Layouts[i];
+                const datosTask = {
+                  ProjectId: project.id,
+                  concept: element.concept
+                }
+                if(element.unit)
+                  datosTask.unit = element.unit
+                if(element.price)
+                  datosTask.price = element.price
+                if(element.description)
+                  datosTask.description = element.description
+
+                await models.Task.create(datosTask, {transaction: t})
+              }
+            }
+          }
+
+          //SE REGISTRA EL LOG
+          //obtenemos el usuario que realiza la transaccion
+          const usuario = await models.User.findOne({
+              where: {
+                  id: req.user.id
+              },
+              transaction: t
+          })
+
+          //descripcion del log
+          var desc = "El usuario " + usuario.email + " ha editado un proyecto con los siguientes datos:\nnombre: " + project.name + "\nFecha de inicio: " + project.start_date + "\nFecha límite: " + project.deadline + "\nStatus: " + project.getDataValue('status')+
+          "\nFecha de término: " + project.end_date + "\nColor: " + project.color + "\nObservaciones: " + project.observations + "\nContrato: " + project.contract
+
+          //cotizaciones
+          const cotizaciones = await models.Quotation.findAll({where: {ProjectId: project.id}, transaction: t})
+
+          contadorCot = 0
+          desc = desc + "\nCotizaciones: "
+          for(var cot in cotizaciones){
+            desc = desc + "\n\t" + cotizaciones[cot].id + ": " + cotizaciones[cot].quotation
+            contadorCot++
+          }
+
+          //cliente
+          if(project.ClientId){
+            const cliente = await models.Client.findOne({where: {id: project.ClientId}, transaction: t})
+            desc = desc + "\nCliente:\n\tid: " + cliente.id + "\n\temail: " + cliente.email
+          }
+          else
+            desc = desc + "\nCliente: Sin cliente"
+
+          if(contadorCot == 0)
+            desc = desc + "Sin cotizaciones"
+
+          //miembros
+          const miembrosLog = await models.User.findAll({where: {id: employeeID}, transaction: t})
+
+          desc = desc+"\nMiembros: "
+          for(var miem in miembrosLog){
+            desc = desc + "\n\t"+miembrosLog[miem].id+":\n\t\temail: " + miembrosLog[miem].email +
+            "\n\t\tRol: "
+            if(req.body["rol"+miembrosLog[miem].id])
+              desc = desc + req.body["rol"+miembrosLog[miem].id]
+            else
+              desc = desc + "Sin rol"
+            desc = desc + "\n\t\tPorcentaje: "
+            if(req.body["rolP"+miembrosLog[miem].id])
+              desc = desc + req.body["rolP"+miembrosLog[miem].id]
+            else
+              desc = desc + "Sin porcentaje"
+          }
+
+          //proveedores
+          const proLog = await models.Provider.findAll({where: {id: proveedoresID}, transaction: t})
+
+          contadorPro = 0
+          desc = desc + "\nProveedores: "
+          for(var pro in proLog){
+            desc = desc + "\n\t" +  proLog[pro].id + ": " + proLog[pro].name
+            contadorPro++
+          }
+
+          if(contadorPro == 0)
+            desc = desc + "Sin proveedores"
+
+          //tipo de proyecto
+          if(layout){
+            desc = desc + "\nLayout"+layout.id+": " + layout.name
+
+            if(layout.Tasks_Layouts){
+              for(var i in layout.Tasks_Layouts){
+                desc = desc + "\n\tTarea " + layout.Tasks_Layouts[i].id + ":"
+                + "\n\t\tConcepto: " + layout.Tasks_Layouts[i].concept
+                + "\n\t\tDescripcion: " + layout.Tasks_Layouts[i].description
+                + "\n\t\tUnidad: " + layout.Tasks_Layouts[i].unit
+                + "\n\t\tPrecio: " + layout.Tasks_Layouts[i].price
+              }
+            }
+            else{
+              desc = desc + "\n\tSin tareas"
+            }
+          }
+          else{
+            desc = desc + "\nSin Layout"
+          }
+
+          //guardamos los datos del log
+          var dataLog = {
+              UserId: usuario.id,
+              title: "Actualización de proyecto",
+              description: desc
+          }
+
+          //guarda el log en la base de datos
+          const log = await models.Log.create(dataLog, { transaction: t })
+
+          //verifica que se hayan registrado el log y el rol
+          if (!log)
+              throw new Error()
+          if (!project)
+              throw new Error()
 
           res.status(200).json([{ status: 200 }]);
           // If the execution reaches this line, no errors were thrown.
@@ -2014,6 +2937,12 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
       await t.rollback();
       return res.status(500).json([{ msg: 'No fue posible eliminar la tarea, vuelva a intentarlo más tarde.' }])
   }
+});
+
+//////////////////////Página de ERROR hay que borrarla :v
+router.get('/error', isLoggedIn, async function(req, res, next) {
+  var error = 404;
+  res.render('error', {error});
 });
 
 module.exports = router;
