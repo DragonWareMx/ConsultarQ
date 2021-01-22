@@ -12,7 +12,7 @@ block content
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #layout-form")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Agregar layout
+                    div Nuevo Tipo de Proyecto
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 button(href="#" uk-search-icon)
@@ -29,12 +29,12 @@ block content
         div(class="uk-grid-small uk-child-width-1-3@m uk-child-width-1-2@s uk-child-width-1 uk-grid-row-large" uk-grid)
             each layout in layouts
                 div()
-                    div(class="uk-card  uk-card-default") 
+                    div(class="uk-card  uk-card-default")
                         div(class="uk-card-header uk-padding-small uk-flex")
-                            div(class="uk-width-4-5 uk-text-emphasis uk-text-truncate") #{layout.name}
-                            a(href="/proyectos/layout/editar/"+layout.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-link-reset")
-                                img(src="/icons/edit.png"  width="12px" style="margin-right:5px;")
-                                div(class="uk-text-primary uk-text-small") Editar
+                            div(class="uk-width-4-5 uk-text-primary uk-text-truncate") #{layout.name}
+                            a(href="/proyectos/layout/editar/"+layout.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
+                                img(src="/icons/edit.png" class="uk-animation-shake" width="12px" style="margin-right:5px;")
+                                div(class="uk-text-primary uk-text-small uk-animation-shake") Editar
                         div(class="uk-card-body uk-padding-small uk-flex")
                             if layout.Tasks_Layouts
                                 div(class="uk-text-small") #{layout.Tasks_Layouts.length} Tareas
@@ -45,7 +45,7 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar Layout
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors")
-                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-new-layout" action="/proyectos/layout/create" method="POST")
+                form(class="uk-card-body uk-padding-small" id="form-new-layout" action="/proyectos/layout/create" method="POST")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -87,7 +87,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Layout registrado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Layout registrado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

@@ -362,12 +362,12 @@ block content
                                     input(type="checkbox" class="uk-checkbox"  id="eu-edit" name="eu")
                                 td(class="uk-text-center")
                                     input(type="checkbox" class="uk-checkbox"  id="ed-edit" name="ed")
-                if pD
-                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" href="#delete-form" uk-toggle style="width:max-content")
-                        <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-top")
                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
+            if pD
+                a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
 
     //- Modal para eliminar
     div(id="delete-form" uk-modal)
@@ -523,7 +523,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Rol creado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Rol creado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -588,7 +588,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Rol editado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Rol editado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -653,7 +653,7 @@ block content
                         * */
                         $('#errors-delete').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Rol eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Rol eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

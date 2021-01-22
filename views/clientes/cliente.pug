@@ -134,17 +134,17 @@ block content
                                 img(src="/icons/eye.png" style="width:15px;height:15px; margin-right:5px") 
                                 |Ver más
 
-        //- PROYECTOS
-        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Proyectos
-
-        div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top uk-grid-small uk-margin-bottom" uk-grid)
+            //- tarjetas de proyectos
+            div(class="uk-text-left uk-text-large uk-text-bold uk-text-primary") Proyectos
+            //- si no hay ningun proyecto debe mostrarse un mensaje
             if client.Projects.length > 0
                 each project in client.Projects
-                    div
-                        div(class="uk-card uk-card-default uk-card-body uk-padding-small")
-                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px")
-                                a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
+                    div(class="uk-width-1-1@m uk-flex")
+                        div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
+                                div.uk-width-1-1 Proyecto #{project.id}
+                                div.uk-width-1-1.uk-text-truncate.uk-text-emphasis 
+                                    a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
                                 //- script barra de porcentaje
                                 -
                                     var tareasListas = 0
@@ -162,43 +162,41 @@ block content
                                     if tareasTotales > 0
                                         -
                                             porcentaje = parseInt((tareasListas/tareasTotales)*100)
-                            div.uk-width-1-1
-                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
-                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso #{porcentaje}%
-                            //- div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Estatus
-                            div.uk-width-1-1.uk-flex.uk-flex-middle
-                                if project.status === "ACTIVO" || project.status === "TERMINADO"
-                                    div(class="uk-width-4-5@m btn-status-active") #{project.status}
-                                else 
-                                    div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
-                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Tipo
+                                div.uk-width-1-1
+                                    progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
+                                div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso #{porcentaje}%
+                                div.uk-width-1-1 Estatus
+                                div.uk-width-1-1.uk-flex.uk-flex-middle
+                                    if project.status === "ACTIVO" || project.status === "TERMINADO"
+                                        div(class="uk-width-4-5@m btn-status-active") #{project.status}
+                                    else 
+                                        div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
+                                div.uk-width-1-1 Tipo
                                 if (project.Pro_Type && project.Pro_Type.name)
                                     div.uk-width-1-1.uk-text-truncate.uk-text-emphasis #{project.Pro_Type.name}
                                 else
-                                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis Sin tipo
-                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Fecha de inicio
-                            div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small #{prettyDate(project.start_date)}
-                            div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Fecha de término
-                            div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small #{prettyDate(project.deadline)}
-                            div.uk-width-1-1.uk-text-truncate.uk-text-small(style="color:#6B6B72") Miembros del proyecto
-                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
-                                each user,index in project.Users
-                                    if user.picture
-                                        img(src="/uploads/avatar/"+user.picture uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
-                                    else
-                                        img(src="/img/iconos/default.png" uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
-                                    if index == 4
-                                        - break
-                                if project.Users.length > 5
-                                    div(class="uk-right uk-margin-top") #{project.Users.length - 5} más...
+                                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis No tiene
+                                div.uk-width-1-1 Fecha de inicio
+                                div.uk-width-1-1.uk-text-truncate.uk-text-emphasis #{prettyDate(project.start_date)}
+                                div.uk-width-1-1 Fecha de término
+                                div.uk-width-1-1.uk-text-truncate.uk-text-emphasis #{prettyDate(project.deadline)}
+                                div.uk-width-1-1 Miembros del proyecto
+                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                                    each user,index in project.Users
+                                        if user.picture
+                                            img(src="/uploads/avatar/"+user.picture uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
+                                        else
+                                            img(src="/img/iconos/default.png" uk-tooltip='title: '+ user.Employee.name +'; pos:left' style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px" )
+                                        if index == 4
+                                            - break
+                                    if project.Users.length > 5
+                                        div(class="uk-right uk-margin-top") #{project.Users.length - 5} más...
+                                        //-img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
             else
                 div(class="uk-width-1-1@m uk-flex")
                     div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
                             | No hay proyectos registrados
-
-                
 
     div(id="modal-adjuntarContrato" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
@@ -228,24 +226,19 @@ block content
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='name_edit' title='Nombre Completo' data-title='Nombre Completo')
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='on' id="email_edit" name="email_edit" value=client.email onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='tel' id="phone_edit" name="phone_edit" value=client.phone_number onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
+                    .field.uk-margin-bottom
+                        input(type='text' autocomplete='rfc' id="rfc_edit" name="rfc_edit" value=client.rfc onchange="this.setAttribute('value', this.value);" required='')
+                        label(for='rfc_edit' title='RFC' data-title='RFC')
                     div.uk-grid
-                        div(class="uk-width-1-2@s uk-width-1-1")
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='name_edit' title='Nombre o razón social' data-title='Nombre o razón social')
-                        div(class="uk-width-1-2@s uk-width-1-1")
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="email_edit" name="email_edit" value=client.email onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
-                        div(class="uk-width-1-2@s uk-width-1-1")
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='tel' id="phone_edit" name="phone_edit" value=client.phone_number onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
-                        div(class="uk-width-1-2@s uk-width-1-1")
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='rfc' id="rfc_edit" name="rfc_edit" value=client.rfc onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='rfc_edit' title='RFC' data-title='RFC')
-                    
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
@@ -381,7 +374,7 @@ block content
                         * */
                         $('#errors-edit').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Cliente actualizado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Cliente actualizado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -448,7 +441,7 @@ block content
                         * */
                         $('#errors-delete').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Cliente eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Cliente eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

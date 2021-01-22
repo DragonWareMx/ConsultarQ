@@ -71,7 +71,7 @@ block content
                                         option(value=tipo.id) #{tipo.name}
                         label(for='tipo' title='Layout' data-title='Layout')
                     div(class="uk-flex uk-flex-wrap uk-flex-between")
-                        div(class="uk-text-primary uk-text-small") PRESTADORES EXTERNOS
+                        div(class="uk-text-primary uk-text-small") PROVEEDORES
                         div(id="agregar_proveedor" class="uk-flex uk-flex-middle" style="cursor:pointer;")
                             img(src="/icons/more.png" width="10px" style="margin-right:5px;di")
                             div(class="uk-text-primary" style="font-size: 12px;line-height: 15px;") Agregar
@@ -83,7 +83,7 @@ block content
                     div(id="lista_proveedores" class="uk-child-width-1")
                         each prestador in project.Providers
                             div(id=prestador.id+"p" class="uk-flex uk-flex-middle")
-                                img(class="delete_proveedor" uk-tooltip="title: Eliminar; pos: left" data-id=prestador.id src="/icons/less.png" width="10px" style="cursor:pointer")
+                                img(class="delete_proveedor" data-id=prestador.id src="/icons/less.png" width="10px" style="cursor:pointer")
                                 div(class="uk-margin-small-left uk-text-small") #{prestador.name}
                         input(type="hidden" id="input_proveedores" value="" name="input_proveedores")
                 div(class="uk-width-3-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
@@ -127,7 +127,7 @@ block content
                             div(id="lista_miembros" class="uk-child-width-1")
                                 each miembro in project.Project_Employees
                                     div(id=miembro.User.Employee.id+"m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500")
-                                        img(class="delete_miembro" uk-tooltip="title: Eliminar; pos: left" data-id=miembro.User.id src="/icons/less.png" width="10px" style="height:10px;cursor:pointer")
+                                        img(class="delete_miembro" data-id=miembro.User.id src="/icons/less.png" width="10px" style="height:10px;cursor:pointer")
                                         if(miembro.User.picture)
                                             img(src="/uploads/avatar/"+miembro.User.picture class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;")
                                         else
@@ -141,8 +141,8 @@ block content
                                             label(for="rolP"+miembro.User.id title="Porcentaje" data-title="Porcentaje")
                                 input(type="hidden" id="input_miembros" name="input_miembros")
                     div(class="uk-width-1")
-                        div(class="uk-text-primary uk-text-small uk-margin-small-left " style="margin-bottom:3px;") OBSERVACIONES (opcional)
-                        textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1 uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja uk-text-small" style="height:85px; border-radius:3px; resize:none" rows="7") #{project.observations}
+                        div(class="uk-text-secondary uk-text-small uk-margin-small-left" style="margin-bottom:3px;") OBSERVACIONES
+                        textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7") #{project.observations}
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-bottom")
                     a(class="uk-button uk-button-text uk-margin-medium-right uk-margin-small-top uk-text-primary uk-text-capitalize" href="javascript:history.back()") Cancelar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
@@ -186,7 +186,7 @@ block content
                     var obj=proveedores[key];
                     if(obj["name"] == input.val()){
                         if($.inArray(obj["id"],arrProveedores)==-1){
-                            $('#lista_proveedores').append('<div id="'+obj['id']+'p" class="uk-flex uk-flex-middle"><img class="delete_proveedor" uk-tooltip="title: Eliminar; pos: left" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="cursor:pointer"><div class="uk-margin-small-left uk-text-small">'+obj["name"]+'</div></div>');
+                            $('#lista_proveedores').append('<div id="'+obj['id']+'p" class="uk-flex uk-flex-middle"><img class="delete_proveedor" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="cursor:pointer"><div class="uk-margin-small-left uk-text-small">'+obj["name"]+'</div></div>');
                             $('#'+obj["id"]+'p').hide().show('normal');
                             arrProveedores.push(obj["id"]);
                             $('#input_proveedores').val(arrProveedores);
@@ -218,11 +218,11 @@ block content
                     if(obj["name"] == input.val()){
                         if($.inArray(obj["User"]["id"],arrMiembros)==-1){
                             if(obj.User["picture"]){
-                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" uk-tooltip="title: Eliminar; pos: left" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
                                 $('#'+obj["id"]+'m').hide().show('slow');
                             }
                             else{
-                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" uk-tooltip="title: Eliminar; pos: left" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
                                 $('#'+obj["id"]+'m').hide().show('slow');
                             }
                             arrMiembros.push(obj["User"]["id"]);
@@ -282,7 +282,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span> Rol creado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Rol creado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

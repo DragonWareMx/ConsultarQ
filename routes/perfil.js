@@ -49,6 +49,10 @@ router.post('/edit/:id', upload.single('fileField'),
             .isLength({ max: 255 }).withMessage('El nombre puede tener un máximo de 255 caracteres.')
             .trim()
             .escape(),
+        check('email')
+            .not().isEmpty().withMessage('Correo electrónico es un campo requerido.')
+            .isEmail().withMessage('Correo electrónico no válido.')
+            .normalizeEmail(),
         check('passActual')
             .trim()
             .optional({ checkFalsy: true }),
