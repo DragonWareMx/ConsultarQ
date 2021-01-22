@@ -67,6 +67,8 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                                 order:[
                                     ['createdAt','DESC']
                                 ]
+                        }, {
+                            model: models.Task
                         }],
                         order: [
                             ['createdAt','DESC']
