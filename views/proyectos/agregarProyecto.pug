@@ -52,7 +52,7 @@ block content
                             img(src="/icons/more.png" width="10px" style="margin-right:5px;di")
                             div(class="uk-text-primary" style="font-size: 12px;line-height: 15px;") Agregar
                     .field.uk-margin-bottom.uk-margin-small-top
-                        input(type='text' list="proveedores" id="proveedor" name="proveedor" placeholder="Proveedores (opcional)" onchange="this.setAttribute('value', this.value);")
+                        input(type='text' list="proveedores" id="proveedor" name="proveedor" placeholder="Prestadores (opcional)" onchange="this.setAttribute('value', this.value);")
                         datalist(id="proveedores")
                             each prestador in prestadores
                                 option(value=prestador.name)

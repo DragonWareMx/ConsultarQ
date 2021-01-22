@@ -13,7 +13,7 @@ block content
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
                     div Regresar
         div(id="errors")
-        form(action="/proyectos/editar/"+project.id id="form-create-project" method="POST" class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" enctype="multipart/form-data" uk-grid)
+        form(action="/proyectos/update/"+project.id id="form-create-project" method="POST" class="uk-grid-small uk-child-width-1 uk-grid-row-large uk-margin-top" enctype="multipart/form-data" uk-grid)
             div(class="uk-card uk-card-default uk-card-body uk-padding-remove-top uk-padding-remove-bottom uk-flex uk-flex-wrap")
                 div(class="uk-width-1-4@m uk-width-1 uk-margin-top uk-margin-bottom" )
                     div(class="uk-text-primary uk-text-small") DATOS GENERALES
@@ -21,24 +21,19 @@ block content
                         input(type='text' autocomplete='off' id="nombreP" name="nombreP" value=project.name maxlength="255" onchange="this.setAttribute('value', this.value);" required='')
                         label(for='nombreP' title='Nombre del proyecto' data-title='Nombre del proyecto')
                     .field.uk-margin-bottom.uk-margin-small-top
-                        select(type='select' id="estatus" name="estatus" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            if(project.status=="ACTIVO")
+                        select(type='select' id="estatus" name="estatus" value='' onchange="this.setAttribute('value', this.value);"  required='')
+                            if (project.getDataValue('status')=="activo")
                                 option(value="activo" selected) Activo
                                 option(value="terminado") Terminado
                                 option(value="cancelado") Cancelado
-                            if(project.status=="TERMINADO")
+                            else if(project.getDataValue('status')=="terminado")
                                 option(value="activo") Activo
                                 option(value="terminado" selected) Terminado
                                 option(value="cancelado") Cancelado
-                            if(project.status=="CANCELADO")
-                               option(value="activo") Activo
-                                option(value="terminado") Terminado
-                                option(value="cancelado" selected) Cancelado
-                            if(project.status=="ATRASADO")
-                                option(value="" disabled selected hidden) Atrasado
+                            else
                                 option(value="activo") Activo
                                 option(value="terminado") Terminado
-                                option(value="cancelado") Cancelado  
+                                option(value="cancelado" selected) Cancelado
                         label(for='estatus' title='Estatus' data-title='Estatus')
                     .field.uk-margin-bottom
                         input(type='date' id="start_date" value=project.start_date name="start_date"  onchange="this.setAttribute('value', this.value);" required)
@@ -55,6 +50,9 @@ block content
                     .field.uk-margin-bottom
                         input(type='date' id="deadline" value=project.deadline  name="deadline"  onchange="this.setAttribute('value', this.value);" required)
                         label(for='start_date' title='Fecha límite' data-title='Fecha límite')
+                    .field.uk-margin-bottom
+                        input(type='color' value=project.color id="color" name="color"  onchange="this.setAttribute('value', this.value);"  style="height:50px; padding:10px; background-color:transparent;" required)
+                        label(for='color' title='Color' data-title='Color')
                     .field.uk-margin-bottom.uk-margin-small-top
                         select(type='select' id="tipo" name="tipo" value='' onchange="this.setAttribute('value', this.value);")
                             if(!project.ProTypeId)
@@ -69,14 +67,14 @@ block content
                                         option(value=tipo.id selected) #{tipo.name}
                                     else
                                         option(value=tipo.id) #{tipo.name}
-                        label(for='tipo' title='Layout' data-title='Layout')
+                        label(for='tipo' title='Layout (opcional)' data-title='Layout (opcional)')
                     div(class="uk-flex uk-flex-wrap uk-flex-between")
-                        div(class="uk-text-primary uk-text-small") PROVEEDORES
+                        div(class="uk-text-primary uk-text-small") PRESTADORES EXTERNOS
                         div(id="agregar_proveedor" class="uk-flex uk-flex-middle" style="cursor:pointer;")
                             img(src="/icons/more.png" width="10px" style="margin-right:5px;di")
                             div(class="uk-text-primary" style="font-size: 12px;line-height: 15px;") Agregar
                     .field.uk-margin-bottom.uk-margin-small-top
-                        input(type='text' list="proveedores" id="proveedor" name="proveedor" placeholder="Proveedores" onchange="this.setAttribute('value', this.value);")
+                        input(type='text' list="proveedores" id="proveedor" name="proveedor" placeholder="Prestadores (opcional)" onchange="this.setAttribute('value', this.value);")
                         datalist(id="proveedores")
                             each prestador in prestadores
                                 option(value=prestador.name)
@@ -91,7 +89,7 @@ block content
                         div(class="uk-width-1-3@m  uk-width-1" style="padding-left:10px;")
                             div(class="uk-text-primary uk-text-small") DATOS DEL CLIENTE
                             .field.uk-margin-bottom.uk-margin-small-top
-                                select(type='select' id="cliente" name="cliente" value='' onchange="this.setAttribute('value', this.value);")
+                                select(type='select' id="cliente" name="cliente" value='' onchange="this.setAttribute('value', this.value);" required)
                                     if(!project.ClientId)
                                         option(value="" disabled hidden selected) Seleccionar cliente
                                         each cliente in clientes
@@ -105,13 +103,18 @@ block content
                                 label(for='cliente' title='Cliente' data-title='Cliente')
                             .field.uk-margin-bottom
                                 input(type='file' multiple id="cotizaciones" name="cotizaciones"  onchange="this.setAttribute('value', this.value);")
-                                label(for='cotizaciones' title='Cotización' data-title='Cotización')
+                                label(for='cotizaciones' title='Cotización (opcional)' data-title='Cotización (opcional)')
+                            .field.uk-margin-bottom.uk-margin-small-top
+                                select(type='select' id="agregarCotizacion" name="agregarCotizacion" value='' onchange="this.setAttribute('value', this.value);" uk-tooltip="Selecciona si deseas que los archivos seleccionados en 'Cotización' se agreguen al proyecto o reemplacen los archivos anteriores.")
+                                    option(value="agregar" selected) Agregar archivos
+                                    option(value="reemplazar") Reemplazar archivos
+                                label(for='cliente' title='Agrear o reemplazar' data-title='Agrear o reemplazar')
                             .field.uk-margin-bottom
                                 input(type='file' id="contrato" name="contrato"  onchange="this.setAttribute('value', this.value);")
-                                label(for='contrato' title='Contrato' data-title='Contrato')
+                                label(for='contrato' title='Contrato (opcional)' data-title='Contrato (opcional)')
                                 if(project.contract)
                                     div(class="uk-width-1 uk-text-right")
-                                        a(class="uk-text-right uk-width-1" href="/contracts/eliminar.pdf" target="blank__" style="font-size:12px;" uk-tooltip="*Al seleccionar otro contrato se eliminará el contrato anterior.") Ya se cuenta con un contrato* 
+                                        a(class="uk-text-right uk-width-1" href="/uploads/docs/"+project.contract target="blank__" style="font-size:12px;" uk-tooltip="*Al seleccionar otro contrato se eliminará el contrato anterior.") Ya se cuenta con un contrato* 
                         div(class="uk-width-2-3@m uk-width-1" style="padding-left:10px;")
                             div(class="uk-width-1-2 uk-flex uk-flex-between")
                                 div(class="uk-text-primary uk-text-small") MIEMBROS DEL PROYECTO
@@ -124,7 +127,7 @@ block content
                                         datalist(id="miembros")
                                             each miembro in miembros
                                                 option(value=miembro.name)
-                            div(id="lista_miembros" class="uk-child-width-1")
+                            div(id="lista_miembros" class="uk-child-width-1") 
                                 each miembro in project.Project_Employees
                                     div(id=miembro.User.Employee.id+"m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500")
                                         img(class="delete_miembro" data-id=miembro.User.id src="/icons/less.png" width="10px" style="height:10px;cursor:pointer")
@@ -134,14 +137,20 @@ block content
                                             img(src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;")
                                         div(class="uk-margin-small-left uk-text-truncate" style="width:270px;") #{miembro.User.Employee.name}
                                         div(class="field uk-margin-small-left")
-                                            input(type="text" required id="rol"+miembro.User.id name="rol"+miembro.User.id value="" onchange="this.setAttribute(\'value\', this.value);")
-                                            label(for="rol"+miembro.User.id title="Rol" data-title="Rol")
+                                            if miembro.role
+                                                input(type="text" id="rol"+miembro.User.id name="rol"+miembro.User.id value=miembro.role onchange="this.setAttribute(\'value\', this.value);")
+                                            else
+                                                input(type="text" id="rol"+miembro.User.id name="rol"+miembro.User.id value="" onchange="this.setAttribute(\'value\', this.value);")
+                                            label(for="rol"+miembro.User.id title="Rol (opcional)" data-title="Rol (opcional)")
                                         div(class="field uk-margin-small-left")
-                                            input(type="number" required id="rolP"+miembro.User.id name="rolP"+miembro.User.id value=miembro.profit onchange="this.setAttribute(\'value\', this.value);")
-                                            label(for="rolP"+miembro.User.id title="Porcentaje" data-title="Porcentaje")
+                                            if miembro.profit
+                                                input(type="number" id="rolP"+miembro.User.id name="rolP"+miembro.User.id value=miembro.profit onchange="this.setAttribute(\'value\', this.value);")
+                                            else
+                                                input(type="number" id="rolP"+miembro.User.id name="rolP"+miembro.User.id value="" onchange="this.setAttribute(\'value\', this.value);")
+                                            label(for="rolP"+miembro.User.id title="Porcentaje (opcional)" data-title="Porcentaje (opcional)")
                                 input(type="hidden" id="input_miembros" name="input_miembros")
                     div(class="uk-width-1")
-                        div(class="uk-text-secondary uk-text-small uk-margin-small-left" style="margin-bottom:3px;") OBSERVACIONES
+                        div(class="uk-text-primary uk-text-small uk-margin-small-left " style="margin-bottom:3px;") OBSERVACIONES (opcional)
                         textarea(type='text' id="observaciones" name="observaciones" class="uk-margin-small-left uk-width-1" rows="7") #{project.observations}
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-bottom")
                     a(class="uk-button uk-button-text uk-margin-medium-right uk-margin-small-top uk-text-primary uk-text-capitalize" href="javascript:history.back()") Cancelar
@@ -185,6 +194,7 @@ block content
                 for(var key in proveedores){
                     var obj=proveedores[key];
                     if(obj["name"] == input.val()){
+                        input.val("").change();
                         if($.inArray(obj["id"],arrProveedores)==-1){
                             $('#lista_proveedores').append('<div id="'+obj['id']+'p" class="uk-flex uk-flex-middle"><img class="delete_proveedor" data-id="'+obj["id"]+'" src="/icons/less.png" width="10px" style="cursor:pointer"><div class="uk-margin-small-left uk-text-small">'+obj["name"]+'</div></div>');
                             $('#'+obj["id"]+'p').hide().show('normal');
@@ -216,13 +226,14 @@ block content
                 for(var key in miembros){
                     var obj=miembros[key];
                     if(obj["name"] == input.val()){
+                        input.val("").change();
                         if($.inArray(obj["User"]["id"],arrMiembros)==-1){
                             if(obj.User["picture"]){
-                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/uploads/avatar/'+obj.User["picture"]+'" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol (opcional)" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje  (opcional)" data-title="Porcentaje"></label></div></div>');
                                 $('#'+obj["id"]+'m').hide().show('slow');
                             }
                             else{
-                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" required id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" required id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje" data-title="Porcentaje"></label></div></div>');
+                                $('#lista_miembros').append('<div id="'+obj["User"]['id']+'m" class="uk-flex uk-flex-middle uk-margin-small-bottom o-flex-wrap-500"><img class="delete_miembro" data-id="'+obj["User"]["id"]+'" src="/icons/less.png" width="10px" style="height:10px;cursor:pointer"><img src="/img/iconos/default.png" class="uk-margin-small-left" width="30px" style="border-radius:50%;height:30px; object-fit:cover;"><div class="uk-margin-small-left uk-text-truncate" style="width:270px;">'+obj["name"]+'</div><div class="field uk-margin-small-left"><input type="text" id="rol'+obj["User"]['id']+'" name="rol'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rol'+obj["User"]['id']+'" title="Rol (opcional)" data-title="Rol"></label></div><div class="field uk-margin-small-left"><input type="number" id="rolP'+obj["User"]['id']+'" name="rolP'+obj["User"]['id']+'" value="" onchange="this.setAttribute(\'value\', this.value);"><label for="rolP'+obj["User"]['id']+'" title="Porcentaje  (opcional)" data-title="Porcentaje"></label></div></div>');
                                 $('#'+obj["id"]+'m').hide().show('slow');
                             }
                             arrMiembros.push(obj["User"]["id"]);
@@ -282,7 +293,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Rol creado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span>Proyecto editado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -290,7 +301,7 @@ block content
                         setTimeout(
                         function()
                         {
-                            window.location.href = window.location.origin + '/roles'
+                            window.location.href = window.location.origin + '/proyectos/proyecto/#{project.id}'
                         }, 2000);
                     },
                     error: function(data){

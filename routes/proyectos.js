@@ -1342,6 +1342,562 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
         }
 });
 
+
+//EDITAR PROYECTO
+router.post('/update/:projectId', upload.fields([{name: 'cotizaciones', maxCount: 10}, {name: 'contrato', maxCount: 1}]),
+    [
+      check('nombreP')
+        .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
+        .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
+        .trim()
+        .escape(),
+      check('color')
+        .not().isEmpty().withMessage('El color es un campo requerido.')
+        .isHexColor().withMessage('El color no es válido.'),
+      check('estatus')
+        .not().isEmpty()
+        .isIn(['activo', 'terminado', 'cancelado']).withMessage('El estatus ingresado no es válido.'),
+      check('agregarCotizacion')
+        .not().isEmpty()
+        .isIn(['agregar', 'reemplazar']).withMessage('Selecciona agregar o reemplazar.'),
+      check('start_date')
+        .not().isEmpty()
+        .custom(date => {
+            return !isNaN(Date.parse(date));
+        }).withMessage('La fecha de inicio no es válida.'),
+      check('end_date')
+        .optional({ checkFalsy: true })
+        .custom(date => {
+          return !isNaN(Date.parse(date));
+        }).withMessage('La fecha de término no es válida.'),
+      check('deadline')
+        .not().isEmpty()
+        .custom(date => {
+          return !isNaN(Date.parse(date));
+        }).withMessage('La fecha límite no es válida.'),
+      check('tipo')
+        .optional({ checkFalsy: true })
+        .custom(async (tipo) => {
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            var validador = true
+
+            //si no es nulo
+            if (tipo) {
+                validador = false
+
+                //busca los tipos de proyecto
+                let ids = await models.Pro_Type.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                //verifica si el id ingresado por el usuario esta en la bd
+                ids.forEach(id => {
+                    if (tipo == id.id) {
+                        validador = true
+                    }
+                });
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('El servicio existe.');
+        }).withMessage('El servicio seleccionado no es válido.'),
+      check('input_proveedores')
+        .custom(async (tipo) => {
+
+          var validador = true
+
+          //si existe un numero en el input significa que ingresaron un proveedor
+          if (/\d/.test(tipo)) {
+              //se crea el validador, es true porque si no hay rol tambien es valido
+              tipo = tipo.split(",")
+              
+              //encuentra todos los proveedores
+              let ids = await models.Provider.findAll({
+                  attributes: ['id'],
+                  raw: true
+              })
+
+              validador2 = false
+
+              //si el validador2 no se hace true, el proveedor no existe, no es valido
+              tipo.forEach(idB => {
+                ids.forEach(id => {
+                  if (idB == id.id) {
+                    validador2 = true
+                  }
+                })
+
+                if(validador2 == false)
+                  validador = false
+                validador2 = false
+              })
+
+              //si se ingreso un 0 significa que no eligieron ninguno
+              if (tipo == 0)
+                  validador = true
+          }
+          if (validador) {
+              return true
+          }
+          else
+              throw new Error('Uno de los proveedores seleccionados no existe.');
+        }).withMessage('Hubo un error con alguno de los proveedores seleccionados, reinténtelo más tarde.'),
+      check('cliente')
+        .not().isEmpty().withMessage('El cliente es un campo requerido.')
+        .custom(async (tipo) => {
+            //se crea el validador
+            validador = false
+
+            //busca los clientes
+            let ids = await models.Client.findAll({
+                attributes: ['id'],
+                raw: true
+            })
+
+            ids.forEach(id => {
+                if (tipo == id.id) {
+                  validador = true
+                }
+            })
+
+            if (validador) {
+                return true
+            }
+            else
+              return false
+        }).withMessage('El Cliente seleccionado no es válido.'),
+        check('input_miembros')
+          .custom(async (tipo) => {
+            if (!(/\d/.test(tipo))) {
+              throw new Error()
+            }
+            //se crea el validador, es true porque si no hay rol tambien es valido
+            tipo = tipo.split(",")
+
+            var validador = true
+
+            //si no es nulo
+            if (tipo && tipo[0] != '') {
+                let ids = await models.Employee.findAll({
+                    attributes: ['id'],
+                    raw: true
+                })
+
+                validador2 = false
+
+                tipo.forEach(idB => {
+                  ids.forEach(id => {
+                    if (idB == id.id) {
+                      validador2 = true
+                    }
+                  })
+
+                  if(validador2 == false)
+                    validador = false
+                  validador2 = false
+                })
+
+                if (tipo == 0)
+                    validador = true
+            }
+            if (validador) {
+                return true
+            }
+            else
+                throw new Error('Algún miembro seleccionado no es válido.');
+        }).withMessage('Algún miembro seleccionado no es válido.'),
+        check('observaciones')
+          .optional({ checkFalsy: true })
+          .isLength({ max: 255 }).withMessage('Observaciones puede tener un máximo de 255 caracteres.')
+          .trim()
+          .escape()
+    ]
+    , isLoggedIn, async function (req, res, next) {
+        //si hay errores entonces se muestran
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          return res.status(422).send(errors.array());
+        }
+
+        //comprueba las fechas
+        var fechaI = new Date(req.body.start_date)
+        var fechaD = new Date(req.body.deadline)
+
+        fechaI.getTime()
+        fechaD.getTime()
+
+        if(fechaI >= fechaD)
+          return res.status(422).json([{ msg: 'La fecha de inicio no puede ser mayor o igual a la fecha límite.' }])
+
+        try {
+            //VERIFICACION DEL PERMISO
+
+            //obtenemos el usuario, su rol y su permiso
+            let usuario = await models.User.findOne({
+                where: {
+                    id: req.user.id
+                },
+                include: {
+                    model: models.Role,
+                    include: {
+                        model: models.Permission,
+                        where: { name: 'pu' }
+                    }
+                }
+            })
+
+            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+                //NO TIENE PERMISO DE AGREGAR rol
+                return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+            }
+        }
+        catch (error) {
+            return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+        }
+        //TIENE PERMISO
+        //Transaccion
+        const t = await models.sequelize.transaction()
+        try {
+          const project = await models.Project.findOne({
+            where: {
+                id: req.params.projectId
+              },
+            include: {
+                model: models.Quotation
+              },
+            transaction: t
+          })
+          const layoutAntiguo = project.ProTypeId
+          //se guardan los datos principales
+          var miembros = req.body.input_miembros.split(",")
+          var employeeID = []
+          var proveedores = req.body.input_proveedores.split(",")
+          var proveedoresID = []
+
+          //Guarda los ids de los usuarios empleados en un arreglo
+          for(var i in miembros){
+            const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
+            employeeID.push(employee.id)
+          }
+
+          //verificamos los roles y porcentajes
+          for(var i in employeeID){
+            await check("rol"+employeeID[i]).optional({ checkFalsy: true }).isLength({ max: 100 }).withMessage('El rol de los miembtos de proyecto puede tener un máximo de 100 caracteres.')
+                  .trim()
+                  .escape().run(req);
+            await check("rolP"+employeeID[i]).optional({ checkFalsy: true }).isLength({ max: 3 }).withMessage('El rol de los miembtos de proyecto puede tener un máximo de 3 dígitos.')
+                  .isNumeric().withMessage('Sólo se aceptan números en el porcentaje.')
+                  .trim()
+                  .escape().run(req);
+          }
+
+          const result = validationResult(req);
+          if (!result.isEmpty()) {
+            await t.rollback();
+            return res.status(422).send(result.array());
+          }
+
+          if (/\d/.test(proveedores)) {
+            //Guarda los ids de los proveedores en un arreglo
+            for(var i in proveedores){
+              const provider = await models.Provider.findOne({ attributes: ['id'], where: { id: proveedores[i] }, raw: true, transaction: t });
+              proveedoresID.push(provider.id)
+            }
+          }
+
+          var datos = {
+            name: req.body.nombreP,
+            start_date: req.body.start_date,
+            deadline: req.body.deadline,
+            color: req.body.color,
+            status: req.body.estatus
+          }
+
+          //SE GUARDAN LOS NULLABLES
+          //tipo de proyecto
+          if(req.body.tipo && req.body.tipo != 0){
+            datos.ProTypeId = req.body.tipo
+          }
+          else{
+            datos.ProTypeId = null
+          }
+
+          //si hay observaciones
+          if(req.body.observaciones){
+            datos.observations = req.body.observaciones
+          }
+          else{
+            datos.observations=null
+          }
+
+          //guarda el cliente
+          if(req.body.cliente){
+            datos.ClientId = req.body.cliente
+          }
+          else{
+            datos.ClientId = null
+          }
+
+          //estatus
+          switch(req.body.estatus){
+            case 'terminado':
+              if(req.body.end_date)
+                datos.end_date = req.body.end_date
+              else
+                throw new Error()
+              break
+            case 'cancelado':
+            case 'activo':
+              break
+            default:
+              throw new Error()
+          }
+
+
+          //guarda el contrato
+          if(req.files.contrato && req.files.contrato[0]){
+            datos.contract = req.files.contrato[0].filename
+            fs.unlink('public/uploads/docs/' + project.contract, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          
+
+          //GUARDA EL PROYECTO
+          await project.update(datos, { transaction: t })
+
+          //GUARDA LOS USUARIOS
+          await project.setUsers(employeeID, {transaction: t})
+
+          for(var j in employeeID){
+            if(req.body["rol"+employeeID[j]])
+              await models.Project_Employee.update({role: req.body["rol"+employeeID[j]]},{where: {Userid: employeeID[j], ProjectId: project.id}, transaction: t})
+            if(req.body["rolP"+employeeID[j]])
+              await models.Project_Employee.update({profit: req.body["rolP"+employeeID[j]]},{where: {Userid: employeeID[j], ProjectId: project.id}, transaction: t})
+          }
+
+          //GUARDA LOS PROVEEDORES
+          await project.setProviders(proveedoresID, {transaction: t})
+
+          //GUARDA LAS COTIZACIONES
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            if(req.body.agregarCotizacion != 'agregar'){
+              const quotationsD = await models.Quotation.findAll({
+                where:{
+                  ProjectId:project.id
+                },
+                transaction:t
+              })
+              for( var j in quotationsD){
+                fs.unlink('public/uploads/docs/' + quotationsD[j].quotation, (err) => {
+                  if (err) {
+                      console.log("failed to delete local image:" + err);
+                  } else {
+                      console.log('successfully deleted local image');
+                  }
+                });
+                await quotationsD[j].destroy({transaction:t})
+              }
+            }
+            for(var i in req.files.cotizaciones){
+              await models.Quotation.create({
+                ProjectId: project.id,
+                quotation: req.files.cotizaciones[i].filename
+              },{transaction: t})
+            }
+          }
+
+          var layout
+
+          //GUARDA LAS TAREAS
+          if(project.ProTypeId && project.ProTypeId != layoutAntiguo){
+            layout = await models.Pro_Type.findOne({where: {id: project.ProTypeId}, include: models.Tasks_Layout})
+
+            for (const i in layout.Tasks_Layouts) {
+              if (Object.hasOwnProperty.call(layout.Tasks_Layouts, i)) {
+                const element = layout.Tasks_Layouts[i];
+                const datosTask = {
+                  ProjectId: project.id,
+                  concept: element.concept
+                }
+                if(element.unit)
+                  datosTask.unit = element.unit
+                if(element.price)
+                  datosTask.price = element.price
+                if(element.description)
+                  datosTask.description = element.description
+
+                await models.Task.create(datosTask, {transaction: t})
+              }
+            }
+          }
+
+          //SE REGISTRA EL LOG
+          //obtenemos el usuario que realiza la transaccion
+          const usuario = await models.User.findOne({
+              where: {
+                  id: req.user.id
+              },
+              transaction: t
+          })
+
+          //descripcion del log
+          var desc = "El usuario " + usuario.email + " ha editado un proyecto con los siguientes datos:\nnombre: " + project.name + "\nFecha de inicio: " + project.start_date + "\nFecha límite: " + project.deadline + "\nStatus: " + project.getDataValue('status')+
+          "\nFecha de término: " + project.end_date + "\nColor: " + project.color + "\nObservaciones: " + project.observations + "\nContrato: " + project.contract
+
+          //cotizaciones
+          const cotizaciones = await models.Quotation.findAll({where: {ProjectId: project.id}, transaction: t})
+
+          contadorCot = 0
+          desc = desc + "\nCotizaciones: "
+          for(var cot in cotizaciones){
+            desc = desc + "\n\t" + cotizaciones[cot].id + ": " + cotizaciones[cot].quotation
+            contadorCot++
+          }
+
+          //cliente
+          if(project.ClientId){
+            const cliente = await models.Client.findOne({where: {id: project.ClientId}, transaction: t})
+            desc = desc + "\nCliente:\n\tid: " + cliente.id + "\n\temail: " + cliente.email
+          }
+          else
+            desc = desc + "\nCliente: Sin cliente"
+
+          if(contadorCot == 0)
+            desc = desc + "Sin cotizaciones"
+
+          //miembros
+          const miembrosLog = await models.User.findAll({where: {id: employeeID}, transaction: t})
+
+          desc = desc+"\nMiembros: "
+          for(var miem in miembrosLog){
+            desc = desc + "\n\t"+miembrosLog[miem].id+":\n\t\temail: " + miembrosLog[miem].email +
+            "\n\t\tRol: "
+            if(req.body["rol"+miembrosLog[miem].id])
+              desc = desc + req.body["rol"+miembrosLog[miem].id]
+            else
+              desc = desc + "Sin rol"
+            desc = desc + "\n\t\tPorcentaje: "
+            if(req.body["rolP"+miembrosLog[miem].id])
+              desc = desc + req.body["rolP"+miembrosLog[miem].id]
+            else
+              desc = desc + "Sin porcentaje"
+          }
+
+          //proveedores
+          const proLog = await models.Provider.findAll({where: {id: proveedoresID}, transaction: t})
+
+          contadorPro = 0
+          desc = desc + "\nProveedores: "
+          for(var pro in proLog){
+            desc = desc + "\n\t" +  proLog[pro].id + ": " + proLog[pro].name
+            contadorPro++
+          }
+
+          if(contadorPro == 0)
+            desc = desc + "Sin proveedores"
+
+          //tipo de proyecto
+          if(layout){
+            desc = desc + "\nLayout"+layout.id+": " + layout.name
+
+            if(layout.Tasks_Layouts){
+              for(var i in layout.Tasks_Layouts){
+                desc = desc + "\n\tTarea " + layout.Tasks_Layouts[i].id + ":"
+                + "\n\t\tConcepto: " + layout.Tasks_Layouts[i].concept
+                + "\n\t\tDescripcion: " + layout.Tasks_Layouts[i].description
+                + "\n\t\tUnidad: " + layout.Tasks_Layouts[i].unit
+                + "\n\t\tPrecio: " + layout.Tasks_Layouts[i].price
+              }
+            }
+            else{
+              desc = desc + "\n\tSin tareas"
+            }
+          }
+          else{
+            desc = desc + "\nSin Layout"
+          }
+
+          //guardamos los datos del log
+          var dataLog = {
+              UserId: usuario.id,
+              title: "Actualización de proyecto",
+              description: desc
+          }
+
+          //guarda el log en la base de datos
+          const log = await models.Log.create(dataLog, { transaction: t })
+
+          //verifica que se hayan registrado el log y el rol
+          if (!log)
+              throw new Error()
+          if (!project)
+              throw new Error()
+
+          res.status(200).json([{ status: 200 }]);
+          // If the execution reaches this line, no errors were thrown.
+          // We commit the transaction.
+          await t.commit()
+        } catch (error) {
+          console.log(error)
+
+          if(req.files.contrato && req.files.contrato[0]){
+            fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+              if (err) {
+                  console.log("failed to delete local image:" + err);
+              } else {
+                  console.log('successfully deleted local image');
+              }
+            });
+          }
+          if(req.files.cotizaciones && req.files.cotizaciones[0]){
+            req.files.cotizaciones.forEach(cotizacion => {
+              fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            });
+          }
+          // If the execution reaches this line, an error was thrown.
+          // We rollback the transaction.
+          await t.rollback();
+          return res.status(500).json([{ msg: 'No fue posible registrar el proyecto, vuelva a intentarlo más tarde.' }])
+        }
+});
+
 router.get('/agregar', isLoggedIn,async function (req, res, next) {
   const prestadores = await models.Provider.findAll({
     include: [{
