@@ -681,7 +681,12 @@ block content
                             }
                             errorsContainer.html(errorsList);
 
-                            alert("Problemas al tratar de enviar el formulario");
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario.',
+                                status: 'danger',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
                         }
                     });
                     // Nos permite cancelar el envio del formulario
@@ -749,7 +754,12 @@ block content
                             }
                             errorsContainer.html(errorsList);
 
-                            alert("Problemas al tratar de enviar el formulario");
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: close\'></span>Problemas al tratar de enviar el formulario.',
+                                status: 'danger',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
                         }
                     });
                     // Nos permite cancelar el envio del formulario

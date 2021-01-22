@@ -39,8 +39,8 @@ block content
                                 each egreso in egresos
                                     tr(class="info item" uk-toggle="target: #modal-info" data-id=egreso.id)
                                         td(class="id") #{egreso.id}
-                                        td(class="project") #{egreso.Project_Employee.Project.name}
-                                        td(class="name") #{egreso.Project_Employee.User.Employee.name}
+                                        td(class="project") #{egreso.Project.name}
+                                        td(class="name") #{egreso.User.Employee.name}
                                         td(class="concept") #{egreso.Concept.name}
                                         td(class="mount") #{egreso.amount}
                                         if(egreso.T_type == 'egreso')
@@ -54,9 +54,10 @@ block content
                 div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
                     div(tabindex="0")
-                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" href="/caja/editar-registro" id="btnEdit")
-                            img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                            div Editar
+                        if cU
+                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" href="/caja/editar-registro" id="btnEdit")
+                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                                div Editar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 form(class="uk-card-body uk-padding-small")
                     div
@@ -208,8 +209,8 @@ block content
                     else{
                         $('#info-direccion').val("Ingreso").change();
                     }
-                    $('#info-proyecto').val(obj["Project_Employee"]["Project"]["name"]).change();
-                    $('#info-nombre').val(obj["Project_Employee"]["User"]["Employee"]["name"]).change();
+                    $('#info-proyecto').val(obj["Project"]["name"]).change();
+                    $('#info-nombre').val(obj["User"]["Employee"]["name"]).change();
                     $('#info-monto').val(obj["amount"]).change();
                     $('#info-tipo-pago').val(obj["Pa_Type"]["name"]).change();
                     $('#info-descripcion').val(obj["description"]).change();
