@@ -24,36 +24,36 @@ block content
             div(uk-dropdown="mode: click")
                 ul(class="uk-list")
                     li(onclick="putSearch('name')" class="uk-dropdown-close" style="cursor:pointer") Nombre
+                    li(onclick="putSearch('rol')" class="uk-dropdown-close" style="cursor:pointer") Rol
                     li(onclick="putSearch('email')" class="uk-dropdown-close" style="cursor:pointer") Correo electrónico
                     li(onclick="putSearch('phone')" class="uk-dropdown-close" style="cursor:pointer") Número de teléfono
 
 
-        div(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid)
-            //- li(class="item")
+        ul(class="uk-child-width-1-2@s items" uk-grid id="items")
             each usuario in usuarios
-                div
-                    div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
-                            div(class="uk-width-auto@m")
-                                a(href="/usuarios/usuario")
-                                    if usuario.picture
-                                        img(src="/uploads/avatar/"+usuario.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
-                                    else
-                                        img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
-                            div(class="uk-width-expand@m uk-margin-small-bottom")
-                                div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
-                                    div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
-                                        a.uk-link-reset(href="/usuarios/usuario") #{usuario.Employee.name} 
-                                    div(class="uk-width-expand@l uk-text-right")
-                                        if pU
-                                            a.uk-flex-inline.uk-flex-middle.editar(style="text-decoration:none; color:#1e87f0 !important" uk-toggle="target: #edit-form" data-id=usuario.id)
-                                                img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                                div(class="uk-text-small") Editar
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
+                li(class="item")
+                    div(class="uk-card uk-card-default uk-width-1")
+                        div(class="uk-card-body uk-flex uk-flex-top uk-padding-small uk-flex-wrap")
+                            div(class="uk-width-auto@m uk-flex uk-flex-left")
+                                if usuario.picture
+                                     img(src="/uploads/avatar/"+usuario.picture alt="" class="uk-border-circle uk-flex" style="width:70px;height:70px; background-size:cover; margin-right:15px; object-fit:cover;")
+                                else
+                                    img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-flex" style="width:70px;height:70px; background-size:cover; margin-right:15px; object-fit:cover;")
+                            div(class="uk-width-expand@m")
+                                div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
+                                    div(class="user-name" style="color:#222238; font-size:16px; font-weight:400") 
+                                        a.uk-link-reset(href="/usuarios/usuario") #{usuario.Employee.name}
+                                    div(class="uk-animation-toggle" tabindex="0")
+                                    if pU
+                                        a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake uk-margin-remove-right uk-margin-auto-left editar" uk-toggle="target: #edit-form" data-id=usuario.id)
+                                            img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                            div(class="uk-text-small") Editar
+                                //- div(class="uk-text-small uk-margin-remove-top user-email" style="margin-bottom:5px;overflow-wrap: break-word;") #{usuario.email}
+                                div.uk-width-1-1.uk-flex.uk-flex-middle.user-phone(uk-tooltip="title: Teléfono; pos: left")
                                     <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>#{usuario.Employee.phone_number}
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
+                                div.uk-width-1-1.uk-flex.uk-flex-middle.user-email(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
                                     <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>#{usuario.email}
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Rol; pos: left")
+                                div.uk-width-1-1.uk-flex.uk-flex-middle.user-role(style="word-break: break-all" uk-tooltip="title: Rol; pos: left")
                                     if usuario.Role != null
                                         <span uk-icon="icon:server; ratio: 0.8" style="margin-right:5px"></span> #{usuario.Role.name}
                                     else
@@ -333,6 +333,9 @@ block content
                 case 'phone':
                     tag.innerHTML='Tel';
                     break;
+                case 'rol':
+                    tag.innerHTML='Rol';
+                    break;
             }
             filter.value=vilevar;
         }
@@ -354,6 +357,9 @@ block content
                 }
                 if(parameter == "phone"){
                     title = cards[i].querySelector('div[class~="user-phone"]');
+                }
+                if(parameter == "rol"){
+                    title = cards[i].querySelector('div[class~="user-role"]');
                 }
                 if (title.innerText.toUpperCase().indexOf(filter) > -1) {
                     cards[i].style.display = "flex"
