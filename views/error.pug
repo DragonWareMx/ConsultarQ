@@ -9,6 +9,8 @@ block content
     div(class="error-num uk-text-primary") #{error}
     if error == 404
       div(class="error-msg") La página que buscas no existe...
-    a(href="javascript:history.back()" class="error-back") Regresar 
-
-    
+    if error == 403
+      div(class="error-msg") No estás autorizado para estar aquí...
+    if error == 500
+      div(class="error-msg") Ocurrió un error inesperado...
+    a(href="javascript:history.back()" class="error-back") Regresar
