@@ -1,0 +1,102 @@
+extends ../main
+
+block head
+    title ConsultarQ - Perfil
+    link(rel="stylesheet" href="/stylesheets/others.css")
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.js"></script>
+block content
+    div(class="uk-container")
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Usuario
+            div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
+                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading" style="color:#6B6B72 !important")
+                    img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                    div Regresar
+
+
+        div(class="uk-width-1-1 uk-card uk-card-default uk-flex uk-flex-wrap uk-margin-top uk-padding-small uk-flex-middle")
+            div(class="uk-padding-small uk-flex uk-flex-wrap uk-flex-middle uk-flex-center uk-width-auto@l")
+                div.uk-width-auto.div-profile-photo(style="margin-right:15px")
+                    //- if user.picture
+                    //-     img(src="/uploads/avatar/"+user.picture class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                    //- else 
+                    img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                    a(class="uk-flex uk-flex-center uk-flex-middle uk-margin-remove uk-width-1 uk-flex-wrap editar" style="width:max-content; font-size:13px; margin-top:5px" uk-toggle="target: #edit-form" data-id=1)
+                        <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar perfil
+                div(class="uk-width-expand@l uk-child-width-1-1 ")
+                    div(class="uk-text-emphasis uk-text-bold text-role-profile" uk-tooltip="title: Nombre; pos: left") Nombre completo
+                    div(class="uk-text-emphasis uk-text-small text-role-profile" uk-tooltip="title: Rol; pos: left") Rol
+                    //- if user.status === "active"
+                    //-     div(class="btn-status-active btn-status-perfil uk-text-center" style="margin-top:10px;" uk-tooltip="title: Estatus; pos: left") ACTIVO
+                    //- else
+                    div(class="btn-status-active btn-status-noactive btn-status-perfil" style="margin-top:10px;" uk-tooltip="title: Estatus; pos: left") INACTIVO
+            div(class="uk-width-auto@l uk-padding-small div-profile-border" style="border-left: 1px solid #EEEEEE; border-right: 1px solid #EEEEEE")
+                div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
+                    <span uk-icon="receiver" class="uk-margin-small-right"></span>+4444444444
+                div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis")
+                    <span uk-icon="location" class="uk-margin-small-right"></span> Suburbio, calle
+                div(class="uk-width-1-1 uk-margin-small-bottom uk-text-emphasis uk-text-break")
+                    <span uk-icon="mail" class="uk-margin-small-right"></span> email@ejemplo.com
+                div(class="uk-width-1-1  uk-text-emphasis uk-text-break")
+                    <span uk-icon="calendar" class="uk-margin-small-right"></span> Fecha de contratación
+            //- -
+            //-     var PA = 0;
+            //-     var PT = 0;
+            //-     var ingresos = 0;
+            //- each pro in userData.Projects
+            //-     if (pro.status == 'ACTIVO' || pro.status == 'ATRASADO') 
+            //-         - 
+            //-             PA++;
+            //-     else
+            //-         -
+            //-             PT++;
+            
+            //- each ing in userData.Transactions
+            //-     if (ing.T_type == 'ingreso')
+            //-         -
+            //-             ingresos += parseFloat(ing.amount);
+
+            div(class="uk-width-expand@l uk-padding-small uk-child-width-1-1")
+                div.uk-flex.uk-flex-wrap.uk-margin-small-bottom
+                    div(style="margin-right:5px") Proyectos activos
+                    div.uk-text-emphasis 0
+                div.uk-flex.uk-flex-wrap.uk-margin-small-bottom
+                    div(style="margin-right:5px") Proyectos terminados
+                    div.uk-text-emphasis 0
+                div.uk-flex.uk-flex-wrap
+                    div(style="margin-right:5px") Ingresos registrados
+                    div.uk-text-emphasis $ 0
+
+        //- ÚLTIMOS PROYECTOS MAX 4!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
+            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Proyectos recientes
+
+        div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top uk-grid-small uk-margin-bottom" uk-grid)
+            //- FOREACH
+            div
+                div(class="uk-card uk-card-default uk-card-body uk-padding-small")
+                    div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
+                    div.uk-width-1-1
+                        progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
+                    div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
+                    //- div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                    div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Estatus
+                    div.btn-status-active.btn-status-noactive INACTIVO 
+                    div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Tipo
+                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small Tipo del proyecto
+                    div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Fecha de inicio
+                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small 5 de Enero de 2021
+                    div.uk-margin-small-right.uk-text-small(style="color:#6B6B72") Fecha de término
+                    div.uk-width-1-1.uk-text-truncate.uk-text-emphasis.uk-text-small 15 de Septiembre de 2020
+                    div.uk-width-1-1.uk-text-truncate.uk-text-small(style="color:#6B6B72") Miembros del proyecto
+                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                        img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+            
+
+
+    
+                

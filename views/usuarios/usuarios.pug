@@ -11,7 +11,7 @@ block content
                 if pC
                     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
                         img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                        div Nuevo Usuario
+                        div Nuevo usuario
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 span(uk-search-icon type="button")
@@ -110,66 +110,74 @@ block content
             //-     a(href='#')
             //-     span(uk-pagination-next='')
 
-        //Form para agregar usuario
+        //- //Form para agregar usuario
         div(id="user-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
-                div(id="errors")
-                form(class="uk-card-body uk-padding-small" id="form-new-user" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
-                    div(class="uk-text-left uk-text-primary uk-margin-bottom") FOTO DE PERFIL
-                        div(class="form-group uk-margin-top uk-border-circle")
-                            img(src="/img/iconos/default.png" alt=""  id="avatar" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
-                            a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
-                                <span uk-icon="icon: upload; ratio: 0.8"></span> &nbsp Agregar foto
+                div(id="errors") 
+                form(class="uk-card-body uk-padding-small uk-padding-remove" id="form-new-user" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-remove") FOTO DE PERFIL
+                        div(class="form-group uk-margin-remove uk-border-circle")
+                            img(src="/img/iconos/default.png" alt=""  id="avatar" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            a(id="foto" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap uk-text-small")
+                                <span uk-icon="icon: upload; ratio: 0.8" style="margin-right:5px"></span>Agregar foto
                             input(name="fileField" type="file" id="fileField" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='name' title='Nombre Completo' data-title='Nombre Completo')
-                            .field.uk-margin-bottom
-                                input(type='email' autocomplete="nope"  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='email' title='Correo electrónico' data-title='Correo electrónico')
-                            .field.uk-margin-bottom
-                                input(type='password' autocomplete='new-password'  id="password" name="password" value='' onchange="this.setAttribute('value', this.value); validatePassword();" required='')
-                                label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
-                            .field.uk-margin-bottom
-                                input(type='password' autocomplete='new-password'  id="password-confirm" onkeyup="validatePassword()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
-                            .field.uk-margin-bottom
-                                select(id="role" name="role" autocomplete='off' value='')
-                                    option(value="" disabled hidden selected ) Seleccionar
-                                    option(value="0") Ninguno
-                                    each rol in roles
-                                        option(value=rol.id ) #{rol.name}
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='name' title='Nombre Completo' data-title='Nombre Completo')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='email' autocomplete="nope"  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                                div(class="uk-width-1-2@s uk-width-1-1")    
+                                    .field.uk-margin-bottom
+                                        input(type='password' autocomplete='new-password'  id="password" name="password" value='' onchange="this.setAttribute('value', this.value); validatePassword();" required='')
+                                        label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='password' autocomplete='new-password'  id="password-confirm" onkeyup="validatePassword()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='password-confirm' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        select(id="role" name="role" autocomplete='off' value='')
+                                            option(value="" disabled hidden selected ) Seleccionar
+                                            option(value="0") Ninguno
+                                            each rol in roles
+                                                option(value=rol.id ) #{rol.name}
 
-                                label(for='role' title='Rol (opcional)' data-title='Rol (opcional)')
-                            .field.uk-margin-bottom
-                                input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
-                                label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
+                                        label(for='role' title='Rol (opcional)' data-title='Rol (opcional)')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='date' autocomplete='off'  id="hiring_date" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
+                                        label(for='hiring_date' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='tel' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
-                            div(class="uk-grid")
-                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on' id="city" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='city' title='Ciudad' data-title='Ciudad')
-                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on' id="state" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='state' title='Estado' data-title='Estado')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='suburb' title='Colonia' data-title='Colonia')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on'  id="street" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='street' title='Calle' data-title='Calle')
-                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="suburb" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='suburb' title='Colonia' data-title='Colonia')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="street" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='street' title='Calle' data-title='Calle')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on'  id="ext_number" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -181,47 +189,43 @@ block content
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
-    //form para editar usuario
+    //- //form para editar usuario
     div(id="edit-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-edit")
-                form(class="uk-card-body uk-padding-small uk-padding-remove-bottom" id="form-edit-user" action="/usuarios/edit/"  method="POST" enctype="multipart/form-data")
-                    div(class="uk-text-left uk-text-primary uk-margin-small-bottom") FOTO DE PERFIL
-                        div(class="form-group uk-margin-top uk-border-circle")
-                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:200px;height:200px; background-size:cover; object-fit:cover;")
-                            a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap")
-                                <span uk-icon="icon: pencil; ratio: 0.8"></span> &nbsp Editar foto
+                form(class="uk-card-body uk-padding-small uk-padding-remove" id="form-edit-user" action="/usuarios/edit/"  method="POST" enctype="multipart/form-data")
+                    div(class="uk-text-left uk-text-primary uk-margin-remove") FOTO DE PERFIL
+                        div(class="form-group uk-margin-remove uk-border-circle")
+                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-width-1 uk-flex-wrap uk-text-small")
+                                <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField" type="file" id="fileField-edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-child-width-1-1 uk-grid")
                         div
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS GENERALES
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="name-edit" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
-                            .field.uk-margin-bottom
-                                input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
-                            a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-width-1 uk-flex-wrap uk-margin-bottom")
-                                <span uk-icon="icon: pencil; ratio: 0.8"></span> &nbsp Editar contraseña
-                            div(style="display:none" id="pass-div")
-                                .field.uk-margin-bottom
-                                    input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
-                                    label(for='password-edit' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
-                                .field.uk-margin-bottom
-                                    input(type='password' autocomplete='new-password'  id="password-confirm-edit" onkeyup="validatePasswordEdit()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
-                                    label(for='password-confirm-edit' title='Confirmar contraseña' data-title='Confirmar contraseña')
-                            .field.uk-margin-bottom
-                                select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
-                                    option(value="" disabled hidden selected ) Seleccionar
-                                    option(value="0") Ninguno
-                                    each rol in roles
-                                        option(value=rol.id ) #{rol.name}
-                                label(for='role-edit' title='Rol (opcional)' data-title='Rol (opcional)')
-                            .field.uk-margin-bottom
-                                input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
-                                label(for='hiring_date-edit' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
+                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="name-edit" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom 
+                                        input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
+                                div(class="uk-width-1-2@s uk-width-1-1")        
+                                    .field.uk-margin-bottom
+                                        select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
+                                            option(value="" disabled hidden selected ) Seleccionar
+                                            option(value="0") Ninguno
+                                            each rol in roles
+                                                option(value=rol.id ) #{rol.name}
+                                        label(for='role-edit' title='Rol (opcional)' data-title='Rol (opcional)')
+                                div(class="uk-width-1-2@s uk-width-1-1")   
+                                    .field.uk-margin-bottom
+                                        input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
+                                        label(for='hiring_date-edit' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                             .field.uk-margin-bottom
                                 select(id="status" name="status" autocomplete='off' value='' required)
                                     option(value="active") Activo
@@ -230,25 +234,27 @@ block content
                             div(class="uk-alert-danger" uk-alert style="display:none" id="status-alert")
                                 p(class="uk-text-small") Si el estatus del usuario es inactivo, este ya no podrá ingresar al sistema.
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
+                            
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='tel' id="phone_number-edit" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='phone_number-edit' title='Número telefónico' data-title='Número telefónico')
-                            div(class="uk-grid")
-                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                            div.uk-grid    
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on' id="city-edit" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='city-edit' title='Ciudad' data-title='Ciudad')
-                                div(class="uk-width-1-1@l uk-width-1-2@s uk-width-1-1")
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on' id="state-edit" name="state" value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='state-edit' title='Estado' data-title='Estado')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on'  id="suburb-edit" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='suburb-edit' title='Colonia' data-title='Colonia')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on'  id="street-edit" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='street-edit' title='Calle' data-title='Calle')
-                            div.uk-grid
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="suburb-edit" name="suburb"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='suburb-edit' title='Colonia' data-title='Colonia')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on'  id="street-edit" name="street"  value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='street-edit' title='Calle' data-title='Calle')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on'  id="ext_number-edit" name="ext_number"  value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -257,13 +263,26 @@ block content
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on'  id="int_number-edit" name="int_number"  value='' onchange="this.setAttribute('value', this.value);")
                                         label(for='int_number-edit' title='No. Interior (opcional)' data-title='No. Interior (opcional)')
+                            a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-flex-wrap uk-margin-bottom" style="width:max-content")
+                                <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar contraseña
+                            div(style="display:none" id="pass-div")
+                                div.uk-grid
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            input(type='password' autocomplete='new-password'  id="password-edit" name="password"  value='' onchange="this.setAttribute('value', this.value); validatePasswordEdit();" )
+                                            label(for='password-edit' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            input(type='password' autocomplete='new-password'  id="password-confirm-edit" onkeyup="validatePasswordEdit()" name="password-confirm"  value='' onchange="this.setAttribute('value', this.value);" )
+                                            label(for='password-confirm-edit' title='Confirmar contraseña' data-title='Confirmar contraseña')
+                            if pD
+                                a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" href="#delete-form" uk-toggle style="width:max-content")
+                                    <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
-                if pD
-                    a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
-                        <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
-    //modal para eliminar
+                
+    //-modal para eliminar
     div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar usuario
@@ -565,7 +584,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Usuario registrado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Usuario registrado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -633,7 +652,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Usuario editado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Usuario editado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -701,7 +720,7 @@ block content
                         * */
                         $('#errors-delete').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Usuario eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Usuario eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

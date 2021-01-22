@@ -114,6 +114,10 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.get('/usuario', isLoggedIn, async (req, res, next) => {
+    res.render('usuario')
+});
+
 //UPDATE USUARIO ID
 router.post('/edit/:id', isLoggedIn, upload.single('fileField'),
     [
