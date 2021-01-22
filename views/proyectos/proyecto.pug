@@ -256,7 +256,7 @@ block content
                 div(id="errors")
                 textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="150")
                 div(class="uk-width-1 uk-flex-right uk-flex uk-margin-small-bottom")
-                    //- button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
+                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Actualizar
                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Comentar
             div#comentDiv(data-simplebar)
                 -function prettyDate(dateString){
@@ -532,6 +532,16 @@ block content
                     else{
                         $("#Comentarios").slideDown('fast');                    
                     }
+                });
+                $('#btn-close-modal').on('click', function() {
+                    $( "#comentDiv" ).load(location.href + " #comentDiv");
+                    $( "#comSpan" ).load(location.href + " #comSpan");
+                    UIkit.notification({
+                        message: '<span uk-icon=\'icon: check\'></span>Los comentarios se han actualizado!',
+                        status: 'success',
+                        pos: 'top-center',
+                        timeout: 1000
+                    });
                 });
             });
 
