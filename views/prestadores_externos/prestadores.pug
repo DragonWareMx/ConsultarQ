@@ -64,12 +64,15 @@ block content
                 div(class="uk-modal-dialog uk-modal-body")
                     div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Información completa
-                        div(tabindex="0")
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" data-id="")
-                                img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                div Editar
+                        div(class="uk-flex uk-flex-middle")
+                            a(class="uk-flex uk-flex-middle uk-link-reset  uk-margin-small-top uk-text-center uk-text-small editar" style="color: #1e87f0 !important;" uk-toggle="target: #modal-editar"  data-id="")
+                                <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar
+                        //- div(tabindex="0")
+                        //-     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" data-id="")
+                        //-         img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                        //-         div Editar
                     button(class="uk-modal-close-default" type="button" uk-close='')
-                    form(class="uk-card-body uk-padding-small")
+                    form(class="uk-card-body uk-padding-remove uk-margin-top")
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
@@ -83,54 +86,66 @@ block content
                                             option(value="activo") Activo
                                             option(value="inactivo") Inactivo
                                         label(for='info-estatus' title='Estatus' data-title='Estatus')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="info-nombre" name="info-nombre" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                                label(for='info-nombre' title='Nombre Completo' data-title='Nombre Completo')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="info-area" name="info-area" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                                label(for='info-area' title='Área' data-title='Área')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="info-telefono" name="info-telefono" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                                label(for='info-telefono' title='Teléfono' data-title='Teléfono')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="info-correo" name="info-correo" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                                label(for='info-correo' title='Correo' data-title='Correo')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="info-dro" name="info-dro" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
-                                label(for='info-dro' title='Número de DRO' data-title='Número de DRO')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="info-nombre" name="info-nombre" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='info-nombre' title='Nombre Completo' data-title='Nombre Completo')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="info-area" name="info-area" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='info-area' title='Área' data-title='Área')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="info-telefono" name="info-telefono" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='info-telefono' title='Teléfono' data-title='Teléfono')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="info-correo" name="info-correo" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='info-correo' title='Correo' data-title='Correo')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="info-dro" name="info-dro" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        label(for='info-dro' title='Número de DRO' data-title='Número de DRO')
             //- agregar prestador externo
             div(id="modal-agregar" uk-modal)
                 div(class="uk-modal-dialog uk-modal-body")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar prestador
                     button(class="uk-modal-close-default" type="button" uk-close='')
                     div(id="errors")
-                    form(class="uk-card-body uk-padding-small" id="add-form" action="/prestadores_externos/nuevo" method="POST")
-                        div(class="uk-child-width-1- uk-grid")
+                    form(class="uk-card-body uk-padding-remove uk-margin-top" id="add-form" action="/prestadores_externos/nuevo" method="POST")
+                        div(class="uk-child-width-1- uk-grid") 
                             div
-                                .field.uk-margin-bottom
-                                    select(id="add_estatus" name="add_estatus" autocomplete='off' value='' required)
-                                        option(value="" disabled hidden selected ) Seleccionar
-                                        option(value="active") Activo
-                                        option(value="inactive") Inactivo
-                                    label(for='add_estatus' title='Estatus' data-title='Estatus')
-                                .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add_nombre" name="add_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add_nombre' title='Nombre Completo' data-title='Nombre Completo')
-                                .field.uk-margin-bottom
-                                    select(id="add_area" name="add_area" autocomplete='off' value='' required)
-                                        option(value="" disabled hidden selected ) Seleccionar
-                                        each area in areas
-                                            option(value=area.id) #{area.name}
-                                    label(for='add_area' title='Área' data-title='Área')
-                                .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add_telefono" name="add_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add_telefono' title='Teléfono' data-title='Teléfono')
-                                .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add_correo" name="add_correo" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add_correo' title='Correo' data-title='Correo')
-                                .field.uk-margin-bottom
-                                    input(type='text' autocomplete='on' id="add_dro" name="add_dro" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='add_dro' title='Número de DRO' data-title='Número de DRO')
+                                div.uk-grid    
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            input(type='text' autocomplete='on' id="add_nombre" name="add_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                            label(for='add_nombre' title='Nombre o razón social' data-title='Nombre o Razón social')
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            select(id="add_estatus" name="add_estatus" autocomplete='off' value='' required)
+                                                option(value="" disabled hidden selected ) Seleccionar
+                                                option(value="active") Activo
+                                                option(value="inactive") Inactivo
+                                            label(for='add_estatus' title='Estatus' data-title='Estatus')
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            select(id="add_area" name="add_area" autocomplete='off' value='' required)
+                                                option(value="" disabled hidden selected ) Seleccionar
+                                                each area in areas
+                                                    option(value=area.id) #{area.name}
+                                            label(for='add_area' title='Área' data-title='Área')
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            input(type='text' autocomplete='on' id="add_telefono" name="add_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                            label(for='add_telefono' title='Teléfono' data-title='Teléfono')
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            input(type='text' autocomplete='on' id="add_correo" name="add_correo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                            label(for='add_correo' title='Correo' data-title='Correo')
+                                    div(class="uk-width-1-2@s uk-width-1-1")
+                                        .field.uk-margin-bottom
+                                            input(type='text' autocomplete='on' id="add_dro" name="add_dro" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                            label(for='add_dro' title='Número de DRO' data-title='Número de DRO')
                                 div(class="uk-width-1 uk-flex-right uk-flex")
                                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Agregar
@@ -139,13 +154,12 @@ block content
                 div(class="uk-modal-dialog uk-modal-body")
                     div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                         div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar información
-                        div(tabindex="0")
-                            a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-danger uk-link-heading eliminar"  id="btnEliminar" href="#delete-form" uk-toggle)
-                                img(src="/icons/delete.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                                div Eliminar
+                        div(class="uk-flex uk-flex-middle" id="btnEliminar" href="#delete-form" uk-toggle)
+                            a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-center uk-text-small")
+                                <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
                     button(class="uk-modal-close-default" type="button" uk-close='')
                     div(id="errors-edit")
-                    form(class="uk-card-body uk-padding-small" id="edit-form" action="/prestadores_externos/edit" method="POST")
+                    form(class="uk-card-body uk-padding-remove uk-margin-top" id="edit-form" action="/prestadores_externos/edit" method="POST")
                         div
                             div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
@@ -159,24 +173,29 @@ block content
                                             option(value="active") Activo
                                             option(value="inactive") Inactivo
                                         label(for='edit_estatus' title='Estatus' data-title='Estatus')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit_nombre" name="edit_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit_nombre' title='Nombre Completo' data-title='Nombre Completo')
-                            .field.uk-margin-bottom
-                                select(id="edit_area" name="edit_area" autocomplete='off' value='' required)
-                                    option(value="" disabled hidden selected) Seleccionar
-                                    each area in areas
-                                            option(value=area.id) #{area.name}
-                                label(for='edit_area' title='Área' data-title='Área')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit_telefono" name="edit_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit_telefono' title='Teléfono' data-title='Teléfono')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit_correo" name="edit_correo" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit_correo' title='Correo' data-title='Correo')
-                            .field.uk-margin-bottom
-                                input(type='text' autocomplete='on' id="edit_dro" name="edit_dro" value='' onchange="this.setAttribute('value', this.value);" required='')
-                                label(for='edit_dro' title='Número de DRO' data-title='Número de DRO')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="edit_nombre" name="edit_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='edit_nombre' title='Nombre Completo' data-title='Nombre Completo')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        select(id="edit_area" name="edit_area" autocomplete='off' value='' required)
+                                            option(value="" disabled hidden selected) Seleccionar
+                                            each area in areas
+                                                    option(value=area.id) #{area.name} 
+                                        label(for='edit_area' title='Área' data-title='Área')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="edit_telefono" name="edit_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='edit_telefono' title='Teléfono' data-title='Teléfono')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="edit_correo" name="edit_correo" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='edit_correo' title='Correo' data-title='Correo')
+                                div(class="uk-width-1-2@s uk-width-1-1")
+                                    .field.uk-margin-bottom
+                                        input(type='text' autocomplete='on' id="edit_dro" name="edit_dro" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        label(for='edit_dro' title='Número de DRO' data-title='Número de DRO')
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                     button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                                     button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEditar" type="submit") Guardar
@@ -375,7 +394,7 @@ block content
                                 * */
                                 $('#errors').css('display', 'none');
                                 UIkit.notification({
-                                    message: '<span uk-icon=\'icon: check\'></span>Prestador externo registrado con éxito!',
+                                    message: '<span uk-icon=\'icon: check\'></span> Prestador externo registrado con éxito!',
                                     status: 'success',
                                     pos: 'top-center',
                                     timeout: 2000
@@ -441,7 +460,7 @@ block content
                                 * */
                                 $('#errors-edit').css('display', 'none');
                                 UIkit.notification({
-                                    message: '<span uk-icon=\'icon: check\'></span>Prestador externo actualizado con éxito!',
+                                    message: '<span uk-icon=\'icon: check\'></span> Prestador externo actualizado con éxito!',
                                     status: 'success',
                                     pos: 'top-center',
                                     timeout: 2000
@@ -507,7 +526,7 @@ block content
                                 * */
                                 $('#errors-delete').css('display', 'none');
                                 UIkit.notification({
-                                    message: '<span uk-icon=\'icon: check\'></span>Prestador externo eliminado con éxito!',
+                                    message: '<span uk-icon=\'icon: check\'></span> Prestador externo eliminado con éxito!',
                                     status: 'success',
                                     pos: 'top-center',
                                     timeout: 2000

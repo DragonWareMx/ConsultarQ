@@ -182,19 +182,24 @@ block content
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="name_edit" name="name_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='name_edit' title='Nombre Completo' data-title='Nombre Completo')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="phone_edit" name="phone_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="email_edit" name="email_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="rfc_edit" name="rfc_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='rfc_edit' title='RFC' data-title='RFC')
                     div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name_edit" name="name_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name_edit' title='Nombre o razón social' data-title='Nombre o razón social')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="phone_edit" name="phone_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="email_edit" name="email_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="rfc_edit" name="rfc_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='rfc_edit' title='RFC' data-title='RFC')
+                   
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
@@ -231,19 +236,24 @@ block content
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Agregar foto
                             input(name="fileField_add" type="file" id="fileField_add" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='name' title='Nombre Completo' data-title='Nombre Completo')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="email" name="email" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='email' title='Correo electrónico' data-title='Correo electrónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="rfc" name="rfc" value='' onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='rfc' title='RFC' data-title='RFC')
                     div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name' title='Nombre o razón social' data-title='Nombre Completo')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="phone_number" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_number' title='Número telefónico' data-title='Número telefónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="email" name="email" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="rfc" name="rfc" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='rfc' title='RFC' data-title='RFC')
+                    
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area" name="area" autocomplete='off' value='' required)
@@ -432,7 +442,7 @@ block content
                         * */
                         $('#errors').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente registrado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente registrado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -502,7 +512,7 @@ block content
                         * */
                         $('#errors-edit').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente actualizado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente actualizado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -569,7 +579,7 @@ block content
                         * */
                         $('#errors-delete').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Cliente eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Cliente eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000

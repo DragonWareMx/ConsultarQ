@@ -59,30 +59,6 @@ block content
                     div(style="margin-right:5px") Ingresos registrados
                     div.uk-text-emphasis $ #{ingresos}
 
-        //- ÚLTIMOS PROYECTOS MAX 4
-        //- div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
-        //-     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Proyectos recientes
-
-        //- div(class="uk-child-width-1-2@s uk-grid-match uk-margin-top uk-grid-small uk-margin-bottom" uk-grid)
-        //-     //- FOREACH
-        //-     div
-        //-         div(class="uk-card uk-card-default uk-card-body uk-padding-small")
-        //-             div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
-        //-             div.uk-width-1-1
-        //-                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-        //-             div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
-        //-             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-        //-                 div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
-        //-                 div.btn-status-active.btn-status-noactive INACTIVO 
-        //-             div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
-        //-             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
-        //-                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-        //-                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-        //-                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-        //-                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-        //-                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-
-
     div(id="modal-editarPerfil" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar perfil
@@ -135,8 +111,8 @@ block content
                                     input(type='text' autocomplete='on'  id="int_number" name="int_number"  value=user.Employee.int_number onchange="this.setAttribute('value', this.value);")
                                     label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
                         .field.uk-margin-bottom
-                            input(type='email' autocomplete="on"  id="email" name="email"  value=user.email onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+                            input(type='email' disabled autocomplete="no"  id="email-edit" name="email"  value=user.email onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='email-edit'  title='Correo electrónico' data-title='Correo electrónico')
                         a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-flex-wrap uk-margin-bottom" style="width:max-content")
                             <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar contraseña
                         div(style="display:none" id="pass-div")

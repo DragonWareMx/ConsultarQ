@@ -6,7 +6,7 @@ block head
 block content
     div(class="uk-container")
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
-            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Editar tipo de proyecto
+            div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Editar Layout
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 a(href="/proyectos/layouts" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-muted uk-link-heading uk-animation-shake uk-animation-fast")
                     img(src="/img/iconos/netGray.png" style="width:20px;height:20px;margin-top:2px;" class="uk-margin-small-right")
@@ -15,11 +15,13 @@ block content
             div(class="uk-card uk-card-default uk-card-body uk-padding-remove-bottom")
                 div(class="uk-flex uk-flex-top uk-flex-between")
                     div(class="uk-text-primary uk-margin-bottom uk-margin-small-left") #{layout.name}
-                    div(class="uk-flex uk-flex-middle")
-                        img(src="/icons/edit.png" uk-toggle="target: #editLayout-form" width="13px" class="uk-margin-small-right" style="cursor:pointer")
-                        img(src="/icons/delete.png" uk-toggle="target: #deleteLayout-form" width="13px" class="uk-margin-small-left" style="cursor:pointer")
-                div(class="uk-overflow-auto")
-                    table(class="uk-table uk-table-small uk-table-divider uk-table-justify")
+                    div(class="uk-flex uk-flex-middle") 
+                        a(uk-toggle="target: #editLayout-form" style="margin-right:10px") 
+                            <span uk-icon="icon: pencil; ratio: 1"></span>
+                        a.uk-text-danger(uk-toggle="target: #deleteLayout-form")
+                            <span uk-icon="icon: trash; ratio: 1"></span>
+                div(class="uk-overflow-auto") 
+                    table(class="uk-table uk-table-small uk-text-small uk-table-divider uk-table-justify")
                         thead
                             tr
                                 th(class="uk-text-center uk-table-shrink") #
@@ -36,20 +38,23 @@ block content
                                         td(class="uk-text-truncate") #{task.description}
                                         td(class="uk-text-truncate") #{task.unit}
                                         td(class="uk-text-truncate") #{task.price}
-                div(class="uk-flex uk-flex-right  uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
-                    img(src="/icons/more.png" width="20px" style="margin-top:3px; margin-right:5px;")
-                    a(uk-toggle="target: #task-form") Agregar Tarea
+                div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-small-top uk-margin-bottom")
+                    a(uk-toggle="target: #task-form")
+                        <span uk-icon="icon: plus-circle; ratio: 0.8" style="margin-right:5px"></span>Agregar tarea
+                
         //- Modal para editar tarea
         div(id="editTask-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-flex uk-flex-between")
                     div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar tarea
-                    div(class="uk-flex uk-flex-middle" uk-toggle="target: #deleteTask-form")
-                        img(src="/icons/delete.png" width="12px")
-                        a(class="uk-text-danger uk-text-small uk-margin-small-left") Eliminar
+                    a(class="uk-flex uk-flex-middle uk-text-danger uk-link-heading uk-margin-small-top uk-text-small" id="btnEliminar" uk-toggle="target: #deleteTask-form" style="width:max-content")
+                        <span uk-icon="icon: trash; ratio: 0.8" style="margin-right:5px"></span>Eliminar
+                    //- div(class="uk-flex uk-flex-middle" uk-toggle="target: #deleteTask-form")
+                    //-     img(src="/icons/delete.png" width="12px")
+                    //-     a(class="uk-text-danger uk-text-small uk-margin-small-left") Eliminar
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-editTask")
-                form(class="uk-card-body uk-padding-small" id="form-edit-task"  method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-edit-task"  method="POST")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -68,6 +73,7 @@ block content
                                     .field.uk-margin-bottom
                                         input(type='number' autocomplete='off'  id="costo-edit" name="costo"  value='100000' onchange="this.setAttribute('value', this.value);")
                                         label(for='costo-edit' title='Costo' data-title='Costo')
+                        
                         div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                             button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-editTask" type="submit") Guardar
@@ -127,7 +133,7 @@ block content
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar layout
                 button(type='button' uk-close='' class="uk-modal-close-default")
                 div(id="errors-editLayout")
-                form(class="uk-card-body uk-padding-small" id="form-edit-layout" action="/proyectos/layout/"+layout.id+"/editar" method="POST")
+                form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-edit-layout" action="/proyectos/layout/"+layout.id+"/editar" method="POST")
                     div(class="uk-child-width-1 uk-grid")
                         div
                             .field.uk-margin-bottom
@@ -193,7 +199,7 @@ block content
                         * */
                         $('#errors-editLayout').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Layout editar con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Layout editado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -264,7 +270,7 @@ block content
                         * */
                         $('#errors-task').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Tarea agregada con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Tarea agregada con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -335,7 +341,7 @@ block content
                         * */
                         $('#errors-editTask').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Tarea editada con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Tarea editada con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -406,7 +412,7 @@ block content
                         * */
                         $('#errors-deleteTask').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Tarea eliminada con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Tarea eliminada con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
@@ -477,7 +483,7 @@ block content
                         * */
                         $('#errors-deleteLayout').css('display', 'none');
                         UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Layout eliminado con éxito!',
+                            message: '<span uk-icon=\'icon: check\'></span> Layout eliminado con éxito!',
                             status: 'success',
                             pos: 'top-center',
                             timeout: 2000
