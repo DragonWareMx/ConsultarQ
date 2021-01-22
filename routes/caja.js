@@ -16,33 +16,36 @@ router.get('/', isLoggedIn, async function (req, res, next) {
         //VERIFICACION DEL PERMISO
 
         //obtenemos el usuario, su rol y su permiso
-        let usuario = await models.User.findOne({
+        const usuario = await models.User.findOne({
             where: {
                 id: req.user.id
             },
             include: {
                 model: models.Role,
                 include: {
-                    model: models.Permission,
-                    where: { name: 'cr' }
+                    model: models.Permission
                 }
             }
         })
 
-        if (usuario && usuario.Role && usuario.Role.Permissions) {
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'cc')
+                cC = true
+            else if (permiso.name == 'cr')
+                cR = true
+            else if (permiso.name == 'cu')
+                cU = true
+            else if (permiso.name == 'cd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cR) {
             //TIENE PERMISO DE DESPLEGAR VISTA
-            let permiso = await models.User.findOne({
-                where: {
-                    id: req.user.id
-                },
-                include: {
-                    model: models.Role,
-                    include: {
-                        model: models.Permission,
-                        where: { name: 'cu' }
-                    }
-                }
-            })
             const proj = await models.Project.findAll({
                 include: [{
                     model: models.User,
@@ -57,13 +60,24 @@ router.get('/', isLoggedIn, async function (req, res, next) {
             });
             const tipos = await models.Pa_Type.findAll();
             const conceptos = await models.Concept.findAll();
-            const proyectos = await models.Project.findAll({
-                include: {
-                    model: models.Project_Employee,
-                    where: { UserId: req.user.id }
-                },
-                where: { status: "activo" }
-            });
+            var proyectos;
+            if (cC && cR && cU && cD) {
+                proyectos = await models.Project.findAll({
+                    include: {
+                        model: models.Project_Employee,
+                    },
+                    where: { status: "activo" }
+                });
+            }
+            else {
+                proyectos = await models.Project.findAll({
+                    include: {
+                        model: models.Project_Employee,
+                        where: { UserId: req.user.id }
+                    },
+                    where: { status: "activo" }
+                });
+            }
             var egresos
             var ingresos
             var deducibles
@@ -129,7 +143,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     mes = "0" + mes
                 return res.redirect('/caja?m=' + mes + '&y=' + moment().year())
             }
-            if (permiso && permiso.Role && permiso.Role.Permissions) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
                 egresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
@@ -137,13 +151,10 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project
-                        }]
+                        model: models.Project,
+                    }, {
+                        model: models.User,
+                        include: { model: models.Employee }
                     }],
                     order: [
                         ['date', 'DESC']
@@ -160,13 +171,10 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project
-                        }]
+                        model: models.Project,
+                    }, {
+                        model: models.User,
+                        include: { model: models.Employee }
                     }],
                     order: [
                         ['date', 'DESC']
@@ -183,13 +191,10 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project
-                        }]
+                        model: models.Project,
+                    }, {
+                        model: models.User,
+                        include: { model: models.Employee }
                     }],
                     order: [
                         ['date', 'DESC']
@@ -206,13 +211,10 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project
-                        }]
+                        model: models.Project,
+                    }, {
+                        model: models.User,
+                        include: { model: models.Employee }
                     }],
                     order: [
                         ['createdAt', 'DESC']
@@ -231,11 +233,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                             model: models.Concept,
                             required: true
                         }, {
-                            model: models.Project_Employee,
-                            include: [{
-                                model: models.Project,
-                                required: true
-                            }]
+                            model: models.Project,
+                            required: true
                         }],
                     where: {
                         T_type: 'ingreso',
@@ -253,11 +252,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                             model: models.Concept,
                             required: true
                         }, {
-                            model: models.Project_Employee,
-                            include: [{
-                                model: models.Project,
-                                required: true
-                            }]
+                            model: models.Project,
+                            required: true
                         }],
                     where: {
                         T_type: 'egreso',
@@ -274,22 +270,21 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project,
-                        }],
-                        where: { ProjectId: lista },
+                        model: models.User,
+                        include: {
+                            model: models.Employee,
+                        },
                         required: true
+                    }, {
+                        model: models.Project
                     }],
                     order: [
                         ['date', 'DESC']
                     ],
                     where: {
                         T_type: 'egreso',
-                        status: 'active'
+                        status: 'active',
+                        ProjectId: lista
                     }
                 })
                 ingresos = await models.Transaction.findAll({
@@ -299,22 +294,21 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project,
-                        }],
-                        where: { ProjectId: lista },
+                        model: models.User,
+                        include: {
+                            model: models.Employee,
+                        },
                         required: true
+                    }, {
+                        model: models.Project
                     }],
                     order: [
                         ['date', 'DESC']
                     ],
                     where: {
                         T_type: 'ingreso',
-                        status: 'active'
+                        status: 'active',
+                        ProjectId: lista
                     }
                 })
                 deducibles = await models.Transaction.findAll({
@@ -324,22 +318,21 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project,
-                        }],
-                        where: { ProjectId: lista },
+                        model: models.User,
+                        include: {
+                            model: models.Employee,
+                        },
                         required: true
+                    }, {
+                        model: models.Project
                     }],
                     order: [
                         ['date', 'DESC']
                     ],
                     where: {
                         invoice: 1,
-                        status: 'active'
+                        status: 'active',
+                        ProjectId: lista
                     }
                 })
                 todos = await models.Transaction.findAll({
@@ -349,21 +342,20 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
-                        include: [{
-                            model: models.User,
-                            include: models.Employee
-                        }, {
-                            model: models.Project,
-                        }],
-                        where: { ProjectId: lista },
+                        model: models.User,
+                        include: {
+                            model: models.Employee,
+                        },
                         required: true
+                    }, {
+                        model: models.Project
                     }],
                     order: [
                         ['createdAt', 'DESC']
                     ],
                     where: {
-                        status: 'active'
+                        status: 'active',
+                        ProjectId: lista
                     }
                 })
                 ingreConceptos = await models.Transaction.findAll({
@@ -376,17 +368,13 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                             model: models.Concept,
                             required: true
                         }, {
-                            model: models.Project_Employee,
-                            include: [{
-                                model: models.Project,
-                                required: true
-                            }],
-                            where: { ProjectId: lista },
+                            model: models.Project,
                             required: true
                         }],
                     where: {
                         T_type: 'ingreso',
                         status: 'active',
+                        ProjectId: lista,
                         where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.getFullYear())
                     },
                 })
@@ -400,23 +388,19 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                             model: models.Concept,
                             required: true
                         }, {
-                            model: models.Project_Employee,
-                            include: [{
-                                model: models.Project,
-                                required: true
-                            }],
-                            where: { ProjectId: lista },
+                            model: models.Project,
                             required: true
                         }],
                     where: {
                         T_type: 'egreso',
                         status: 'active',
+                        ProjectId: lista,
                         where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.getFullYear())
                     },
                 })
             }
 
-            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos, hoy, ingreConceptos, egreConceptos })
+            res.render('caja', { tipos, conceptos, proyectos, egresos, ingresos, deducibles, todos, hoy, ingreConceptos, egreConceptos, cC, cR, cU, cD })
         }
         else {
             //NO TIENE PERMISOS
@@ -424,7 +408,6 @@ router.get('/', isLoggedIn, async function (req, res, next) {
         }
     }
     catch (error) {
-        console.log(error)
         return res.status(403).json(403)
     }
 });
@@ -433,24 +416,37 @@ router.get('/', isLoggedIn, async function (req, res, next) {
 // });
 router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
     try {
+        //VERIFICACION DEL PERMISO
         //obtenemos el usuario, su rol y su permiso
-        let usuario = await models.User.findOne({
+        const usuario = await models.User.findOne({
             where: {
                 id: req.user.id
             },
-            order: [
-                ['status', 'ASC']
-            ],
             include: {
                 model: models.Role,
                 include: {
-                    model: models.Permission,
-                    where: { name: 'cu' }
+                    model: models.Permission
                 }
             }
         })
 
-        if (usuario && usuario.Role && usuario.Role.Permissions) {
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'cc')
+                cC = true
+            else if (permiso.name == 'cr')
+                cR = true
+            else if (permiso.name == 'cu')
+                cU = true
+            else if (permiso.name == 'cd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
             //  TIENE PERMISO DE DESPLEGAR VISTA
             const movimiento = await models.Transaction.findOne({
                 include: [{
@@ -459,13 +455,10 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
                 {
                     model: models.Concept
                 }, {
-                    model: models.Project_Employee,
-                    include: [{
-                        model: models.User,
-                        include: models.Employee
-                    }, {
-                        model: models.Project
-                    }]
+                    model: models.User,
+                    include: { model: models.Employee }
+                }, {
+                    model: models.Proyect
                 }],
                 where: {
                     id: req.params.id
@@ -474,14 +467,24 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
             const tipos = await models.Pa_Type.findAll();
             const conceptos = await models.Concept.findAll();
             if (movimiento) {
-                const proyectos = await models.Project.findAll({
-                    include: {
-                        model: models.Project_Employee,
-                        where: { UserId: movimiento.Project_Employee.UserId }
-                    },
-                    where: { status: "activo" }
-                });
-                return res.render('editarRegistro', { movimiento, tipos, conceptos, proyectos })
+                var proyectos
+                if (cC && cR && cU && cD) {
+                    proyectos = await models.Project.findAll({
+                        include: {
+                            model: models.Project_Employee,
+                        },
+                        where: { status: "activo" }
+                    });
+                } else {
+                    proyectos = await models.Project.findAll({
+                        include: {
+                            model: models.Project_Employee,
+                            where: { UserId: movimiento.Project_Employee.UserId }
+                        },
+                        where: { status: "activo" }
+                    });
+                }
+                return res.render('editarRegistro', { movimiento, tipos, conceptos, proyectos, cU, cD })
             }
             else {
                 return res.status(404).json(404)                //  mandar a la vista de error
@@ -697,36 +700,36 @@ router.post('/borrar-registro/delete/:id', isLoggedIn, async (req, res, next) =>
 router.get('/egresos', isLoggedIn, async (req, res, next) => {
 
     try {
-        //VERIFICACION DEL PERMISO
-
-        //obtenemos el usuario, su rol y su permiso
-        let usuario = await models.User.findOne({
+        const usuario = await models.User.findOne({
             where: {
                 id: req.user.id
             },
             include: {
                 model: models.Role,
                 include: {
-                    model: models.Permission,
-                    where: { name: 'cr' }
+                    model: models.Permission
                 }
             }
         })
 
-        if (usuario && usuario.Role && usuario.Role.Permissions) {
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'cc')
+                cC = true
+            else if (permiso.name == 'cr')
+                cR = true
+            else if (permiso.name == 'cu')
+                cU = true
+            else if (permiso.name == 'cd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cR) {
             //TIENE PERMISO DE DESPLEGAR VISTA
-            let permiso = await models.User.findOne({
-                where: {
-                    id: req.user.id
-                },
-                include: {
-                    model: models.Role,
-                    include: {
-                        model: models.Permission,
-                        where: { name: 'cu' }
-                    }
-                }
-            })
             const proj = await models.Project.findAll({
                 include: [{
                     model: models.User,
@@ -740,7 +743,7 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                 lista.push(viledruid.id)
             });
             var egresos
-            if (permiso && permiso.Role && permiso.Role.Permissions) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
                 egresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
@@ -748,13 +751,12 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
+                        model: models.User,
                         include: [{
-                            model: models.User,
                             include: models.Employee
-                        }, {
-                            model: models.Project
                         }]
+                    }, {
+                        model: models.Project
                     }],
                     order: [
                         ['date', 'DESC']
@@ -773,9 +775,9 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                     {
                         model: models.Concept
                     }, {
-                        model: models.Project_Employee,
+                        model: models.User,
                         include: [{
-                            model: models.User,
+                            model: models.Employee,
                             include: models.Employee
                         }, {
                             model: models.Project,

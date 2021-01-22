@@ -36,11 +36,19 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      ProjectEmployeeId: {
+      UserId: {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Project_Employees',
+          model: 'Users',
+          key: 'id',
+        },
+      },
+      ProjectId: {
+        type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'Projects',
           key: 'id',
         },
       },
