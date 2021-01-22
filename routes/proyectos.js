@@ -2016,4 +2016,10 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
   }
 });
 
+//////////////////////Página de ERROR hay que borrarla :v
+router.get('/error', isLoggedIn, async function(req, res, next) {
+  var error = 404;
+  res.render('error', {error});
+});
+
 module.exports = router;
