@@ -162,7 +162,7 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
 
   const url = process.env.CLIENT_URL
   console.log(url)
-  const ht = `<!DOCTYPE html>
+  var ht = `<!DOCTYPE html>
   <!-- saved from url=(0042)http://127.0.0.1:3000/proyectos/proyecto/4 -->
   <html>
      <head>
@@ -190,6 +190,9 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         </style>
      </head>
      <body>
+     `
+     //BODY
+     ht += `
         <div class="uk-container">
           <div class="uk-grid-collapse uk-child-width-1-1 uk-grid-row-large uk-grid uk-grid-stack" uk-grid="">
               <div class="uk-first-column">
@@ -500,6 +503,8 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
               </div>
           </div>
         </div>
+        `
+      ht+= `
      </body>
   </html>`
 
