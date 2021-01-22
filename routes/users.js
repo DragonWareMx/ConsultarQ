@@ -81,6 +81,18 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                     model: models.Employee
                 }, {
                     model: models.Role
+                }, {
+                    model: models.Project_Employee,
+                        include: {
+                            model: models.Project,
+                            include: {
+                                model: models.Task,
+                                
+                            }
+                        },
+                        order: [
+                            ['createdAt','DESC']
+                        ],
                 }],
                 where: { email: { [Op.ne]: "DragonWareOficial@hotmail.com" } },
                 order: [
