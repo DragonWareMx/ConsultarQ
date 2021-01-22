@@ -228,19 +228,24 @@ block content
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
                     div(class="uk-text-left uk-text-primary uk-margin-small-bottom") DATOS GENERALES
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='name_edit' title='Nombre Completo' data-title='Nombre Completo')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='on' id="email_edit" name="email_edit" value=client.email onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='tel' id="phone_edit" name="phone_edit" value=client.phone_number onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
-                    .field.uk-margin-bottom
-                        input(type='text' autocomplete='rfc' id="rfc_edit" name="rfc_edit" value=client.rfc onchange="this.setAttribute('value', this.value);" required='')
-                        label(for='rfc_edit' title='RFC' data-title='RFC')
                     div.uk-grid
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="name_edit" name="name_edit" value=client.name onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='name_edit' title='Nombre o razón social' data-title='Nombre o razón social')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='on' id="email_edit" name="email_edit" value=client.email onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='email_edit' title='Correo electrónico' data-title='Correo electrónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='tel' id="phone_edit" name="phone_edit" value=client.phone_number onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='phone_edit' title='Número telefónico' data-title='Número telefónico')
+                        div(class="uk-width-1-2@s uk-width-1-1")
+                            .field.uk-margin-bottom
+                                input(type='text' autocomplete='rfc' id="rfc_edit" name="rfc_edit" value=client.rfc onchange="this.setAttribute('value', this.value);" required='')
+                                label(for='rfc_edit' title='RFC' data-title='RFC')
+                    
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
