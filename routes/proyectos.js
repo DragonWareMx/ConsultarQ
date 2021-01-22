@@ -110,13 +110,7 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
         ],
       })
 
-      var comentID = []
-      for (const i in proyecto.Project_Employees) {
-        if (Object.hasOwnProperty.call(proyecto.Project_Employees, i)) {
-          const element = proyecto.Project_Employees[i];
-          comentID.push(element.id)
-        }
-      }
+
       const comentarios = await models.Comment.findAll({
         where: {ProjectId: proyecto.id},
         order: [['createdAt','DESC']],
@@ -129,13 +123,11 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
       const movimientos = await models.Transaction.findAll({
         include: [
           {
-            model: models.Project_Employee,
-            include: {
-              model: models.User,
-              include: models.Employee
-            },
-            where: {ProjectId: proyecto.id},
-            required: true,
+            model: models.Project,
+          },
+          {
+            model: models.User,
+            include: models.Employee
           },
           {
             model: models.Concept
@@ -144,6 +136,7 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
             model: models.Pa_Type
           }
         ],
+        where: {ProjectId: proyecto.id},
         order: [['date','DESC']]
       })
 
@@ -152,16 +145,16 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
     }
     else {
         //NO TIENE PERMISOS
-        return res.status(403).json(403)
+        return res.render('error',{error: 403})
     }
   }
   catch (error) {
     console.log(error)
-      return res.status(403).json(403)
+    return res.render('error',{error: 500})
   }
 });
 
-//VER PROYECTO--------------------
+//VER PDF--------------------
 router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
   let options = { format: 'A4' };
   // Example of options with args //
@@ -169,7 +162,7 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
 
   const url = process.env.CLIENT_URL
   console.log(url)
-  const ht = `<!DOCTYPE html>
+  var ht = `<!DOCTYPE html>
   <!-- saved from url=(0042)http://127.0.0.1:3000/proyectos/proyecto/4 -->
   <html>
      <head>
@@ -197,316 +190,321 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         </style>
      </head>
      <body>
-                  <div class="uk-container">
-                    <div class="uk-grid-collapse uk-child-width-1-1 uk-grid-row-large uk-grid uk-grid-stack" uk-grid="">
-                       <div class="uk-first-column">
-                          <div class="uk-card uk-card-default">
-                             <div class="uk-card-header uk-padding-remove uk-flex" style="background:rgba(217,58,138,0.53)">
-                                <div class="uk-width-3-5@m uk-margin-small-left uk-margin-small-top uk-margin-small-bottom">
-                                   <div style="color: #222238;">CON TODO</div>
-                                   <div class="uk-text-small" style="min-height: 20.8px">Layout de proyecto número 1</div>
+     `
+     //BODY
+     ht += `
+        <div class="uk-container">
+          <div class="uk-grid-collapse uk-child-width-1-1 uk-grid-row-large uk-grid uk-grid-stack" uk-grid="">
+              <div class="uk-first-column">
+                <div class="uk-card uk-card-default">
+                    <div class="uk-card-header uk-padding-remove uk-flex" style="background:rgba(217,58,138,0.53)">
+                      <div class="uk-width-3-5@m uk-margin-small-left uk-margin-small-top uk-margin-small-bottom">
+                          <div style="color: #222238;">CON TODO</div>
+                          <div class="uk-text-small" style="min-height: 20.8px">Layout de proyecto número 1</div>
+                      </div>
+                      <div class="uk-width-2-5@m uk-flex uk-flex-right uk-flex-wrap-reverse">
+                          <div class="uk-width-auto@l uk-flex uk-flex-right uk-flex-middle"><button class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" title="" aria-expanded="false">ACTIVO</button></div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-flex uk-flex-wrap">
+                      <div class="uk-width-1-3@l" style="border-right: 1px solid #EEEEEE; padding:5px">
+                          <div class="uk-card-body uk-padding-remove">
+                            <div class="uk-width-1 uk-margin-small-top">
+                                <div class="o-progress-date-line"></div>
+                                <div class="o-progress-date-start" style="background:#d93a8a"></div>
+                                <div class="o-progress-date-end" style="background:#d93a8a"></div>
+                                <div class="o-progress-date-today" uk-tooltip="Hoy" style="margin-left:71.89915341634739%; border: 1px solid#d93a8a" title="" aria-expanded="false"></div>
+                                <div class="o-progress-date-dates">
+                                  <div class="uk-text-small">1, ENE, 2021</div>
+                                  <div class="uk-text-small">30, ENE, 2021</div>
                                 </div>
-                                <div class="uk-width-2-5@m uk-flex uk-flex-right uk-flex-wrap-reverse">
-                                   <div class="uk-width-auto@l uk-flex uk-flex-right uk-flex-middle"><button class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" title="" aria-expanded="false">ACTIVO</button></div>
-                                </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-flex uk-flex-wrap">
-                                <div class="uk-width-1-3@l" style="border-right: 1px solid #EEEEEE; padding:5px">
-                                   <div class="uk-card-body uk-padding-remove">
-                                      <div class="uk-width-1 uk-margin-small-top">
-                                         <div class="o-progress-date-line"></div>
-                                         <div class="o-progress-date-start" style="background:#d93a8a"></div>
-                                         <div class="o-progress-date-end" style="background:#d93a8a"></div>
-                                         <div class="o-progress-date-today" uk-tooltip="Hoy" style="margin-left:71.89915341634739%; border: 1px solid#d93a8a" title="" aria-expanded="false"></div>
-                                         <div class="o-progress-date-dates">
-                                            <div class="uk-text-small">1, ENE, 2021</div>
-                                            <div class="uk-text-small">30, ENE, 2021</div>
-                                         </div>
-                                      </div>
-                                   </div>
-                                   <div class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top">
-                                      <div class="uk-width-2-5 uk-flex uk-flex-middle uk-flex-center">
-                                         <div class="progress--circle progress--0" style="margin-top:0px">
-                                            <div class="progress__number">0%</div>
-                                         </div>
-                                      </div>
-                                      <div class="uk-width-3-5 uk-width-1@s uk-width-3-5">
-                                         <div class="uk-text-large" style="color: #222238;">0</div>
-                                         <div class="uk-text-small">Tareas listas</div>
-                                         <div class="uk-text-large" style="color: #222238;">2</div>
-                                         <div class="uk-text-small">Tareas faltantes</div>
-                                      </div>
-                                   </div>
-                                </div>
-                                <div class="uk-width-1-3@l uk-flex uk-flex-wrap" style="border-right: 1px solid #EEEEEE">
-                                   <div class="uk-width-1-1 uk-padding-small div-datos-cliente-proyecto" style="border-bottom: 1px solid #EEEEEE;">
-                                      <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom">DATOS DEL CLIENTE</div>
-                                      <div class="uk-width-1-1 uk-flex uk-flex-wrap">
-                                         <div class="uk-width-auto@s"><img src="`+ url +`/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                         <div class="uk-width-expand@s uk-text-small">
-                                            <div class="uk-flex uk-width-1-1">
-                                               <div class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400"> <a class="uk-link-reset uk-text-truncate" href="http://127.0.0.1:3000/clientes/cliente/4">Agustin Adrian Marin</a></div>
-                                            </div>
-                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Teléfono; pos: left" title="" aria-expanded="false">
-                                               <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px" class="uk-icon">
-                                                  <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="receiver">
-                                                     <path fill="none" stroke="#000" stroke-width="1.01" d="M6.189,13.611C8.134,15.525 11.097,18.239 13.867,18.257C16.47,18.275 18.2,16.241 18.2,16.241L14.509,12.551L11.539,13.639L6.189,8.29L7.313,5.355L3.76,1.8C3.76,1.8 1.732,3.537 1.7,6.092C1.667,8.809 4.347,11.738 6.189,13.611"></path>
-                                                  </svg>
-                                               </span>
-                                               1122339966
-                                            </div>
-                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left" title="" aria-expanded="false">
-                                               <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px" class="uk-icon">
-                                                  <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="mail">
-                                                     <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
-                                                     <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
-                                                  </svg>
-                                               </span>
-                                               agusAA@gmail.com
-                                            </div>
-                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Área; pos: left" title="" aria-expanded="false">
-                                               <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px" class="uk-icon">
-                                                  <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="thumbnails">
-                                                     <rect fill="none" stroke="#000" x="3.5" y="3.5" width="5" height="5"></rect>
-                                                     <rect fill="none" stroke="#000" x="11.5" y="3.5" width="5" height="5"></rect>
-                                                     <rect fill="none" stroke="#000" x="11.5" y="11.5" width="5" height="5"></rect>
-                                                     <rect fill="none" stroke="#000" x="3.5" y="11.5" width="5" height="5"></rect>
-                                                  </svg>
-                                               </span>
-                                               Textiles
-                                            </div>
-                                            <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Estatus; pos: left" title="" aria-expanded="false">
-                                               <div class="uk-width-4-5@m btn-status-active">ACTIVO</div>
-                                            </div>
-                                         </div>
-                                      </div>
-                                   </div>
-                                   <div class="uk-width-1-1 uk-padding-small uk-text-small div-docs-proyecto">
-                                      <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle">
-                                         <div class="uk-width-auto@s uk-text-truncate" style="margin-right:5px">Cotización</div>
-                                         <div class="uk-width-expand@s uk-text-emphasis" style="font-size:14px;"><a class="uk-link-reset uk-text-truncate">Sin cotizaciones</a></div>
-                                      </div>
-                                      <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top uk-flex-middle">
-                                         <div class="uk-width-auto@s" style="margin-right:5px">Contrato</div>
-                                         <div class="uk-width-expand@s uk-text-emphasis" style="font-size:14px"><a class="uk-link-reset uk-text-truncate">Sin contrato</a></div>
-                                      </div>
-                                   </div>
-                                </div>
-                                <div class="uk-width-1-3@l uk-padding-small" style="border-right: 1px solid #EEEEEE;">
-                                   <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom">MIEMBROS DEL PROYECTO</div>
-                                   <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom uk-flex uk-flex-middle">
-                                      <div class="uk-width-auto"><img src="`+ url +`/img/iconos/default.png" width="33px" uk-tooltip="John Doe" style="width:30px; height:30px; border-radius:50px; margin-right:15px;object-fit:cover" title="" aria-expanded="false"></div>
-                                      <div class="uk-width-expand uk-text-small">
-                                         <div class="uk-flex uk-width-1-1">
-                                            <div class="uk-width-auto@m" style="color:#222238; font-size:14px; font-weight:400"> <a class="uk-link-reset uk-text-truncate">John Doe</a></div>
-                                         </div>
-                                         <div class="uk-flex uk-width-1-1">
-                                            <div class="uk-width-auto@m" style="font-size:14px; font-weight:400">Líder - Sin porcentaje</div>
-                                         </div>
-                                      </div>
-                                   </div>
-                                   <div class="uk-width-1-1 uk-text-small uk-flex uk-flex-middle uk-flex-between uk-flex-wrap">
-                                   </div>
-                                </div>
-                             </div>
+                            </div>
                           </div>
-                       </div>
-                    </div>
-                    <div class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small" id="Comentarios">
-                       <div class="width-1-1 uk-text-small uk-flex uk-flex-wrap-reverse uk-flex-middle">
-                          <div class="uk-width-auto"> <b>COMENTARIOS</b></div>
-                          <div class="uk-width-auto uk-margin-left uk-flex uk-flex-middle">
-                             <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px" class="uk-icon">
-                                <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="commenting">
-                                   <polygon fill="none" stroke="#000" points="1.5,1.5 18.5,1.5 18.5,13.5 10.5,13.5 6.5,17.5 6.5,13.5 1.5,13.5"></polygon>
-                                   <circle cx="10" cy="8" r="1"></circle>
-                                   <circle cx="6" cy="8" r="1"></circle>
-                                   <circle cx="14" cy="8" r="1"></circle>
-                                </svg>
-                             </span>
+                          <div class="uk-width-1 uk-flex uk-flex-wrap uk-margin-small-top">
+                            <div class="uk-width-2-5 uk-flex uk-flex-middle uk-flex-center">
+                                <div class="progress--circle progress--0" style="margin-top:0px">
+                                  <div class="progress__number">0%</div>
+                                </div>
+                            </div>
+                            <div class="uk-width-3-5 uk-width-1@s uk-width-3-5">
+                                <div class="uk-text-large" style="color: #222238;">0</div>
+                                <div class="uk-text-small">Tareas listas</div>
+                                <div class="uk-text-large" style="color: #222238;">2</div>
+                                <div class="uk-text-small">Tareas faltantes</div>
+                            </div>
                           </div>
-                          <div class="uk-width-expand"><a class="uk-flex uk-flex-middle" id="nover-comentarios" style="width:max-content; float:right"><img src="./ConsultarQ - Proyecto_files/notEye.png" style="width:15px;height:15px; margin-right:5px">Ocultar</a></div>
-                       </div>
-                       <form id="form-create-comment" action="http://127.0.0.1:3000/proyectos/proyecto/4/comment" method="POST">
-                          <div class="uk-text-primary uk-margin-small-bottom" style="font-size:13px">Agregar comentario</div>
-                          <div id="errors"></div>
-                          <textarea class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete="on" id="descripcion" name="descripcion" value="" onchange="this.setAttribute(&#39;value&#39;, this.value);" required="" maxlength="150"></textarea>
-                          <div class="uk-width-1 uk-flex-right uk-flex uk-margin-small-bottom"><button class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button">Actualizar</button><button class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit">Comentar</button></div>
-                       </form>
-                       <div id="comentDiv" data-simplebar="">
-                          <div style="max-height: 491.6px; overflow-y:scroll" id="scrollCom">
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">CHINGUE A SU MADRE EL AMERICA!!!!!</div>
+                      </div>
+                      <div class="uk-width-1-3@l uk-flex uk-flex-wrap" style="border-right: 1px solid #EEEEEE">
+                          <div class="uk-width-1-1 uk-padding-small div-datos-cliente-proyecto" style="border-bottom: 1px solid #EEEEEE;">
+                            <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom">DATOS DEL CLIENTE</div>
+                            <div class="uk-width-1-1 uk-flex uk-flex-wrap">
+                                <div class="uk-width-auto@s"><img src="`+ url +`/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                                <div class="uk-width-expand@s uk-text-small">
+                                  <div class="uk-flex uk-width-1-1">
+                                      <div class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400"> <a class="uk-link-reset uk-text-truncate" href="http://127.0.0.1:3000/clientes/cliente/4">Agustin Adrian Marin</a></div>
+                                  </div>
+                                  <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Teléfono; pos: left" title="" aria-expanded="false">
+                                      <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px" class="uk-icon">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="receiver">
+                                            <path fill="none" stroke="#000" stroke-width="1.01" d="M6.189,13.611C8.134,15.525 11.097,18.239 13.867,18.257C16.47,18.275 18.2,16.241 18.2,16.241L14.509,12.551L11.539,13.639L6.189,8.29L7.313,5.355L3.76,1.8C3.76,1.8 1.732,3.537 1.7,6.092C1.667,8.809 4.347,11.738 6.189,13.611"></path>
+                                        </svg>
+                                      </span>
+                                      1122339966
+                                  </div>
+                                  <div class="uk-width-1-1 uk-flex uk-flex-middle" style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left" title="" aria-expanded="false">
+                                      <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px" class="uk-icon">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="mail">
+                                            <polyline fill="none" stroke="#000" points="1.4,6.5 10,11 18.6,6.5"></polyline>
+                                            <path d="M 1,4 1,16 19,16 19,4 1,4 Z M 18,15 2,15 2,5 18,5 18,15 Z"></path>
+                                        </svg>
+                                      </span>
+                                      agusAA@gmail.com
+                                  </div>
+                                  <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Área; pos: left" title="" aria-expanded="false">
+                                      <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px" class="uk-icon">
+                                        <svg width="16" height="16" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="thumbnails">
+                                            <rect fill="none" stroke="#000" x="3.5" y="3.5" width="5" height="5"></rect>
+                                            <rect fill="none" stroke="#000" x="11.5" y="3.5" width="5" height="5"></rect>
+                                            <rect fill="none" stroke="#000" x="11.5" y="11.5" width="5" height="5"></rect>
+                                            <rect fill="none" stroke="#000" x="3.5" y="11.5" width="5" height="5"></rect>
+                                        </svg>
+                                      </span>
+                                      Textiles
+                                  </div>
+                                  <div class="uk-width-1-1 uk-flex uk-flex-middle" uk-tooltip="title: Estatus; pos: left" title="" aria-expanded="false">
+                                      <div class="uk-width-4-5@m btn-status-active">ACTIVO</div>
+                                  </div>
                                 </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">ahuevo, si jala</div>
-                                </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">feliz día del niño</div>
-                                </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">a quien le dices joto puto??!!!</div>
-                                </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">kyte joto</div>
-                                </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">trabajando duro o durando en el trabajo?</div>
-                                </div>
-                             </div>
-                             <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
-                                <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
-                                <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
-                                   <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
-                                      <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
-                                      <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
-                                   </div>
-                                   <div class="uk-width-1-1">Que onda amigos!!!</div>
-                                </div>
-                             </div>
+                            </div>
                           </div>
-                       </div>
-                    </div>
-                    <div class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small">
-                       <div class="width-1-1 uk-text-small uk-flex uk-flex-wrap-reverse uk-flex-middle"> <b>OBSERVACIONES</b></div>
-                       <div class="uk-text-small uk-text-emphasis">Ya casi terminamos</div>
-                    </div>
-                    <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top uk-card-body uk-padding-small">
-                       <div class="uk-flex uk-flex-top uk-flex-between">
-                          <div class="uk-text-primary uk-margin-bottom "><b>TAREAS</b></div>
-                       </div>
-                       <div class="uk-overflow-auto">
-                          <table class="uk-table uk-table-small uk-table-divider uk-table-justify uk-text-small">
-                             <thead>
-                                <tr>
-                                   <th class="uk-text-center uk-table-shrink">#</th>
-                                   <th class="uk-text-truncate uk-table-expand">Concepto</th>
-                                   <th class="uk-text-truncate uk-table-expand">Descripción</th>
-                                   <th class="uk-text-truncate uk-width-small">Cantidad</th>
-                                   <th class="uk-text-truncate uk-width-small">Unidad</th>
-                                   <th class="uk-text-truncate  uk-width-small">Costo/U</th>
-                                   <th class="uk-text-truncate uk-width-small">Costo/T</th>
-                                   <th class="uk-text-truncate uk-width-small">Realizado</th>
-                                </tr>
-                             </thead>
-                             <tbody>
-                                <tr class="editar" uk-toggle="target: #editTask-form" data-id="1">
-                                   <td>1</td>
-                                   <td>Cemento</td>
-                                   <td>Cemento para ladrillos industrial.</td>
-                                   <td></td>
-                                   <td>Kg.</td>
-                                   <td>100</td>
-                                   <td></td>
-                                   <td>No</td>
-                                </tr>
-                                <tr class="editar" uk-toggle="target: #editTask-form" data-id="1">
-                                   <td>2</td>
-                                   <td>Arcilla</td>
-                                   <td>Arcilla líquida para hacer manualidades.</td>
-                                   <td></td>
-                                   <td>lt.</td>
-                                   <td>500</td>
-                                   <td></td>
-                                   <td>No</td>
-                                </tr>
-                             </tbody>
-                          </table>
-                       </div>
-                      
-                    </div>
-                    <div class="uk-flex uk-flex-wrap-reverse uk-width-1-1">
-                       <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top">
-                          <div class="uk-card-body uk-text-center uk-padding-remove">
-                             <div class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove"> <b>SIN MOVIMIENTOS</b></div>
-                             <div class="uk-overflow-auto uk-margin-remove"></div>
+                          <div class="uk-width-1-1 uk-padding-small uk-text-small div-docs-proyecto">
+                            <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle">
+                                <div class="uk-width-auto@s uk-text-truncate" style="margin-right:5px">Cotización</div>
+                                <div class="uk-width-expand@s uk-text-emphasis" style="font-size:14px;"><a class="uk-link-reset uk-text-truncate">Sin cotizaciones</a></div>
+                            </div>
+                            <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top uk-flex-middle">
+                                <div class="uk-width-auto@s" style="margin-right:5px">Contrato</div>
+                                <div class="uk-width-expand@s uk-text-emphasis" style="font-size:14px"><a class="uk-link-reset uk-text-truncate">Sin contrato</a></div>
+                            </div>
                           </div>
-                       </div>
-                    </div>
-                    <div class="uk-flex uk-flex-wrap-reverse uk-width-1-1">
-                       <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top">
-                          <div class="uk-card-body uk-text-center uk-padding-remove">
-                             <div class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove"><b>PRESTADORES EXTERNOS</b></div>
-                             <div class="uk-overflow-auto uk-margin-remove">
-                                <table class="uk-table uk-table-divider uk-text-small">
-                                   <thead>
-                                      <tr>
-                                         <th class="uk-text-center">#</th>
-                                         <th class="uk-text-center">NOMBRE</th>
-                                         <th class="uk-text-center">ÁREA</th>
-                                         <th class="uk-text-center">TELÉFONO</th>
-                                         <th class="uk-text-center">CORREO ELECTRÓNICO</th>
-                                         <th class="uk-text-center">NÚMERO DE DRO</th>
-                                         <th class="uk-text-center">ESTATUS</th>
-                                      </tr>
-                                   </thead>
-                                   <tbody>
-                                      <tr class="info">
-                                         <td>1</td>
-                                         <td>Adolfo Lemus</td>
-                                         <td>Plomeria</td>
-                                         <td>4455667788</td>
-                                         <td>adolfo@ejemplo.com</td>
-                                         <td>12345678</td>
-                                         <td class="status">Inactivo</td>
-                                      </tr>
-                                      <tr class="info">
-                                         <td>2</td>
-                                         <td>Oscar Huerta</td>
-                                         <td>Herreria</td>
-                                         <td>5566778899</td>
-                                         <td>oscar@ejemplo.com</td>
-                                         <td>23456789</td>
-                                         <td class="status">Activo</td>
-                                      </tr>
-                                   </tbody>
-                                </table>
-                             </div>
+                      </div>
+                      <div class="uk-width-1-3@l uk-padding-small" style="border-right: 1px solid #EEEEEE;">
+                          <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom">MIEMBROS DEL PROYECTO</div>
+                          <div class="uk-width-1-1 uk-text-small uk-margin-small-bottom uk-flex uk-flex-middle">
+                            <div class="uk-width-auto"><img src="`+ url +`/img/iconos/default.png" width="33px" uk-tooltip="John Doe" style="width:30px; height:30px; border-radius:50px; margin-right:15px;object-fit:cover" title="" aria-expanded="false"></div>
+                            <div class="uk-width-expand uk-text-small">
+                                <div class="uk-flex uk-width-1-1">
+                                  <div class="uk-width-auto@m" style="color:#222238; font-size:14px; font-weight:400"> <a class="uk-link-reset uk-text-truncate">John Doe</a></div>
+                                </div>
+                                <div class="uk-flex uk-width-1-1">
+                                  <div class="uk-width-auto@m" style="font-size:14px; font-weight:400">Líder - Sin porcentaje</div>
+                                </div>
+                            </div>
                           </div>
-                       </div>
+                          <div class="uk-width-1-1 uk-text-small uk-flex uk-flex-middle uk-flex-between uk-flex-wrap">
+                          </div>
+                      </div>
                     </div>
-                 </div>
+                </div>
+              </div>
+          </div>
+          <div class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small" id="Comentarios">
+              <div class="width-1-1 uk-text-small uk-flex uk-flex-wrap-reverse uk-flex-middle">
+                <div class="uk-width-auto"> <b>COMENTARIOS</b></div>
+                <div class="uk-width-auto uk-margin-left uk-flex uk-flex-middle">
+                    <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px" class="uk-icon">
+                      <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-svg="commenting">
+                          <polygon fill="none" stroke="#000" points="1.5,1.5 18.5,1.5 18.5,13.5 10.5,13.5 6.5,17.5 6.5,13.5 1.5,13.5"></polygon>
+                          <circle cx="10" cy="8" r="1"></circle>
+                          <circle cx="6" cy="8" r="1"></circle>
+                          <circle cx="14" cy="8" r="1"></circle>
+                      </svg>
+                    </span>
+                </div>
+                <div class="uk-width-expand"><a class="uk-flex uk-flex-middle" id="nover-comentarios" style="width:max-content; float:right"><img src="./ConsultarQ - Proyecto_files/notEye.png" style="width:15px;height:15px; margin-right:5px">Ocultar</a></div>
+              </div>
+              <form id="form-create-comment" action="http://127.0.0.1:3000/proyectos/proyecto/4/comment" method="POST">
+                <div class="uk-text-primary uk-margin-small-bottom" style="font-size:13px">Agregar comentario</div>
+                <div id="errors"></div>
+                <textarea class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px; height:auto !important;" placeholder="Máximo 150 caracteres" autocomplete="on" id="descripcion" name="descripcion" value="" onchange="this.setAttribute(&#39;value&#39;, this.value);" required="" maxlength="150"></textarea>
+                <div class="uk-width-1 uk-flex-right uk-flex uk-margin-small-bottom"><button class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button">Actualizar</button><button class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit">Comentar</button></div>
+              </form>
+              <div id="comentDiv" data-simplebar="">
+                <div style="max-height: 491.6px; overflow-y:scroll" id="scrollCom">
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">CHINGUE A SU MADRE EL AMERICA!!!!!</div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">ahuevo, si jala</div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">feliz día del niño</div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">a quien le dices joto puto??!!!</div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">John Doe</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">kyte joto</div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">trabajando duro o durando en el trabajo?</div>
+                      </div>
+                    </div>
+                    <div class="uk-width-1-1 uk-margin-small uk-padding-small uk-flex uk flex wrap" style="border: solid 1px #EEEEEE; boder-radius:2px">
+                      <div class="uk-width-auto"><img src="./ConsultarQ - Proyecto_files/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover"></div>
+                      <div class="uk-width-expand uk-text-small uk-flex uk-flex-column">
+                          <div class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-flex-between">
+                            <div class="uk-width-auto@s" style="color:#222238; margin-right:5px">DragonWare</div>
+                            <div class="uk-width-auto@s" style="font-size:12px;">21 de Enero del 2021</div>
+                          </div>
+                          <div class="uk-width-1-1">Que onda amigos!!!</div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+          <div class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small">
+              <div class="width-1-1 uk-text-small uk-flex uk-flex-wrap-reverse uk-flex-middle"> <b>OBSERVACIONES</b></div>
+              <div class="uk-text-small uk-text-emphasis">Ya casi terminamos</div>
+          </div>
+          <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top uk-card-body uk-padding-small">
+              <div class="uk-flex uk-flex-top uk-flex-between">
+                <div class="uk-text-primary uk-margin-bottom "><b>TAREAS</b></div>
+              </div>
+              <div class="uk-overflow-auto">
+                <table class="uk-table uk-table-small uk-table-divider uk-table-justify uk-text-small">
+                    <thead>
+                      <tr>
+                          <th class="uk-text-center uk-table-shrink">#</th>
+                          <th class="uk-text-truncate uk-table-expand">Concepto</th>
+                          <th class="uk-text-truncate uk-table-expand">Descripción</th>
+                          <th class="uk-text-truncate uk-width-small">Cantidad</th>
+                          <th class="uk-text-truncate uk-width-small">Unidad</th>
+                          <th class="uk-text-truncate  uk-width-small">Costo/U</th>
+                          <th class="uk-text-truncate uk-width-small">Costo/T</th>
+                          <th class="uk-text-truncate uk-width-small">Realizado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="editar" uk-toggle="target: #editTask-form" data-id="1">
+                          <td>1</td>
+                          <td>Cemento</td>
+                          <td>Cemento para ladrillos industrial.</td>
+                          <td></td>
+                          <td>Kg.</td>
+                          <td>100</td>
+                          <td></td>
+                          <td>No</td>
+                      </tr>
+                      <tr class="editar" uk-toggle="target: #editTask-form" data-id="1">
+                          <td>2</td>
+                          <td>Arcilla</td>
+                          <td>Arcilla líquida para hacer manualidades.</td>
+                          <td></td>
+                          <td>lt.</td>
+                          <td>500</td>
+                          <td></td>
+                          <td>No</td>
+                      </tr>
+                    </tbody>
+                </table>
+              </div>
+            
+          </div>
+          <div class="uk-flex uk-flex-wrap-reverse uk-width-1-1">
+              <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top">
+                <div class="uk-card-body uk-text-center uk-padding-remove">
+                    <div class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove"> <b>SIN MOVIMIENTOS</b></div>
+                    <div class="uk-overflow-auto uk-margin-remove"></div>
+                </div>
+              </div>
+          </div>
+          <div class="uk-flex uk-flex-wrap-reverse uk-width-1-1">
+              <div class="uk-card uk-card-default uk-width-1-1 uk-margin-top">
+                <div class="uk-card-body uk-text-center uk-padding-remove">
+                    <div class="uk-text-primary uk-width-1-1 uk-padding-small uk-text-left uk-margin-remove"><b>PRESTADORES EXTERNOS</b></div>
+                    <div class="uk-overflow-auto uk-margin-remove">
+                      <table class="uk-table uk-table-divider uk-text-small">
+                          <thead>
+                            <tr>
+                                <th class="uk-text-center">#</th>
+                                <th class="uk-text-center">NOMBRE</th>
+                                <th class="uk-text-center">ÁREA</th>
+                                <th class="uk-text-center">TELÉFONO</th>
+                                <th class="uk-text-center">CORREO ELECTRÓNICO</th>
+                                <th class="uk-text-center">NÚMERO DE DRO</th>
+                                <th class="uk-text-center">ESTATUS</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr class="info">
+                                <td>1</td>
+                                <td>Adolfo Lemus</td>
+                                <td>Plomeria</td>
+                                <td>4455667788</td>
+                                <td>adolfo@ejemplo.com</td>
+                                <td>12345678</td>
+                                <td class="status">Inactivo</td>
+                            </tr>
+                            <tr class="info">
+                                <td>2</td>
+                                <td>Oscar Huerta</td>
+                                <td>Herreria</td>
+                                <td>5566778899</td>
+                                <td>oscar@ejemplo.com</td>
+                                <td>23456789</td>
+                                <td class="status">Activo</td>
+                            </tr>
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
+        `
+      ht+= `
      </body>
   </html>`
 
@@ -519,7 +517,6 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
 
     fs.readFile('./public/uploads/pdfs/proyecto'+req.params.id+'.pdf', {root: __dirname} , function (err,data){
       res.contentType("application/pdf");
-      console.log(err)
       res.send(data);
     });
   });
@@ -715,12 +712,12 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
     }
     else {
         //NO TIENE PERMISOS
-        return res.status(403).json(403)
+        return res.render('error',{error: 403})
     }
   }
   catch (error) {
     console.log(error)
-      return res.status(403).json(403)
+    return res.render('error',{error: 500})
   }
 });
 
@@ -812,12 +809,12 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
     }
     else {
         //NO TIENE PERMISOS
-        return res.status(403).json(403)
+        return res.render('error',{error: 403})
     }
   }
   catch (error) {
     console.log(error)
-      return res.status(403).json(403)
+    return res.render('error',{error: 500})
   }
 });
 
