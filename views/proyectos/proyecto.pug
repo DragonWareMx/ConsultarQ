@@ -235,13 +235,12 @@ block content
                                                             div(class="uk-width-auto@m" style="font-size:14px; font-weight:400") Sin rol - Sin porcentaje
                             else
                                 a.uk-link-reset.uk-text-truncate SIN MIEMBROS
-                            div.uk-width-1-1.uk-text-small.uk-flex.uk-flex-right 
-                                    a.uk-flex.uk-flex-middle.uk-text-small.uk-link-heading(id="ver-comentarios" uk-tooltip="title: Comentarios; pos: left")
-                                        div(id="comSpan")
-                                            <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> #{comentarios.length}
-                                    div(class="uk-align-right uk-width-auto")
-                                        a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;" href="/proyectos/proyecto/"+proyecto.id+"/pdf" target="_blank")
-                                            <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
+                            div.uk-width-1-1.uk-text-small.uk-flex.uk-flex-middle.uk-flex-between.uk-flex-wrap
+                                a.uk-flex.uk-flex-middle.uk-text-small.uk-link-heading(id="ver-comentarios" uk-tooltip="title: Comentarios; pos: left")
+                                    div(id="comSpan")
+                                        <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> #{comentarios.length}
+                                a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;" href="/proyectos/proyecto/"+proyecto.id+"/pdf" target="_blank")
+                                    <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
         //- COMENTARIOS-----------------------
         div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small"  id="Comentarios")
             div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle
