@@ -8,6 +8,7 @@ const nodemailer = require("nodemailer");
 const helpers = require('../lib/helpers');
 require('connect-flash');
 require('dotenv').config();
+
 //brute-force
 var ExpressBrute = require('express-brute'),
     MemcachedStore = require('express-brute-memcached'),
@@ -306,9 +307,26 @@ router.get('/logout', (req, res) => {
 });
 
 
-router.get('/inicio', isLoggedIn, function (req, res, next) {
+router.get('/inicio', isLoggedIn, async function (req, res, next) {
     //res.render('index', { title: 'Express' });
-    res.render("inicio");
+    const hoy = moment().toDate()
+    const todos = await models.Transaction.findAll({
+        include: [{
+            model: models.User,
+            include: { model: models.Employee }
+        }, {
+            model: models.Concept
+        }],
+        order: [
+            ['date', 'DESC']
+        ],
+    })
+    var egresos
+    var ingresos
+    var deducibles
+    var ingreConceptos
+    var egreConceptos
+    res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos });
 });
 
 module.exports = router;

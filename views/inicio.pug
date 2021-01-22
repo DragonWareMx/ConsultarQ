@@ -10,6 +10,80 @@ block head
 
 block content
     div(class="uk-container")
+        script.
+            var days = function(month,year) {
+                return new Date(year, month, 0).getDate();
+            };
+            var todos = !{ JSON.stringify(todos) };
+            var fechaActual = !{JSON.stringify(hoy)};
+            //- var ingreConceptos = !{JSON.stringify(ingreConceptos)};
+            //- var egreConceptos = !{JSON.stringify(egreConceptos)};
+            fechaActual = new Date(fechaActual);
+            var totalIngre=0;
+            var totalEgre=0;
+            var numIngre=0;
+            var numEgre=0;
+            var conceptosIngre=[
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+            ]
+            var conceptosEgre=[
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+                {count: 0, name: "-"},
+            ]
+            var monthEgre=[];
+            var monthIngre=[];
+            var cantDays=days(fechaActual.getMonth()+1,fechaActual.getFullYear());
+            var listaDays=[];
+            var yearEgre=[0,0,0,0,0,0,0,0,0,0,0,0]
+            var yearIngre=[0,0,0,0,0,0,0,0,0,0,0,0]
+            for(var j=1;j<=cantDays;j++){
+                listaDays.push(j.toString());
+                monthEgre.push(0)
+                monthIngre.push(0)
+            }
+            for(var key in todos){
+                var obj=todos[key];
+                var fecha= new Date(obj['date'])
+                if(fecha.getFullYear() == fechaActual.getFullYear()){
+                    if(obj['T_type']=='ingreso'){
+                        totalIngre=totalIngre+ parseFloat(obj['amount']);
+                        numIngre++;
+                        yearIngre[fecha.getMonth()]= yearIngre[fecha.getMonth()]+parseFloat(obj['amount'])
+                        if(fecha.getMonth() == fechaActual.getMonth()){
+                            monthIngre[fecha.getDate()-1]=monthIngre[fecha.getDate()-1] + parseFloat(obj['amount']);
+                        }
+                    }
+                    if(obj['T_type']=='egreso'){
+                        totalEgre=totalEgre+ parseFloat(obj['amount']);
+                        numEgre++;
+                        yearEgre[fecha.getMonth()]= yearEgre[fecha.getMonth()]+parseFloat(obj['amount'])
+                        if(fecha.getMonth() == fechaActual.getMonth()){
+                            monthEgre[fecha.getDate()-1]=monthEgre[fecha.getDate()-1] + parseFloat(obj['amount']);
+                        }
+                    }
+                }
+            }
+            //- var i=0;
+            //- for(var key in ingreConceptos){
+            //-      var obj=ingreConceptos[key];
+            //-     conceptosIngre[i]['count']=obj['count'];
+            //-     conceptosIngre[i]['name']=obj['Concept']['name'];
+            //-     i++;
+            //- }
+            //- i=0;
+            //- for(var key in egreConceptos){
+            //-      var obj=egreConceptos[key];
+            //-     conceptosEgre[i]['count']=obj['count'];
+            //-     conceptosEgre[i]['name']=obj['Concept']['name'];
+            //-     i++;
+            //- }
+            //- var porcentajeEgre= (100* numEgre) / (numEgre+numIngre);
+            //- var porcentajeIngre= (100* numIngre) / (numEgre+numIngre);
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle" uk-height-viewport="expand: true")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Inicio
         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-top")
@@ -17,58 +91,64 @@ block content
                 div(class="uk-width-3-4@m uk-padding-remove")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-small")
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
-                            div(class="uk-align-center") 
-                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;") 
-                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF 
+                            div(class="uk-align-center")
+                            -
+                                var fechaLink=new Date(hoy);
+                                var monthLink=fechaLink.getMonth() + 1;
+                                var yearOrigin=fechaLink.getFullYear();
+                                if(monthLink<10){
+                                    monthLink="0"+monthLink;
+                                }
+                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;" href="/caja/pdf/"+monthLink+"/"+yearOrigin target="_blank")
+                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Generar PDF
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") ENERO
-                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="color:#222238") Quincena 1
-                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
+                        div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top uk-flex-center")
                             //- ********************* PARA USUARIO ARQUITECTO****************
 
-                            div(class="uk-width-4-5" style="") 
+                            div(class="uk-width-4-5" style="")
                                 <canvas id="chart-general" width="400" height="250"></canvas>
                                 script.
                                     var ctx = document.getElementById('chart-general');
                                     var dataFirst = {
                                         label: "Ingresos",
-                                        data: [9562, 5975, 7544, 2073, 1000, 5400, 4000],
+                                        data: monthIngre,
                                         borderColor: "#1e87f0",
                                         fill: false,
                                         lineTension: 0,
                                         borderWidth:2
                                         };
-                                        
+
                                     var dataSecond = {
                                         label: "Egresos",
-                                        data: [2000, 7600, 6000, 3654, 7622, 1000, 1800],
+                                        data: monthEgre,
                                         borderColor: "#222238",
                                         fill: false,
                                         lineTension: 0,
                                         borderWidth:2
                                     };
-                                    
+
                                     var dataGeneral = {
-                                    labels: ["0", "1", "2", "3", "4", "5", "6"],
+                                    labels: listaDays,
                                     datasets: [dataFirst, dataSecond]
                                     };
                                     var myLineChart = new Chart(ctx, {
                                         type: 'line',
                                         data: dataGeneral,
-                                        options: { 
-                                            elements: { 
-                                                point:{ 
-                                                    radius: 1 
+                                        options: {
+                                            elements: {
+                                                point:{
+                                                    radius: 1
                                                 },
                                                 legend: {
                                                 }
-                                            } 
-                                        } 
+                                            }
+                                        }
                                     });
 
                             //- *****************PARA USUARIO ADMIN Y CONTADOR****************
 
-                            //- div(class="uk-width-3-5@l" style="") 
+                            //- div(class="uk-width-3-5@l" style="")
                             //-     <canvas id="chart-general" width="400" height="250"></canvas>
                             //-     script.
                             //-         var ctx = document.getElementById('chart-general');
@@ -80,7 +160,7 @@ block content
                             //-             lineTension: 0,
                             //-             borderWidth:2
                             //-             };
-                                        
+
                             //-         var dataSecond = {
                             //-             label: "Egresos",
                             //-             data: [2000, 7600, 6000, 3654, 7622, 1000, 1800],
@@ -89,7 +169,7 @@ block content
                             //-             lineTension: 0,
                             //-             borderWidth:2
                             //-         };
-                                    
+
                             //-         var dataGeneral = {
                             //-         labels: ["0", "1", "2", "3", "4", "5", "6"],
                             //-         datasets: [dataFirst, dataSecond]
@@ -97,15 +177,15 @@ block content
                             //-         var myLineChart = new Chart(ctx, {
                             //-             type: 'line',
                             //-             data: dataGeneral,
-                            //-             options: { 
-                            //-                 elements: { 
-                            //-                     point:{ 
-                            //-                         radius: 1 
+                            //-             options: {
+                            //-                 elements: {
+                            //-                     point:{
+                            //-                         radius: 1
                             //-                     },
                             //-                     legend: {
                             //-                     }
-                            //-                 } 
-                            //-             } 
+                            //-                 }
+                            //-             }
                             //-         });
                             //- div(class="uk-width-2-5@l " style="padding:6px;")
                             //-     div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
@@ -120,7 +200,7 @@ block content
                             //-                 div(class="uk-width-1-3@m" style="margin-right:3px") 23 registros
                             //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
                             //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
-                                
+
                             //-     div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body uk-margin-small-bottom" style="padding:2px; padding-top:15px; padding-bottom:15px;")
                             //-         div(class="uk-width-1-5@m uk-flex uk-flex-center")
                             //-             img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
@@ -133,7 +213,7 @@ block content
                             //-                 div(class="uk-width-1-3@m") 23 registros
                             //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
                             //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
-                            
+
                             //-     div(class="uk-card uk-card-default uk-flex uk-flex-wrap uk-card-body" style="padding:2px; padding-top:15px; padding-bottom:15px")
                             //-         div(class="uk-width-1-5@m uk-flex uk-flex-center")
                             //-             img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px")
@@ -147,7 +227,7 @@ block content
                             //-                 div(class="uk-width-expand@m uk-flex uk-flex-middle")
                             //-                     progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                             div(class="uk-width-1-1 uk-flex uk-flex-right")
-                                a(href="#" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
+                                a(href="/caja/historial" class="uk-flex uk-flex-middle uk-margin-top" style="font-size:13px; width:max-content;")
                                     <span uk-icon="icon: info; ratio: 0.8" style="margin-right:5px"></span>Ver historial
                         div(class="uk-width-1-1 uk-margin-small-top" style="border-top:solid 1px #EEEEEE")
                             div(class="uk-margin-top" style="color:#222238") ÚLTIMOS REGISTROS
@@ -155,62 +235,41 @@ block content
                                 table.uk-table.uk-table-small.table-caja.uk-table-middle.uk-table-responsive
                                     thead
                                         tr
-                                            th ID
-                                            th USUARIO
-                                            th MOVIMIENTO
-                                            th CONCEPTO
-                                            th MONTO
+                                            th.uk-text-center ID
+                                            th.uk-text-center USUARIO
+                                            th.uk-text-center FECHA
+                                            th.uk-text-center MOVIMIENTO
+                                            th.uk-text-center CONCEPTO
+                                            th.uk-text-center MONTO
                                     tbody
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle 
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |María Flores Escobedo
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000  
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle 
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |Solo 5 registros aquí
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000  
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle 
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |María Flores Escobedo
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000  
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle 
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |Solo 5 registros aquí
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000    
-                                        tr
-                                            th 123
-                                            th.uk-flex.uk-flex-middle 
-                                                div
-                                                img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                |Solo 5 registros aquí
-                                            th Ingreso
-                                            th Concepto 1
-                                            th $9,000  
+                                        each registro, index in todos
+                                            tr
+                                                th.uk-text-center #{registro.id}
+                                                th.uk-flex.uk-flex-middle.uk-flex-center
+                                                    if (registro.User.picture)
+                                                        img(src="/uploads/avatar/"+registro.User.picture style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                    else
+                                                        img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                    | &nbsp; #{registro.User.Employee.name}
+                                                th.uk-text-center #{registro.date}
+                                                th.uk-text-center
+                                                    if (registro.T_type == "ingreso")
+                                                        | Ingreso
+                                                    else
+                                                        | Egreso
+                                                th.uk-text-center
+                                                    if registro.Concept
+                                                        | #{registro.Concept.name}
+                                                    else
+                                                        | Concepto eliminado
+                                                th.uk-text-center $ #{registro.amount}
+                                            if index >= 4
+                                                - break
 
                 div(class="uk-width-expand@m div-proyectos-inicio")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-remove ")
                         //- **********************USUARIO TIPO CONTADOR****************
-                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px") 
+                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px")
                         //-     div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") 2021 (%)
                         //- div(class="uk-width-1-1 uk-margin-small-top" style="")
                         //-     <canvas id="chart-year-pie" width="400px" height=""></canvas>
@@ -225,16 +284,16 @@ block content
                         //-                     data: [55,45]
                         //-                 }],
                         //-             },
-                        //-             options: { 
-                                        
+                        //-             options: {
+
                         //-                 legend: {
                         //-                     display: false,
                         //-                     position:'bottom'
                         //-                 }
-                                        
+
                         //-             }
                         //-         });
-                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
+                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="")
                         //-     div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") INGRESOS (%)
                         //- div(class="uk-width-1-1 uk-margin-small-top" style="")
                         //- <canvas id="chart-ingresos-dona" width="400px" height=""></canvas>
@@ -250,16 +309,16 @@ block content
                         //-                 borderWidth:4
                         //-             }],
                         //-         },
-                        //-         options: { 
-                                    
+                        //-         options: {
+
                         //-             legend: {
                         //-                 display: false,
                         //-                 position:'bottom'
                         //-             }
-                                    
+
                         //-         }
                         //-     });
-                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="") 
+                        //- div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center uk-margin-top" style="")
                         //-     div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") EGRESOS (%)
                         //- div(class="uk-width-1-1 uk-margin-small-top" style="")
                         //- <canvas id="chart-egresos-dona" width="400px" height=""></canvas>
@@ -274,28 +333,28 @@ block content
                         //-                 data: [62.5,25,13.8,35.4]
                         //-             }],
                         //-         },
-                        //-         options: { 
-                                    
+                        //-         options: {
+
                         //-             legend: {
                         //-                 display: false,
                         //-                 position:'bottom'
                         //-             }
-                                    
+
                         //-         }
                         //-     });
                         //- div.uk-padding.uk-text-small.uk-text-center Principales ingresos y egresos del año 2021
 
                         //- **********USUARIO TIPO ADMIN Y ARQUITECTO***********
-                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px") 
+                        div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center" style="padding-top:50px")
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") PROYECTOS
-                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7") 
+                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7")
                             div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
                             div.uk-width-1-1
                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                             div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                 div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
-                                div.btn-status-active ACTIVO 
+                                div.btn-status-active ACTIVO
                             div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
                                 img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
@@ -303,31 +362,15 @@ block content
                                 img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
                                 img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
                                 img(src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                        
-                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7") 
+
+                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7")
                             div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
                             div.uk-width-1-1
                                 progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
                             div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                 div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
-                                div.btn-status-active.btn-status-noactive INACTIVO 
-                            div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
-                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
-                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
-                        
-                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7") 
-                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
-                            div.uk-width-1-1
-                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
-                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
-                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                                div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
-                                div.btn-status-active ACTIVO 
+                                div.btn-status-active.btn-status-noactive INACTIVO
                             div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
                                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
@@ -336,6 +379,18 @@ block content
                                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
                                 img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
 
-                        
-        
-            
+                        div(class="uk-width-1-1 uk-margin-small-top uk-padding-small" style="border-bottom: solid 1px #C7C7C7")
+                            div.uk-text-truncate.uk-margin-small-bottom(style="color:#222238; font-size:14px") Nombre del proyecto
+                            div.uk-width-1-1
+                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100" style="height:5px !important")
+                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:12px") Progreso 40%
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                div.uk-margin-small-right(style="font-size:13px; color:#6B6B72") Estatus
+                                div.btn-status-active ACTIVO
+                            div.uk-width-1-1.uk-margin-small-top.uk-text-truncate(style="font-size:13px; color:#6B6B72") Miembros del proyecto
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
+                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                img(uk-tooltip="title: Nombre completo; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
