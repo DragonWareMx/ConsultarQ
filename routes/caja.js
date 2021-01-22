@@ -149,7 +149,7 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                     mes = "0" + mes
                 return res.redirect('/caja?m=' + mes + '&y=' + moment().year())
             }
-            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cC && cR && cu && cD) {
                 egresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
@@ -766,7 +766,7 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
                 lista.push(viledruid.id)
             });
             var egresos
-            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cC && cR && cU && cD) {
                 egresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
@@ -879,7 +879,7 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
                 lista.push(viledruid.id)
             });
             var ingresos
-            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cC && cR && cU && cD) {
                 ingresos = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
@@ -992,7 +992,7 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
                 lista.push(viledruid.id)
             });
             var deducibles
-            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cC && cR && cU && cD) {
                 deducibles = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
@@ -1105,7 +1105,7 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
                 lista.push(viledruid.id)
             });
             var transacciones
-            if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
+            if (usuario && usuario.Role && usuario.Role.Permissions && cC && cR && cU && cD) {
                 transacciones = await models.Transaction.findAll({
                     include: [{
                         model: models.Pa_Type
