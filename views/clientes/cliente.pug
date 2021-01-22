@@ -65,20 +65,20 @@ block content
                                         var bandera = false;
                                     if quotations.length > 0
                                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                            a.uk-link-reset(href="#") #{quotations[0].quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                            a.uk-link-reset(target="_blank"  href="/uploads/doc_services/"+quotations[0].quotation) #{quotations[0].quotation}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                             div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{quotations[0].Project.id}
                                         div#MoreCot
                                             each quotation in quotations
                                                 if bandera 
                                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                        a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                        a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+quotation.quotation ) #{quotation.quotation}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                                         div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{quotation.Project.id}
                                                     //-return
                                                 -
                                                     bandera = true;
                                     else
                                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                            a.uk-link-reset(href="#") No hay cotizaciones registradas
+                                            span.uk-link-reset No hay cotizaciones registradas
                                     //-if 
                                         if project.Quotations.length > 0
                                             each quotation,index in project.Quotations
@@ -86,11 +86,12 @@ block content
                                                     each quotation,index in project.Quotations     
                                                         if index != 0
                                                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                                a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span> 
+                                                                a.uk-link-reset(href="#") #{quotation.quotation}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span> 
                                                                 div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
                                 else
                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                        a.uk-link-reset(href="#") No hay cotizaciones registradas
+                                        span.uk-link-reset No hay cotizaciones registradas
+                            //- boton generar cotizacion
                                 div.uk-width-1-1.uk-flex.uk-flex-middle
                                     a.uk-flex.uk-flex-middle(href="/clientes/generar-cotizacion" style="width:max-content")
                                         <span uk-icon="icon:file-pdf; ratio: 0.8" style="margin-right:5px"></span>Generar
@@ -109,22 +110,22 @@ block content
                                         if project.contract
                                             if index == 0
                                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                    a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                    a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+project.contract) #{project.contract}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                                     div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp; Proyecto: #{project.id}
                                                 return
                                         else
                                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                            a.uk-link-reset(href="#") No hay contratos registrados
+                                            span.uk-link-reset(href="#") No hay contratos registrados
                                         div#MoreCont
                                             each project,index in client.Projects
                                                 if index != 0
                                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                        a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                        a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+project.contract) #{project.contract}<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                                         div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
                                 else
                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                        a.uk-link-reset(href="#") No hay contratos registrados
-                                //- boton agregar contrato
+                                        span.uk-link-reset(href="#") No hay contratos registrados
+                            //- boton agregar contrato
                                 div.uk-width-1-1.uk-flex.uk-flex-middle
                                     a.uk-flex.uk-flex-middle(href="#modal-adjuntarContrato" uk-toggle style="width:max-content")
                                         <span uk-icon="icon:upload; ratio: 0.8" style="margin-right:5px"></span>Adjuntar contrato
