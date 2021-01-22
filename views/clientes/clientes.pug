@@ -88,24 +88,38 @@ block content
                                         div(class="uk-width-4-5@m btn-status-active") ACTIVO
                                     else 
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
+                            //- cotizacion
                             if client.Projects.length > 0
                                 each project in client.Projects
-                                    each quotation in project.Quotations
+                                    if project.Quotations.length > 0
+                                        each quotation in project.Quotations
+                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                                div(class="uk-width-1-5@m") Cotización
+                                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
+                                                    a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+quotation.quotation) #{quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>                       
+                                    else
                                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                             div(class="uk-width-1-5@m") Cotización
-                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
-                                                a.uk-link-reset(href="#") #{quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>                       
+                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                | No hay cotizaciones registrados.
                             else
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                         div(class="uk-width-1-5@m") Cotización
                                         div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
                                             | No hay cotizaciones registrados.
+                            //- proyecto
                             if client.Projects.length > 0
                                 each project in client.Projects
-                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
-                                        div(class="uk-width-1-5@m") Contratos
-                                        div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
-                                            a.uk-link-reset(href="#") #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                    if project.contract
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                            div(class="uk-width-1-5@m") Contratos
+                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                a.uk-link-reset(target="_blank" href="/uploads/doc_services/"+project.contract) #{project.contract}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                    else
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
+                                            div(class="uk-width-1-5@m") Contratos
+                                            div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                | No hay contratos registrados.
                             else
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                     div(class="uk-width-1-5@m") Contratos
@@ -117,12 +131,32 @@ block content
                                     div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                         div(class="uk-width-1-5@m uk-text-truncate") Proyecto
                                         div(class="uk-width-4-5@m uk-text-emphasis") 
-                                            a.uk-link-reset(href="#") #{project.name}
+                                            a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
+                                            //- script barra de porcentaje
+                                            -
+                                                var tareasListas = 0
+                                                var tareasFaltantes = 0
+                                                var tareasTotales = 0
+                                                var porcentaje = 100
+                                            if project.Tasks
+                                                each task in project.Tasks
+                                                    -
+                                                        tareasTotales++
+                                                        if(task.check)
+                                                            tareasListas++
+                                                        else
+                                                            tareasFaltantes++
+                                                if tareasTotales > 0
+                                                    -
+                                                        porcentaje = parseInt((tareasListas/tareasTotales)*100)
                                             div.uk-width-1-1
-                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
+                                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso #{porcentaje}%
                                     div(class="uk-width-1-5@m") Estatus
-                                    div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                                    if project.status === "ACTIVO" || project.status === "TERMINADO"
+                                        div(class="uk-width-4-5@m btn-status-active") #{project.status}
+                                    else 
+                                        div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
                         else
                             k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
                                 div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
