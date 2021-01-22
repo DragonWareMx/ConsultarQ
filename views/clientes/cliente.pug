@@ -61,20 +61,24 @@ block content
                             div(class="uk-width-1-5@m uk-text-truncate") Cotización
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px") 
                                 if client.Projects.length > 0
-                                    each project in client.Projects
-                                        each quotation,index in project.Quotations
-                                            if index == 0
-                                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                    a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
-                                                return
-                                            div#MoreCot
-                                                each quotation,index in project.Quotations     
-                                                    if index != 0
-                                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                            a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span> 
-                                                            div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{project.id}
-                                        return
+                                    -   
+                                        var bandera = false;
+                                    if quotations.length > 0
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            a.uk-link-reset(href="#") #{quotations[0].quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                            div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{quotations[0].Project.id}
+                                        div#MoreCot
+                                            each quotation in quotations
+                                                if bandera 
+                                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                                        a.uk-link-reset(href="#") #{quotation.quotation}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto #{quotation.Project.id}
+                                                    //-return
+                                                -
+                                                    bandera = true;
+                                    else
+                                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            a.uk-link-reset(href="#") No hay cotizaciones registradas
                                     //-if 
                                         if project.Quotations.length > 0
                                             each quotation,index in project.Quotations
@@ -102,17 +106,21 @@ block content
                             div(class="uk-width-4-5@m uk-text-emphasis uk-flex-inline uk-flex-middle uk-flex-wrap" style="font-size:14px")
                                 if client.Projects.length > 0
                                     each project,index in client.Projects
-                                        if index == 0
-                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
-                                                a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                                div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp; Proyecto: #{project.id}
-                                            return
-                                    div#MoreCont
-                                        each project,index in client.Projects
-                                            if index != 0
+                                        if project.contract
+                                            if index == 0
                                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
                                                     a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
-                                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
+                                                    div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp; Proyecto: #{project.id}
+                                                return
+                                        else
+                                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                            a.uk-link-reset(href="#") No hay contratos registrados
+                                        div#MoreCont
+                                            each project,index in client.Projects
+                                                if index != 0
+                                                    div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
+                                                        a.uk-link-reset(href="#") #{project.contract}.pdf<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
+                                                        div(style="font-size:12px; color:#666666 !important") &nbsp;&nbsp;Proyecto: #{project.id}
                                 else
                                     div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle
                                         a.uk-link-reset(href="#") No hay contratos registrados
@@ -128,17 +136,34 @@ block content
             //- tarjetas de proyectos
             div(class="uk-text-left uk-text-large uk-text-bold uk-text-primary") Proyectos
             //- si no hay ningun proyecto debe mostrarse un mensaje
-            if client.Projects
+            if client.Projects.length > 0
                 each project in client.Projects
                     div(class="uk-width-1-1@m uk-flex")
                         div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
                                 div.uk-width-1-1 Proyecto #{project.id}
                                 div.uk-width-1-1.uk-text-truncate.uk-text-emphasis 
-                                    a.uk-link-reset(href="#") #{project.name}
+                                    a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
+                                //- script barra de porcentaje
+                                -
+                                    var tareasListas = 0
+                                    var tareasFaltantes = 0
+                                    var tareasTotales = 0
+                                    var porcentaje = 100
+                                if project.Tasks
+                                    each task in project.Tasks
+                                        -
+                                            tareasTotales++
+                                            if(task.check)
+                                                tareasListas++
+                                            else
+                                                tareasFaltantes++
+                                    if tareasTotales > 0
+                                        -
+                                            porcentaje = parseInt((tareasListas/tareasTotales)*100)
                                 div.uk-width-1-1
-                                    progress(id="js-progressbar" class="uk-progress uk-margin-remove" value="40" max="100")
-                                div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso 40%
+                                    progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
+                                div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso #{porcentaje}%
                                 div.uk-width-1-1 Estatus
                                 div.uk-width-1-1.uk-flex.uk-flex-middle
                                     if project.status === "ACTIVO" || project.status === "TERMINADO"
@@ -170,7 +195,7 @@ block content
                 div(class="uk-width-1-1@m uk-flex")
                     div.uk-card.uk-card-default.uk-card-body.uk-padding-remove.uk-margin-bottom
                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small(style="font-size:14px")
-                            | No se tienen proyectos registrados
+                            | No hay proyectos registrados
 
     div(id="modal-adjuntarContrato" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
@@ -191,7 +216,11 @@ block content
                 form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-client" action="/clientes/edit/"+client.id  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")
-                            img(src="/img/iconos/default.png" alt=""  id="avatar-edit" class="uk-border-circle uk-margin-auto uk-flex" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            a(href="/clientes/cliente/"+client.id)
+                            if client.picture
+                                img(src="/uploads/clients/"+client.picture class="uk-border-circle uk-margin-auto uk-flex" id="avatar-edit" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
+                            else
+                                img(src="/img/iconos/default.png" class="uk-border-circle uk-margin-auto uk-flex" id="avatar-edit" style="width:100px;height:100px; background-size:cover; object-fit:cover;")
                             a(id="foto-edit" class="uk-flex uk-flex-center uk-flex-middle uk-margin-auto uk-width-1 uk-flex-wrap" style="width:max-content; font-size:13px")
                                 <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar foto
                             input(name="fileField_edit" type="file" id="fileField_edit" style="visibility:hidden;height:2px;width:30px")
@@ -248,26 +277,26 @@ block content
     script.
         jQuery(($) => {
             $('#a-MoreCot').on('click', function() {
-                 if ($("#MoreCot").is(':visible')) {
-                    $("#MoreCot").hide();
-                    $("#GenerarCot").hide();
+                
+
+                if ($("#MoreCot").is(':visible')) {
+                    $("#MoreCot").hide('fast');
                     $("#a-MoreCot").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
                 }
                 else{
-                    $("#MoreCot").show();
-                    $("#GenerarCot").show();
+                    $("#MoreCot").show('fast');
                     $("#a-MoreCot").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
                 }
             });
 
             $('#a-MoreCont').on('click', function() {
                  if ($("#MoreCont").is(':visible')) {
-                    $("#MoreCont").hide();
+                    $("#MoreCont").hide('fast');
                     //$("#GenerarCont").hide();
                     $("#a-MoreCont").html("<img src='/icons/eye.png' style='width:15px;height:15px; margin-right:5px'> Ver más")
                 }
                 else{
-                    $("#MoreCont").show();
+                    $("#MoreCont").show('fast');
                     //$("#GenerarCont").show();
                     $("#a-MoreCont").html("<img src='/icons/notEye.png' style='width:15px;height:15px; margin-right:5px'> Ver menos")
                 }
@@ -285,7 +314,6 @@ block content
 
         jQuery(($) => {
              //esto es para la foto de perfil
-
             $('#foto-edit').on('click', function() {
                 $("#fileField_edit").click();
             });

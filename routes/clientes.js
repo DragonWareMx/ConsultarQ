@@ -135,6 +135,8 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
                                 include: [{
                                     model: models.Employee
                                 }]
+                        }, {
+                            model: models.Task
                         }],
                         order: [
                             ['createdAt', 'DESC']
@@ -144,8 +146,27 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
 
             const areas = await models.Client_Area.findAll()
 
+            const quotations = await models.Quotation.findAll({
+                include: [{
+                    model: models.Project,
+                    include: [{
+                        model: models.Client,
+                        where: {
+                            id: req.params.id
+                        },
+                        required: true
+                    }],
+                    required: true
+                }],
+                order: [
+                    ['createdAt', 'DESC']
+                ]
+            })
+
+            console.log(quotations)
+
             if(client){
-                return res.render('cliente', { client , areas })
+                return res.render('cliente', { client , areas , quotations })
             }
             else{
                 return res.status(404).json(404)                //  mandar a la vista de error
