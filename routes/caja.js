@@ -1422,15 +1422,15 @@ router.get('/pdf/:month/:year', isLoggedIn, async function (req, res, next) {
                         text-align: center
                       }
                       table.blueTable tbody td {
-                        font-size: 13px;
+                        font-size: 12px;
                       }
                       table.blueTable thead {
                         background: #407EC9;
                         border-bottom: 2px solid #444444;
                       }
                       table.blueTable thead th {
-                        font-size: 15px;
-                        font-weight: bold;
+                        font-size: 14px;
+                        font-weight: 400;
                         color: #407EC9;
                         border-left: 2px solid #D0E4F5;
                       }
@@ -1590,6 +1590,10 @@ router.get('/pdf/:month/:year', isLoggedIn, async function (req, res, next) {
         console.log(error)
         return res.render('error', { error: 404 })
     }
+})
+
+router.get('/pdf/anual/:year', isLoggedIn, async function (res, req, next) {
+
 })
 
 module.exports = router;

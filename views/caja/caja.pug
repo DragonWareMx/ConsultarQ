@@ -184,62 +184,61 @@ block content
                         div(class="uk-width-1-1 uk-flex uk-flex-center uk-margin-small-top")
                             button(class="button-caja button-caja-s uk-width-1-2" style="") Buscar
 
+                -
+                        var fechaLink=new Date(hoy);
+                        var monthLink=fechaLink.getMonth() + 1;
+                        var yearLink=fechaLink.getFullYear();
+                        var yearOrigin=yearLink;
+                        var yearLink2=yearLink
+                        var year=yearLink
+                        var mLAfter=0;
+                        var mLBefore=0;
+                        var yLAfter=0;
+                        var yLBefore=0;
+                        if(monthLink==1){
+                            mLAfter=12;
+                            yearLink=yearLink-1;
+                        }
+                        else{
+                            mLAfter=monthLink - 1;
+                        }
+                        if(monthLink==12){
+                            mLBefore=1;
+                            yearLink2=yearLink+1;
+                        }
+                        else{
+                            mLBefore=monthLink + 1;
+                        }
 
+                        if(mLAfter<10){
+                            mLAfter="0"+mLAfter;
+                        }
+                        if(mLBefore<10){
+                            mLBefore="0"+mLBefore;
+                        }
+                        if(year==2000){
+                            yLBefore=2040;
+                        }
+                        else{
+                            yLBefore=year-1;
+                        }
+                        if(year==2040){
+                            yLAfter=2000;
+                        }
+                        else{
+                            yLAfter=year+1;
+                        }
+                        if(monthLink<10){
+                            monthLink="0"+monthLink;
+                        }
             div(class="uk-grid-small uk-width-1-1 uk-margin-remove-left" uk-grid style="padding-right:15px;" uk-height-match="target: > div > .uk-card")
                 div(class="uk-width-3-4@m uk-padding-remove")
                     div(class="uk-card uk-card-default uk-card-body uk-padding-small")
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-align-center")
-                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;")
-                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
+                            a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;" href="/caja/pdf/"+monthLink+"/"+yearOrigin target="_blank")
+                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Generar PDF
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
-                            -
-                                var fechaLink=new Date(hoy);
-                                var monthLink=fechaLink.getMonth() + 1;
-                                var yearLink=fechaLink.getFullYear();
-                                var yearLink2=yearLink
-                                var year=yearLink
-                                var mLAfter=0;
-                                var mLBefore=0;
-                                var yLAfter=0;
-                                var yLBefore=0;
-                                if(monthLink==1){
-                                    mLAfter=12;
-                                    yearLink=yearLink-1;
-                                }
-                                else{
-                                    mLAfter=monthLink - 1;
-                                }
-                                if(monthLink==12){
-                                    mLBefore=1;
-                                    yearLink2=yearLink+1;
-                                }
-                                else{
-                                    mLBefore=monthLink + 1;
-                                }
-
-                                if(mLAfter<10){
-                                    mLAfter="0"+mLAfter;
-                                }
-                                if(mLBefore<10){
-                                    mLBefore="0"+mLBefore;
-                                }
-                                if(year==2000){
-                                    yLBefore=2040;
-                                }
-                                else{
-                                    yLBefore=year-1;
-                                }
-                                if(year==2040){
-                                    yLAfter=2000;
-                                }
-                                else{
-                                    yLAfter=year+1;
-                                }
-                                if(monthLink<10){
-                                    monthLink="0"+monthLink;
-                                }
-
                             a(uk-icon="icon: chevron-left" href="/caja?m="+mLAfter+"&y="+ yearLink)
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px; text-transform: capitalize") #{moment(hoy).format('MMMM')}
                             a(uk-icon="icon: chevron-right" href="/caja?m="+mLBefore+"&y="+ yearLink2)
@@ -365,7 +364,7 @@ block content
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-flex-middle uk-margin-small-bottom")
                             div(class="uk-align-center")
                             a(class="uk-button uk-button-default uk-button-small button-down uk-flex uk-flex-middle" style="color:#222238;")
-                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Descargar PDF
+                                <span uk-icon="icon: download; ratio: 0.8" style="margin-right:5px"></span> Generar PDF
                         div(class="uk-flex-inline uk-width-1-1 uk-flex-middle uk-flex-center")
                             div(style="color: #1e87f0; font-weight: bold; font-size: 22px; line-height: 27px; margin-left:20px; margin-right:20px") HISTORIAL #{moment(hoy).format('YYYY')}
                         div(class="uk-width-1-1 uk-flex uk-flex-wrap uk-margin-small-top")
