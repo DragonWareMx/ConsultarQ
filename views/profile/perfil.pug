@@ -111,8 +111,13 @@ block content
                                     input(type='text' autocomplete='on'  id="int_number" name="int_number"  value=user.Employee.int_number onchange="this.setAttribute('value', this.value);")
                                     label(for='int_number' title='No. Interior (opcional)' data-title='No. Interior')
                         .field.uk-margin-bottom
+<<<<<<< Updated upstream
                             input(type='email' autocomplete="on"  id="email" name="email"  value=user.email onchange="this.setAttribute('value', this.value);" required='')
                             label(for='email' title='Correo electrónico' data-title='Correo electrónico')
+=======
+                            input(type='email' disabled autocomplete="no"  id="email-edit" name="email"  value=user.email onchange="this.setAttribute('value', this.value);" required='')
+                            label(for='email-edit'  title='Correo electrónico' data-title='Correo electrónico')
+>>>>>>> Stashed changes
                         a(id="pass" class="uk-flex uk-flex-left uk-flex-middle uk-text-small uk-flex-wrap uk-margin-bottom" style="width:max-content")
                             <span uk-icon="icon: pencil; ratio: 0.8" style="margin-right:5px"></span>Editar contraseña
                         div(style="display:none" id="pass-div")
