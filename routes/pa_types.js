@@ -23,7 +23,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ur' }
+                    where: { name: 'cr' }
                 }
             }
         })
@@ -33,7 +33,10 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             models.Pa_Type.findAll({
                 order: [
                     ['id', 'ASC']
-                ]
+                ],
+                where: {
+                    status: 'active'
+                }
             }).then(tipos => {
                 return res.render('pa_types/pa_types', { tipos })
             });
@@ -82,7 +85,7 @@ router.post('/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso
+                        where: { name: 'cc' }           //////////////////  cambiar nombre del permiso
                     }
                 }
             })
@@ -210,7 +213,7 @@ router.post('/update/:id',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uu' }           ////////////////////////REVISAR PERMISO
+                        where: { name: 'cu' }           ////////////////////////REVISAR PERMISO
                     }
                 }
             })
@@ -323,7 +326,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ud' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
+                    where: { name: 'cd' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
                 }
             }
         })
@@ -345,8 +348,9 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         //se elimina el rol
         const patypeD = await models.Pa_Type.findOne({ where: { id: req.params.id }, transaction: t })
 
-        await patypeD.destroy({ transaction: t });
-
+        await patypeD.update({
+            status: 'inactive',
+        }, { transaction: t })
         //SE REGISTRA EL LOG
         //obtenemos el usuario que realiza la transaccion
         const usuario = await models.User.findOne({
@@ -366,10 +370,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         //guarda el log en la base de datos
         const log = await models.Log.create(dataLog, { transaction: t })
 
-        //verifica si se elimina el tipo de pago
-        const verPaType = await models.Pa_Type.findOne({ where: { id: patypeD.id }, transaction: t })
-
-        if (verPaType)
+        if (!patypeD)
             throw new Error()
         if (!log)
             throw new Error()

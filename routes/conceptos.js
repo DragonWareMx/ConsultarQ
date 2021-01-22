@@ -46,7 +46,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ur' }
+                    where: { name: 'cr' }
                 }
             }
         })
@@ -56,7 +56,10 @@ router.get('/', isLoggedIn, async (req, res, next) => {
             models.Concept.findAll({
                 order: [
                     ['id', 'ASC']
-                ]
+                ],
+                where: {
+                    status: 'active'
+                }
             }).then(conceptos => {
                 return res.render('conceptos/conceptos', { conceptos })
             });
@@ -105,7 +108,7 @@ router.post('/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso
+                        where: { name: 'cc' }           //////////////////  cambiar nombre del permiso
                     }
                 }
             })
@@ -233,7 +236,7 @@ router.post('/update/:id',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uu' }           ////////////////////////REVISAR PERMISO
+                        where: { name: 'cu' }           ////////////////////////REVISAR PERMISO
                     }
                 }
             })
@@ -346,7 +349,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ud' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
+                    where: { name: 'cd' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
                 }
             }
         })
@@ -368,7 +371,9 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         //se elimina el rol
         const conceptD = await models.Concept.findOne({ where: { id: req.params.id }, transaction: t })
 
-        await conceptD.destroy({ transaction: t });
+        await conceptD.update({
+            status: 'inactive',
+        }, { transaction: t })
 
         //SE REGISTRA EL LOG
         //obtenemos el usuario que realiza la transaccion
@@ -389,10 +394,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         //guarda el log en la base de datos
         const log = await models.Log.create(dataLog, { transaction: t })
 
-        //verifica si se elimina el concepto
-        const verConcept = await models.Concept.findOne({ where: { id: conceptD.id }, transaction: t })
-
-        if (verConcept)
+        if (!conceptD)
             throw new Error()
         if (!log)
             throw new Error()

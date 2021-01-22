@@ -16,7 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   };
   Pa_Type.init({
     name: DataTypes.STRING,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    status: {
+      type: DataTypes.ENUM('active', 'inactive'),
+      defaultValue: 'active',
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Pa_Type',

@@ -16,7 +16,12 @@ module.exports = (sequelize, DataTypes) => {
   };
   Concept.init({
     name: DataTypes.STRING,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    status: {
+      type: DataTypes.ENUM('active', 'inactive'),
+      defaultValue: 'active',
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Concept',

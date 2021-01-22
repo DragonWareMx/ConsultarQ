@@ -58,8 +58,8 @@ router.get('/', isLoggedIn, async function (req, res, next) {
             proj.forEach(viledruid => {
                 lista.push(viledruid.id)
             });
-            const tipos = await models.Pa_Type.findAll();
-            const conceptos = await models.Concept.findAll();
+            const tipos = await models.Pa_Type.findAll({ where: { status: 'active' } });
+            const conceptos = await models.Concept.findAll({ where: { status: 'active' } });
             var proyectos;
             if (cC && cR && cU && cD) {
                 proyectos = await models.Project.findAll({
@@ -462,8 +462,8 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
                     id: req.params.id
                 }
             })
-            const tipos = await models.Pa_Type.findAll();
-            const conceptos = await models.Concept.findAll();
+            const tipos = await models.Pa_Type.findAll({ where: { status: 'active' } });
+            const conceptos = await models.Concept.findAll({ where: { status: 'active' } });
             if (movimiento) {
                 var proyectos
                 if (cC && cR && cU && cD) {

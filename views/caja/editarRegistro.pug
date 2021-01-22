@@ -31,6 +31,7 @@ block content
                     label(for='concepto' title='Concepto' data-title='Concepto')
                 .field.uk-margin-bottom
                     select(id="pago" name="pago" autocomplete='off' value='' required)
+                        option(value="" disabled hidden selected ) Seleccionar
                         each tipo in tipos
                             option(value=tipo.id selected=(tipo.id == movimiento.PaTypeId)) #{tipo.name}
                     label(for='pago' title='Tipo de pago' data-title='Tipo de pago')
