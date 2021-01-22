@@ -458,7 +458,7 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
                     model: models.User,
                     include: { model: models.Employee }
                 }, {
-                    model: models.Proyect
+                    model: models.Project
                 }],
                 where: {
                     id: req.params.id
@@ -479,7 +479,7 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
                     proyectos = await models.Project.findAll({
                         include: {
                             model: models.Project_Employee,
-                            where: { UserId: movimiento.Project_Employee.UserId }
+                            where: { UserId: movimiento.UserId }
                         },
                         where: { status: "activo" }
                     });
@@ -496,6 +496,7 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
         }
     }
     catch (error) {
+        console.log(error)
         return res.status(403).json(403)
     }
 });
@@ -572,16 +573,34 @@ router.post('/editar-registro/:id', isLoggedIn,
             if (!project_employ)
                 throw new Error()
             //se actualiza la transaccion
-            await oldTransaccion.update({
-                T_type: req.body.type,
-                date: req.body.date,
-                amount: req.body.monto,
-                description: req.body.descripcion,
-                invoice: req.body.invoice,
-                ProjectEmployeeId: project_employ.id,
-                PaTypeId: req.body.pago,
-                ConceptId: req.body.concepto,
-            }, { transaction: t })
+            if (cC && cR && cU && cD) {
+                //se crea la transaccion
+                await oldTransaccion.update({
+                    T_type: req.body.type,
+                    date: req.body.date,
+                    amount: req.body.monto,
+                    description: req.body.descripcion,
+                    invoice: req.body.invoice,
+                    ProjectId: req.body.proyecto.id,
+                    UserId: req.user.id,
+                    PaTypeId: req.body.pago,
+                    ConceptId: req.body.concepto,
+                }, { transaction: t })
+            }
+            else {
+                //se crea la transaccion
+                await oldTransaccion.update({
+                    T_type: req.body.type,
+                    date: req.body.date,
+                    amount: req.body.monto,
+                    description: req.body.descripcion,
+                    invoice: req.body.invoice,
+                    ProjectId: project_employ.ProjectId,
+                    UserId: project_employ.UserId,
+                    PaTypeId: req.body.pago,
+                    ConceptId: req.body.concepto,
+                }, { transaction: t })
+            }
 
             //SE REGISTRA EL LOG
             //obtenemos el usuario que realiza la transaccion
@@ -1146,7 +1165,7 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
 
 });
 
-router.post('/create',
+router.post('/create', isLoggedIn,
     [
         check('type').isIn(['ingreso', 'egreso']).withMessage('El tipo de movimiento ingresado no es válido.'),
         check('concepto')
@@ -1173,7 +1192,7 @@ router.post('/create',
             .isLength({ max: 255 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
             .trim()
             .escape(),
-    ], isLoggedIn, async (req, res, next) => {
+    ], async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(422).send(errors.array());
@@ -1181,7 +1200,7 @@ router.post('/create',
         try {
             //VERIFICACION DEL PERMISO
             //obtenemos el usuario, su rol y su permiso
-            const usuario = await models.User.findOne({
+            var usuario = await models.User.findOne({
                 where: {
                     id: req.user.id
                 },
@@ -1197,7 +1216,6 @@ router.post('/create',
             var cR = false;
             var cU = false;
             var cD = false;
-
             usuario.Role.Permissions.forEach(permiso => {
                 if (permiso.name == 'cc')
                     cC = true
@@ -1224,7 +1242,7 @@ router.post('/create',
             var newTransaccion;
             var project_employ;
             //se busca en donde el registro del usuario y proyecto
-            if (usuario && usuario.Role && usuario.Role.Permissions && cC && cR && cU && cD) {
+            if (cC && cR && cU && cD) {
                 //se crea la transaccion
                 newTransaccion = await models.Transaction.create({
                     T_type: req.body.type,

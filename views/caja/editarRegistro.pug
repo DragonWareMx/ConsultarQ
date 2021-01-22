@@ -38,7 +38,7 @@ block content
                     select(id="proyecto" name="proyecto" autocomplete='off' value='' required)
                         option(value="" disabled hidden selected ) Seleccionar
                         each proyecto in proyectos
-                            option(value=proyecto.id selected=(movimiento.Project_Employee.ProjectId == proyecto.id)) #{proyecto.name}
+                            option(value=proyecto.id selected=(movimiento.ProjectId == proyecto.id)) #{proyecto.name}
                     label(for='proyecto' title='Proyecto' data-title='Proyecto')
             div(class="uk-width-1-3@m uk-padding-small div-info-nex-caja")
                 .field.uk-margin-bottom
@@ -71,8 +71,9 @@ block content
             div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                 a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="javascript:history.back(-1);"  ) Cancelar
                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Guardar
-            a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
-                <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
+            if cD
+                a(class="uk-flex-left uk-flex-middle uk-text-danger uk-link-heading" id="btnEliminar" href="#delete-form" uk-toggle)
+                    <span uk-icon="icon: trash; ratio: 0.8"></span> &nbsp Eliminar
 
         div(id="modal-agregarConcepto" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -110,8 +111,9 @@ block content
                             a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" uk-toggle id="cancelar-tp") Cancelar
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregarPT" type="submit") Guardar
 
-    //modal para eliminar
-    div(id="delete-form" uk-modal)
+    if cD
+        //modal para eliminar
+        div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar registro
                 button(type='button' uk-close='' class="uk-modal-close-default" id="cerrar-modal-eliminar")
