@@ -234,7 +234,6 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                             required: true
                         }, {
                             model: models.Project,
-                            required: true
                         }],
                     where: {
                         T_type: 'ingreso',
@@ -253,7 +252,6 @@ router.get('/', isLoggedIn, async function (req, res, next) {
                             required: true
                         }, {
                             model: models.Project,
-                            required: true
                         }],
                     where: {
                         T_type: 'egreso',

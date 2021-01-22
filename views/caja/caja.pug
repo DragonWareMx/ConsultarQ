@@ -352,7 +352,11 @@ block content
                                                         | Ingreso
                                                     else
                                                         | Egreso
-                                                th.uk-text-center #{registro.Concept.name}
+                                                th.uk-text-center
+                                                    if registro.Concept
+                                                        | #{registro.Concept.name}
+                                                    else
+                                                        | Concepto eliminado
                                                 th.uk-text-center $ #{registro.amount}
                                             if index >= 4
                                                 - break
