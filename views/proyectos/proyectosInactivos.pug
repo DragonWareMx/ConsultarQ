@@ -186,9 +186,4 @@ block content
                                 div(uk-tooltip="title: Comentarios; pos: top" class="uk-width-auto uk-flex uk-flex-middle")
                                     <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span>
                                     //- contamos los comentarios
-                                    -
-                                        var contadorComentarios = 0
-                                    each empleado in proyecto.Project_Employees
-                                        -
-                                            contadorComentarios += empleado.Comments.length
-                                    div(class="uk-text-small" style="cursor: default" ) #{contadorComentarios}
+                                    div(class="uk-text-small" style="cursor: default" ) #{proyecto.Comments.length}

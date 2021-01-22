@@ -84,8 +84,7 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
             model: models.Pro_Type
           },
           {
-            model: models.Project_Employee,
-            include: models.Comment
+            model: models.Project_Employee
           },
           {
             model: models.Task,
@@ -116,14 +115,11 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
         }
       }
       const comentarios = await models.Comment.findAll({
-        where: {ProjectEmployeeId: comentID},
+        where: {ProjectId: proyecto.id},
         order: [['createdAt','DESC']],
         include: {
-          model: models.Project_Employee,
-          include: {
-            model: models.User,
-            include: models.Employee
-          }
+          model: models.User,
+          include: models.Employee
         }
       })
 
@@ -189,15 +185,30 @@ router.post('/proyecto/:id/comment',
                 include: {
                     model: models.Role,
                     include: {
-                        model: models.Permission,
-                        where: { name: 'pc' }
+                        model: models.Permission
                     }
                 }
             })
 
-            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
-                //NO TIENE PERMISO DE AGREGAR rol
-                return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+            var pC = false;
+            var pR = false;
+            var pU = false;
+            var pD = false;
+
+            usuario.Role.Permissions.forEach(permiso => {
+                if (permiso.name == 'pc')
+                    pC = true
+                else if (permiso.name == 'pr')
+                    pR = true
+                else if (permiso.name == 'pu')
+                    pU = true
+                else if (permiso.name == 'pd')
+                    pD = true
+            });
+
+            if (!(usuario && pU)) {
+                //NO TIENE PERMISO DE AGREGAR COMENTARIOS
+                return res.status(403).json([{ msg: 'No estás autorizado para comentar.' }])
             }
         }
         catch (error) {
@@ -209,18 +220,27 @@ router.post('/proyecto/:id/comment',
         //Transaccion
         const t = await models.sequelize.transaction()
         try {
-          const ProjectEm = await models.Project_Employee.findOne({where: {
-            ProjectId: req.params.id,
-            UserId: req.user.id
-          }, transaction: t})
+          //SI TIENE EL PERMISO MAESTRO PUEDE COMENTAR
+          //SI NO SE TIENE QUE VERIFICAR SI FORMA PARTE DEL PROYECTO
+          if (!(pR && pU && pC && pD)) {
+            const proEm = await models.Project_Employee.findOne({
+              where:{
+                ProjectId:  req.params.id,
+                UserId: req.user.id
+              }
+            })
 
-          if(!ProjectEm)
-            throw new Error()
+            if(!proEm){
+              await t.rollback();
+              return res.status(500).json([{ msg: 'No puedes enviar comentarios con tu rol asignado si no formas parte del proyecto.' }])
+            }
+          }
 
           //se guardan los datos principales
           var datos = {
             comment: req.body.descripcion,
-            ProjectEmployeeId: ProjectEm.id
+            ProjectId:  req.params.id,
+            UserId: req.user.id
           }
 
           //GUARDA EL COMENTARIO
@@ -286,14 +306,16 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           model: models.Pro_Type
         },
         {
-          model: models.Project_Employee,
-          include: models.Comment
+          model: models.Project_Employee
         },
         {
           model: models.Task
         },
         {
           model: models.Quotation
+        },
+        {
+          model: models.Comment
         }
       ],
       where: {status : 'activo'},
@@ -311,11 +333,13 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           model: models.Pro_Type
         },
         {
-          model: models.Project_Employee,
-          include: models.Comment
+          model: models.Project_Employee
         },
         {
           model: models.Task
+        },
+        {
+          model: models.Comment
         }
         ],
         order: [['createdAt','DESC']]
@@ -379,14 +403,16 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
           model: models.Pro_Type
         },
         {
-          model: models.Project_Employee,
-          include: models.Comment
+          model: models.Project_Employee
         },
         {
           model: models.Task
         },
         {
           model: models.Quotation
+        },
+        {
+          model: models.Comment
         }
       ],
       where: {status : ['terminado','cancelado']},
@@ -404,11 +430,13 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
           model: models.Pro_Type
         },
         {
-          model: models.Project_Employee,
-          include: models.Comment
+          model: models.Project_Employee
         },
         {
           model: models.Task
+        },
+        {
+          model: models.Comment
         }
         ],
         order: [['createdAt','DESC']]
@@ -995,6 +1023,9 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
     include:[{
       model: models.Project_Employee,
       include:{ model: models.User, include: models.Employee}
+    },
+    {
+      model: models.Provider
     }]
   })
   const proTypes=await models.Pro_Type.findAll()

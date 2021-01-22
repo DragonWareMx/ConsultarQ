@@ -54,11 +54,11 @@ block content
                         div(class="uk-width-2-5@m uk-flex uk-flex-right uk-flex-wrap-reverse")
                             div(class="uk-width-auto@l uk-flex uk-flex-right uk-flex-middle")
                                 if proyecto.status == 'ATRASADO' || proyecto.status == 'CANCELADO'
-                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px; outline:none") ATRASADO
+                                    button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background:#F1A5A5;border-radius:2px;color:#DC5454;border:none;padding:7px;font-size:8px; outline:none") #{proyecto.status}
                                 else if proyecto.status == 'EN TIEMPO' || proyecto.status == 'ACTIVO'
                                     button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
                             div(class="uk-width-auto@l uk-flex uk-flex-right")
-                                a.uk-flex.uk-flex-middle.uk-text-small(href="#" id="btnEdit" style="margin-right:10px")
+                                a.uk-flex.uk-flex-middle.uk-text-small(href="/proyectos/editar/"+proyecto.id id="btnEdit" style="margin-right:10px")
                                     <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
                     div(class="uk-width-1-1 uk-flex uk-flex-wrap")    
                         div(class="uk-width-1-3@l" style="border-right: 1px solid #EEEEEE; padding:5px")
@@ -228,13 +228,9 @@ block content
                             else
                                 a.uk-link-reset.uk-text-truncate SIN MIEMBROS
                             div.uk-width-1-1.uk-text-small.uk-flex.uk-flex-right 
-                                -
-                                    var contadorComentarios = 0
-                                each empleado in proyecto.Project_Employees
-                                    -
-                                        contadorComentarios += empleado.Comments.length
-                                a.uk-flex.uk-flex-middle.uk-text-small.uk-link-heading(id="ver-comentarios" uk-tooltip="title: Comentarios; pos: left")
-                                    <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> #{contadorComentarios}
+                                    a.uk-flex.uk-flex-middle.uk-text-small.uk-link-heading(id="ver-comentarios" uk-tooltip="title: Comentarios; pos: left")
+                                        div(id="comSpan")
+                                            <span uk-icon="icon: commenting; ratio: 0.7" style="margin-right:5px"></span> #{comentarios.length}
         //- COMENTARIOS-----------------------
         div(class="uk-card uk-width-1-1 uk-card-default uk-margin-top uk-padding-small"  id="Comentarios")
             div.width-1-1.uk-text-small.uk-flex.uk-flex-wrap-reverse.uk-flex-middle
@@ -262,7 +258,7 @@ block content
                             img(src="/img/iconos/default.png" style="width:40px; height:40px; border-radius:50px; margin-right:15px;object-fit:cover")
                         div(class="uk-width-expand uk-text-small uk-flex uk-flex-column")
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-flex-middle.uk-flex-between
-                                div(class="uk-width-auto@s" style="color:#222238; margin-right:5px") #{comentario.Project_Employee.User.Employee.name}
+                                div(class="uk-width-auto@s" style="color:#222238; margin-right:5px") #{comentario.User.Employee.name}
                                 div(class="uk-width-auto@s" style="font-size:12px;") #{prettyDate(comentario.createdAt)}
                             div.uk-width-1-1 #{comentario.comment}
             //- AGREGAR COMENTARIO
@@ -508,94 +504,97 @@ block content
     
     
     
-    
-    script.
-        jQuery(($) => {
-            $('#ver-comentarios').on('click', function() {
-                if ($("#Comentarios").is(':visible')) {
-                    $("#Comentarios").slideUp('fast');
-                }
-                else{
-                    $("#Comentarios").slideDown('fast');                    
-                }
-            });
-            $('#nover-comentarios').on('click', function() {
-                if ($("#Comentarios").is(':visible')) {
-                    $("#Comentarios").slideUp('fast');
-                }
-                else{
-                    $("#Comentarios").slideDown('fast');                    
-                }
-            });
-        });
-
-        $(document).ready(function () {
-            //ajax del form de nuevo
-            $("#form-create-comment").bind("submit",function(){
-                // Capturamnos el boton de envío
-                var btnEnviar = $("#btnEnviar");
-
-                $.ajax({
-                    type: $(this).attr("method"),
-                    url: $(this).attr("action"),
-                    data: $(this).serialize(),
-                    beforeSend: function(data){
-                        /*
-                        * Esta función se ejecuta durante el envió de la petición al
-                        * servidor.
-                        * */
-                        // btnEnviar.text("Enviando"); Para button
-                        btnEnviar.val("Enviando"); // Para input de tipo button
-                        btnEnviar.attr("disabled","disabled");
-                    },
-                    complete:function(data){
-                        /*
-                        * Se ejecuta al termino de la petición
-                        * */
-                        btnEnviar.val("Enviar formulario");
-                    },
-                    success: function(data){
-                        /*
-                        * Se ejecuta cuando termina la petición y esta ha sido
-                        * correcta
-                        * */
-                        $('#errors').css('display', 'none');
-                        UIkit.notification({
-                            message: '<span uk-icon=\'icon: check\'></span>Comentario enviado con éxito!',
-                            status: 'success',
-                            pos: 'top-center',
-                            timeout: 1000
-                        });
-                        $( "#comentDiv" ).load(location.href + " #comentDiv");
-                        btnEnviar.removeAttr("disabled");
-                        $("#descripcion").val("");
-                    },
-                    error: function(data){
-                        /*
-                        * Se ejecuta si la peticón ha sido erronea
-                        * */
-                        btnEnviar.removeAttr("disabled");
-                        $('#errors').css('display', 'block');
-                        var errors = JSON.parse(data.responseText);
-                        var errorsContainer = $('#errors');
-                        errorsContainer.innerHTML = '';
-                        var errorsList = '';
-                        for (var i = 0; i < errors.length; i++) {
-                            //if(errors[i].redirect)
-                                //window.location.href = window.location.origin + '/logout'
-                            errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
-                        }
-                        errorsContainer.html(errorsList);
-
-                        UIkit.notification({
-                            message: '<span uk-icon=\'icon: close\'></span>No se pudo enviar el comentario!',
-                            status: 'danger',
-                            pos: 'top-center',
-                            timeout: 2000
-                        });
+    div(id="scripts")
+        script.
+            jQuery(($) => {
+                $('#ver-comentarios').on('click', function() {
+                    if ($("#Comentarios").is(':visible')) {
+                        $("#Comentarios").slideUp('fast');
+                    }
+                    else{
+                        $("#Comentarios").slideDown('fast');                    
                     }
                 });
-                // Nos permite cancelar el envio del formulario
-                return false;
+                $('#nover-comentarios').on('click', function() {
+                    if ($("#Comentarios").is(':visible')) {
+                        $("#Comentarios").slideUp('fast');
+                    }
+                    else{
+                        $("#Comentarios").slideDown('fast');                    
+                    }
+                });
             });
-        });
+
+            $(document).ready(function () {
+                //ajax del form de nuevo
+
+                $("#form-create-comment").bind("submit",function(){
+                    // Capturamnos el boton de envío
+                    var btnEnviar = $("#btnEnviar");
+
+                    $.ajax({
+                        type: $(this).attr("method"),
+                        url: $(this).attr("action"),
+                        data: $(this).serialize(),
+                        beforeSend: function(data){
+                            /*
+                            * Esta función se ejecuta durante el envió de la petición al
+                            * servidor.
+                            * */
+                            // btnEnviar.text("Enviando"); Para button
+                            btnEnviar.val("Enviando"); // Para input de tipo button
+                            btnEnviar.attr("disabled","disabled");
+                        },
+                        complete:function(data){
+                            /*
+                            * Se ejecuta al termino de la petición
+                            * */
+                            btnEnviar.val("Enviar formulario");
+                        },
+                        success: function(data){
+                            /*
+                            * Se ejecuta cuando termina la petición y esta ha sido
+                            * correcta
+                            * */
+                            $('#errors').css('display', 'none');
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: check\'></span>Comentario enviado con éxito!',
+                                status: 'success',
+                                pos: 'top-center',
+                                timeout: 1000
+                            });
+                            $( "#comentDiv" ).load(location.href + " #comentDiv");
+                            $( "#comSpan" ).load(location.href + " #comSpan");
+                            $( "#scripts" ).load(location.href + " #scripts");
+                            btnEnviar.removeAttr("disabled");
+                            $("#descripcion").val("");
+                        },
+                        error: function(data){
+                            /*
+                            * Se ejecuta si la peticón ha sido erronea
+                            * */
+                            btnEnviar.removeAttr("disabled");
+                            $('#errors').css('display', 'block');
+                            var errors = JSON.parse(data.responseText);
+                            var errorsContainer = $('#errors');
+                            errorsContainer.innerHTML = '';
+                            var errorsList = '';
+                            for (var i = 0; i < errors.length; i++) {
+                                //if(errors[i].redirect)
+                                    //window.location.href = window.location.origin + '/logout'
+                                errorsList += '<div class="uk-alert-danger" uk-alert><a class="uk-alert-close" uk-close></a><p>'+ errors[i].msg +'</p></div>';
+                            }
+                            errorsContainer.html(errorsList);
+
+                            UIkit.notification({
+                                message: '<span uk-icon=\'icon: close\'></span>No se pudo enviar el comentario!',
+                                status: 'danger',
+                                pos: 'top-center',
+                                timeout: 2000
+                            });
+                        }
+                    });
+                    // Nos permite cancelar el envio del formulario
+                    return false;
+                });
+            });

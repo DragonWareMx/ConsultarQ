@@ -13,8 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Project_Employee.belongsTo(models.User)
       Project_Employee.belongsTo(models.Project)
-      Project_Employee.hasMany(models.Comment)
-      Project_Employee.hasMany(models.Transaction)
     }
   };
   Project_Employee.init({
