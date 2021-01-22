@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsToMany(models.Project, { through: 'project_employees', uniqueKey: 'UserId' });
       User.hasMany(models.Project_Employee)
       User.hasMany(models.Comment)
+      User.hasMany(models.Transaction)
     }
   };
   User.init({

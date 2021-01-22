@@ -342,11 +342,11 @@ block content
                                             tr
                                                 th.uk-text-center #{registro.id}
                                                 th.uk-flex.uk-flex-middle.uk-flex-center
-                                                    if (registro.Project_Employee.User.picture)
-                                                        img(src="/uploads/avatar/"+registro.Project_Employee.User.picture style="width:20px; height:20px; border-radius:50px; margin-right:5px")
+                                                    if (registro.User.picture)
+                                                        img(src="/uploads/avatar/"+registro.User.picture style="width:20px; height:20px; border-radius:50px; margin-right:5px")
                                                     else
                                                         img(src="/img/iconos/default.png" style="width:20px; height:20px; border-radius:50px; margin-right:5px")
-                                                    | &nbsp; #{registro.Project_Employee.User.Employee.name}
+                                                    | &nbsp; #{registro.User.Employee.name}
                                                 th.uk-text-center
                                                     if (registro.T_type == "ingreso")
                                                         | Ingreso

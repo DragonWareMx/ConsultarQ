@@ -18,7 +18,8 @@ module.exports = {
         amount: "600.00",
         description: "Descripcion de la transaccion",
         invoice: 0,
-        ProjectEmployeeId: 1,
+        UserId: 2,
+        ProjectId: 1,
         PaTypeId: 1,
         ConceptId: 1
       },
@@ -28,7 +29,8 @@ module.exports = {
         amount: "800.00",
         description: "Descripcion de la transaccion",
         invoice: 1,
-        ProjectEmployeeId: 1,
+        UserId: 1,
+        ProjectId: 1,
         PaTypeId: 2,
         ConceptId: 1
       },
@@ -38,7 +40,8 @@ module.exports = {
         amount: "150.00",
         description: "Descripcion de la transaccion",
         invoice: 1,
-        ProjectEmployeeId: 1,
+        UserId: 2,
+        ProjectId: 1,
         PaTypeId: 3,
         ConceptId: 2
       },
@@ -48,7 +51,8 @@ module.exports = {
         amount: "1000.00",
         description: "Descripcion de la transaccion",
         invoice: 0,
-        ProjectEmployeeId: 1,
+        UserId: 1,
+        ProjectId: 1,
         PaTypeId: 1,
         ConceptId: 2
       },
@@ -58,7 +62,8 @@ module.exports = {
         amount: "750.00",
         description: "Descripcion de la transaccion",
         invoice: 1,
-        ProjectEmployeeId: 1,
+        UserId: 1,
+        ProjectId: 1,
         PaTypeId: 2,
         ConceptId: 3
       },
@@ -68,7 +73,8 @@ module.exports = {
         amount: "1200.00",
         description: "Descripcion de la transaccion",
         invoice: 1,
-        ProjectEmployeeId: 1,
+        UserId: 2,
+        ProjectId: 1,
         PaTypeId: 3,
         ConceptId: 3
       },
@@ -78,7 +84,8 @@ module.exports = {
         amount: "700.00",
         description: "Descripcion de la transaccion",
         invoice: 1,
-        ProjectEmployeeId: 1,
+        UserId: 2,
+        ProjectId: 1,
         PaTypeId: 1,
         ConceptId: 1
       },
@@ -88,7 +95,8 @@ module.exports = {
         amount: "500.00",
         description: "Descripcion de la transaccion",
         invoice: 0,
-        ProjectEmployeeId: 1,
+        UserId: 1,
+        ProjectId: 1,
         PaTypeId: 2,
         ConceptId: 2
       },
@@ -98,7 +106,8 @@ module.exports = {
         amount: "2000.00",
         description: "Descripcion de la transaccion",
         invoice: 0,
-        ProjectEmployeeId: 1,
+        UserId: 2,
+        ProjectId: 1,
         PaTypeId: 3,
         ConceptId: 3
       },
@@ -108,7 +117,8 @@ module.exports = {
         amount: "900.00",
         description: "Descripcion de la transaccion",
         invoice: 1,
-        ProjectEmployeeId: 1,
+        UserId: 2,
+        ProjectId: 1,
         PaTypeId: 3,
         ConceptId: 2
       }

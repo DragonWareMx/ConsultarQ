@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       Project.belongsTo(models.Client)
       Project.hasMany(models.Task)
       Project.hasMany(models.Comment)
+      Project.hasMany(models.Transaction)
     }
   };
   Project.init({
@@ -44,44 +45,44 @@ module.exports = (sequelize, DataTypes) => {
     end_date: {
       type: DataTypes.DATEONLY
     },
-    status:{
+    status: {
       allowNull: false,
-      type: DataTypes.ENUM('activo', 'cancelado','terminado'),
+      type: DataTypes.ENUM('activo', 'cancelado', 'terminado'),
       defaultValue: 'activo',
-      get(){
-        if(this.getDataValue('status') == 'activo'){
-          if(!this.getDataValue('end_date')){
+      get() {
+        if (this.getDataValue('status') == 'activo') {
+          if (!this.getDataValue('end_date')) {
             //obtenemos la fecha actual y el deadline
             var endDate = new Date()
-            endDate.setHours(5,22,33,0)
-            var deadline = new Date(this.getDataValue('deadline')+"T11:22:33+0000")
+            endDate.setHours(5, 22, 33, 0)
+            var deadline = new Date(this.getDataValue('deadline') + "T11:22:33+0000")
 
             //se comparan
-            if(endDate.getTime() <= deadline.getTime()){
+            if (endDate.getTime() <= deadline.getTime()) {
               return 'ACTIVO'
             }
-            else{
+            else {
               return 'ATRASADO'
             }
           }
-          else{
-            var endDate = new Date(this.getDataValue('end_date')+"T11:22:33+0000")
-            var deadline = new Date(this.getDataValue('deadline')+"T11:22:33+0000")
-            if(endDate.getTime() <= deadline.getTime()){
+          else {
+            var endDate = new Date(this.getDataValue('end_date') + "T11:22:33+0000")
+            var deadline = new Date(this.getDataValue('deadline') + "T11:22:33+0000")
+            if (endDate.getTime() <= deadline.getTime()) {
               return 'EN TIEMPO'
             }
-            else{
+            else {
               return 'ATRASADO'
             }
           }
         }
-        else if(this.getDataValue('status') == 'terminado'){
-          var endDate = new Date(this.getDataValue('end_date')+"T11:22:33+0000")
-          var deadline = new Date(this.getDataValue('deadline')+"T11:22:33+0000")
-          if(endDate.getTime() <= deadline.getTime()){
+        else if (this.getDataValue('status') == 'terminado') {
+          var endDate = new Date(this.getDataValue('end_date') + "T11:22:33+0000")
+          var deadline = new Date(this.getDataValue('deadline') + "T11:22:33+0000")
+          if (endDate.getTime() <= deadline.getTime()) {
             return 'EN TIEMPO'
           }
-          else{
+          else {
             return 'ATRASADO'
           }
         }

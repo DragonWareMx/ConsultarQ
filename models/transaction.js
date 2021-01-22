@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Transaction.belongsTo(models.Pa_Type);
       Transaction.belongsTo(models.Concept);
-      Transaction.belongsTo(models.Project_Employee);
+      Transaction.belongsTo(models.User);
+      Transaction.belongsTo(models.Project);
     }
   };
   Transaction.init({
