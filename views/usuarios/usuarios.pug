@@ -29,76 +29,76 @@ block content
 
 
         ul(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid)
-            //- li(class="item")
-            each usuario in usuarios
-                div
-                    div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
-                            div(class="uk-width-auto@m")
-                                a(href="#")
-                                    if usuario.picture
-                                        img(src="/uploads/clients/"+usuario.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
-                                    else
-                                        img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
-                            div(class="uk-width-expand@m uk-margin-small-bottom")
-                                div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
-                                    div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
-                                        a.uk-link-reset(href="#") #{usuario.Employee.name} 
-                                    div(class="uk-width-expand@l uk-text-right")
-                                        if pU
-                                            a.uk-flex-inline.uk-flex-middle.editar(style="text-decoration:none; color:#1e87f0 !important" uk-toggle="target: #edit-form" data-id=usuario.id)
-                                                img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
-                                                div(class="uk-text-small") Editar
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
-                                    <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>#{usuario.Employee.phone_number}
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
-                                    <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>#{usuario.email}
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Rol; pos: left")
-                                    if usuario.Role != null
-                                        <span uk-icon="icon:server; ratio: 0.8" style="margin-right:5px"></span> #{usuario.Role.name}
-                                    else
-                                        <span uk-icon="icon:server; ratio: 0.8" style="margin-right:5px"></span> El usuario no tiene rol
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
-                                    if usuario.status === "active"
-                                        div(class="uk-width-4-5@m btn-status-active") ACTIVO
+            li(class="item")
+                each usuario in usuarios
+                    div
+                        div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
+                                div(class="uk-width-auto@m")
+                                    a(href="/usuarios/usuario")
+                                        if usuario.picture
+                                            img(src="/uploads/avatar/"+usuario.picture style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                                        else
+                                            img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
+                                div(class="uk-width-expand@m uk-margin-small-bottom")
+                                    div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
+                                        div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
+                                            a.uk-link-reset(href="/usuarios/usuario") #{usuario.Employee.name} 
+                                        div(class="uk-width-expand@l uk-text-right")
+                                            if pU
+                                                a.uk-flex-inline.uk-flex-middle.editar(style="text-decoration:none; color:#1e87f0 !important" uk-toggle="target: #edit-form" data-id=usuario.id)
+                                                    img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
+                                                    div(class="uk-text-small") Editar
+                                    div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
+                                        <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>#{usuario.Employee.phone_number}
+                                    div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
+                                        <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>#{usuario.email}
+                                    div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Rol; pos: left")
+                                        if usuario.Role != null
+                                            <span uk-icon="icon:server; ratio: 0.8" style="margin-right:5px"></span> #{usuario.Role.name}
+                                        else
+                                            <span uk-icon="icon:server; ratio: 0.8" style="margin-right:5px"></span> El usuario no tiene rol
+                                    div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
+                                        if usuario.status === "active"
+                                            div(class="uk-width-4-5@m btn-status-active") ACTIVO
+                                        else 
+                                            div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
+                            div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
+                                //-
+                                    console.log(usuario.Project_Employees[0].Project)
+                                if usuario.Project_Employees[0] && usuario.Project_Employees[0].Project 
+                                    div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+                                        div(class="uk-width-1-5@m uk-text-truncate") Proyecto
+                                        div(class="uk-width-4-5@m uk-text-emphasis") 
+                                            a.uk-link-reset(target="_blank" href="/proyectos/proyecto/"+usuario.Project_Employees[0].Project.id) #{usuario.Project_Employees[0].Project.name}
+                                            //- script barra de porcentaje
+                                            -
+                                                var tareasListas = 0
+                                                var tareasFaltantes = 0
+                                                var tareasTotales = 0
+                                                var porcentaje = 100
+                                            if usuario.Project_Employees[0].Project.Tasks
+                                                each task in usuario.Project_Employees[0].Project.Tasks
+                                                    -
+                                                        tareasTotales++
+                                                        if(task.check)
+                                                            tareasListas++
+                                                        else
+                                                            tareasFaltantes++
+                                                if tareasTotales > 0
+                                                    -
+                                                        porcentaje = parseInt((tareasListas/tareasTotales)*100)
+                                            div.uk-width-1-1
+                                                progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
+                                            div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso #{porcentaje}%
+                                    div(class="uk-width-1-5@m") Estatus
+                                    if usuario.Project_Employees[0].Project.status === "ACTIVO" || usuario.Project_Employees[0].Project.status === "TERMINADO"
+                                        div(class="uk-width-4-5@m btn-status-active") #{usuario.Project_Employees[0].Project.status}
                                     else 
-                                        div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
-                        div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
-                            //-
-                                console.log(usuario.Project_Employees[0].Project)
-                            if usuario.Project_Employees[0] && usuario.Project_Employees[0].Project 
-                                div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
-                                    div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                                    div(class="uk-width-4-5@m uk-text-emphasis") 
-                                        a.uk-link-reset(target="_blank" href="/proyectos/proyecto/"+usuario.Project_Employees[0].Project.id) #{usuario.Project_Employees[0].Project.name}
-                                        //- script barra de porcentaje
-                                        -
-                                            var tareasListas = 0
-                                            var tareasFaltantes = 0
-                                            var tareasTotales = 0
-                                            var porcentaje = 100
-                                        if usuario.Project_Employees[0].Project.Tasks
-                                            each task in usuario.Project_Employees[0].Project.Tasks
-                                                -
-                                                    tareasTotales++
-                                                    if(task.check)
-                                                        tareasListas++
-                                                    else
-                                                        tareasFaltantes++
-                                            if tareasTotales > 0
-                                                -
-                                                    porcentaje = parseInt((tareasListas/tareasTotales)*100)
-                                        div.uk-width-1-1
-                                            progress(id="js-progressbar" class="uk-progress uk-margin-remove" value=porcentaje max="100")
-                                        div.uk-width-1-1.uk-text-right.uk-text-emphasis(style="font-size:14px") Progreso #{porcentaje}%
-                                div(class="uk-width-1-5@m") Estatus
-                                if usuario.Project_Employees[0].Project.status === "ACTIVO" || usuario.Project_Employees[0].Project.status === "TERMINADO"
-                                    div(class="uk-width-4-5@m btn-status-active") #{usuario.Project_Employees[0].Project.status}
-                                else 
-                                    div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{usuario.Project_Employees[0].Project.status}
-                            else
-                                div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
-                                    div(class="uk-width-1-1@m ") No hay proyectos registrados
+                                        div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{usuario.Project_Employees[0].Project.status}
+                                else
+                                    div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
+                                        div(class="uk-width-1-1@m ") No hay proyectos registrados
 
 
 
