@@ -818,12 +818,58 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
   }
 });
 
+//VER DOCUMENTACION
 router.get('/documentacion', isLoggedIn,async function (req, res, next) {
-  const projects =await models.Project.findAll({
-    include: models.Task,
-    order: [['createdAt','DESC']]
-  })
-  res.render('documentacion',{projects}); 
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      const projects =await models.Project.findAll({
+        include: models.Task,
+        order: [['createdAt','DESC']]
+      })
+      res.render('documentacion',{projects});     
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+  catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+  }
 });
 
 //AGREGAR PROYECTO
@@ -1895,80 +1941,271 @@ router.post('/update/:projectId', upload.fields([{name: 'cotizaciones', maxCount
         }
 });
 
+//AGREGAR PROYECTO
 router.get('/agregar', isLoggedIn,async function (req, res, next) {
-  const prestadores = await models.Provider.findAll({
-    include: [{
-        model: models.Provider_Area
-    }],
-    order: [
-        ['status', 'ASC']
-    ]
-  })
-      
-  const miembros = await models.Employee.findAll({
-    include: [{
-      model: models.User
-    }],
-    order: [
-      ['name','ASC']
-    ]
-  })
 
-  const proTypes = await models.Pro_Type.findAll()
+  try {
+    //VERIFICACION DEL PERMISO
 
-  const Clients = await models.Client.findAll()
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
 
-  return res.render('agregarProyecto', { prestadores,miembros, proTypes, Clients})
-});
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
 
-router.get('/documentacion/editar/:id', isLoggedIn,function (req, res, next) {
-  models.Project.findOne({
-    where: {
-      id: req.params.id
-    },
-    include: [{
-      model: models.Task
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pC) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      const prestadores = await models.Provider.findAll({
+        include: [{
+            model: models.Provider_Area
+        }],
+        order: [
+            ['status', 'ASC']
+        ]
+      })
+          
+      const miembros = await models.Employee.findAll({
+        include: [{
+          model: models.User
+        }],
+        order: [
+          ['name','ASC']
+        ]
+      })
+    
+      const proTypes = await models.Pro_Type.findAll()
+    
+      const Clients = await models.Client.findAll()
+    
+      return res.render('agregarProyecto', { prestadores,miembros, proTypes, Clients})
     }
-  ]
-  }).then(project =>{
-    res.render('editarDocumentacion',{project});
-  }); 
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+  catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+  }
 });
 
+//VER EDITAR DOCUMENTACION
+router.get('/documentacion/editar/:id', isLoggedIn,async function (req, res, next) {
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      models.Project.findOne({
+        where: {
+          id: req.params.id
+        },
+        include: [{
+          model: models.Task
+        }
+      ]
+      }).then(project =>{
+        res.render('editarDocumentacion',{project});
+      }); 
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+  catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+  }
+});
+
+//VER EDITAR PROYECTO
 router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
-  const project=await models.Project.findOne({
-    where:{
-      id: req.params.id
-    },
-    include:[{
-      model: models.Project_Employee,
-      include:{ model: models.User, include: models.Employee}
-    },
-    {
-      model: models.Provider
-    }]
-  })
-  const proTypes=await models.Pro_Type.findAll()
-  const prestadores=await models.Provider.findAll()
-  const clientes=await models.Client.findAll()
-  const miembros = await models.Employee.findAll({
-    include: [{
-      model: models.User
-    }],
-    order: [
-      ['name','ASC']
-    ]
-  })
-  res.render('editarProyecto',{project,proTypes,prestadores,miembros,clientes});
+
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      const project=await models.Project.findOne({
+        where:{
+          id: req.params.id
+        },
+        include:[{
+          model: models.Project_Employee,
+          include:{ model: models.User, include: models.Employee}
+        },
+        {
+          model: models.Provider
+        }]
+      })
+      const proTypes=await models.Pro_Type.findAll()
+      const prestadores=await models.Provider.findAll()
+      const clientes=await models.Client.findAll()
+      const miembros = await models.Employee.findAll({
+        include: [{
+          model: models.User
+        }],
+        order: [
+          ['name','ASC']
+        ]
+      })
+      res.render('editarProyecto',{project,proTypes,prestadores,miembros,clientes});
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+  catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+  }
 });
 
+//VER LAYOUTS
 router.get('/layouts', isLoggedIn,async function (req, res, next) {
-  const layouts=await models.Pro_Type.findAll({
-      include: models.Tasks_Layout
-  })
-  res.render('layouts',{layouts});
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      const layouts=await models.Pro_Type.findAll({
+        include: models.Tasks_Layout
+      })
+      res.render('layouts',{layouts});
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+  catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+  }
 });
 
+//CREAR LAYOUT
 router.post('/layout/create',[
   check('tipo')
         .not().isEmpty().withMessage('Nombre del layout es un campo requerido.')
@@ -2050,21 +2287,69 @@ router.post('/layout/create',[
   }
 });
 
-router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
-  models.Pro_Type.findOne({
-    where: {
-      id: req.params.id
-    },
-    include: [{
-      model: models.Tasks_Layout
+//VER EDITAR LAYOUT
+router.get('/layout/editar/:id', isLoggedIn,async function (req, res, next) {
+  try {
+    //VERIFICACION DEL PERMISO
+
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
+        include: {
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
+        }
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
+      //TIENE PERMISO DE DESPLEGAR VISTA
+      //obtiene todos los proyectos y se manda a la vista
+      models.Pro_Type.findOne({
+        where: {
+          id: req.params.id
+        },
+        include: [{
+          model: models.Tasks_Layout
+        }
+      ]
+      }).then(layout =>{
+        res.render('editarLayout',{layout});
+      });
     }
-  ]
-  }).then(layout =>{
-    res.render('editarLayout',{layout});
-  });
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+  catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+  }
 });
 
 
+//EDITAR LAYOUT
 router.post('/layout/:idLayout/editar',[
   check('titulo')
         .not().isEmpty().withMessage('Nombre del layout es un campo requerido.')
@@ -2150,20 +2435,6 @@ router.post('/layout/:idLayout/editar',[
   }
 });
 
-router.get('/layout/editar/:id', isLoggedIn,function (req, res, next) {
-  models.Pro_Type.findOne({
-    where: {
-      id: req.params.id
-    },
-    include: [{
-      model: models.Tasks_Layout
-    }
-  ]
-  }).then(layout =>{
-    res.render('editarLayout',{layout});
-  });
-});
-
 //Agregar tarea de layout
 router.post('/layout/:layoutId/tarea/agregar',[
   check('concepto')
@@ -2203,7 +2474,7 @@ router.post('/layout/:layoutId/tarea/agregar',[
             model: models.Role,
             include: {
                 model: models.Permission,
-                where: { name: 'pu' }
+                where: { name: 'pc' }
             }
         }
     })
@@ -2682,7 +2953,7 @@ router.post('/documentacion/:projectId/tarea/agregar',[
             model: models.Role,
             include: {
                 model: models.Permission,
-                where: { name: 'pu' }
+                where: { name: 'pc' }
             }
         }
     })
