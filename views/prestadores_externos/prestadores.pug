@@ -48,17 +48,30 @@ block content
                                     th(class="uk-text-center") ESTATUS
                             tbody
                                 each prestador in prestadores
-                                    tr(class="info item" uk-toggle="target: #modal-info" data-id=prestador.id id="item")
-                                        td(class="id") #{prestador.id}
-                                        td(class="name") #{prestador.name}
-                                        td(class="area") #{prestador.Provider_Area.name}
-                                        td(class="numero") #{prestador.phone_number}
-                                        if(prestador.status == 'active')
-                                            td(class="status")
-                                                div(class="uk-width-4-5@m btn-status-active uk-align-center") ACTIVO
-                                        else
-                                            td(class="status") 
-                                                div(class="uk-width-4-5@m btn-status-active btn-status-noactive uk-align-center") INACTIVO
+                                    if prestador.Provider_Area && prestador.Provider_Area.status == "active"
+                                        tr(class="info item" uk-toggle="target: #modal-info" data-id=prestador.id id="item")
+                                            td(class="id") #{prestador.id}
+                                            td(class="name") #{prestador.name}
+                                            td(class="area") #{prestador.Provider_Area.name}
+                                            td(class="numero") #{prestador.phone_number}
+                                            if(prestador.status == 'active')
+                                                td(class="status")
+                                                    div(class="uk-width-4-5@m btn-status-active uk-align-center") ACTIVO
+                                            else
+                                                td(class="status") 
+                                                    div(class="uk-width-4-5@m btn-status-active btn-status-noactive uk-align-center") INACTIVO
+                                    else
+                                        tr(class="info item" uk-toggle="target: #modal-info" data-id=prestador.id id="item")
+                                            td(class="id") #{prestador.id}
+                                            td(class="name") #{prestador.name}
+                                            td(class="area") Sin área
+                                            td(class="numero") #{prestador.phone_number}
+                                            if(prestador.status == 'active')
+                                                td(class="status")
+                                                    div(class="uk-width-4-5@m btn-status-active uk-align-center") ACTIVO
+                                            else
+                                                td(class="status") 
+                                                    div(class="uk-width-4-5@m btn-status-active btn-status-noactive uk-align-center") INACTIVO
             //- informacion completa
             div(id="modal-info" uk-modal)
                 div(class="uk-modal-dialog uk-modal-body")
@@ -130,9 +143,10 @@ block content
                                     div(class="uk-width-1-2@s uk-width-1-1")
                                         .field.uk-margin-bottom
                                             select(id="add_area" name="add_area" autocomplete='off' value='' required)
-                                                option(value="" disabled hidden selected ) Seleccionar
+                                                option(value="0" selected ) Sin área
                                                 each area in areas
-                                                    option(value=area.id) #{area.name}
+                                                    if area && area.status == "active"
+                                                        option(value=area.id) #{area.name}
                                             label(for='add_area' title='Área' data-title='Área')
                                     div(class="uk-width-1-2@s uk-width-1-1")
                                         .field.uk-margin-bottom
@@ -180,9 +194,11 @@ block content
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         select(id="edit_area" name="edit_area" autocomplete='off' value='' required)
-                                            option(value="" disabled hidden selected) Seleccionar
-                                            each area in areas
-                                                    option(value=area.id) #{area.name} 
+                                            //-option(value="" disabled hidden selected) Seleccionar
+                                            option(value='0' selected) Sin área
+                                                each area in areas
+                                                    if area && area.status == "active"
+                                                        option(value=area.id) #{area.name} 
                                         label(for='edit_area' title='Área' data-title='Área')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
@@ -318,7 +334,12 @@ block content
                         $('#info-estatus option[value="inactivo"]').prop('selected', 'selected').change();
                     }
                     $('#info-nombre').val(obj["name"]).change();
-                    $('#info-area').val(obj["Provider_Area"]["name"]).change();
+                    if(obj["Provider_Area"] && obj["Provider_Area"]["status"] == "active"){
+                        $('#info-area').val(obj["Provider_Area"]["name"]).change();
+                    }
+                    else{
+                        $('#info-area').val("Sin área").change();
+                    }
                     $('#info-telefono').val(obj["phone_number"]).change();
                     $('#info-correo').val(obj["email"]).change();
                     $('#info-dro').val(obj["dro"]).change();
@@ -343,7 +364,9 @@ block content
                         $('#edit_estatus option[value="inactive"]').prop('selected', 'selected').change();
                     }
                     $('#edit_nombre').val(obj["name"]).change();
-                    $('#edit_area option[value=' + obj["Provider_Area"]["id"] + ']').prop('selected', 'selected').change();
+                    if(obj["Provider_Area"]){
+                        $('#edit_area option[value=' + obj["Provider_Area"]["id"] + ']').prop('selected', 'selected').change();
+                    }
                     $('#edit_telefono').val(obj["phone_number"]).change();
                     $('#edit_correo').val(obj["email"]).change();
                     $('#edit_dro').val(obj["dro"]).change();

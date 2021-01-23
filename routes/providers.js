@@ -218,6 +218,11 @@ router.post('/edit/:id', isLoggedIn,
                             validador = true
                         }
                     });
+
+                    if (area == 0){
+                        validador = true
+                    }
+
                 }
                 if (validador) {
                     return true
@@ -276,14 +281,26 @@ router.post('/edit/:id', isLoggedIn,
                 where: { id: req.params.id }, transaction: t
             })
 
-            await prestadorU.update({
+            data = 
+            {
                 name: req.body.edit_nombre,
                 dro: req.body.edit_dro,
                 email: req.body.edit_correo,
                 phone_number: req.body.edit_telefono,
-                ProviderAreaId: req.body.edit_area,
+                //ProviderAreaId: req.body.edit_area,
                 status: req.body.edit_estatus,
-            }, { transaction: t })
+            }
+
+            if (req.body.edit_area){
+                if (req.body.edit_area == 0){
+                    data.ProviderAreaId=null
+                }
+                else{
+                    data.ProviderAreaId=req.body.edit_area
+                }
+            }
+
+            await prestadorU.update(data, { transaction: t })
 
             //SE REGISTRA EL LOG
             //obtenemos el usuario que realiza la transaccion
@@ -749,10 +766,12 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
     //Transaccion
     const t = await models.sequelize.transaction()
     try {
-        //se elimina el rol
+        //  se actualiza el status del area
         const areaD = await models.Provider_Area.findOne({ where: { id: req.params.id }, transaction: t })
-
-        await areaD.destroy({ transaction: t });
+        
+        await areaD.update({
+            status: 'inactive'
+        }, { transaction: t })
 
         //SE REGISTRA EL LOG
         //obtenemos el usuario que realiza la transaccion
@@ -774,9 +793,9 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
         const log = await models.Log.create(dataLog, { transaction: t })
 
         //verifica si se elimina el concepto
-        const verArea = await models.Provider_Area.findOne({ where: { id: areaD.id }, transaction: t })
+        const verArea = await models.Provider_Area.findOne({ where: { id: areaD.id, status: "inactive" }, transaction: t })
 
-        if (verArea)
+        if (!verArea)
             throw new Error()
         if (!log)
             throw new Error()
