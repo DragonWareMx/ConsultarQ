@@ -339,7 +339,6 @@ router.get('/inicio', isLoggedIn, async function (req, res, next) {
     var deducibles
     var ingreConceptos
     var egreConceptos
-    console.log(usuario.Projects[0].Users)
     res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos, usuario});
 });
 

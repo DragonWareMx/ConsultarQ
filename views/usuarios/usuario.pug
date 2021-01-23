@@ -121,7 +121,7 @@ block content
                                 div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top
                                     each project_user,index in project_employee.Project.Users
                                         if project_user
-                                            img(uk-tooltip="title: " + project_user.Employee.name + "; pos: left" src="/img/avatar/"+project_user.picture style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
+                                            img(uk-tooltip="title: " + project_user.Employee.name + "; pos: left" src="/uploads/avatar/"+project_user.picture style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
                                         else
                                             img(uk-tooltip="title: " + project_user.Employee.name +"; pos: left" src="/img/iconos/default.png" style="width:30px; height:30px; border-radius:50px; margin-bottom:5px; margin-right:5px")
                                     if project_employee.Project.length > 5

@@ -103,29 +103,7 @@ router.post('/edit/:id', upload.single('fileField'),
             return res.status(422).send(errors.array());
         }
 
-        try {
-            //VERIFICACION DEL PERMISO
-            //obtenemos el usuario, su rol y su permiso
-            const usuario = await models.User.findOne({
-                where: {
-                    id: req.user.id
-                },
-                include: {
-                    model: models.Role,
-                    include: {
-                        model: models.Permission,
-                        where: { name: 'uu' }
-                    }
-                }
-            })
-            //NO TIENE PERMISO
-            if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
-                return res.status(403).json([{ msg: 'No estás autorizado para editar los datos.' }])
-            }
-        }
-        catch (error) {
-            return res.status(403).json([{ msg: 'No estás autorizado para editar los datos.' }])
-        }
+    
 
         //TIENE PERMISO
         //Transaccion
