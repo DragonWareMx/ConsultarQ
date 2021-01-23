@@ -621,7 +621,7 @@ router.post('/nuevo', isLoggedIn, upload.single('fileField'),
             .escape(),
         check('ext_number')
             .not().isEmpty().withMessage('El número exterior es un campo requerido.')
-            .isAlphanumeric().withMessage('El número interior sólo acepta caracteres alfanuméricos.')
+            .isAlphanumeric().withMessage('El número exterior sólo acepta caracteres alfanuméricos.')
             .isLength({ max: 10 }).withMessage('El número exterior puede tener un máximo de 10 caracteres.'),
         check('int_number')
             .optional({ checkFalsy: true })
