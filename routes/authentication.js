@@ -321,12 +321,26 @@ router.get('/inicio', isLoggedIn, async function (req, res, next) {
             ['date', 'DESC']
         ],
     })
+    const usuario = await models.User.findOne({
+        where: {id: req.user.id},
+        include:[{
+            model:models.Project,
+            include: [{
+                model: models.User,
+                include:{model:models.Employee}
+            },
+            {
+                model: models.Task
+            }]
+        }]
+    })
     var egresos
     var ingresos
     var deducibles
     var ingreConceptos
     var egreConceptos
-    res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos });
+    console.log(usuario.Projects[0].Users)
+    res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos, usuario});
 });
 
 module.exports = router;
