@@ -49,10 +49,11 @@ block content
                                     th(class="uk-text-center") DESCRIPCIÓN
                             tbody
                                 each area in areas
-                                    tr(class="info" uk-toggle="target: #modal-info" data-id=area.id)
-                                        td #{area.id}
-                                        td #{area.name}
-                                        td #{area.description}
+                                    if area.status == "active"
+                                        tr(class="info" uk-toggle="target: #modal-info" data-id=area.id)
+                                            td #{area.id}
+                                            td #{area.name}
+                                            td #{area.description}
         //- informacion completa
         div(id="modal-info" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")

@@ -411,6 +411,10 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField_edit'),
                             validador = true
                         }
                     });
+
+                    if (area == 0){
+                        validador = true
+                    }
                 }
                 if (validador) {
                     return true
@@ -478,7 +482,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField_edit'),
                         rfc: req.body.rfc_edit,
                         picture: req.file.filename,
                         status: req.body.status_edit,
-                        ClientAreaId: req.body.area_edit,
+                        //ClientAreaId: req.body.area_edit,
                     }
             }
             else {
@@ -489,8 +493,17 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField_edit'),
                         phone_number: req.body.phone_edit,
                         rfc: req.body.rfc_edit,
                         status: req.body.status_edit,
-                        ClientAreaId: req.body.area_edit,
+                        //ClientAreaId: req.body.area_edit,
                     }
+            }
+
+            if (req.body.area_edit){
+                if (req.body.area_edit == 0){
+                    data.ClientAreaId=null
+                }
+                else{
+                    data.ClientAreaId=req.body.area_edit
+                }
             }
 
             await clienteU.update(data , { transaction: t })
@@ -976,10 +989,12 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
     //Transaccion
     const t = await models.sequelize.transaction()
     try {
-        //se elimina el rol
+        //  se actualiza el status del area
         const areaD = await models.Client_Area.findOne({ where: { id: req.params.id }, transaction: t })
 
-        await areaD.destroy({ transaction: t });
+        await areaD.update({
+            status: 'inactive'
+        }, { transaction: t })
 
         //SE REGISTRA EL LOG
         //obtenemos el usuario que realiza la transaccion
@@ -1001,9 +1016,9 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
         const log = await models.Log.create(dataLog, { transaction: t })
 
         //verifica si se elimina el concepto
-        const verArea = await models.Client_Area.findOne({ where: { id: areaD.id }, transaction: t })
+        const verArea = await models.Client_Area.findOne({ where: { id: areaD.id, status: "inactive" }, transaction: t })
 
-        if (verArea)
+        if (!verArea)
             throw new Error()
         if (!log)
             throw new Error()

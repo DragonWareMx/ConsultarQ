@@ -82,7 +82,10 @@ block content
                                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Fecha de registro; pos: left")
                                     <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>#{prettyDate(client.createdAt)}
                                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Área; pos: left")
-                                    <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>#{client.Client_Area.name}
+                                    if client.Client_Area && client.Client_Area.status == "active"
+                                        <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>#{client.Client_Area.name}
+                                    else
+                                        <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>Sin área
                                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
                                     if client.status === "active"
                                         div(class="uk-width-4-5@m btn-status-active") ACTIVO
@@ -203,8 +206,10 @@ block content
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
-                                    each area in areas
-                                        option(value=area.id) #{area.name}
+                                    option(value='0' selected) Sin area
+                                        each area in areas
+                                            if area && area.status == "active"
+                                                option(value=area.id) #{area.name}
                                 label(for='area_edit' title='Área' data-title='Área')
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
@@ -259,7 +264,8 @@ block content
                                 select(id="area" name="area" autocomplete='off' value='' required)
                                     option(value="" disabled hidden selected ) Seleccionar
                                         each area in areas
-                                            option(value=area.id) #{area.name}
+                                            if area.status == "active"
+                                                option(value=area.id) #{area.name}
                                 label(for='area' title='Área' data-title='Área')
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
@@ -382,7 +388,10 @@ block content
                 $('#phone_edit').val(obj["phone_number"]).change();
                 $('#email_edit').val(obj["email"]).change();
                 $('#rfc_edit').val(obj["rfc"]).change();
-                $('#area_edit option[value=' + obj["Client_Area"]["id"] + ']').prop('selected', 'selected').change();
+                if(obj["Client_Area"]){
+                    $('#area_edit option[value=' + obj["Client_Area"]["id"] + ']').prop('selected', 'selected').change();
+                }
+                
 
                 //esto es para poner el id en el action del form
                  $('#form-edit-client').attr('action', '/clientes/edit/'+obj["id"]);
