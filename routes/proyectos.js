@@ -328,6 +328,29 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                 <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO: `+proyecto.name+`</h3>
                 <img src="`+ url + `/img/logos/faviconB.png"  width="481" height="299" style="position: absolute; top: 325px; left: 150px ; opacity: 0.2;" >
                 <div style="height: 20px"> </div>
+
+                <table class="blueTable" style="margin-top: 20px">
+                  <thead>
+                    <tr>
+                      <th>AVANCE</th>
+                      <th>TAREAS LISTAS</th>
+                      <th>TAREAS FALTANTES</th>
+                      <th>FECHA DE INICIO</th>
+                      <th>FECHA LÍMITE</th>
+                      <th>ESTATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>${porcentaje}%</td>
+                      <td>${tareasListas}</td>
+                      <td>${tareasFaltantes}</td>
+                      <td>${fechaII.getDate()} / ${mesI} / ${fechaII.getFullYear()}</td>
+                      <td>${fechaTI.getDate()} / ${mesF} / ${fechaTI.getFullYear()}</td>
+                      <td>${proyecto.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
                 `
   if(proyecto.Client){
     ht += `
@@ -352,7 +375,13 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                       <td>${proyecto.Client.phone_number}</td>
                       <td>${proyecto.Client.email}</td>
                       <td>${proyecto.Client.Client_Area.name}</td>
-                      <td>${proyecto.Client.status}</td>
+                      `
+                      if(proyecto.Client.status == 'active')
+                        ht+=`<td>ACTIVO</td>`
+                      else
+                        ht+=`<td>INACTIVO</td>`
+      
+                  ht+=`
                     </tr>
                   </tbody>
                 </table>
@@ -384,10 +413,25 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                 ht += `
                     <tr>
                     <td>${miembro.User.id}</td>
-                    <td><img src="`+ url + `/uploads/clients/${miembro.User.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td></td>
-                    <td>${miembro.User.Employee.name}</td>
-                    <td>${miembro.role}</td>
-                    <td>${miembro.profit}</td>
+                    `
+                if(miembro.User.picture)
+                  ht+=`<td><img src="`+ url + `/uploads/avatar/${miembro.User.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                else
+                  ht+=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+
+                ht+=`<td>${miembro.User.Employee.name}</td>`
+
+                if(miembro.role)
+                  ht+=`<td>${miembro.role}</td>`
+                else
+                  ht+=`<td>Sin rol</td>`
+
+                if(miembro.profit)
+                  ht+=`<td>${miembro.profit}%</td>`
+                else
+                  ht+=`<td>Sin porcentaje</td>``<td>Sin porcentaje</td>`
+                    
+                  ht+=`
                     </tr>
                 `;
             });
