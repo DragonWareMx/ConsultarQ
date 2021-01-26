@@ -174,7 +174,11 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         model: models.Pro_Type
       },
       {
-        model: models.Project_Employee
+        model: models.Project_Employee,
+        include: {
+          model: models.User,
+          include: models.Employee
+        }
       },
       {
         model: models.Task,
@@ -324,6 +328,81 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                 <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO: `+proyecto.name+`</h3>
                 <img src="`+ url + `/img/logos/faviconB.png"  width="481" height="299" style="position: absolute; top: 325px; left: 150px ; opacity: 0.2;" >
                 <div style="height: 20px"> </div>
+                `
+  if(proyecto.Client){
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">DATOS DEL CLIENTE</h5>
+                <table class="blueTable" style="margin-top: 20px">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>FOTO DE PERFIL</th>
+                      <th>NOMBRE</th>
+                      <th>NÚMERO DE TELÉFONO</th>
+                      <th>CORREO ELECTRÓNICO</th>
+                      <th>ÁREA</th>
+                      <th>ESTATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>${proyecto.Client.id}</td>
+                      <td><img src="`+ url + `/uploads/clients/${proyecto.Client.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>
+                      <td>${proyecto.Client.name}</td>
+                      <td>${proyecto.Client.phone_number}</td>
+                      <td>${proyecto.Client.email}</td>
+                      <td>${proyecto.Client.Client_Area.name}</td>
+                      <td>${proyecto.Client.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                `
+  }
+  else{
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN CLIENTE REGISTRADO</h5>
+                `
+  }
+  
+  if(proyecto.Project_Employees){
+    ht += `
+
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MIEMBROS DEL PROYECTO</h5>
+                <table class="blueTable" style="margin-top: 20px">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>FOTO DE PERFIL</th>
+                      <th>NOMBRE</th>
+                      <th>ROL</th>
+                      <th>PORCENTAJE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    `
+              proyecto.Project_Employees.forEach(miembro => {
+                ht += `
+                    <tr>
+                    <td>${miembro.User.id}</td>
+                    <td><img src="`+ url + `/uploads/clients/${miembro.User.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td></td>
+                    <td>${miembro.User.Employee.name}</td>
+                    <td>${miembro.role}</td>
+                    <td>${miembro.profit}</td>
+                    </tr>
+                `;
+            });
+    ht += `
+                  </tbody>
+                </table>
+                `
+  }
+  else{
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MIEMBROS</h5>
+                `
+  }
+    
+  ht += `
                 <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">INGRESOS</h5>
                 <table class="blueTable" style="margin-top: 20px">
                   <thead>
