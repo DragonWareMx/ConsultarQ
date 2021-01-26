@@ -158,7 +158,7 @@ router.post('/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un concepto nuevo con los siguientes datos:\nnombre: " + newConcept.name + "\ndescripcion: " + newConcept.description + "\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un concepto nuevo con los siguientes datos:\nnombre: " + newConcept.name + "\ndescripcion: " + newConcept.description
 
             // var contador = 0
             // for (var key in req.body) {
@@ -291,7 +291,7 @@ router.post('/update/:id',
                 })
 
                 //descripcion del log
-                var desc = "El usuario " + usuario.email + " ha actualizado el concepto con el id " + conceptU.id + " con los siguientes datos:\nnombre: " + conceptU.name + "\ndescripcion: " + conceptU.editDescripcion + "\nCon los permisos:\n"
+                var desc = "El usuario " + usuario.email + " ha actualizado el concepto con el id " + conceptU.id + " con los siguientes datos:\nnombre: " + conceptU.name + "\ndescripcion: " + conceptU.description
 
                 // var contador = 0
                 // for (var key in req.body) {
@@ -388,7 +388,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         var dataLog = {
             UserId: usuario.id,
             title: "Eliminación de concepto",
-            description: "El usuario " + usuario.email + " ha eliminado el concepto con el id " + conceptD.id + " de nombre " + conceptD.name + " con descripcion " + conceptD.description
+            description: "El usuario " + usuario.email + " ha eliminado el concepto con el id " + conceptD.id + " con los siguientes datos: \nnombre: " + conceptD.name + " \ndescripcion: " + conceptD.description
         }
 
         //guarda el log en la base de datos

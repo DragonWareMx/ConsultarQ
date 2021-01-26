@@ -556,7 +556,7 @@ router.post('/areas/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un área de prestadores externos nueva con los siguientes datos:\nNombre: " + newArea.name + "\nDescripción: " + newArea.description +"\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un área de prestadores externos nueva con los siguientes datos:\nNombre: " + newArea.name + "\nDescripción: " + newArea.description 
 
             // var contador = 0
             // for (var key in req.body) {
@@ -689,7 +689,7 @@ router.post('/areas/update/:id',
                 })
 
                 //descripcion del log
-                var desc = "El usuario " + usuario.email + " ha actualizado el área de prestadores externos con el id " + areaU.id + " con los siguientes datos:\nNombre: " + areaU.name + "\nDescripción: " + areaU.editDescripcion + "\nCon los permisos:\n"
+                var desc = "El usuario " + usuario.email + " ha actualizado el área de prestadores externos con el id " + areaU.id + " con los siguientes datos:\nNombre: " + areaU.name + "\nDescripción: " + areaU.description
 
                 // var contador = 0
                 // for (var key in req.body) {
@@ -786,7 +786,7 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
         var dataLog = {
             UserId: usuario.id,
             title: "Eliminación de área de prestador externo",
-            description: "El usuario " + usuario.email + " ha eliminado el área de prestadores externos con el id " + areaD.id + " con los siguientes datos: \nNombre " + areaD.name + "\nDescripción " + areaD.description
+            description: "El usuario " + usuario.email + " ha eliminado el área de prestadores externos con el id " + areaD.id + " con los siguientes datos: \nNombre: " + areaD.name + "\nDescripción: " + areaD.description
         }
 
         //guarda el log en la base de datos

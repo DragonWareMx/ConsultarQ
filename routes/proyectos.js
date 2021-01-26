@@ -2352,7 +2352,7 @@ router.post('/layout/:idLayout/editar',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha ediato un layout con los siguientes datos:\nnombre: " + layout.name 
+    var desc = "El usuario " + usuario.email + " ha editado un layout con los siguientes datos:\nnombre: " + layout.name 
 
     //guardamos los datos del log
     var dataLog = {
