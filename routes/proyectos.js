@@ -321,26 +321,26 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
             </head>
             <body>
                 <h2 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">CONSULTARQ</h2>
-                <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO</h3>
+                <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO: `+proyecto.name+`</h3>
                 <img src="`+ url + `/img/logos/faviconB.png"  width="481" height="299" style="position: absolute; top: 325px; left: 150px ; opacity: 0.2;" >
                 <div style="height: 20px"> </div>
                 <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">INGRESOS</h5>
                 <table class="blueTable" style="margin-top: 20px">
-                <thead>
-                <tr>
-                <th>ID</th>
-                <th>PROYECTO</th>
-                <th>NOMBRE</th>
-                <th>CONCEPTO</th>
-                <th>DESCRIPCION</th>
-                <th>TIPO</th>
-                <th>DEDUCIBLE</th>
-                <th>PAGO</th>
-                <th>FECHA</th>
-                <th>MONTO</th>
-                </tr>
-                </thead>
-                <tbody>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>PROYECTO</th>
+                      <th>NOMBRE</th>
+                      <th>CONCEPTO</th>
+                      <th>DESCRIPCION</th>
+                      <th>TIPO</th>
+                      <th>DEDUCIBLE</th>
+                      <th>PAGO</th>
+                      <th>FECHA</th>
+                      <th>MONTO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                 `;
         /*const ingresos = await models.Transaction.findAll({
             include: [{
@@ -382,27 +382,27 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         });*/
 
         ht += `
-                </tbody>
+                  </tbody>
                 </table>
 
                 <div style="height: 20px"> </div>
                 <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">EGRESOS</h5>
                 <table class="blueTable" style="margin-top: 20px">
-                <thead>
-                <tr>
-                <th>ID</th>
-                <th>PROYECTO</th>
-                <th>NOMBRE</th>
-                <th>CONCEPTO</th>
-                <th>DESCRIPCION</th>
-                <th>TIPO</th>
-                <th>DEDUCIBLE</th>
-                <th>PAGO</th>
-                <th>FECHA</th>
-                <th>MONTO</th>
-                </tr>
-                </thead>
-                <tbody>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>PROYECTO</th>
+                      <th>NOMBRE</th>
+                      <th>CONCEPTO</th>
+                      <th>DESCRIPCION</th>
+                      <th>TIPO</th>
+                      <th>DEDUCIBLE</th>
+                      <th>PAGO</th>
+                      <th>FECHA</th>
+                      <th>MONTO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
         `;
 
         /*const egresos = await models.Transaction.findAll({
@@ -446,7 +446,7 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         */
 
         ht += `
-                </tbody>
+                  </tbody>
                 </table>
             </body>
         </html>
