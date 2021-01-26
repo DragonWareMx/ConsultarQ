@@ -16,7 +16,7 @@ block content
             div(class="uk-margin-bottom" tabindex="0")
                 a(href="#modal-agregarCliente" uk-toggle class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading  uk-animation-fast")
                     img(src="/img/iconos/more.png" style="width:20px;height:20px;margin-top:3px;" class="uk-margin-small-right")
-                    div Agregar cliente 
+                    div Agregar cliente
         -function prettyDate(dateString){
                 //if it's already a date object and not a string you don't need this line:
                 -var date = new Date(dateString);
@@ -38,6 +38,7 @@ block content
             div(uk-dropdown="mode: click")
                 ul(class="uk-list")
                     li(onclick="putSearch('name')" class="uk-dropdown-close" style="cursor:pointer") Nombre
+                    li(onclick="putSearch('area')" class="uk-dropdown-close" style="cursor:pointer") Área
                     li(onclick="putSearch('email')" class="uk-dropdown-close" style="cursor:pointer") Correo electrónico
                     li(onclick="putSearch('phone')" class="uk-dropdown-close" style="cursor:pointer") Número de teléfono
         -function prettyDate(dateString){
@@ -55,9 +56,9 @@ block content
             a(href="/clientes/areas" class="") ÁREAS
 
         //- contenido
-        div(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid)
+        ul(class="uk-child-width-1-2@m uk-grid-match uk-margin-top" uk-grid id="items")
             each client in clientes
-                div
+                li(class="item")
                     div.uk-card.uk-card-default.uk-card-body.uk-padding-remove
                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small
                             div(class="uk-width-auto@m")
@@ -68,20 +69,20 @@ block content
                                         img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
                             div(class="uk-width-expand@m")
                                 div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
-                                    div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
+                                    div(class="uk-width-auto@l user-name" style="color:#222238; font-size:16px; font-weight:400")
                                         a.uk-link-reset(href="/clientes/cliente/"+client.id) #{client.name}
                                     div(class="uk-width-expand@l uk-text-right")
                                         //- if pU
                                         a.uk-flex-inline.uk-flex-middle.editar(style="text-decoration:none; color:#1e87f0 !important" uk-toggle="target: #modal-editarCliente" data-id=client.id)
                                             img(src="/icons/edit.png" style="width:10px;height:10px" class="uk-margin-small-right")
                                             div(class="uk-text-small") Editar
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Teléfono; pos: left")
+                                div.uk-width-1-1.uk-flex.uk-flex-middle.user-phone(uk-tooltip="title: Teléfono; pos: left")
                                     <span uk-icon="icon:receiver; ratio: 0.8" style="margin-right:5px"></span>#{client.phone_number}
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
+                                div.uk-width-1-1.uk-flex.uk-flex-middle.user-email(style="word-break: break-all" uk-tooltip="title: Correo electrónico; pos: left")
                                     <span uk-icon="icon:mail; ratio: 0.8" style="margin-right:5px"></span>#{client.email}
                                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Fecha de registro; pos: left")
                                     <span uk-icon="icon:calendar; ratio: 0.8" style="margin-right:5px"></span>#{prettyDate(client.createdAt)}
-                                div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Área; pos: left")
+                                div.uk-width-1-1.uk-flex.uk-flex-middle.user-area(uk-tooltip="title: Área; pos: left")
                                     if client.Client_Area && client.Client_Area.status == "active"
                                         <span uk-icon="icon:thumbnails; ratio: 0.8" style="margin-right:5px"></span>#{client.Client_Area.name}
                                     else
@@ -89,7 +90,7 @@ block content
                                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
                                     if client.status === "active"
                                         div(class="uk-width-4-5@m btn-status-active") ACTIVO
-                                    else 
+                                    else
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
                             //- cotizacion
                             if client.Projects.length > 0
@@ -98,8 +99,8 @@ block content
                                         each quotation in project.Quotations
                                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                                 div(class="uk-width-1-5@m") Cotización
-                                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px") 
-                                                    a.uk-link-reset(target="_blank" href="/uploads/docs/"+quotation.quotation) #{quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>                       
+                                                div(class="uk-width-4-5@m uk-text-emphasis" style="font-size:14px")
+                                                    a.uk-link-reset(target="_blank" href="/uploads/docs/"+quotation.quotation) #{quotation.quotation}.PDF<span uk-icon="icon:file-pdf; ratio: 0.6" style="margin-left:3px"></span>
                                     else
                                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-margin-small-top.uk-flex-middle
                                             div(class="uk-width-1-5@m") Cotización
@@ -130,10 +131,10 @@ block content
                                         | No hay contratos registrados.
                         if client.Projects.length > 0
                             each project in client.Projects
-                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                                div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
                                     div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                         div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                                        div(class="uk-width-4-5@m uk-text-emphasis") 
+                                        div(class="uk-width-4-5@m uk-text-emphasis")
                                             a.uk-link-reset(href="/proyectos/proyecto/"+project.id) #{project.name}
                                             //- script barra de porcentaje
                                             -
@@ -158,18 +159,20 @@ block content
                                     div(class="uk-width-1-5@m") Estatus
                                     if project.status === "ACTIVO" || project.status === "TERMINADO"
                                         div(class="uk-width-4-5@m btn-status-active") #{project.status}
-                                    else 
+                                    else
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{project.status}
                         else
-                            k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                            k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
                                 div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                     div(class="uk-width-1-1@m ") No hay proyectos registrados
-                        //-else 
-                            k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7") 
+                        //-else
+                            k-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
                                     div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                         div(class="uk-width-1-1@m ") No hay contratos registrados
-                                        
-    
+
+        ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
+            //- li
+
     //- modal editar cliente
     div(id="modal-editarCliente" uk-modal)
         div(class="uk-modal-dialog uk-modal-body")
@@ -202,7 +205,7 @@ block content
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='on' id="rfc_edit" name="rfc_edit" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='rfc_edit' title='RFC' data-title='RFC')
-                   
+
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area_edit" name="area_edit" autocomplete='off' value='' required)
@@ -258,7 +261,7 @@ block content
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='on' id="rfc" name="rfc" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='rfc' title='RFC' data-title='RFC')
-                    
+
                         div(class="uk-width-1-2@s uk-width-1-1")
                             .field.uk-margin-bottom
                                 select(id="area" name="area" autocomplete='off' value='' required)
@@ -278,9 +281,9 @@ block content
                     div(class="uk-width-1 uk-flex-right uk-flex")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                         button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar
-    
-    
-    
+
+
+
     //- modal eliminar cliente
     div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -292,7 +295,116 @@ block content
                     div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
                         a(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize" href="#modal-editarCliente" uk-toggle data-id="" data-name="") Cancelar
                         button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" type="submit") Eliminar
-    
+
+    script.
+        function putSearch(vilevar){
+            var filter=document.getElementById("filter");
+            var tag=document.getElementById("tag-filter");
+            switch(vilevar){
+                case 'name':
+                    tag.innerHTML='Nombre';
+                    break;
+                case 'email':
+                    tag.innerHTML='Email';
+                    break;
+                case 'phone':
+                    tag.innerHTML='Tel';
+                    break;
+                case 'area':
+                    tag.innerHTML='Área';
+                    break;
+            }
+            filter.value=vilevar;
+        }
+
+        function myFunction() {
+            var input, filter, cards, cardContainer, h5, title, i;
+            input = document.getElementById("buscador");
+            filter = input.value.toUpperCase();
+            parameter=document.getElementById("filter").value;
+            cardContainer = document.getElementById("items");
+            cards = cardContainer.getElementsByClassName("item");
+            document.getElementById("pagination").style.display = "none";
+            for (i = 0; i < cards.length; i++) {
+                if(parameter == "name"){
+                    title = cards[i].querySelector('div[class~="user-name"]');
+                }
+                if(parameter == "email"){
+                    title = cards[i].querySelector('div[class~="user-email"]');
+                }
+                if(parameter == "phone"){
+                    title = cards[i].querySelector('div[class~="user-phone"]');
+                }
+                if(parameter == "area"){
+                    title = cards[i].querySelector('div[class~="user-area"]');
+                }
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "flex"
+                    } else {
+                        cards[i].style.display = "none"
+                }
+            }
+        }
+
+    script.
+        $(document).ready(function () {
+            const $studentItem = $('.item');
+            const $paginationList = $('.uk-pagination');
+            const $studentSearch = $('#buscador');
+            const itemTotal = 6;
+
+            // hide all
+            function hideAll() {
+                $studentItem.hide();
+            }
+
+            hideAll();
+
+            // display first 10
+            function displayRange(a,b) {
+                hideAll();
+                // display 0 - 1 students
+                $studentItem.slice(a,b).fadeIn();
+            }
+
+            displayRange(0, itemTotal);
+
+            // create pagination links
+            let pagination = '';
+            for(var i = 1; i < $studentItem.length / itemTotal +  1; i ++) {
+                pagination += `
+                    <li><a class="pagination__num">${i}</a></li>
+                `;
+            }
+            $paginationList.append(pagination);
+            // click on pagination num
+            // pass into display range
+            // calc and show range
+            $('body').on('click', '.pagination__num', function () {
+
+                hideAll();
+
+                // get text number 1 - 5
+                // get ranges for start and end
+                let paginationText = Number($(this).text()) - 1;
+                let startFrom = paginationText * itemTotal;
+                let end = paginationText * itemTotal + paginationText + itemTotal;
+                // console.log('start: ' + startFrom + '   end: ' + end)
+                // display ranges
+                displayRange(startFrom, end);
+
+            });
+
+            $studentSearch.keyup(function()
+            {
+                if (!this.value) {
+                hideAll();
+                $paginationList.show();
+                displayRange(0, itemTotal);
+                }
+            });
+        });
+
     script.
         $(document).ready(function(){
             var clientes=!{ JSON.stringify(clientes) };
@@ -364,7 +476,7 @@ block content
             //-         $('#status-alert-new').show();
             //-     }
             //- });
-        }); 
+        });
 
         jQuery(($) => {
             //esto de abajo es para al momento de abrir el modal de editar cargar los datos
@@ -391,7 +503,7 @@ block content
                 if(obj["Client_Area"]){
                     $('#area_edit option[value=' + obj["Client_Area"]["id"] + ']').prop('selected', 'selected').change();
                 }
-                
+
 
                 //esto es para poner el id en el action del form
                  $('#form-edit-client').attr('action', '/clientes/edit/'+obj["id"]);
@@ -415,7 +527,7 @@ block content
                     $('#form-delete-client').attr('action', '/clientes/delete/'+ userID);
                 });
         });
-        
+
         $(document).ready(function () {
             //ajax del form de nuevo
             $("#form-new-client").bind("submit",function(){
@@ -638,6 +750,3 @@ block content
                 return false;
             });
         });
-    
-
-        
