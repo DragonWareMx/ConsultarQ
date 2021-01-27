@@ -1,0 +1,52 @@
+extends main
+
+block head
+    title ConsultarQ - Inicio
+
+block content
+    div(class="uk-container")
+        div(class="uk-animation-toggle" tabindex="0")
+            div(class="uk-card uk-card-default uk-width-2-3@m uk-width-auto@s  uk-align-center uk-margin-large-top uk-animation-shake")
+                div(class="uk-card-header")
+                    div(class="uk-grid-small uk-flex-middle" uk-grid)
+                        div(class="uk-width-expand")
+                            h3(class="uk-card-title uk-margin-remove-bottom") ConsultarQ
+                            p(class="uk-text-meta uk-margin-remove-top") Bienvenido de nuevo #{user.name}
+                div(class="uk-card-body uk-flex uk-flex-center uk-flex-wrap")
+                    p(id="calendar" class="uk-margin-auto") La fecha de hoy es: 
+                    p(id="clock" class="uk-margin-auto uk-width-1 uk-text-primary uk-text-center uk-text-lead")
+            a(href="/logout", style="color:blue" class="uk-align-right") Cerrar Sesión
+    script.
+        function showTime() {
+            'use strict';
+            var date    = new Date(),
+                hours   = date.getHours(),
+                minutes = date.getMinutes(),
+                seconds = date.getSeconds(),
+                day = date.getDay(),
+                month = date.getMonth() + 1,
+                year = date.getFullYear();
+
+            if (hours < 10) {
+                hours = '0' + hours;
+            }
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+            if (seconds < 10) {
+                seconds = '0' + seconds;
+            }
+            document.getElementById('clock').textContent = hours + ':' + minutes + ':' + seconds;
+            if(month < 10){
+                document.getElementById('calendar').textContent ='La fecha de hoy es: ' + day + '/0' + month + '/' + year;
+            }
+            else{
+                document.getElementById('calendar').textContent = 'La fecha de hoy es: ' + day + '/' + month + '/' + year;
+            }
+            }
+
+            window.onload = function() {
+            'use strcit';
+            
+            setInterval(showTime, 1000);
+        };

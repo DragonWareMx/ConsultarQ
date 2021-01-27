@@ -308,38 +308,85 @@ router.get('/logout', (req, res) => {
 
 
 router.get('/inicio', isLoggedIn, async function (req, res, next) {
-    //res.render('index', { title: 'Express' });
-    const hoy = moment().toDate()
-    const todos = await models.Transaction.findAll({
-        include: [{
-            model: models.User,
-            include: { model: models.Employee }
-        }, {
-            model: models.Concept
-        }],
-        order: [
-            ['date', 'DESC']
-        ],
-    })
-    const usuario = await models.User.findOne({
-        where: {id: req.user.id},
-        include:[{
-            model:models.Project,
+    try {
+        //VERIFICACION DEL PERMISO
+    
+        //obtenemos el usuario, su rol y su permiso
+        const usuarioP = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission
+                }
+            }
+        })
+    
+        uR = false
+        pR = false
+        cR = false
+        eR = false
+        sR = false
+        dR = false
+    
+        usuarioP.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'ur')
+                uR = true
+            else if (permiso.name == 'pr')
+                pR = true
+            else if (permiso.name == 'cr')
+                cR = true
+            else if (permiso.name == 'er')
+                eR = true
+            else if (permiso.name == 'sr')
+                sR = true
+            else if (permiso.name == 'dr')
+                dR = true
+        });
+
+        if(!(uR || pR || cR || eR || sR || dR)){
+            return res.render('inicio2')
+        }
+
+        //res.render('index', { title: 'Express' });
+        const hoy = moment().toDate()
+        const todos = await models.Transaction.findAll({
             include: [{
                 model: models.User,
-                include:{model:models.Employee}
-            },
-            {
-                model: models.Task
+                include: { model: models.Employee }
+            }, {
+                model: models.Concept
+            }],
+            order: [
+                ['date', 'DESC']
+            ],
+        })
+        const usuario = await models.User.findOne({
+            where: {id: req.user.id},
+            include:[{
+                model:models.Project,
+                include: [{
+                    model: models.User,
+                    include:{model:models.Employee}
+                },
+                {
+                    model: models.Task
+                }]
             }]
-        }]
-    })
-    var egresos
-    var ingresos
-    var deducibles
-    var ingreConceptos
-    var egreConceptos
-    res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos, usuario});
+        })
+        var egresos
+        var ingresos
+        var deducibles
+        var ingreConceptos
+        var egreConceptos
+        res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos, usuario});
+    }
+    catch (error) {
+    console.log(error)
+    return res.render('error',{error: 500})
+    }
 });
 
 module.exports = router;
