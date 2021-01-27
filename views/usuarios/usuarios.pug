@@ -1,7 +1,7 @@
 extends ../main
 
 block head
-    title ConsultarQ - Usuarios 
+    title ConsultarQ - Usuarios
     link(rel="stylesheet" href="/stylesheets/others.css")
 block content
     div(class="uk-container")
@@ -9,7 +9,7 @@ block content
             div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Administrar Usuarios
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
                 if pC
-                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake" uk-toggle="target: #user-form")
+                    a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading" uk-toggle="target: #user-form")
                         img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                         div Nuevo usuario
         form(class="uk-flex uk-margin-bottom")
@@ -24,7 +24,7 @@ block content
             div(uk-dropdown="mode: click")
                 ul(class="uk-list")
                     li(onclick="putSearch('name')" class="uk-dropdown-close" style="cursor:pointer") Nombre
-                    li(onclick="putSearch('rol')" class="uk-dropdown-close" style="cursor:pointer") Rol
+                    li(onclick="putSearch('role')" class="uk-dropdown-close" style="cursor:pointer") Rol
                     li(onclick="putSearch('email')" class="uk-dropdown-close" style="cursor:pointer") Correo electrónico
                     li(onclick="putSearch('phone')" class="uk-dropdown-close" style="cursor:pointer") Número de teléfono
 
@@ -43,8 +43,8 @@ block content
                                             img(src="/img/iconos/default.png" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover")
                                 div(class="uk-width-expand@m uk-margin-small-bottom")
                                     div.uk-flex.uk-width-1-1.uk-flex-wrap-reverse
-                                        div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400") 
-                                            a.uk-link-reset(href="/usuarios/usuario/"+usuario.id) #{usuario.Employee.name} 
+                                        div(class="uk-width-auto@l" style="color:#222238; font-size:16px; font-weight:400")
+                                            a.uk-link-reset(href="/usuarios/usuario/"+usuario.id) #{usuario.Employee.name}
                                         div(class="uk-width-expand@l uk-text-right")
                                             if pU
                                                 a.uk-flex-inline.uk-flex-middle.editar(style="text-decoration:none; color:#1e87f0 !important" uk-toggle="target: #edit-form" data-id=usuario.id)
@@ -62,15 +62,15 @@ block content
                                     div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
                                         if usuario.status === "active"
                                             div(class="uk-width-4-5@m btn-status-active") ACTIVO
-                                        else 
+                                        else
                                             div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
                             div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
                                 //-
                                     console.log(usuario.Project_Employees[0].Project)
-                                if usuario.Project_Employees[0] && usuario.Project_Employees[0].Project 
+                                if usuario.Project_Employees[0] && usuario.Project_Employees[0].Project
                                     div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                         div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                                        div(class="uk-width-4-5@m uk-text-emphasis") 
+                                        div(class="uk-width-4-5@m uk-text-emphasis")
                                             a.uk-link-reset(target="_blank" href="/proyectos/proyecto/"+usuario.Project_Employees[0].Project.id) #{usuario.Project_Employees[0].Project.name}
                                             //- script barra de porcentaje
                                             -
@@ -95,7 +95,7 @@ block content
                                     div(class="uk-width-1-5@m") Estatus
                                     if usuario.Project_Employees[0].Project.status === "ACTIVO" || usuario.Project_Employees[0].Project.status === "TERMINADO"
                                         div(class="uk-width-4-5@m btn-status-active") #{usuario.Project_Employees[0].Project.status}
-                                    else 
+                                    else
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{usuario.Project_Employees[0].Project.status}
         ul(class="uk-child-width-1-2@s items" uk-grid id="items")
             each usuario in usuarios
@@ -110,7 +110,7 @@ block content
                                         img(src="/img/iconos/default.png" alt="" class="uk-border-circle uk-flex" style="width:70px;height:70px; background-size:cover; margin-right:15px; object-fit:cover;")
                             div(class="uk-width-expand@m")
                                 div(class="uk-margin-remove-top uk-flex uk-flex-between uk-flex-wrap-reverse" style="margin-bottom:5px")
-                                    div(class="user-name" style="color:#222238; font-size:16px; font-weight:400") 
+                                    div(class="user-name" style="color:#222238; font-size:16px; font-weight:400")
                                         a.uk-link-reset(href="/usuarios/usuario/"+usuario.id) #{usuario.Employee.name}
                                     div(class="uk-animation-toggle" tabindex="0")
                                     if pU
@@ -130,7 +130,7 @@ block content
                                 div.uk-width-1-1.uk-flex.uk-flex-middle(uk-tooltip="title: Estatus; pos: left")
                                     if usuario.status === "active"
                                         div(class="uk-width-4-5@m btn-status-active") ACTIVO
-                                    else 
+                                    else
                                         div(class="uk-width-4-5@m btn-status-active btn-status-noactive") INACTIVO
                         div.uk-width-1-1.uk-flex.uk-flex-wrap.uk-padding-small.uk-flex-middle(style="border-top: solid 1px #C7C7C7")
                             //-
@@ -138,7 +138,7 @@ block content
                             if usuario.Project_Employees[0] && usuario.Project_Employees[0].Project
                                 div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
                                     div(class="uk-width-1-5@m uk-text-truncate") Proyecto
-                                    div(class="uk-width-4-5@m uk-text-emphasis") 
+                                    div(class="uk-width-4-5@m uk-text-emphasis")
                                         a.uk-link-reset(href="/proyectos/proyecto/"+usuario.Project_Employees[0].Project.id) #{usuario.Project_Employees[0].Project.name}
                                         //- script barra de porcentaje
                                         -
@@ -163,7 +163,7 @@ block content
                                 div(class="uk-width-1-5@m") Estatus
                                 if usuario.Project_Employees[0].Project.status === "ACTIVO" || usuario.Project_Employees[0].Project.status === "TERMINADO"
                                     div(class="uk-width-4-5@m btn-status-active") #{usuario.Project_Employees[0].Project.status}
-                                else 
+                                else
                                     div(class="uk-width-4-5@m btn-status-active btn-status-noactive") #{usuario.Project_Employees[0].Project.status}
                             else
                                 div.uk-width-1-1.uk-flex-inline.uk-flex-wrap
@@ -184,7 +184,7 @@ block content
             div(class="uk-modal-dialog uk-modal-body")
                 div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar usuario
                 button(type='button' uk-close='' class="uk-modal-close-default")
-                div(id="errors") 
+                div(id="errors")
                 form(class="uk-card-body uk-padding-small uk-padding-remove" id="form-new-user" action="/usuarios/nuevo" method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-text-primary uk-margin-remove") FOTO DE PERFIL
                         div(class="form-group uk-margin-remove uk-border-circle")
@@ -204,7 +204,7 @@ block content
                                     .field.uk-margin-bottom
                                         input(type='email' autocomplete="nope"  id="email" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='email' title='Correo electrónico' data-title='Correo electrónico')
-                                div(class="uk-width-1-2@s uk-width-1-1")    
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='password' autocomplete='new-password'  id="password" name="password" value='' onchange="this.setAttribute('value', this.value); validatePassword();" required='')
                                         label(for='password' title='Contraseña (mínimo 8 caracteres)' data-title='Contraseña')
@@ -280,10 +280,10 @@ block content
                                         input(type='text' autocomplete='on' id="name-edit" name="name" value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='name-edit' title='Nombre Completo' data-title='Nombre Completo')
                                 div(class="uk-width-1-2@s uk-width-1-1")
-                                    .field.uk-margin-bottom 
+                                    .field.uk-margin-bottom
                                         input(type='email' autocomplete="nope"  id="email-edit" name="email"  value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
                                         label(for='email-edit' title='Correo electrónico' data-title='Correo electrónico')
-                                div(class="uk-width-1-2@s uk-width-1-1")        
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         select(id="role-edit" name="role" autocomplete='off' value='' /*required*/)
                                             option(value="" disabled hidden selected ) Seleccionar
@@ -291,9 +291,9 @@ block content
                                             each rol in roles
                                                 option(value=rol.id ) #{rol.name}
                                         label(for='role-edit' title='Rol (opcional)' data-title='Rol (opcional)')
-                                div(class="uk-width-1-2@s uk-width-1-1")   
+                                div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='date' autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
+                                        input(type='date' class="datepicker" autocomplete='off'  id="hiring_date-edit" name="hiring_date"  onchange="this.setAttribute('value', this.value);")
                                         label(for='hiring_date-edit' title='Fecha de contratación (opcional)' data-title='Fecha de contratación (opcional)')
                             .field.uk-margin-bottom
                                 select(id="status" name="status" autocomplete='off' value='' required)
@@ -303,11 +303,11 @@ block content
                             div(class="uk-alert-danger" uk-alert style="display:none" id="status-alert")
                                 p(class="uk-text-small") Si el estatus del usuario es inactivo, este ya no podrá ingresar al sistema.
                             div(class="uk-text-left uk-text-primary uk-margin-bottom") DATOS DE CONTACTO
-                            
+
                             .field.uk-margin-bottom
                                 input(type='text' autocomplete='tel' id="phone_number-edit" name="phone_number" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='phone_number-edit' title='Número telefónico' data-title='Número telefónico')
-                            div.uk-grid    
+                            div.uk-grid
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
                                         input(type='text' autocomplete='on' id="city-edit" name="city" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -350,7 +350,7 @@ block content
                             div(class="uk-width-1 uk-flex-right uk-flex")
                                 button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button") Cancelar
                                 button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar-edit" type="submit") Guardar
-                
+
     //-modal para eliminar
     div(id="delete-form" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -402,7 +402,7 @@ block content
                 case 'phone':
                     tag.innerHTML='Tel';
                     break;
-                case 'rol':
+                case 'role':
                     tag.innerHTML='Rol';
                     break;
             }
@@ -427,7 +427,7 @@ block content
                 if(parameter == "phone"){
                     title = cards[i].querySelector('div[class~="user-phone"]');
                 }
-                if(parameter == "rol"){
+                if(parameter == "role"){
                     title = cards[i].querySelector('div[class~="user-role"]');
                 }
                 if (title.innerText.toUpperCase().indexOf(filter) > -1) {
@@ -625,6 +625,21 @@ block content
         });
 
         $(document).ready(function () {
+            //esto de aqui es para el datelimit
+            var dtToday = new Date();
+
+            var month = dtToday.getMonth() + 1;
+            var day = dtToday.getDate();
+            var year = dtToday.getFullYear();
+
+            if(month < 10)
+                month = '0' + month.toString();
+            if(day < 10)
+                day = '0' + day.toString();
+
+            var maxDate = year + '-' + month + '-' + day;
+            $('#hiring_date').attr('max', maxDate);
+            $('#hiring_date-edit').attr('max', maxDate);
             //ajax del form de nuevo
             $("#form-new-user").bind("submit",function(){
                 // Capturamnos el boton de envío

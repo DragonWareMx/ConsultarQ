@@ -326,7 +326,7 @@ router.post('/nuevo', upload.single('fileField_add'),
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un cliente nuevo con los siguientes datos:\nNombre: " + newClient.name + "\nEmail: " + newClient.email + "\nNúmero de telefono: " + newClient.phone_number + "\nRFC: " + newClient.rfc + "\nEstatus: " + newClient.status + "\nÁrea: " + newClient.ClientAreaId + "\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un cliente nuevo con los siguientes datos:\nNombre: " + newClient.name + "\nEmail: " + newClient.email + "\nNúmero de telefono: " + newClient.phone_number + "\nRFC: " + newClient.rfc + "\nEstatus: " + newClient.status + "\nÁrea: " + newClient.ClientAreaId
 
             // var contador = 0
             // for (var key in req.body) {
@@ -779,7 +779,7 @@ router.post('/areas/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un área de clientes nueva con los siguientes datos:\nNombre: " + newArea.name + "\nDescripción: " + newArea.description +"\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un área de clientes nueva con los siguientes datos:\nNombre: " + newArea.name + "\nDescripción: " + newArea.description 
 
             // var contador = 0
             // for (var key in req.body) {
@@ -912,7 +912,7 @@ router.post('/areas/update/:id',
                 })
 
                 //descripcion del log
-                var desc = "El usuario " + usuario.email + " ha actualizado el área de clientes con el id " + areaU.id + " con los siguientes datos:\nNombre: " + areaU.name + "\nDescripción: " + areaU.editDescripcion + "\nCon los permisos:\n"
+                var desc = "El usuario " + usuario.email + " ha actualizado el área de clientes con el id " + areaU.id + " con los siguientes datos:\nNombre: " + areaU.name + "\nDescripción: " + areaU.description
 
                 // var contador = 0
                 // for (var key in req.body) {
@@ -1009,7 +1009,7 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
         var dataLog = {
             UserId: usuario.id,
             title: "Eliminación de área de prestador externo",
-            description: "El usuario " + usuario.email + " ha eliminado el área de clientes con el id " + areaD.id + " con los siguientes datos: \nNombre " + areaD.name + "\nDescripción " + areaD.description
+            description: "El usuario " + usuario.email + " ha eliminado el área de clientes con el id " + areaD.id + " con los siguientes datos: \nNombre: " + areaD.name + "\nDescripción: " + areaD.description
         }
 
         //guarda el log en la base de datos

@@ -19,29 +19,23 @@ block content
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar área
         //- barra de busqueda
-        form(class="uk-flex")
+        form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
-                a(href="#" uk-search-icon)
-                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                span(uk-search-icon type="button")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
             //- boton de filtrar
-            button(class="uk-button uk-button-primary uk-width-auto" href="#")
-                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
-            div(uk-dropdown="mode: click")
-                ul(class="uk-list")
-                    li() sugerencia 1
-                    li() sugerencia 2
-                    li() sugerencia 3
 
         div(class="o-proyect-menu-show uk-width-1")
             a(href="/clientes" class="o-menu-selected") CLIENTES
             a(href="/clientes/areas" class="") ÁREAS
-        
+
         //- contenido
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
                 div(class="uk-card-body uk-text-center")
                     div(class="uk-overflow-auto uk-margin-top")
-                        table(class="uk-table uk-table-divider")
+                        table(class="uk-table uk-table-divider" id="items")
                             thead
                                 tr
                                     th(class="uk-text-center") ID
@@ -50,10 +44,10 @@ block content
                             tbody
                                 each area in areas
                                     if area.status == "active"
-                                        tr(class="info" uk-toggle="target: #modal-info" data-id=area.id)
-                                            td #{area.id}
-                                            td #{area.name}
-                                            td #{area.description}
+                                        tr(class="info item" uk-toggle="target: #modal-info" data-id=area.id)
+                                            td(class="id") #{area.id}
+                                            td(class="name") #{area.name}
+                                            td(class="description") #{area.description}
         //- informacion completa
         div(id="modal-info" uk-modal)
             div(class="uk-modal-dialog uk-modal-body")
@@ -65,7 +59,7 @@ block content
                     //- div(tabindex="0")
                     //-     a(class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading editar" uk-toggle="target: #modal-editar" id="btnEdit")
                     //-         img(src="/icons/edit.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    //-         div Editar 
+                    //-         div Editar
                 button(class="uk-modal-close-default" type="button" uk-close='')
                 form(class="uk-card-body uk-padding-remove uk-margin-top")
                     div
@@ -137,15 +131,87 @@ block content
                             button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnAgregar" type="submit") Guardar
         //- paginacion
         div(class="uk-width-1-1")
-            ul(class="uk-pagination uk-margin-top")
-                li()
-                    a(href="#")
-                        span(class="uk-margin-small-right" uk-pagination-previous) 
-                        | Anterior
-                li(class="uk-margin-auto-left")
-                    a(href="#") Siguiente
-                        span(class="uk-margin-small-left" uk-pagination-next)
-        
+            ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
+
+        script.
+            function myFunction() {
+                var input, filter, cards, cardContainer, h5, title, i;
+                input = document.getElementById("buscador");
+                filter = input.value.toUpperCase();
+                cardContainer = document.getElementById("items");
+                cards = cardContainer.getElementsByClassName("item");
+                document.getElementById("pagination").style.display = "none";
+                for (i = 0; i < cards.length; i++) {
+                    name = cards[i].querySelector('td[class~="name"]').innerText.toUpperCase().indexOf(filter);
+                    id = cards[i].querySelector('td[class~="id"]').innerText.toUpperCase().indexOf(filter);
+                    description = cards[i].querySelector('td[class~="description"]').innerText.toUpperCase().indexOf(filter);
+                    if (name > -1 || id > -1 || description > -1) {
+                        cards[i].style.display = "table-row"
+                        } else {
+                            cards[i].style.display = "none"
+                    }
+                }
+            }
+
+        script.
+            $(document).ready(function () {
+                const $studentItem = $('.item');
+                const $paginationList = $('.uk-pagination');
+                const $studentSearch = $('#buscador');
+                const itemTotal = 20;
+
+                // hide all
+                function hideAll() {
+                    $studentItem.hide();
+                }
+
+                hideAll();
+
+                // display first 10
+                function displayRange(a,b) {
+                    hideAll();
+                    // display 0 - 1 students
+                    $studentItem.slice(a,b).fadeIn();
+                }
+
+                displayRange(0, itemTotal);
+
+                // create pagination links
+                let pagination = '';
+                for(var i = 1; i < $studentItem.length / itemTotal +  1; i ++) {
+                    pagination += `
+                        <li><a class="pagination__num">${i}</a></li>
+                    `;
+                }
+                $paginationList.append(pagination);
+                // click on pagination num
+                // pass into display range
+                // calc and show range
+                $('body').on('click', '.pagination__num', function () {
+
+                    hideAll();
+
+                    // get text number 1 - 5
+                    // get ranges for start and end
+                    let paginationText = Number($(this).text()) - 1;
+                    let startFrom = paginationText * itemTotal;
+                    let end = paginationText * itemTotal + paginationText + itemTotal;
+                    // console.log('start: ' + startFrom + '   end: ' + end)
+                    // display ranges
+                    displayRange(startFrom, end);
+
+                });
+
+                $studentSearch.keyup(function()
+                {
+                    if (!this.value) {
+                    hideAll();
+                    $paginationList.show();
+                    displayRange(0, itemTotal);
+                    }
+                });
+            });
+
         script.
             $('.info').on('click', function() {
                 var userID = $(this).data('id');

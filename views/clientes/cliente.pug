@@ -219,6 +219,7 @@ block content
         div(class="uk-modal-dialog uk-modal-body")
             div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Editar cliente
             div.width-1-1.uk-margin-top
+                div(id="errors-edit")
                 form(class="uk-card-body uk-padding-remove uk-padding-remove-bottom" id="form-edit-client" action="/clientes/edit/"+client.id  method="POST" enctype="multipart/form-data")
                     div(class="uk-text-left uk-margin-remove uk-text-primary") FOTO DE PERFIL
                         div(class="form-group uk-border-circle")

@@ -8,7 +8,7 @@ const passport = require('passport');
 //sequelize models
 const models = require('../models/index');
 
-//  se consultan todos los conceptos
+//  se consultan todos los tipos de pago
 router.get('/', isLoggedIn, async (req, res, next) => {
 
     try {
@@ -135,7 +135,7 @@ router.post('/nuevo',
             })
 
             //descripcion del log
-            var desc = "El usuario " + usuario.email + " ha registrado un tipo de pago nuevo con los siguientes datos:\nnombre: " + editPaType.name + "\ndescripcion: " + editPaType.description + "\nCon los permisos:\n"
+            var desc = "El usuario " + usuario.email + " ha registrado un tipo de pago nuevo con los siguientes datos:\nnombre: " + editPaType.name + "\ndescripcion: " + editPaType.description 
 
             // var contador = 0
             // for (var key in req.body) {
@@ -268,7 +268,7 @@ router.post('/update/:id',
                 })
 
                 //descripcion del log
-                var desc = "El usuario " + usuario.email + " ha actualizado el tipo de pago con el id " + patypeU.id + " con los siguientes datos:\nnombre: " + patypeU.name + "\ndescripcion: " + patypeU.editDescripcion + "\nCon los permisos:\n"
+                var desc = "El usuario " + usuario.email + " ha actualizado el tipo de pago con el id " + patypeU.id + " con los siguientes datos:\nnombre: " + patypeU.name + "\ndescripcion: " + patypeU.description
 
                 // var contador = 0
                 // for (var key in req.body) {
@@ -364,7 +364,7 @@ router.post('/delete/:id', isLoggedIn, async function (req, res, next) {
         var dataLog = {
             UserId: usuario.id,
             title: "Eliminación de tipo de pago",
-            description: "El usuario " + usuario.email + " ha eliminado el tipo de pago con el id " + patypeD.id + " de nombre " + patypeD.name + " con descripcion " + patypeD.description
+            description: "El usuario " + usuario.email + " ha eliminado el tipo de pago con el id " + patypeD.id + " con los siguientes datos: \nnombre: " + patypeD.name + " \ndescripcion: " + patypeD.description
         }
 
         //guarda el log en la base de datos

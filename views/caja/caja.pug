@@ -92,7 +92,7 @@ block content
                 a(href="/conceptos" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") CONCEPTOS
                 a(href="/tipos_de_pago" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") TIPOS DE PAGO
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(href="#modal-agregarRegistro" uk-toggle class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading uk-animation-shake")
+                a(href="#modal-agregarRegistro" uk-toggle class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading ")
                     img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Agregar registro
         div(class="o-proyect-menu-show uk-width-1")
@@ -568,7 +568,7 @@ block content
                             .field.uk-margin-bottom
                                 input(type='number' autocomplete='on' id="monto" name="monto"  step="0.01" min="0" value='' onchange="this.setAttribute('value', this.value);" required='')
                                 label(for='monto' title='Monto total' data-title='Monto total')
-                            textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='' maxlength="255")
+                            textarea(class="uk-textarea field uk-margin-bottom uk-text-emphasis textarea-caja" style="font-size:14px; border-radius:3px;" placeholder="Descripción (Opcional)" autocomplete='on' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" maxlength="255")
                     div(class="uk-width-1 uk-flex-right uk-flex")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" id="btn-close-modal" type="button" ) Cancelar
                         button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="btnEnviar" type="submit") Agregar

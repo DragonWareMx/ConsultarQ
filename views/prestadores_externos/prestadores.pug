@@ -27,11 +27,11 @@ block content
             //- boton de filtrar
             div(class="uk-button uk-button-primary uk-width-auto" href="#" style="cursor: default")
                 img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
-        
+
         div(class="o-proyect-menu-show uk-width-1")
             a(href="/prestadores_externos" class="o-menu-selected") PRESTADORES
             a(href="/prestadores_externos/areas" class="") ÁREAS
-        
+
         //- contenido
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             //- tabla
@@ -58,7 +58,7 @@ block content
                                                 td(class="status")
                                                     div(class="uk-width-4-5@m btn-status-active uk-align-center") ACTIVO
                                             else
-                                                td(class="status") 
+                                                td(class="status")
                                                     div(class="uk-width-4-5@m btn-status-active btn-status-noactive uk-align-center") INACTIVO
                                     else
                                         tr(class="info item" uk-toggle="target: #modal-info" data-id=prestador.id id="item")
@@ -70,7 +70,7 @@ block content
                                                 td(class="status")
                                                     div(class="uk-width-4-5@m btn-status-active uk-align-center") ACTIVO
                                             else
-                                                td(class="status") 
+                                                td(class="status")
                                                     div(class="uk-width-4-5@m btn-status-active btn-status-noactive uk-align-center") INACTIVO
             //- informacion completa
             div(id="modal-info" uk-modal)
@@ -109,7 +109,7 @@ block content
                                         label(for='info-area' title='Área' data-title='Área')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='text' autocomplete='on' id="info-telefono" name="info-telefono" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
+                                        input(type='text' autocomplete='tel' id="info-telefono" name="info-telefono" value='' onchange="this.setAttribute('value', this.value);" required='' disabled)
                                         label(for='info-telefono' title='Teléfono' data-title='Teléfono')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
@@ -126,9 +126,9 @@ block content
                     button(class="uk-modal-close-default" type="button" uk-close='')
                     div(id="errors")
                     form(class="uk-card-body uk-padding-remove uk-margin-top" id="add-form" action="/prestadores_externos/nuevo" method="POST")
-                        div(class="uk-child-width-1- uk-grid") 
+                        div(class="uk-child-width-1- uk-grid")
                             div
-                                div.uk-grid    
+                                div.uk-grid
                                     div(class="uk-width-1-2@s uk-width-1-1")
                                         .field.uk-margin-bottom
                                             input(type='text' autocomplete='on' id="add_nombre" name="add_nombre" value='' onchange="this.setAttribute('value', this.value);" required='')
@@ -150,7 +150,7 @@ block content
                                             label(for='add_area' title='Área' data-title='Área')
                                     div(class="uk-width-1-2@s uk-width-1-1")
                                         .field.uk-margin-bottom
-                                            input(type='text' autocomplete='on' id="add_telefono" name="add_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                            input(type='text' autocomplete='tel' id="add_telefono" name="add_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
                                             label(for='add_telefono' title='Teléfono' data-title='Teléfono')
                                     div(class="uk-width-1-2@s uk-width-1-1")
                                         .field.uk-margin-bottom
@@ -198,11 +198,11 @@ block content
                                             option(value='0' selected) Sin área
                                                 each area in areas
                                                     if area && area.status == "active"
-                                                        option(value=area.id) #{area.name} 
+                                                        option(value=area.id) #{area.name}
                                         label(for='edit_area' title='Área' data-title='Área')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
-                                        input(type='text' autocomplete='on' id="edit_telefono" name="edit_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
+                                        input(type='text' autocomplete='tel' id="edit_telefono" name="edit_telefono" value='' onchange="this.setAttribute('value', this.value);" required='')
                                         label(for='edit_telefono' title='Teléfono' data-title='Teléfono')
                                 div(class="uk-width-1-2@s uk-width-1-1")
                                     .field.uk-margin-bottom
