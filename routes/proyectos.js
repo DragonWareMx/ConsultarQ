@@ -3354,8 +3354,9 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
           throw new Error()
       if (!log)
           throw new Error()
-      res.status(200).json([{ status: 200 }]);
+
       await t.commit()
+      res.status(200).json([{ status: 200 }]);
   } catch (error) {
       await t.rollback();
       return res.status(500).json([{ msg: 'No fue posible eliminar la tarea, vuelva a intentarlo más tarde.' }])
