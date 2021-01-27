@@ -13,76 +13,124 @@ module.exports = {
     */
     await queryInterface.bulkInsert('Permissions', [
       {
-        name: 'uc'
+        name: 'uc',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'ur'
+        name: 'ur',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'uu'
+        name: 'uu',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'ud'
+        name: 'ud',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'cc'
+        name: 'cc',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'cr'
+        name: 'cr',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'cu'
+        name: 'cu',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'cd'
+        name: 'cd',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'sc'
+        name: 'sc',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'sr'
+        name: 'sr',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'su'
+        name: 'su',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'sd'
+        name: 'sd',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'pc'
+        name: 'pc',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'pr'
+        name: 'pr',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'pu'
+        name: 'pu',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'pd'
+        name: 'pd',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'dc'
+        name: 'dc',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'dr'
+        name: 'dr',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'du'
+        name: 'du',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'dd'
+        name: 'dd',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'ec'
+        name: 'ec',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'er'
+        name: 'er',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'eu'
+        name: 'eu',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
       {
-        name: 'ed'
+        name: 'ed',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31'
       },
     ], {});
   },
