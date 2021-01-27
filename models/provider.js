@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Provider.belongsTo(models.Provider_Area)
-      Provider.belongsToMany(models.Project, { through: 'project_providers', uniqueKey: 'ProviderId' });
+      Provider.belongsToMany(models.Project, { through: 'Project_Providers', uniqueKey: 'ProviderId' });
     }
   };
   Provider.init({
@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     phone_number: DataTypes.STRING,
-    status: DataTypes.ENUM('active','inactive')
+    status: DataTypes.ENUM('active', 'inactive')
   }, {
     sequelize,
     modelName: 'Provider',
