@@ -25,13 +25,13 @@ module.exports = {
       },
       concept: {
         allowNull:false,
-        type: Sequelize.TEXT(255)
+        type: Sequelize.STRING(255)
       },
       price: {
         type: Sequelize.DECIMAL(10,2)
       },
       description: {
-        type: Sequelize.TEXT(500)
+        type: Sequelize.STRING(500)
       },
       check: {
         allowNull: false,
