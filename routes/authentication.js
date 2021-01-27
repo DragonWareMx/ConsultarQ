@@ -21,7 +21,7 @@ if (process.env.NODE_ENV == 'development') {
     store = new ExpressBrute.MemoryStore(); // stores state locally, don't use this in production
 } else {
     // stores state with memcached
-    store = new MemcachedStore(['127.0.0.1'], {
+    store = new MemcachedStore(['127.0.0.1:3000'], {
         prefix: 'NoConflicts'
     });
 }
@@ -322,12 +322,12 @@ router.get('/inicio', isLoggedIn, async function (req, res, next) {
         ],
     })
     const usuario = await models.User.findOne({
-        where: {id: req.user.id},
-        include:[{
-            model:models.Project,
+        where: { id: req.user.id },
+        include: [{
+            model: models.Project,
             include: [{
                 model: models.User,
-                include:{model:models.Employee}
+                include: { model: models.Employee }
             },
             {
                 model: models.Task
@@ -339,7 +339,7 @@ router.get('/inicio', isLoggedIn, async function (req, res, next) {
     var deducibles
     var ingreConceptos
     var egreConceptos
-    res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos, usuario});
+    res.render("inicio", { todos, hoy, egresos, ingresos, deducibles, ingreConceptos, egreConceptos, usuario });
 });
 
 module.exports = router;
