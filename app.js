@@ -90,15 +90,15 @@ app.use(async (req, res, next) => {
           uR = true
         else if (permiso.name == 'pr')
           pR = true
-          else if (permiso.name == 'cr')
+        else if (permiso.name == 'cr')
           cR = true
-          else if (permiso.name == 'er')
+        else if (permiso.name == 'er')
           eR = true
-          else if (permiso.name == 'sr')
+        else if (permiso.name == 'sr')
           sR = true
-          else if (permiso.name == 'dr')
+        else if (permiso.name == 'dr')
           dR = true
-          
+
       });
     }
 
@@ -110,6 +110,7 @@ app.use(async (req, res, next) => {
     app.locals.dR = dR;
   }
   catch (error) {
+    console.log(error);
     app.locals.user = req.user
   }
   next();
