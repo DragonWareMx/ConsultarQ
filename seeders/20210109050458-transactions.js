@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('transactions', [
+    await queryInterface.bulkInsert('Transactions', [
       {
         T_type: 'ingreso',
         date: "2018-2-25",

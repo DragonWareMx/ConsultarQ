@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('concepts', [
+    await queryInterface.bulkInsert('Concepts', [
       {
         id: 1,
         name: 'Pago de servicios',

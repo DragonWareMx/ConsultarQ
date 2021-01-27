@@ -18,7 +18,7 @@ module.exports = {
     //encriptacion de la password
     const userPassword = await helpers.encryptPassword("viledruid9000");
 
-    await queryInterface.bulkInsert('users', [
+    await queryInterface.bulkInsert('Users', [
       {
         email: 'DragonwareOficial@hotmail.com',
         password: userPassword,

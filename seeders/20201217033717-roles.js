@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('roles', [
+    await queryInterface.bulkInsert('Roles', [
       {
         name: 'DragonWare',
         createdAt: '2020-12-31',

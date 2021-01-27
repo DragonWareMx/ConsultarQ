@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('clients', [
+    await queryInterface.bulkInsert('Clients', [
       {
         name: 'Adolfo Leonardo Huerta Garcia',
         email: 'adoleo@gmail.com',

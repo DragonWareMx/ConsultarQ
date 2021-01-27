@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('client_areas', [
+    await queryInterface.bulkInsert('Client_Areas', [
       {
         id: 1,
         name: 'Salud pública',

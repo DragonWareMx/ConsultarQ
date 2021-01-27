@@ -13,7 +13,7 @@ module.exports = {
      * }], {});
     */
 
-    await queryInterface.bulkInsert('employees', [
+    await queryInterface.bulkInsert('Employees', [
       {
         name: encrypt('DragonWare'),
         phone_number: encrypt("4435555555"),

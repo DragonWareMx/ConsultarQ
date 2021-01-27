@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('projects', [{
+    await queryInterface.bulkInsert('Projects', [{
       name: "Proyecto de John Doe",
       observations: "El proyecto ya inició",
       start_date: "2020-01-01",
@@ -20,14 +20,14 @@ module.exports = {
       createdAt: '2020-12-31',
       updatedAt: '2020-12-31',
     }], {});
-    await queryInterface.bulkInsert('project_employees', [{
+    await queryInterface.bulkInsert('Project_Employees', [{
       UserId: 2,
       ProjectId: 1,
       profit: "100",
       createdAt: '2020-12-31',
       updatedAt: '2020-12-31',
     }], {});
-    await queryInterface.bulkInsert('comments', [{
+    await queryInterface.bulkInsert('Comments', [{
       ProjectId: 1,
       UserId: 2,
       comment: 'Este proyecto ya está muy atrasado.',
@@ -35,7 +35,7 @@ module.exports = {
       updatedAt: '2020-12-31',
     }], {});
 
-    await queryInterface.bulkInsert('tasks', [
+    await queryInterface.bulkInsert('Tasks', [
       {
         ProjectId: 1,
         concept: 'Elaborar planos.',
@@ -51,12 +51,12 @@ module.exports = {
         updatedAt: '2020-12-31',
       }
     ], {});
-    await queryInterface.bulkInsert('pro_types', [{
+    await queryInterface.bulkInsert('Pro_Types', [{
       name: "Layout de proyecto número 1",
       createdAt: '2020-12-31',
       updatedAt: '2020-12-31',
     }], {});
-    await queryInterface.bulkInsert('tasks_layouts', [
+    await queryInterface.bulkInsert('Tasks_Layouts', [
       {
         ProTypeId: 1,
         unit: 'Kg.',
