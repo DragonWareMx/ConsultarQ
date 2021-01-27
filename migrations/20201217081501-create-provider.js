@@ -29,7 +29,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'provider_areas',
+          model: 'Provider_Areas',
           key: 'id',
         },
         allowNull: true
