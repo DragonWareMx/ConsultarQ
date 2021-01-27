@@ -11,21 +11,27 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   await queryInterface.bulkInsert('Concepts', [
+    await queryInterface.bulkInsert('Concepts', [
       {
         id: 1,
         name: 'Pago de servicios',
-        description: "Descripcion del concepto"
+        description: "Descripcion del concepto",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 2,
         name: 'Viaticos',
-        description: "Descripcion del concepto"
+        description: "Descripcion del concepto",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 3,
         name: 'Pago de salarios',
-        description: "Descripcion del concepto"
+        description: "Descripcion del concepto",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
     ], {});
   },

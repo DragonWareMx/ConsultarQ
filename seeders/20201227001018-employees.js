@@ -23,7 +23,9 @@ module.exports = {
         street: encrypt("Sierra nevada"),
         int_number: encrypt("301"),
         ext_number: encrypt("55"),
-        UserId: 1
+        UserId: 1,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         name: encrypt('John Doe'),
@@ -34,7 +36,9 @@ module.exports = {
         street: encrypt("Sierra nevada"),
         int_number: encrypt("301"),
         ext_number: encrypt("55"),
-        UserId: 2
+        UserId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
     ], {});
   },

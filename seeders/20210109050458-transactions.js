@@ -21,7 +21,9 @@ module.exports = {
         UserId: 2,
         ProjectId: 1,
         PaTypeId: 1,
-        ConceptId: 1
+        ConceptId: 1,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'egreso',
@@ -32,7 +34,9 @@ module.exports = {
         UserId: 1,
         ProjectId: 1,
         PaTypeId: 2,
-        ConceptId: 1
+        ConceptId: 1,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'egreso',
@@ -43,7 +47,9 @@ module.exports = {
         UserId: 2,
         ProjectId: 1,
         PaTypeId: 3,
-        ConceptId: 2
+        ConceptId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'egreso',
@@ -54,7 +60,9 @@ module.exports = {
         UserId: 1,
         ProjectId: 1,
         PaTypeId: 1,
-        ConceptId: 2
+        ConceptId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'ingreso',
@@ -65,7 +73,9 @@ module.exports = {
         UserId: 1,
         ProjectId: 1,
         PaTypeId: 2,
-        ConceptId: 3
+        ConceptId: 3,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'ingreso',
@@ -76,7 +86,9 @@ module.exports = {
         UserId: 2,
         ProjectId: 1,
         PaTypeId: 3,
-        ConceptId: 3
+        ConceptId: 3,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'egreso',
@@ -87,7 +99,9 @@ module.exports = {
         UserId: 2,
         ProjectId: 1,
         PaTypeId: 1,
-        ConceptId: 1
+        ConceptId: 1,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'ingreso',
@@ -98,7 +112,9 @@ module.exports = {
         UserId: 1,
         ProjectId: 1,
         PaTypeId: 2,
-        ConceptId: 2
+        ConceptId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'ingreso',
@@ -109,7 +125,9 @@ module.exports = {
         UserId: 2,
         ProjectId: 1,
         PaTypeId: 3,
-        ConceptId: 3
+        ConceptId: 3,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         T_type: 'egreso',
@@ -120,7 +138,9 @@ module.exports = {
         UserId: 2,
         ProjectId: 1,
         PaTypeId: 3,
-        ConceptId: 2
+        ConceptId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
     ], {});
   },

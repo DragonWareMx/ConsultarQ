@@ -23,11 +23,15 @@ module.exports = {
         email: 'DragonwareOficial@hotmail.com',
         password: userPassword,
         RoleId: 1,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         email: 'johndoe@hotmail.com',
         password: userPassword,
-        RoleId: 2
+        RoleId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
     ], {});
   },

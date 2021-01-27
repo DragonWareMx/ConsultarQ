@@ -11,21 +11,27 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-   await queryInterface.bulkInsert('Pa_Types', [
+    await queryInterface.bulkInsert('Pa_Types', [
       {
         id: 1,
         name: 'Efectivo',
-        description: "Descripcion del tipo de pago"
+        description: "Descripcion del tipo de pago",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 2,
         name: 'Tarjeta de credito',
-        description: "Descripcion del tipo de pago"
+        description: "Descripcion del tipo de pago",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 3,
         name: 'Paypal',
-        description: "Descripcion del tipo de pago"
+        description: "Descripcion del tipo de pago",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
     ], {});
   },

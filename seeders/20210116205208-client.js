@@ -18,7 +18,9 @@ module.exports = {
         phone_number: '1122334455',
         rfc: 'VECJ880326',
         status: 'active',
-        ClientAreaId: 1
+        ClientAreaId: 1,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         name: 'Dulce Lopez Lemus',
@@ -26,7 +28,9 @@ module.exports = {
         phone_number: '9988774455',
         rfc: 'VECJ880326',
         status: 'active',
-        ClientAreaId: 2
+        ClientAreaId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         name: 'Fernando Andre Aguilar Rendon',
@@ -34,7 +38,9 @@ module.exports = {
         phone_number: '8877334455',
         rfc: 'VECJ880326',
         status: 'inactive',
-        ClientAreaId: 2
+        ClientAreaId: 2,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         name: 'Agustin Adrian Marin',
@@ -42,7 +48,9 @@ module.exports = {
         phone_number: '1122339966',
         rfc: 'VECJ880326',
         status: 'active',
-        ClientAreaId: 3
+        ClientAreaId: 3,
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
     ], {});
   },
@@ -54,6 +62,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-      await queryInterface.bulkDelete('Clients', null, {});
+    await queryInterface.bulkDelete('Clients', null, {});
   }
 };

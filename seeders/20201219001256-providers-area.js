@@ -15,24 +15,32 @@ module.exports = {
       {
         id: 1,
         name: 'Plomeria',
-        description: "Descripcion del area de plomeria"
+        description: "Descripcion del area de plomeria",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 3,
         name: 'Materiales',
-        description: "Descripcion del area de materiales"
+        description: "Descripcion del area de materiales",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 2,
         name: 'Herreria',
-        description: "Descripcion del area de herreria"
+        description: "Descripcion del area de herreria",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 4,
         name: 'Carpinteria',
-        description: "Descripcion del area de carpinteria"
+        description: "Descripcion del area de carpinteria",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
-  
+
     ], {});
   },
 

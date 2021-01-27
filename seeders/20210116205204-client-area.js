@@ -15,17 +15,23 @@ module.exports = {
       {
         id: 1,
         name: 'Salud pública',
-        description: "Descripcion del area de salud pública"
+        description: "Descripcion del area de salud pública",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 2,
         name: 'Constructora industrial',
-        description: "Descripcion del area constructora industrial"
+        description: "Descripcion del area constructora industrial",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         id: 3,
         name: 'Textiles',
-        description: "Descripcion del area de textiles"
+        description: "Descripcion del area de textiles",
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       }
     ], {});
 
@@ -38,6 +44,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-      await queryInterface.bulkDelete('Client_Areas', null, {});
+    await queryInterface.bulkDelete('Client_Areas', null, {});
   }
 };
