@@ -2282,7 +2282,7 @@ router.get('/documentacion/editar/:id', isLoggedIn,async function (req, res, nex
         }]
       })
       if(project)
-        res.render('editarDocumentacion',{project});
+        res.render('editarDocumentacion',{project, pD});
       else
         return res.render('error',{error: 404})
     }
