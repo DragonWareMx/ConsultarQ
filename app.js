@@ -79,6 +79,10 @@ app.use(async (req, res, next) => {
     //permisos
     uR = false
     pR = false
+    cR = false
+    eR = false
+    sR = false
+    dR = false
 
     if (usuario.Role && usuario.Role.Permissions) {
       usuario.Role.Permissions.forEach(permiso => {
@@ -86,11 +90,24 @@ app.use(async (req, res, next) => {
           uR = true
         else if (permiso.name == 'pr')
           pR = true
+          else if (permiso.name == 'cr')
+          cR = true
+          else if (permiso.name == 'er')
+          eR = true
+          else if (permiso.name == 'sr')
+          sR = true
+          else if (permiso.name == 'dr')
+          dR = true
+          
       });
     }
 
     app.locals.uR = uR;
     app.locals.pR = pR;
+    app.locals.cR = cR;
+    app.locals.eR = eR;
+    app.locals.sR = sR;
+    app.locals.dR = dR;
   }
   catch (error) {
     app.locals.user = req.user
