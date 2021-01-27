@@ -36,9 +36,18 @@ block content
                                     td #{task.concept} 
                                     td #{task.description} 
                                     td #{task.units} 
-                                    td #{task.unit} 
-                                    td #{task.price}
-                                    td #{task.price*task.units} 
+                                    td #{task.unit}
+                                    if task.price 
+                                        td $#{new Intl.NumberFormat("en-IN").format(task.price)}
+                                    else
+                                        td
+                                    -
+                                        precio2 = (task.price*task.units).toFixed(2)
+                                        precio = new Intl.NumberFormat("en-IN").format(precio2)
+                                    if task.price*task.units > 0
+                                        td $#{precio}
+                                    else
+                                        td 
                                     if task.check
                                         td Sí 
                                     else

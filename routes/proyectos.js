@@ -140,8 +140,7 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
         order: [['date','DESC']]
       })
 
-      console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',comentarios)
-      res.render('proyecto', {proyecto, comentarios, movimientos});
+      res.render('proyecto', {proyecto, comentarios, movimientos, pU});
     }
     else {
         //NO TIENE PERMISOS
@@ -400,8 +399,14 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>${proyecto.Client.id}</td>
-                      <td><img src="`+ url + `/uploads/clients/${proyecto.Client.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>
+                      <td>${proyecto.Client.id}</td>`
+
+                    if(proyecto.Client.picture)
+                      ht +=`<td><img src="`+ url + `/uploads/clients/${proyecto.Client.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                    else
+                      ht +=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                
+                      ht +=`
                       <td>${proyecto.Client.name}</td>
                       <td>${proyecto.Client.phone_number}</td>
                       <td>${proyecto.Client.email}</td>
@@ -518,12 +523,15 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                   ht+=`<td></td>`
 
                 if(tarea.price)
-                  ht+=`<td>$${tarea.price}</td>`
+                  ht+=`<td>$${new Intl.NumberFormat("en-IN").format(tarea.price)}</td>`
                 else
                   ht+=`<td></td>`
 
-                if(tarea.price * tarea.units > 0)
-                  ht+=`<td>$${tarea.price * tarea.units}</td>`
+                if(tarea.price * tarea.units > 0){
+                  precio2 = (tarea.price*tarea.units).toFixed(2)
+                  precio = new Intl.NumberFormat("en-IN").format(precio2)
+                  ht+=`<td>$${precio}</td>`
+                }
                 else
                   ht+=`<td></td>`
 
@@ -569,13 +577,14 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
     `;
 
     movimientos.forEach(movimiento => {
+      precio = new Intl.NumberFormat("en-IN").format(movimiento.amount)
       ht += `
           <tr>
           <td>${movimiento.id}</td>
           <td>${movimiento.User.Employee.name}</td>
           <td>${movimiento.Concept.name}</td>
           <td>${movimiento.description}</td>
-          <td>$${movimiento.amount}</td>
+          <td>$${precio}</td>
           <td>${movimiento.Pa_Type.name}</td>
           <td>${movimiento.T_type.replace(/\b\w/g, function (l) { return l.toUpperCase() })}</td>
           <td>${movimiento.invoice == true ? 'Sí' : 'No'}</td>
@@ -622,7 +631,7 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
             else
               ht+=`<td>Sin Área</td>`
             
-        ht+=`<td>${movimiento.description}</td>
+        ht+=`
             <td>${proveedor.phone_number}</td>
             <td>${proveedor.email}</td>
             <td>${proveedor.dro}</td>`
@@ -3064,18 +3073,18 @@ router.post('/documentacion/:projectId/tarea/agregar',[
   check('cantidad')
         .optional({ checkFalsy: true })
         .isNumeric().withMessage('Sólo se aceptan números en el campo Cantidad')
-        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 16 dígitos.')
+        .isLength({ max: 10 }).withMessage('La cantidad puede tener un máximo de 10 dígitos.')
         .trim()
         .escape(),
   check('unidad')
         .optional({ checkFalsy: true })
-        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .isLength({ max: 10 }).withMessage('La unidad puede tener un máximo de 10 caracteres.')
         .trim()
         .escape(),
   check('costo')
         .optional({ checkFalsy: true })
-        .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
-        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 dígitos.')
+        .isNumeric().withMessage('Sólo se aceptan números en el campo costo')
+        .isLength({ max: 10 }).withMessage('El costo puede tener un máximo de 10 dígitos.')
         .trim()
         .escape(),
   check('realizado')
@@ -3179,18 +3188,19 @@ router.post('/documentacion/:projectId/tarea/editar/:taskId',[
         .escape(),
   check('cantidad')
         .optional({ checkFalsy: true })
-        .isNumeric().withMessage('Sólo se aceptan números en el campo Cantidad')
-        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 16 dígitos.')
+        .isNumeric().withMessage('Sólo se aceptan números en el campo cantidad')
+        .isLength({ max: 10 }).withMessage('La cantidad puede tener un máximo de 10 dígitos.')
         .trim()
         .escape(),
   check('unidad')
         .optional({ checkFalsy: true })
-        .isLength({ max: 10 }).withMessage('La Unidad puede tener un máximo de 10 caracteres.')
+        .isLength({ max: 10 }).withMessage('La unidad puede tener un máximo de 10 caracteres.')
         .trim()
         .escape(),
   check('costo')
         .optional({ checkFalsy: true })
-        .isNumeric().withMessage('Sólo se aceptan números en el campo Costo')
+        .isNumeric().withMessage('Sólo se aceptan números en el campo costo')
+        .isLength({ max: 10 }).withMessage('El costo puede tener un máximo de 10 dígitos.')
         .trim()
         .escape(),
   check('realizado')
@@ -3203,6 +3213,7 @@ router.post('/documentacion/:projectId/tarea/editar/:taskId',[
     if (!errors.isEmpty()) {
         return res.status(422).send(errors.array());
     }
+
   try {
     let usuario = await models.User.findOne({
         where: {

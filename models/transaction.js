@@ -18,11 +18,23 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Transaction.init({
-    T_type: DataTypes.ENUM('ingreso', 'egreso'),
-    date: DataTypes.DATEONLY,
-    amount: DataTypes.DECIMAL,
+    T_type: {
+      type: DataTypes.ENUM('ingreso', 'egreso'),
+      allowNull: false
+    },
+    date: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    amount: {
+      type: DataTypes.DECIMAL(10,2),
+      allowNull: false
+    },
     description: DataTypes.STRING,
-    invoice: DataTypes.BOOLEAN,
+    invoice: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
     status: {
       type: DataTypes.ENUM('active', 'inactive'),
       defaultValue: 'active',
