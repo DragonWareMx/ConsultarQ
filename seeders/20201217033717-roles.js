@@ -29,7 +29,7 @@ module.exports = {
       }
     ], {});
 
-    await queryInterface.bulkInsert('permission_role', [
+    await queryInterface.bulkInsert('Permission_Role', [
       {
         Roleid: 1,
         PermissionId: 1,

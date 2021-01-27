@@ -9,7 +9,7 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    await queryInterface.createTable('permission_role',
+    await queryInterface.createTable('Permission_Role',
       {
         id: {
           type: Sequelize.INTEGER,
@@ -54,6 +54,6 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
 
-    await queryInterface.dropTable('permission_role');
+    await queryInterface.dropTable('Permission_Role');
   }
 };
