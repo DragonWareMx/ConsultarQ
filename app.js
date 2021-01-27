@@ -110,7 +110,6 @@ app.use(async (req, res, next) => {
     app.locals.dR = dR;
   }
   catch (error) {
-    console.log(error);
     app.locals.user = req.user
   }
   next();

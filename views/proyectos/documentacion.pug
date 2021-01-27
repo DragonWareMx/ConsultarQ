@@ -14,9 +14,10 @@ block content
                 a(href="/proyectos/activos" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") ACTIVOS
                 a(href="/proyectos/inactivos" class="uk-padding-small uk-padding-remove-vertical" style="color: #6B6B72; text-decoration:none;") INACTIVOS
             div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(href="/proyectos/agregar" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading ")
-                    img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
-                    div Agregar proyecto
+                if pC
+                    a(href="/proyectos/agregar" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-text-primary uk-link-heading ")
+                        img(src="/icons/more.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
+                        div Agregar proyecto
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
                 button(href="#" uk-search-icon)
@@ -41,9 +42,10 @@ block content
                     div(class="uk-card  uk-card-default" style="min-height:290px;")
                         div(class="uk-card-header uk-padding-small uk-flex")
                             div(class="uk-width-4-5 uk-text-emphasis uk-text-truncate") #{project.name}
-                            a(href="/proyectos/documentacion/editar/"+project.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
-                                img(src="/icons/edit.png" width="12px" style="margin-right:5px;")
-                                div(class="uk-text-primary uk-text-small ") Editar
+                            if pU
+                                a(href="/proyectos/documentacion/editar/"+project.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
+                                    img(src="/icons/edit.png" width="12px" style="margin-right:5px;")
+                                    div(class="uk-text-primary uk-text-small ") Editar
                         div(class="uk-card-body uk-padding-small")
                             -
                                 var realizadas =0;

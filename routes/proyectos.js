@@ -882,7 +882,7 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
         where: {status : 'activo'},
         order: [['createdAt','DESC']]
         })
-        res.render('proyectos', {proyectos});
+        res.render('proyectos', {proyectos, pC});
       }
       else{
         const proyectos = await models.Project.findAll({
@@ -906,7 +906,7 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
           ],
           order: [['createdAt','DESC']]
         })
-        res.render('proyectos', {proyectos});
+        res.render('proyectos', {proyectos, pC});
       }
     }
     else {
@@ -955,56 +955,60 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
     });
 
     //si el usuario puede ver y registrar
-    if (usuario && usuario.Role && usuario.Role.Permissions && pR && pC) {
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
       //TIENE PERMISO DE DESPLEGAR VISTA
-      //obtiene todos los proyectos y se manda a la vista
-      const proyectos = await models.Project.findAll({
-        include: [{
-          model: models.User,
-          include: models.Employee
-        },{
-          model: models.Pro_Type
-        },
-        {
-          model: models.Project_Employee
-        },
-        {
-          model: models.Task
-        },
-        {
-          model: models.Quotation
-        },
-        {
-          model: models.Comment
-        }
-      ],
-      where: {status : ['terminado','cancelado']},
-      order: [['createdAt','DESC']]
-      })
-      res.render('proyectosInactivos', {proyectos});
-    }
-    else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
-      const proyectos = await models.Project.findAll({
-        include: [{
-          model: models.User,
-          include: models.Employee,
-          where: {id: usuario.id}
-        },{
-          model: models.Pro_Type
-        },
-        {
-          model: models.Project_Employee
-        },
-        {
-          model: models.Task
-        },
-        {
-          model: models.Comment
-        }
+      if(pR && pC && pU && pD){
+        //obtiene todos los proyectos y se manda a la vista
+        const proyectos = await models.Project.findAll({
+          include: [{
+            model: models.User,
+            include: models.Employee
+          },{
+            model: models.Pro_Type
+          },
+          {
+            model: models.Project_Employee
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Quotation
+          },
+          {
+            model: models.Comment
+          }
         ],
+        where: {status : ['terminado','cancelado']},
         order: [['createdAt','DESC']]
-      })
-      res.render('proyectos', {proyectos});
+        })
+        res.render('proyectosInactivos', {proyectos, pC});
+      }
+      else{
+        const proyectos = await models.Project.findAll({
+          include: [{
+            model: models.User,
+            include: models.Employee,
+            where: {id: usuario.id},
+            required: true
+          },{
+            model: models.Pro_Type
+          },
+          {
+            model: models.Project_Employee
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Comment
+          }
+          ],
+          where: {status : ['terminado','cancelado']},
+          order: [['createdAt','DESC']]
+        })
+        res.render('proyectosInactivos', {proyectos, pC});
+      }
     }
     else {
         //NO TIENE PERMISOS
@@ -1054,11 +1058,28 @@ router.get('/documentacion', isLoggedIn,async function (req, res, next) {
     //si el usuario puede ver y registrar
     if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
       //TIENE PERMISO DE DESPLEGAR VISTA
-      const projects =await models.Project.findAll({
-        include: models.Task,
-        order: [['createdAt','DESC']]
-      })
-      res.render('documentacion',{projects});     
+      if(pR && pC && pU && pD){
+        const projects =await models.Project.findAll({
+          include: models.Task,
+          order: [['createdAt','DESC']]
+        })
+        res.render('documentacion',{projects, pC, pU});    
+      } 
+      else{
+        const projects =await models.Project.findAll({
+          include: [{
+            model: models.Task
+          },
+          {
+            model: models.User,
+            include: models.Employee,
+            where: {id: usuario.id},
+            required: true
+          }],
+          order: [['createdAt','DESC']]
+        })
+        res.render('documentacion',{projects, pC, pU});    
+      }
     }
     else {
         //NO TIENE PERMISOS
