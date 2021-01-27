@@ -1,14 +1,14 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Quotations', {
+    await queryInterface.createTable('quotations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      ProjectId:{
+      ProjectId: {
         type: Sequelize.INTEGER,
         onDelete: 'CASCADE',
         references: {

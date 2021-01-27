@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Projects', {
+    await queryInterface.createTable('projects', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -49,9 +49,9 @@ module.exports = {
       end_date: {
         type: Sequelize.DATEONLY
       },
-      status:{
+      status: {
         allowNull: false,
-        type: Sequelize.ENUM('activo', 'cancelado','terminado'),
+        type: Sequelize.ENUM('activo', 'cancelado', 'terminado'),
         defaultValue: 'activo',
       },
       createdAt: {

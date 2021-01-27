@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Providers', {
+    await queryInterface.createTable('providers', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -35,7 +35,7 @@ module.exports = {
         allowNull: true
       },
       status: {
-        type: Sequelize.ENUM('active','inactive')
+        type: Sequelize.ENUM('active', 'inactive')
       },
       createdAt: {
         allowNull: false,
