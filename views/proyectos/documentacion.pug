@@ -19,56 +19,126 @@ block content
                     div Agregar proyecto
         form(class="uk-flex uk-margin-bottom")
             div(class="uk-search uk-search-default uk-width-expand")
-                button(href="#" uk-search-icon)
-                input(class="uk-search-input" type="search" placeholder="Buscar...")
+                span(uk-search-icon type="button")
+                input(class="uk-search-input" type="search" id="buscador" placeholder="Buscar..."  onkeyup="myFunction()")
+                label(for="buscador" class="tag-filter" id="tag-filter") Nombre
                 input(class="uk-search-input" type="hidden" name="filter" id="filter" value="name" placeholder="Buscar...")
-            //- boton de filtrar
-            button(class="uk-button uk-button-primary uk-width-auto" href="#" type="button")
-                img(src="/icons/filterWhite.png" style="width:20px;height:20px;" class="")
-            div(uk-dropdown="mode: click")
-                ul(class="uk-list")
-                    li(onclick="putSearch('name')") Nombre
-                    li(onclick="putSearch('tipo')") Tipo
-                    li(onclick="putSearch('miembro')") Miembro
         div(class="o-proyect-menu-show uk-width-1")
                 a(href="/proyectos/documentacion" class="o-menu-selected" ) DOC
                 a(href="/proyectos/activos" class="") ACTIVOS
                 a(href="/proyectos/inactivos" class="") INACTIVOS
                 div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-        div(class="uk-grid-small  uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-row-large" uk-grid uk-height-match="target: > div > .uk-card")
+        div(class="uk-grid-small  uk-child-width-1-3@m uk-child-width-1-2@s uk-grid-row-large" uk-grid uk-height-match="target: > div > .uk-card" id="items")
             each project in projects
-                div()
-                    div(class="uk-card  uk-card-default" style="min-height:290px;")
-                        div(class="uk-card-header uk-padding-small uk-flex")
-                            div(class="uk-width-4-5 uk-text-emphasis uk-text-truncate") #{project.name}
-                            a(href="/proyectos/documentacion/editar/"+project.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
-                                img(src="/icons/edit.png" width="12px" style="margin-right:5px;")
-                                div(class="uk-text-primary uk-text-small ") Editar
-                        div(class="uk-card-body uk-padding-small")
-                            -
-                                var realizadas =0;
-                                var noRealizadas =0;
-                                for(var key in project.Tasks){
-                                    var obj=project.Tasks[key];
-                                    if(obj.check == 1)
-                                        realizadas++;
-                                    else
-                                        noRealizadas++;
-                                }
-                            div(class="uk-text-large uk-text-secondary") #{realizadas}
-                            div(class="uk-text-small" style="margin-top:-7px") Tareas realizadas
-                            div(class="uk-text-large uk-text-secondary uk-margin-small-top") #{noRealizadas}
-                            div(class="uk-text-small" style="margin-top:-7px") Tareas faltantes
-                            if project.observations
-                                div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
-                                    if project.observations.length > 170
-                                        -
-                                            observations = project.observations.substr(0,155) + '...';
-                                    else
-                                        -   
-                                            observations = project.observations;
-                                    div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{observations}
-                            else
-                                div(class="uk-margin-small-top uk-text-light uk-text-small") SIN OBSERVACIONES
-                            
+                li(class="item")
+                    div()
+                        div(class="uk-card  uk-card-default" style="min-height:290px;")
+                            div(class="uk-card-header uk-padding-small uk-flex")
+                                div(class="uk-width-4-5 uk-text-emphasis uk-text-truncate project-name") #{project.name}
+                                a(href="/proyectos/documentacion/editar/"+project.id class="uk-width-1-5 uk-flex uk-flex-middle uk-flex-right uk-animation-toggle uk-link-reset")
+                                    img(src="/icons/edit.png" width="12px" style="margin-right:5px;")
+                                    div(class="uk-text-primary uk-text-small ") Editar
+                            div(class="uk-card-body uk-padding-small")
+                                -
+                                    var realizadas =0;
+                                    var noRealizadas =0;
+                                    for(var key in project.Tasks){
+                                        var obj=project.Tasks[key];
+                                        if(obj.check == 1)
+                                            realizadas++;
+                                        else
+                                            noRealizadas++;
+                                    }
+                                div(class="uk-text-large uk-text-secondary") #{realizadas}
+                                div(class="uk-text-small" style="margin-top:-7px") Tareas realizadas
+                                div(class="uk-text-large uk-text-secondary uk-margin-small-top") #{noRealizadas}
+                                div(class="uk-text-small" style="margin-top:-7px") Tareas faltantes
+                                if project.observations
+                                    div(class="uk-margin-small-top uk-text-light uk-text-small") OBSERVACIONES
+                                        if project.observations.length > 170
+                                            -
+                                                observations = project.observations.substr(0,155) + '...';
+                                        else
+                                            -   
+                                                observations = project.observations;
+                                        div(class="uk-text-small uk-text-secondary" style="font-size:13px;line-height:16px;") #{observations}
+                                else
+                                    div(class="uk-margin-small-top uk-text-light uk-text-small") SIN OBSERVACIONES
+        ul.uk-pagination.uk-flex-center(uk-margin='' id="pagination")
+    script.
+        function myFunction() {
+            var input, filter, cards, cardContainer, h5, title, i;
+            input = document.getElementById("buscador");
+            filter = input.value.toUpperCase();
+            cardContainer = document.getElementById("items");
+            cards = cardContainer.getElementsByClassName("item");
+            document.getElementById("pagination").style.display = "none";
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].querySelector('div[class~="project-name"]');
+                if (title.innerText.toUpperCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "block"
+                    } else {
+                        cards[i].style.display = "none"
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            const $studentItem = $('.item');
+            const $paginationList = $('.uk-pagination');
+            const $studentSearch = $('#buscador');
+            const itemTotal = 6;
+
+            // hide all
+            function hideAll() {
+                $studentItem.hide();
+            }
+
+            hideAll();
+
+            // display first 10
+            function displayRange(a,b) {
+                hideAll();
+                // display 0 - 1 students
+                $studentItem.slice(a,b).fadeIn();
+            }
+
+            displayRange(0, itemTotal);
+
+            // create pagination links
+            let pagination = '';
+            for(var i = 1; i < $studentItem.length / itemTotal +  1; i ++) {
+                pagination += `
+                    <li><a class="pagination__num">${i}</a></li>
+                `;
+            }
+            $paginationList.append(pagination);
+            // click on pagination num
+            // pass into display range
+            // calc and show range
+            $('body').on('click', '.pagination__num', function () {
+
+                hideAll();
+
+                // get text number 1 - 5
+                // get ranges for start and end
+                let paginationText = Number($(this).text()) - 1;
+                let startFrom = paginationText * itemTotal;
+                let end = paginationText * itemTotal + paginationText + itemTotal;
+                // console.log('start: ' + startFrom + '   end: ' + end)
+                // display ranges
+                displayRange(startFrom, end);
+
+            });
+
+            $studentSearch.keyup(function()
+            {
+                if (!this.value) {
+                hideAll();
+                $paginationList.show();
+                displayRange(0, itemTotal);
+                }
+            });
+        });
+                                
                                 
