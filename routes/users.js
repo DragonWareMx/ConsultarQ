@@ -105,11 +105,11 @@ router.get('/', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403}) 
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500}) 
     }
 });
 
@@ -175,16 +175,16 @@ router.get('/usuario/:id', isLoggedIn, async (req, res, next) => {
                 return res.render('usuario', { usuario , roles })
             }
             else{
-                return res.status(404).json(404)                //  mandar a la vista de error
+                return res.render('error',{error: 404})                 //  mandar a la vista de error
             }
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403}) 
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500}) 
     }
 });
 

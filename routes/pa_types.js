@@ -43,11 +43,11 @@ router.get('/', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });

@@ -48,7 +48,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ur' }       
+                    where: { name: 'dr' }       
                 }
             }
         })
@@ -85,16 +85,16 @@ router.get('/', isLoggedIn, async (req, res, next) => {
                 return res.render('clientes', { clientes , areas })
             }
             else{
-                return res.status(404).json(404)                //  mandar a la vista de error
+                return res.render('error',{error: 404})                  //  mandar a la vista de error
             }
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 });
 
@@ -113,7 +113,7 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ur' }       
+                    where: { name: 'dr' }       
                 }
             }
         })
@@ -169,16 +169,16 @@ router.get('/cliente/:id', isLoggedIn, async (req, res, next) => {
                 return res.render('cliente', { client , areas , quotations })
             }
             else{
-                return res.status(404).json(404)                //  mandar a la vista de error
+                return res.render('error',{error: 404})                //  mandar a la vista de error
             }
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
     //res.render('cliente')
 });
@@ -251,7 +251,7 @@ router.post('/nuevo', upload.single('fileField_add'),
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso 
+                        where: { name: 'dc' }           //////////////////  cambiar nombre del permiso 
                     }
                 }
             })
@@ -441,7 +441,7 @@ router.post('/edit/:id', isLoggedIn, upload.single('fileField_edit'),
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'eu' }
+                        where: { name: 'du' }
                     }
                 }
             })
@@ -564,7 +564,7 @@ router.post('/delete/:id', isLoggedIn,
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'ed' }
+                        where: { name: 'dd' }
                     }
                 }
             })
@@ -670,7 +670,7 @@ router.get('/areas', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: {name: 'ur'}
+                    where: {name: 'dr'}
                 }
             }
         })
@@ -687,11 +687,11 @@ router.get('/areas', isLoggedIn, async (req, res, next) => {
         }
         else{
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch(error){
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });
@@ -729,7 +729,7 @@ router.post('/areas/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso 
+                        where: { name: 'dc' }           //////////////////  cambiar nombre del permiso 
                     }
                 }
             })
@@ -857,7 +857,7 @@ router.post('/areas/update/:id',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uu' }           ////////////////////////REVISAR PERMISO
+                        where: { name: 'du' }           ////////////////////////REVISAR PERMISO
                     }
                 }
             })
@@ -970,7 +970,7 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ud' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
+                    where: { name: 'dd' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
                 }
             }
         })

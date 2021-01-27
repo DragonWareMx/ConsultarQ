@@ -174,7 +174,11 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         model: models.Pro_Type
       },
       {
-        model: models.Project_Employee
+        model: models.Project_Employee,
+        include: {
+          model: models.User,
+          include: models.Employee
+        }
       },
       {
         model: models.Task,
@@ -195,6 +199,26 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
         include: models.Provider_Area
       }
     ],
+  })
+
+  const movimientos = await models.Transaction.findAll({
+    include: [
+      {
+        model: models.Project,
+      },
+      {
+        model: models.User,
+        include: models.Employee
+      },
+      {
+        model: models.Concept
+      },
+      {
+        model: models.Pa_Type
+      }
+    ],
+    where: {ProjectId: proyecto.id},
+    order: [['date','DESC']]
   })
 
   const fechaII = new Date(proyecto.start_date+"T11:22:33+0000")
@@ -321,133 +345,309 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
             </head>
             <body>
                 <h2 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">CONSULTARQ</h2>
-                <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO</h3>
+                <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO: `+proyecto.name+`</h3>
                 <img src="`+ url + `/img/logos/faviconB.png"  width="481" height="299" style="position: absolute; top: 325px; left: 150px ; opacity: 0.2;" >
                 <div style="height: 20px"> </div>
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">INGRESOS</h5>
+
                 <table class="blueTable" style="margin-top: 20px">
-                <thead>
-                <tr>
-                <th>ID</th>
-                <th>PROYECTO</th>
-                <th>NOMBRE</th>
-                <th>CONCEPTO</th>
-                <th>DESCRIPCION</th>
-                <th>TIPO</th>
-                <th>DEDUCIBLE</th>
-                <th>PAGO</th>
-                <th>FECHA</th>
-                <th>MONTO</th>
-                </tr>
-                </thead>
-                <tbody>
+                  <thead>
+                    <tr>
+                      <th>AVANCE</th>
+                      <th>TAREAS LISTAS</th>
+                      <th>TAREAS FALTANTES</th>
+                      <th>FECHA DE INICIO</th>
+                      <th>FECHA LÍMITE</th>
+                      <th>ESTATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>${porcentaje}%</td>
+                      <td>${tareasListas}</td>
+                      <td>${tareasFaltantes}</td>
+                      <td>${fechaII.getDate()} / ${mesI} / ${fechaII.getFullYear()}</td>
+                      <td>${fechaTI.getDate()} / ${mesF} / ${fechaTI.getFullYear()}</td>
+                      <td>${proyecto.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
+                `
+  if(proyecto.observations){
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">Observaciones</h5>
+                <div style="font-family: Montserrat,Tahoma;">${proyecto.observations}</div>
+                `
+  }
+  else{
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN OBSERVACIONES</h5>
+                `
+  }
+  if(proyecto.Client){
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">DATOS DEL CLIENTE</h5>
+                <table class="blueTable" style="margin-top: 20px">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>FOTO DE PERFIL</th>
+                      <th>NOMBRE</th>
+                      <th>NÚMERO DE TELÉFONO</th>
+                      <th>CORREO ELECTRÓNICO</th>
+                      <th>ÁREA</th>
+                      <th>ESTATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>${proyecto.Client.id}</td>
+                      <td><img src="`+ url + `/uploads/clients/${proyecto.Client.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>
+                      <td>${proyecto.Client.name}</td>
+                      <td>${proyecto.Client.phone_number}</td>
+                      <td>${proyecto.Client.email}</td>
+                      <td>${proyecto.Client.Client_Area.name}</td>
+                      `
+                      if(proyecto.Client.status == 'active')
+                        ht+=`<td>ACTIVO</td>`
+                      else
+                        ht+=`<td>INACTIVO</td>`
+      
+                  ht+=`
+                    </tr>
+                  </tbody>
+                </table>
+                `
+  }
+  else{
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN CLIENTE REGISTRADO</h5>
+                `
+  }
+  
+  if(proyecto.Project_Employees && proyecto.Project_Employees.length > 0){
+    ht += `
+
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MIEMBROS DEL PROYECTO</h5>
+                <table class="blueTable" style="margin-top: 20px">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>FOTO DE PERFIL</th>
+                      <th>NOMBRE</th>
+                      <th>ROL</th>
+                      <th>PORCENTAJE</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    `
+              proyecto.Project_Employees.forEach(miembro => {
+                ht += `
+                    <tr>
+                    <td>${miembro.User.id}</td>
+                    `
+                if(miembro.User.picture)
+                  ht+=`<td><img src="`+ url + `/uploads/avatar/${miembro.User.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                else
+                  ht+=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+
+                ht+=`<td>${miembro.User.Employee.name}</td>`
+
+                if(miembro.role)
+                  ht+=`<td>${miembro.role}</td>`
+                else
+                  ht+=`<td>Sin rol</td>`
+
+                if(miembro.profit)
+                  ht+=`<td>${miembro.profit}%</td>`
+                else
+                  ht+=`<td>Sin porcentaje</td>`
+                    
+                  ht+=`
+                    </tr>
                 `;
-        /*const ingresos = await models.Transaction.findAll({
-            include: [{
-                model: models.Pa_Type
-            },
-            {
-                model: models.Concept
-            }, {
-                model: models.Project,
-            }, {
-                model: models.User,
-                include: { model: models.Employee }
-            }],
-            order: [
-                ['date', 'DESC']
-            ],
-            where: {
-                T_type: 'ingreso',
-                where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.format('YYYY')),
-                $and: sequelize.where(sequelize.fn('MONTH', sequelize.col('date')), hoy.month() + 1)
-            },
-        })
-
-        ingresos.forEach(ingreso => {
-            ht += `
-                <tr>
-                <td>${ingreso.id}</td>
-                <td>${ingreso.Project.name}</td>
-                <td>${ingreso.User.Employee.name}</td>
-                <td>${ingreso.Concept.name}</td>
-                <td>${ingreso.description}</td>
-                <td>${ingreso.T_type.replace(/\b\w/g, function (l) { return l.toUpperCase() })}</td>
-                <td>${ingreso.invoice == true ? 'Si' : 'No'}</td>
-                <td>${ingreso.Pa_Type.name}</td>
-                <td>${ingreso.date}</td>
-                <td>${ingreso.amount}</td>
-                </tr>
-            `;
-        });*/
-
-        ht += `
-                </tbody>
+            });
+    ht += `
+                  </tbody>
                 </table>
-
-                <div style="height: 20px"> </div>
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">EGRESOS</h5>
+                `
+  }
+  else{
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MIEMBROS</h5>
+                `
+  }
+  if(proyecto.Tasks && proyecto.Tasks.length > 0){
+    var contador = 1
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">TAREAS</h5>
                 <table class="blueTable" style="margin-top: 20px">
-                <thead>
-                <tr>
-                <th>ID</th>
-                <th>PROYECTO</th>
-                <th>NOMBRE</th>
-                <th>CONCEPTO</th>
-                <th>DESCRIPCION</th>
-                <th>TIPO</th>
-                <th>DEDUCIBLE</th>
-                <th>PAGO</th>
-                <th>FECHA</th>
-                <th>MONTO</th>
-                </tr>
-                </thead>
-                <tbody>
-        `;
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>CONCEPTO</th>
+                      <th>DESCRIPCIÓN</th>
+                      <th>CANTIDAD</th>
+                      <th>UNIDAD</th>
+                      <th>COSTO/U</th>
+                      <th>COSTO/T</th>
+                      <th>REALIZADO</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                `;
 
-        /*const egresos = await models.Transaction.findAll({
-            include: [{
-                model: models.Pa_Type
-            },
-            {
-                model: models.Concept
-            }, {
-                model: models.Project,
-            }, {
-                model: models.User,
-                include: { model: models.Employee }
-            }],
-            order: [
-                ['date', 'DESC']
-            ],
-            where: {
-                T_type: 'egreso',
-                where: sequelize.where(sequelize.fn('YEAR', sequelize.col('date')), hoy.format('YYYY')),
-                $and: sequelize.where(sequelize.fn('MONTH', sequelize.col('date')), hoy.month() + 1)
-            },
-        })
-
-        egresos.forEach(egreso => {
+        proyecto.Tasks.forEach(tarea => {
             ht += `
                 <tr>
-                <td>${egreso.id}</td>
-                <td>${egreso.Project.name}</td>
-                <td>${egreso.User.Employee.name}</td>
-                <td>${egreso.Concept.name}</td>
-                <td>${egreso.description}</td>
-                <td>${egreso.T_type.replace(/\b\w/g, function (l) { return l.toUpperCase() })}</td>
-                <td>${egreso.invoice == true ? 'Si' : 'No'}</td>
-                <td>${egreso.Pa_Type.name}</td>
-                <td>${egreso.date}</td>
-                <td>${egreso.amount}</td>
+                <td>${contador}</td>
+                <td>${tarea.concept}</td>`
+
+                if(tarea.description)
+                  ht+=`<td>${tarea.description}</td>`
+                else
+                  ht+=`<td></td>`
+                
+                if(tarea.units)
+                  ht+=`<td>${tarea.units}</td>`
+                else
+                  ht+=`<td></td>`
+                
+                if(tarea.unit)
+                  ht+=`<td>${tarea.unit}</td>`
+                else
+                  ht+=`<td></td>`
+
+                if(tarea.price)
+                  ht+=`<td>$${tarea.price}</td>`
+                else
+                  ht+=`<td></td>`
+
+                if(tarea.price * tarea.units > 0)
+                  ht+=`<td>$${tarea.price * tarea.units}</td>`
+                else
+                  ht+=`<td></td>`
+
+                if(tarea.check)
+                  ht+=`<td>Sí</td>`
+                else
+                  ht+=`<td>No</td>`
+                
+              ht+=`
                 </tr>
             `;
+            contador++
         });
-        */
 
         ht += `
-                </tbody>
-                </table>
+                  </tbody>
+                </table>`
+  }     
+  else{
+    ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN TAREAS</h5>
+                `
+  }
+
+  if(movimientos && movimientos.length > 0){          
+    ht+=`
+            <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MOVIMIENTOS</h5>
+            <table class="blueTable" style="margin-top: 20px">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>MIEMBRO</th>
+                  <th>CONCEPTO</th>
+                  <th>DESCRIPCION</th>
+                  <th>MONTO</th>
+                  <th>PAGO</th>
+                  <th>MOVIMIENTO</th>
+                  <th>DEDUCIBLE</th>
+                  <th>FECHA</th>
+                </tr>
+              </thead>
+              <tbody>
+    `;
+
+    movimientos.forEach(movimiento => {
+      ht += `
+          <tr>
+          <td>${movimiento.id}</td>
+          <td>${movimiento.User.Employee.name}</td>
+          <td>${movimiento.Concept.name}</td>
+          <td>${movimiento.description}</td>
+          <td>$${movimiento.amount}</td>
+          <td>${movimiento.Pa_Type.name}</td>
+          <td>${movimiento.T_type.replace(/\b\w/g, function (l) { return l.toUpperCase() })}</td>
+          <td>${movimiento.invoice == true ? 'Sí' : 'No'}</td>
+          <td>${movimiento.date}</td>
+          </tr>
+      `;
+    });
+
+    ht += `
+              </tbody>
+            </table>`
+  }
+  else{
+  ht += `
+              <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MOVIMIENTOS</h5>
+              `
+  }
+
+  if(proyecto.Providers && proyecto.Providers.length > 0){          
+    ht+=`
+            <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PRESTADORES EXTERNOS</h5>
+            <table class="blueTable" style="margin-top: 20px">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>NOMBRE</th>
+                  <th>ÁREA</th>
+                  <th>TELÉFONO</th>
+                  <th>CORREO ELECTRÓNICO</th>
+                  <th>NÚMERO DE DRO</th>
+                  <th>ESTATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+    `;
+
+    proyecto.Providers.forEach(proveedor => {
+        ht += `
+            <tr>
+            <td>${proveedor.id}</td>
+            <td>${proveedor.name}</td>`
+            if(proveedor.Provider_Area)
+              ht+=`<td>${proveedor.Provider_Area.name}</td>`
+            else
+              ht+=`<td>Sin Área</td>`
+            
+        ht+=`<td>${movimiento.description}</td>
+            <td>${proveedor.phone_number}</td>
+            <td>${proveedor.email}</td>
+            <td>${proveedor.dro}</td>`
+
+            if(proveedor.status == 'active')
+              ht+=`<td>ACTIVO</td>`
+            else
+              ht+=`<td>INACTIVO</td>`
+            
+        ht+=`
+            </tr>
+        `;
+    });
+
+    ht += `
+              </tbody>
+            </table>`
+  }
+  else{
+  ht += `
+            <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN PRESTADORES EXTERNOS</h5>
+            `
+  }
+                
+        ht+= `
             </body>
         </html>
         `;
