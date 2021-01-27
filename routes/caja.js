@@ -529,7 +529,7 @@ router.post('/editar-registro/:id', isLoggedIn,
                     return true
             }).withMessage('El monto ingresado no es válido.'),
         check('descripcion')
-            .not().isEmpty().withMessage('Descripción es un campo requerido.')
+            .optional({ checkFalsy: true })
             .isLength({ max: 255 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
             .trim()
             .escape(),
@@ -1192,7 +1192,7 @@ router.post('/create', isLoggedIn,
                     return true
             }).withMessage('El monto ingresado no es válido.'),
         check('descripcion')
-            .not().isEmpty().withMessage('Descripción es un campo requerido.')
+            .optional({ checkFalsy: true })
             .isLength({ max: 255 }).withMessage('La descripción puede tener un máximo de 255 caracteres.')
             .trim()
             .escape(),

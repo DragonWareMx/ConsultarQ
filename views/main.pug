@@ -56,12 +56,14 @@ html
                                 li(class="category_item")
                                     a(href="/servicios/") Cartera de servicios
                                         img(src="/icons/package.png" class="category_icon")
-                                li(class="category_item")
-                                    a(href="/proyectos/activos") Proyectos
-                                        img(src="/icons/checklist.png" class="category_icon")
-                                li(class="category_item")
-                                    a(href="/proyectos/layouts") Layouts de proyectos
-                                        img(src="/icons/layout.png" class="category_icon")
+                                if pR
+                                    li(class="category_item")
+                                        a(href="/proyectos/activos") Proyectos
+                                            img(src="/icons/checklist.png" class="category_icon")
+                                if pR
+                                    li(class="category_item")
+                                        a(href="/proyectos/layouts") Layouts de proyectos
+                                            img(src="/icons/layout.png" class="category_icon")
                         li(class="category") CLIENTES Y PROVEEDORES
                             ul(class="uk-nav-default uk-nav-parent-icon" uk-nav="multiple: false")
                                 li(class=" category_item")

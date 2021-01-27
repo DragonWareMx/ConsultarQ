@@ -66,8 +66,9 @@ block content
                                 else if proyecto.status == 'EN TIEMPO' || proyecto.status == 'ACTIVO'
                                     button(class="uk-margin-small-right" uk-tooltip="title: Estatus; pos: left" style="background: #86DDAE;border-radius:2px;color: #129326;border:none;padding:7px;font-size:8px; outline:none" /* CAMBIA EL COLOR DEL TEXTO Y BACKGROUND*/) #{proyecto.status}
                             div(class="uk-width-auto@l uk-flex uk-flex-right")
-                                a.uk-flex.uk-flex-middle.uk-text-small(href="/proyectos/editar/"+proyecto.id id="btnEdit" style="margin-right:10px")
-                                    <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
+                                if pU
+                                    a.uk-flex.uk-flex-middle.uk-text-small(href="/proyectos/editar/"+proyecto.id id="btnEdit" style="margin-right:10px")
+                                        <span uk-icon="icon:pencil; ratio:0.8" style="margin-right:5px"></span>Editar
                     div(class="uk-width-1-1 uk-flex uk-flex-wrap")    
                         div(class="uk-width-1-3@l" style="border-right: 1px solid #EEEEEE; padding:5px")
                             //- FECHAS
@@ -328,11 +329,14 @@ block content
                                     td #{task.units}
                                     td #{task.unit}
                                     if task.price
-                                        td $#{task.price}
+                                        td $#{new Intl.NumberFormat("en-IN").format(task.price)}
                                     else
                                         td 
                                     if task.price*task.units > 0
-                                        td $#{task.price*task.units}
+                                        -
+                                            precio2 = (task.price*task.units).toFixed(2)
+                                            precio = new Intl.NumberFormat("en-IN").format(precio2)
+                                        td $#{precio}
                                     else
                                         td
                                     if task.check

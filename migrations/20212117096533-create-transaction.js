@@ -9,19 +9,23 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       T_type: {
-        type: Sequelize.ENUM('ingreso', 'egreso')
+        type: Sequelize.ENUM('ingreso', 'egreso'),
+        allowNull: false
       },
       date: {
-        type: Sequelize.DATEONLY
+        type: Sequelize.DATEONLY,
+        allowNull: false
       },
       amount: {
         type: Sequelize.DECIMAL(10, 2),
+        allowNull: false
       },
       description: {
         type: Sequelize.STRING
       },
       invoice: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       },
       status: {
         type: Sequelize.ENUM('active', 'inactive'),

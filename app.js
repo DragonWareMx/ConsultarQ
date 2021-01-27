@@ -78,15 +78,19 @@ app.use(async (req, res, next) => {
 
     //permisos
     uR = false
+    pR = false
 
     if (usuario.Role && usuario.Role.Permissions) {
       usuario.Role.Permissions.forEach(permiso => {
         if (permiso.name == 'ur')
           uR = true
+        else if (permiso.name == 'pr')
+          pR = true
       });
     }
 
     app.locals.uR = uR;
+    app.locals.pR = pR;
   }
   catch (error) {
     app.locals.user = req.user

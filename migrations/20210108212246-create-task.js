@@ -21,20 +21,17 @@ module.exports = {
         type: Sequelize.STRING(10)
       },
       units: {
-        type: Sequelize.STRING(16)
+        type: Sequelize.DECIMAL(10,2)
       },
       concept: {
         allowNull:false,
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT(255)
       },
       price: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL(10,2)
       },
       description: {
-        type: Sequelize.TEXT
-      },
-      amount: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.TEXT(500)
       },
       check: {
         allowNull: false,

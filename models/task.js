@@ -16,14 +16,13 @@ module.exports = (sequelize, DataTypes) => {
   };
   Task.init({
     unit: DataTypes.STRING(10),
-    units: DataTypes.STRING(16),
+    units: DataTypes.DECIMAL(10,2),
     concept: {
       allowNull:false,
-      type: DataTypes.TEXT
+      type: DataTypes.TEXT(255)
     },
-    price: DataTypes.DECIMAL,
-    description: DataTypes.TEXT,
-    amount: DataTypes.DECIMAL,
+    price: DataTypes.DECIMAL(10,2),
+    description: DataTypes.TEXT(500),
     check: {
       allowNull: false,
       defaultValue: false,
