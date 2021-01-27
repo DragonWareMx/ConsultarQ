@@ -45,11 +45,11 @@ router.get('/', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });
@@ -447,7 +447,7 @@ router.get('/areas', isLoggedIn, async (req, res, next) => {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: {name: 'ur'}
+                    where: {name: 'er'}
                 }
             }
         })
@@ -464,11 +464,11 @@ router.get('/areas', isLoggedIn, async (req, res, next) => {
         }
         else{
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})
         }
     }
     catch(error){
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})
     }
 
 });
@@ -506,7 +506,7 @@ router.post('/areas/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }           //////////////////  cambiar nombre del permiso 
+                        where: { name: 'ec' }           //////////////////  cambiar nombre del permiso 
                     }
                 }
             })
@@ -634,7 +634,7 @@ router.post('/areas/update/:id',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uu' }           ////////////////////////REVISAR PERMISO
+                        where: { name: 'eu' }           ////////////////////////REVISAR PERMISO
                     }
                 }
             })
@@ -747,7 +747,7 @@ router.post('/areas/delete/:id', isLoggedIn, async function (req, res, next) {
                 model: models.Role,
                 include: {
                     model: models.Permission,
-                    where: { name: 'ud' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
+                    where: { name: 'ed' }               ///////////////////////////VERIFICAR QUE SEA EL PERMISO CORRECTO
                 }
             }
         })

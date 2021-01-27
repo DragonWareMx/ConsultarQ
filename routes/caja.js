@@ -408,11 +408,11 @@ router.get('/', isLoggedIn, async function (req, res, next) {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})
     }
 });
 // router.get('/agregar-registro', isLoggedIn, function (req, res, next) {
@@ -491,17 +491,17 @@ router.get('/editar-registro/:id', isLoggedIn, async function (req, res, next) {
                 return res.render('editarRegistro', { movimiento, tipos, conceptos, proyectos, cU, cD })
             }
             else {
-                return res.status(404).json(404)                //  mandar a la vista de error
+                return res.render('error',{error: 404})               //  mandar a la vista de error
             }
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403}) 
         }
     }
     catch (error) {
         console.log(error)
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})
     }
 });
 
@@ -823,11 +823,11 @@ router.get('/egresos', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });
@@ -936,11 +936,11 @@ router.get('/ingresos', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });
@@ -1049,11 +1049,11 @@ router.get('/deducibles', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });
@@ -1160,11 +1160,11 @@ router.get('/historial', isLoggedIn, async (req, res, next) => {
         }
         else {
             //NO TIENE PERMISOS
-            return res.status(403).json(403)
+            return res.render('error',{error: 403})  
         }
     }
     catch (error) {
-        return res.status(403).json(403)
+        return res.render('error',{error: 500})  
     }
 
 });

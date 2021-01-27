@@ -35,18 +35,147 @@ var upload = multer({
 
 
 router.get('/', isLoggedIn, async function(req, res, next) {
-    const servicios = await models.Service.findAll({ });
-    const docu = await models.Service_Portfolio.findAll({ });
-    res.render('carteraServicios', {servicios, docu}) 
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        const usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission
+                }
+            }
+        })
+
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'sc')
+                cC = true
+            else if (permiso.name == 'sr')
+                cR = true
+            else if (permiso.name == 'su')
+                cU = true
+            else if (permiso.name == 'sd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cR) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            const servicios = await models.Service.findAll({ });
+            const docu = await models.Service_Portfolio.findAll({ });
+            res.render('carteraServicios', {servicios, docu})
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.render('error',{error: 403}) 
+        }
+    }
+    catch (error) {
+        return res.render('error',{error: 500}) 
+    }
 });
 
 router.get('/ver-servicio/:id', isLoggedIn, async function(req, res, next) {
-    const servicio = await models.Service.findAll({ where: { id: req.params.id } }); 
-    res.render('verServicio', {servicio})  
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        const usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission
+                }
+            }
+        })
+
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'sc')
+                cC = true
+            else if (permiso.name == 'sr')
+                cR = true
+            else if (permiso.name == 'su')
+                cU = true
+            else if (permiso.name == 'sd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cR) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            const servicio = await models.Service.findAll({ where: { id: req.params.id } }); 
+            res.render('verServicio', {servicio})
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.render('error',{error: 403}) 
+        }
+    }
+    catch (error) {
+        return res.render('error',{error: 500}) 
+    } 
 });
 
-router.get('/agregar-servicio', isLoggedIn, function(req, res, next) {
-    res.render('agregarServicio')
+router.get('/agregar-servicio', isLoggedIn, async function(req, res, next) {
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        const usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission
+                }
+            }
+        })
+
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'sc')
+                cC = true
+            else if (permiso.name == 'sr')
+                cR = true
+            else if (permiso.name == 'su')
+                cU = true
+            else if (permiso.name == 'sd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cC) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+          res.render('agregarServicio')
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.render('error',{error: 403}) 
+        }
+    }
+    catch (error) {
+        return res.render('error',{error: 500}) 
+    }
 });
 
 // GUARDAR NUEVO SERVICIO
@@ -78,7 +207,7 @@ router.post('/agregar-servicio/nuevo',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }
+                        where: { name: 'sc' }
                     }
                 }
             })
@@ -143,8 +272,51 @@ router.post('/agregar-servicio/nuevo',
 });
 
 router.get('/editar-servicio/:id', isLoggedIn, async function(req, res, next) {
-    const servicio = await models.Service.findAll({ where: { id: req.params.id } }); 
-    res.render('editarServicio', {servicio})  
+    try {
+        //VERIFICACION DEL PERMISO
+
+        //obtenemos el usuario, su rol y su permiso
+        const usuario = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            include: {
+                model: models.Role,
+                include: {
+                    model: models.Permission
+                }
+            }
+        })
+
+        var cC = false;
+        var cR = false;
+        var cU = false;
+        var cD = false;
+
+        usuario.Role.Permissions.forEach(permiso => {
+            if (permiso.name == 'sc')
+                cC = true
+            else if (permiso.name == 'sr')
+                cR = true
+            else if (permiso.name == 'su')
+                cU = true
+            else if (permiso.name == 'sd')
+                cD = true
+        });
+
+        if (usuario && usuario.Role && usuario.Role.Permissions && cU) {
+            //TIENE PERMISO DE DESPLEGAR VISTA
+            const servicio = await models.Service.findAll({ where: { id: req.params.id } }); 
+            res.render('editarServicio', {servicio})
+        }
+        else {
+            //NO TIENE PERMISOS
+            return res.render('error',{error: 403}) 
+        }
+    }
+    catch (error) {
+        return res.render('error',{error: 500}) 
+    }  
 }); 
 
 // EDITAR SERVICIO--------------
@@ -176,7 +348,7 @@ router.post('/editar-servicio/update/:id',
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }
+                        where: { name: 'su' }
                     }
                 }
             })
@@ -267,7 +439,7 @@ router.post('/editarPDF', upload.single('filePDF'),
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'uc' }
+                        where: { name: 'su' }
                     }
                 }
             })
@@ -355,7 +527,7 @@ router.post('/delete/:id', isLoggedIn,
                     model: models.Role,
                     include: {
                         model: models.Permission,
-                        where: { name: 'ed' }
+                        where: { name: 'sd' }
                     }
                 }
             })
