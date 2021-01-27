@@ -14,6 +14,8 @@ module.exports = {
     await queryInterface.bulkInsert('Roles', [
       {
         name: 'DragonWare',
+        createdAt: '2020-12-31',
+        updatedAt: '2020-12-31',
       },
       {
         name: 'Administrador',
