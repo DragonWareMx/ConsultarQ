@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Pa_Types', [
+    await queryInterface.bulkInsert('pa_types', [
       {
         id: 1,
         name: 'Efectivo',

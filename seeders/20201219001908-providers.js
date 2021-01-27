@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Providers', [
+    await queryInterface.bulkInsert('providers', [
       {
         name: 'Adolfo Lemus',
         dro: "12345678",

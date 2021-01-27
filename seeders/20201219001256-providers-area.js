@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Provider_Areas', [
+    await queryInterface.bulkInsert('provider_areas', [
       {
         id: 1,
         name: 'Plomeria',

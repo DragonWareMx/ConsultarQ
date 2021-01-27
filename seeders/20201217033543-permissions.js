@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Permissions', [
+    await queryInterface.bulkInsert('permissions', [
       {
         name: 'uc',
         createdAt: '2020-12-31',
