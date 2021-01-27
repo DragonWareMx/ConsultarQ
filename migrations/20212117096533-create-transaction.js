@@ -44,7 +44,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Users',
+          model: 'users',
           key: 'id',
         },
       },
@@ -52,7 +52,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Projects',
+          model: 'projects',
           key: 'id',
         },
       },
@@ -60,7 +60,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Pa_Types',
+          model: 'pa_types',
           key: 'id',
         },
       },
@@ -68,7 +68,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Concepts',
+          model: 'concepts',
           key: 'id',
         },
       }

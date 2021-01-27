@@ -33,7 +33,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'Roles',
+          model: 'roles',
           key: 'id',
         },
       },
