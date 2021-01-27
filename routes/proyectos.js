@@ -2206,17 +2206,18 @@ router.get('/documentacion/editar/:id', isLoggedIn,async function (req, res, nex
     if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
       //TIENE PERMISO DE DESPLEGAR VISTA
       //obtiene todos los proyectos y se manda a la vista
-      models.Project.findOne({
+      const project = await models.Project.findOne({
         where: {
           id: req.params.id
         },
         include: [{
           model: models.Task
-        }
-      ]
-      }).then(project =>{
+        }]
+      })
+      if(project)
         res.render('editarDocumentacion',{project});
-      }); 
+      else
+        return res.render('error',{error: 404})
     }
     else {
         //NO TIENE PERMISOS
@@ -2478,17 +2479,18 @@ router.get('/layout/editar/:id', isLoggedIn,async function (req, res, next) {
     if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
       //TIENE PERMISO DE DESPLEGAR VISTA
       //obtiene todos los proyectos y se manda a la vista
-      models.Pro_Type.findOne({
+      const layout = await models.Pro_Type.findOne({
         where: {
           id: req.params.id
         },
         include: [{
           model: models.Tasks_Layout
-        }
-      ]
-      }).then(layout =>{
+        }]
+      })
+      if(layout)
         res.render('editarLayout',{layout});
-      });
+      else
+        return res.render('error',{error: 404})
     }
     else {
         //NO TIENE PERMISOS
@@ -3300,18 +3302,17 @@ router.post('/documentacion/:projectId/tarea/editar/:taskId',[
       throw new Error()
     if (!task)
       throw new Error()
-    res.status(200).json(task);
+    res.status(200).json([{ status: 200 }]);
     await t.commit()
   }
   catch(error){
-    console.log(error)
     await t.rollback();
     return res.status(500).json([{ msg: 'No fue posible editar la tarea, vuelva a intentarlo más tarde.' }])
   }
 });
 
 //Eliminar tarea de proyecto
-router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, async (req, res, next) => {
+router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, async function (req, res, next) {
   try {
       let usuario = await models.User.findOne({
           where: {
@@ -3349,7 +3350,9 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
           description: "El usuario " + usuario.email + " ha eliminado la tarea " + task.concept+" del proyecto "+project.name
       }
       const log = await models.Log.create(dataLog, { transaction: t })
+
       const verTask = await models.Task.findOne({ where: { id: task.id }, transaction: t })
+
       if (verTask)
           throw new Error()
       if (!log)
@@ -3358,6 +3361,7 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
       await t.commit()
       res.status(200).json([{ status: 200 }]);
   } catch (error) {
+      console.log(error)
       await t.rollback();
       return res.status(500).json([{ msg: 'No fue posible eliminar la tarea, vuelva a intentarlo más tarde.' }])
   }

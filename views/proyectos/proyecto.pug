@@ -322,7 +322,7 @@ block content
                                 th(class="uk-text-truncate uk-width-small") Realizado
                         tbody
                             each task, index in proyecto.Tasks
-                                tr(uk-toggle="target: #editTask-form" class="editar" data-id=1) 
+                                tr(class="editar" data-id=1) 
                                     td #{index+1}
                                     td #{task.concept}
                                     td #{task.description}
@@ -344,8 +344,9 @@ block content
                                     else
                                         td No
             div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
-                a(href="/proyectos/documentacion/editar/"+proyecto.id)
-                    <span uk-icon="icon: settings; ratio: 0.8" style="margin-right:5px"></span>Administrar tareas
+                if pU
+                    a(href="/proyectos/documentacion/editar/"+proyecto.id)
+                        <span uk-icon="icon: settings; ratio: 0.8" style="margin-right:5px"></span>Administrar tareas
         //- FINANZAS DEL PROYECTO--------------------------
         div(class="uk-flex uk-flex-wrap-reverse uk-width-1-1")
             div(class="uk-card uk-card-default uk-width-1-1 uk-margin-top")
@@ -472,54 +473,6 @@ block content
                     div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
                         button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
                         button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="editTask" type="submit") Guardar
-    //- Modal para eliminar tarea 
-    div(id="deleteTask-form" uk-modal)
-        div(class="uk-modal-dialog uk-modal-body")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-danger") Eliminar tarea
-            button(type='button' uk-close='' class="uk-modal-close-default")
-            div(id="errors-deleteTask")
-            div(class="uk-text-left" id="textTask-delete") ¿Estás seguro de que deseas eliminar la tarea?
-            form(class="uk-card-body uk-padding-small" id="form-delete-task" action=""  method="POST")
-                div(class="uk-width-1 uk-flex-right uk-flex uk-flex-middle")
-                    button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                    button(class="uk-button uk-button-danger uk-border-rounded uk-text-capitalize" id="deleteTask" type="submit") Eliminar         
-    //- Modal para agregar tarea
-    div(id="task-form" uk-modal)
-        div(class="uk-modal-dialog uk-modal-body")
-            div(class="uk-text-left  uk-text-large uk-text-bold uk-text-primary") Agregar tarea
-            button(type='button' uk-close='' class="uk-modal-close-default")
-            div(id="errors-task")
-            form(class="uk-card-body uk-padding-remove uk-margin-top" id="form-new-task" action="/proyectos/documentacion/"+1+"/tarea/agregar" method="POST" enctype="multipart/form-data")
-                div(class="uk-child-width-1 uk-grid")
-                    div
-                        .field.uk-margin-bottom
-                            input(type='text' autocomplete='off' id="concepto" name="concepto" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='concepto' title='Concepto' data-title='Concepto')
-                        .field.uk-margin-bottom
-                            input(type='text' autocomplete='off' id="descripcion" name="descripcion" value='' onchange="this.setAttribute('value', this.value);" required='')
-                            label(for='descripcion' title='Descripcion' data-title='Descripcion')
-                    div
-                        div.uk-grid
-                            div(class="uk-width-1-2@s uk-width-1-1")
-                                .field.uk-margin-bottom
-                                    input(type='number' autocomplete='off'  id="cantidad" name="cantidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='cantidad' title='Cantidad' data-title='Cantidad')
-                            div(class="uk-width-1-2@s uk-width-1-1")
-                                .field.uk-margin-bottom
-                                    input(type='text' autocomplete='off'  id="unidad" name="unidad"  value='' onchange="this.setAttribute('value', this.value);" required='')
-                                    label(for='unidad' title='Unidad' data-title='Unidad')
-                            div(class="uk-width-1-2@s uk-width-1-1")
-                                .field.uk-margin-bottom
-                                    input(type='number' autocomplete='off'  id="costo" name="costo"  value='' onchange="this.setAttribute('value', this.value);")
-                                    label(for='costo' title='Costo' data-title='Costo')
-                            div(class="uk-width-1-2@s uk-width-1-1 uk-flex uk-flex-top uk-flex-left")
-                                input(type='checkbox' autocomplete='off'  id="realizado" name="realizado" onchange="this.setAttribute('value', this.value);" style="margin-top:5px")
-                                label(for='realizado' class="uk-text-primary") Realizado
-                    div(class="uk-flex uk-flex-right@s uk-flex-center uk-margin-top")
-                        button(class="uk-button uk-button-text uk-margin-medium-right uk-text-primary uk-text-capitalize uk-modal-close" type="button" ) Cancelar
-                        button(class="uk-button uk-button-primary uk-border-rounded uk-text-capitalize" id="task" type="submit") Agregar
-    
-    
     
     
     
