@@ -2206,17 +2206,18 @@ router.get('/documentacion/editar/:id', isLoggedIn,async function (req, res, nex
     if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
       //TIENE PERMISO DE DESPLEGAR VISTA
       //obtiene todos los proyectos y se manda a la vista
-      models.Project.findOne({
+      const project = await models.Project.findOne({
         where: {
           id: req.params.id
         },
         include: [{
           model: models.Task
-        }
-      ]
-      }).then(project =>{
+        }]
+      })
+      if(project)
         res.render('editarDocumentacion',{project});
-      }); 
+      else
+        return res.render('error',{error: 404})
     }
     else {
         //NO TIENE PERMISOS
@@ -2478,17 +2479,18 @@ router.get('/layout/editar/:id', isLoggedIn,async function (req, res, next) {
     if (usuario && usuario.Role && usuario.Role.Permissions && pU) {
       //TIENE PERMISO DE DESPLEGAR VISTA
       //obtiene todos los proyectos y se manda a la vista
-      models.Pro_Type.findOne({
+      const layout = await models.Pro_Type.findOne({
         where: {
           id: req.params.id
         },
         include: [{
           model: models.Tasks_Layout
-        }
-      ]
-      }).then(layout =>{
+        }]
+      })
+      if(layout)
         res.render('editarLayout',{layout});
-      });
+      else
+        return res.render('error',{error: 404})
     }
     else {
         //NO TIENE PERMISOS
