@@ -9,10 +9,12 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    await queryInterface.createTable('permission_role', 
-    { 
+    await queryInterface.createTable('permission_role',
+      {
         id: {
           type: Sequelize.INTEGER,
+          autoIncrement: true,
+          allowNull: false,
           primaryKey: true
         },
         PermissionId: {
@@ -41,7 +43,7 @@ module.exports = {
           allowNull: false,
           type: Sequelize.DATE
         }
-    });
+      });
   },
 
   down: async (queryInterface, Sequelize) => {
