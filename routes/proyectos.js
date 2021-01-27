@@ -155,524 +155,567 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
 
 //VER PDF--------------------
 router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
-  let options = { format: 'A4' };
-  // Example of options with args //
-  // let options = { format: 'A4', args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+  try {
+    //VERIFICACION DEL PERMISO
 
-  const proyecto = await models.Project.findOne({
-    where: {
-      id: req.params.id
-    },
-    include: 
-    [
-      {
-        model: models.User,
-        include: models.Employee,
-      },
-      {
-        model: models.Pro_Type
-      },
-      {
-        model: models.Project_Employee,
+    //obtenemos el usuario, su rol y su permiso
+    const usuario = await models.User.findOne({
+        where: {
+            id: req.user.id
+        },
         include: {
-          model: models.User,
-          include: models.Employee
+            model: models.Role,
+            include: {
+                model: models.Permission
+            }
         }
-      },
-      {
-        model: models.Task,
-        order: ['check','ASC']
-      },
-      {
-        model: models.Quotation
-      },
-      {
-        model: models.Client,
-        include: models.Client_Area
-      },
-      {
-        model: models.Task
-      },
-      {
-        model: models.Provider,
-        include: models.Provider_Area
+    })
+
+    var pC = false;
+    var pR = false;
+    var pU = false;
+    var pD = false;
+
+    usuario.Role.Permissions.forEach(permiso => {
+        if (permiso.name == 'pc')
+            pC = true
+        else if (permiso.name == 'pr')
+            pR = true
+        else if (permiso.name == 'pu')
+            pU = true
+        else if (permiso.name == 'pd')
+            pD = true
+    });
+
+    //si el usuario puede ver y registrar
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
+      let options = { format: 'A4' };
+      // Example of options with args //
+      // let options = { format: 'A4', args: ['--no-sandbox', '--disable-setuid-sandbox'] };
+
+      const proyecto = await models.Project.findOne({
+        where: {
+          id: req.params.id
+        },
+        include: 
+        [
+          {
+            model: models.User,
+            include: models.Employee,
+          },
+          {
+            model: models.Pro_Type
+          },
+          {
+            model: models.Project_Employee,
+            include: {
+              model: models.User,
+              include: models.Employee
+            }
+          },
+          {
+            model: models.Task,
+            order: ['check','ASC']
+          },
+          {
+            model: models.Quotation
+          },
+          {
+            model: models.Client,
+            include: models.Client_Area
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Provider,
+            include: models.Provider_Area
+          }
+        ],
+      })
+
+      const movimientos = await models.Transaction.findAll({
+        include: [
+          {
+            model: models.Project,
+          },
+          {
+            model: models.User,
+            include: models.Employee
+          },
+          {
+            model: models.Concept
+          },
+          {
+            model: models.Pa_Type
+          }
+        ],
+        where: {ProjectId: proyecto.id},
+        order: [['date','DESC']]
+      })
+
+      const fechaII = new Date(proyecto.start_date+"T11:22:33+0000")
+      const fechaI = fechaII.getTime()
+      const fechaTI = new Date(proyecto.deadline+"T11:22:33+0000")
+      const fechaT = fechaTI.getTime()
+      var hoyI
+      if(proyecto.end_date)
+          hoyI = new Date(proyecto.end_date+"T11:22:33+0000")
+      else
+          hoyI = new Date()
+      const hoy = hoyI.getTime()
+
+      var diasF
+      diasF = ((hoy-fechaI)/(fechaT-fechaI))*100
+
+      if(diasF > 91)
+          diasF = 91
+      else if(diasF < 5)
+          diasF = 5
+
+      const MESES = [
+      "ENE",
+      "FEB",
+      "MAR",
+      "ABR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AGO",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DIC",
+      ];
+      const f = new Date();
+
+      mesI = MESES[fechaII.getMonth()];
+      mesF = MESES[fechaTI.getMonth()];
+
+      var tareasListas = 0
+          var tareasFaltantes = 0
+          var tareasTotales = 0
+          var porcentaje = 100
+      if (proyecto.Tasks)
+        for (const i in proyecto.Tasks) {
+          if (Object.hasOwnProperty.call(proyecto.Tasks, i)) {
+            const element = proyecto.Tasks[i];
+            tareasTotales++
+            if(element.check)
+                tareasListas++
+            else
+                tareasFaltantes++
+          }
       }
-    ],
-  })
-
-  const movimientos = await models.Transaction.findAll({
-    include: [
-      {
-        model: models.Project,
-      },
-      {
-        model: models.User,
-        include: models.Employee
-      },
-      {
-        model: models.Concept
-      },
-      {
-        model: models.Pa_Type
+      if (tareasTotales > 0){
+        porcentaje = parseInt((tareasListas/tareasTotales)*100)
       }
-    ],
-    where: {ProjectId: proyecto.id},
-    order: [['date','DESC']]
-  })
 
-  const fechaII = new Date(proyecto.start_date+"T11:22:33+0000")
-  const fechaI = fechaII.getTime()
-  const fechaTI = new Date(proyecto.deadline+"T11:22:33+0000")
-  const fechaT = fechaTI.getTime()
-  var hoyI
-  if(proyecto.end_date)
-      hoyI = new Date(proyecto.end_date+"T11:22:33+0000")
-  else
-      hoyI = new Date()
-  const hoy = hoyI.getTime()
+      const url = process.env.CLIENT_URL
+      console.log(url)
+      var ht = `
+            <!doctype html>
+            <html>
+              <head>
+                    <meta charset="utf-8">
+                    <title>Informe caja chica</title>
+                    <link rel="preconnect" href="https://fonts.gstatic.com">
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
+                    <style>
+                        h2,h4 {
+                            color: #407ec9;
+                        }
+                        body{
+                            padding: 1.5rem 2rem;
+                            text-align: center;
+                        }
+                        @font-face{
+                            font-family:Montserrat;
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Black.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-BlackItalic.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Bold.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-BoldItalic.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-ExtraLight.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Italic.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Light.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Medium.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Thin.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-SemiBold.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-ExtraBold.ttf);
+                            src:url(${url}+/fonts/Montserrat/Montserrat-Regular.ttf);
+                          }
+                          table.blueTable {
+                            font-family: Tahoma, Geneva, sans-serif;
+                            border: 1px solid #1C6EA4;
+                            background-color: #FFFFFF;
+                            width: 100%;
+                            text-align: left;
+                            border-collapse: collapse;
+                          }
+                          table.blueTable td, table.blueTable th {
+                            border: 1px solid #AAAAAA;
+                            padding: 3px 2px;
+                            text-align: center
+                          }
+                          table.blueTable tbody td {
+                            font-size: 13px;
+                          }
+                          table.blueTable thead {
+                            background: #407EC9;
+                            border-bottom: 2px solid #444444;
+                          }
+                          table.blueTable thead th {
+                            font-size: 15px;
+                            font-weight: bold;
+                            color: #407EC9;
+                            border-left: 2px solid #D0E4F5;
+                          }
+                          table.blueTable thead th:first-child {
+                            border-left: none;
+                          }
+                    </style>
+                </head>
+                <body>
+                    <h2 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">CONSULTARQ</h2>
+                    <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO: `+proyecto.name+`</h3>
+                    <img src="`+ url + `/img/logos/faviconB.png"  width="481" height="299" style="position: absolute; top: 325px; left: 150px ; opacity: 0.2;" >
+                    <div style="height: 20px"> </div>
 
-  var diasF
-  diasF = ((hoy-fechaI)/(fechaT-fechaI))*100
-
-  if(diasF > 91)
-      diasF = 91
-  else if(diasF < 5)
-      diasF = 5
-
-  const MESES = [
-  "ENE",
-  "FEB",
-  "MAR",
-  "ABR",
-  "MAY",
-  "JUN",
-  "JUL",
-  "AGO",
-  "SEP",
-  "OCT",
-  "NOV",
-  "DIC",
-  ];
-  const f = new Date();
-
-  mesI = MESES[fechaII.getMonth()];
-  mesF = MESES[fechaTI.getMonth()];
-
-  var tareasListas = 0
-      var tareasFaltantes = 0
-      var tareasTotales = 0
-      var porcentaje = 100
-  if (proyecto.Tasks)
-    for (const i in proyecto.Tasks) {
-      if (Object.hasOwnProperty.call(proyecto.Tasks, i)) {
-        const element = proyecto.Tasks[i];
-        tareasTotales++
-        if(element.check)
-            tareasListas++
-        else
-            tareasFaltantes++
-      }
-  }
-  if (tareasTotales > 0){
-    porcentaje = parseInt((tareasListas/tareasTotales)*100)
-  }
-
-  const url = process.env.CLIENT_URL
-  console.log(url)
-  var ht = `
-        <!doctype html>
-        <html>
-           <head>
-                <meta charset="utf-8">
-                <title>Informe caja chica</title>
-                <link rel="preconnect" href="https://fonts.gstatic.com">
-                <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
-                <style>
-                    h2,h4 {
-                        color: #407ec9;
-                    }
-                    body{
-                        padding: 1.5rem 2rem;
-                        text-align: center;
-                    }
-                    @font-face{
-                        font-family:Montserrat;
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Black.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-BlackItalic.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Bold.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-BoldItalic.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-ExtraLight.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Italic.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Light.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Medium.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Thin.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-SemiBold.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-ExtraBold.ttf);
-                        src:url(${url}+/fonts/Montserrat/Montserrat-Regular.ttf);
-                       }
-                       table.blueTable {
-                        font-family: Tahoma, Geneva, sans-serif;
-                        border: 1px solid #1C6EA4;
-                        background-color: #FFFFFF;
-                        width: 100%;
-                        text-align: left;
-                        border-collapse: collapse;
-                      }
-                      table.blueTable td, table.blueTable th {
-                        border: 1px solid #AAAAAA;
-                        padding: 3px 2px;
-                        text-align: center
-                      }
-                      table.blueTable tbody td {
-                        font-size: 13px;
-                      }
-                      table.blueTable thead {
-                        background: #407EC9;
-                        border-bottom: 2px solid #444444;
-                      }
-                      table.blueTable thead th {
-                        font-size: 15px;
-                        font-weight: bold;
-                        color: #407EC9;
-                        border-left: 2px solid #D0E4F5;
-                      }
-                      table.blueTable thead th:first-child {
-                        border-left: none;
-                      }
-                </style>
-            </head>
-            <body>
-                <h2 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">CONSULTARQ</h2>
-                <h3 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PROYECTO: `+proyecto.name+`</h3>
-                <img src="`+ url + `/img/logos/faviconB.png"  width="481" height="299" style="position: absolute; top: 325px; left: 150px ; opacity: 0.2;" >
-                <div style="height: 20px"> </div>
-
-                <table class="blueTable" style="margin-top: 20px">
-                  <thead>
-                    <tr>
-                      <th>AVANCE</th>
-                      <th>TAREAS LISTAS</th>
-                      <th>TAREAS FALTANTES</th>
-                      <th>FECHA DE INICIO</th>
-                      <th>FECHA LÍMITE</th>
-                      <th>ESTATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>${porcentaje}%</td>
-                      <td>${tareasListas}</td>
-                      <td>${tareasFaltantes}</td>
-                      <td>${fechaII.getDate()} / ${mesI} / ${fechaII.getFullYear()}</td>
-                      <td>${fechaTI.getDate()} / ${mesF} / ${fechaTI.getFullYear()}</td>
-                      <td>${proyecto.status}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                `
-  if(proyecto.observations){
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">Observaciones</h5>
-                <div style="font-family: Montserrat,Tahoma;">${proyecto.observations}</div>
-                `
-  }
-  else{
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN OBSERVACIONES</h5>
-                `
-  }
-  if(proyecto.Client){
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">DATOS DEL CLIENTE</h5>
-                <table class="blueTable" style="margin-top: 20px">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>FOTO DE PERFIL</th>
-                      <th>NOMBRE</th>
-                      <th>NÚMERO DE TELÉFONO</th>
-                      <th>CORREO ELECTRÓNICO</th>
-                      <th>ÁREA</th>
-                      <th>ESTATUS</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>${proyecto.Client.id}</td>`
-
-                    if(proyecto.Client.picture)
-                      ht +=`<td><img src="`+ url + `/uploads/clients/${proyecto.Client.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
-                    else
-                      ht +=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
-                
-                      ht +=`
-                      <td>${proyecto.Client.name}</td>
-                      <td>${proyecto.Client.phone_number}</td>
-                      <td>${proyecto.Client.email}</td>
-                      <td>${proyecto.Client.Client_Area.name}</td>
-                      `
-                      if(proyecto.Client.status == 'active')
-                        ht+=`<td>ACTIVO</td>`
-                      else
-                        ht+=`<td>INACTIVO</td>`
-      
-                  ht+=`
-                    </tr>
-                  </tbody>
-                </table>
-                `
-  }
-  else{
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN CLIENTE REGISTRADO</h5>
-                `
-  }
-  
-  if(proyecto.Project_Employees && proyecto.Project_Employees.length > 0){
-    ht += `
-
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MIEMBROS DEL PROYECTO</h5>
-                <table class="blueTable" style="margin-top: 20px">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>FOTO DE PERFIL</th>
-                      <th>NOMBRE</th>
-                      <th>ROL</th>
-                      <th>PORCENTAJE</th>
-                    </tr>
-                  </thead>
-                  <tbody>
+                    <table class="blueTable" style="margin-top: 20px">
+                      <thead>
+                        <tr>
+                          <th>AVANCE</th>
+                          <th>TAREAS LISTAS</th>
+                          <th>TAREAS FALTANTES</th>
+                          <th>FECHA DE INICIO</th>
+                          <th>FECHA LÍMITE</th>
+                          <th>ESTATUS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>${porcentaje}%</td>
+                          <td>${tareasListas}</td>
+                          <td>${tareasFaltantes}</td>
+                          <td>${fechaII.getDate()} / ${mesI} / ${fechaII.getFullYear()}</td>
+                          <td>${fechaTI.getDate()} / ${mesF} / ${fechaTI.getFullYear()}</td>
+                          <td>${proyecto.status}</td>
+                        </tr>
+                      </tbody>
+                    </table>
                     `
-              proyecto.Project_Employees.forEach(miembro => {
+      if(proyecto.observations){
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">Observaciones</h5>
+                    <div style="font-family: Montserrat,Tahoma;">${proyecto.observations}</div>
+                    `
+      }
+      else{
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN OBSERVACIONES</h5>
+                    `
+      }
+      if(proyecto.Client){
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">DATOS DEL CLIENTE</h5>
+                    <table class="blueTable" style="margin-top: 20px">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>FOTO DE PERFIL</th>
+                          <th>NOMBRE</th>
+                          <th>NÚMERO DE TELÉFONO</th>
+                          <th>CORREO ELECTRÓNICO</th>
+                          <th>ÁREA</th>
+                          <th>ESTATUS</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>${proyecto.Client.id}</td>`
+
+                        if(proyecto.Client.picture)
+                          ht +=`<td><img src="`+ url + `/uploads/clients/${proyecto.Client.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                        else
+                          ht +=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                    
+                          ht +=`
+                          <td>${proyecto.Client.name}</td>
+                          <td>${proyecto.Client.phone_number}</td>
+                          <td>${proyecto.Client.email}</td>
+                          <td>${proyecto.Client.Client_Area.name}</td>
+                          `
+                          if(proyecto.Client.status == 'active')
+                            ht+=`<td>ACTIVO</td>`
+                          else
+                            ht+=`<td>INACTIVO</td>`
+          
+                      ht+=`
+                        </tr>
+                      </tbody>
+                    </table>
+                    `
+      }
+      else{
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN CLIENTE REGISTRADO</h5>
+                    `
+      }
+      
+      if(proyecto.Project_Employees && proyecto.Project_Employees.length > 0){
+        ht += `
+
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MIEMBROS DEL PROYECTO</h5>
+                    <table class="blueTable" style="margin-top: 20px">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>FOTO DE PERFIL</th>
+                          <th>NOMBRE</th>
+                          <th>ROL</th>
+                          <th>PORCENTAJE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        `
+                  proyecto.Project_Employees.forEach(miembro => {
+                    ht += `
+                        <tr>
+                        <td>${miembro.User.id}</td>
+                        `
+                    if(miembro.User.picture)
+                      ht+=`<td><img src="`+ url + `/uploads/avatar/${miembro.User.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                    else
+                      ht+=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+
+                    ht+=`<td>${miembro.User.Employee.name}</td>`
+
+                    if(miembro.role)
+                      ht+=`<td>${miembro.role}</td>`
+                    else
+                      ht+=`<td>Sin rol</td>`
+
+                    if(miembro.profit)
+                      ht+=`<td>${miembro.profit}%</td>`
+                    else
+                      ht+=`<td>Sin porcentaje</td>`
+                        
+                      ht+=`
+                        </tr>
+                    `;
+                });
+        ht += `
+                      </tbody>
+                    </table>
+                    `
+      }
+      else{
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MIEMBROS</h5>
+                    `
+      }
+      if(proyecto.Tasks && proyecto.Tasks.length > 0){
+        var contador = 1
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">TAREAS</h5>
+                    <table class="blueTable" style="margin-top: 20px">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>CONCEPTO</th>
+                          <th>DESCRIPCIÓN</th>
+                          <th>CANTIDAD</th>
+                          <th>UNIDAD</th>
+                          <th>COSTO/U</th>
+                          <th>COSTO/T</th>
+                          <th>REALIZADO</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                    `;
+
+            proyecto.Tasks.forEach(tarea => {
                 ht += `
                     <tr>
-                    <td>${miembro.User.id}</td>
-                    `
-                if(miembro.User.picture)
-                  ht+=`<td><img src="`+ url + `/uploads/avatar/${miembro.User.picture}"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
-                else
-                  ht+=`<td><img src="`+ url + `/img/iconos/default.png"  width="70" height="70" style="width:70px; height:70px; border-radius:50px; margin-right:15px;object-fit:cover" ></td>`
+                    <td>${contador}</td>
+                    <td>${tarea.concept}</td>`
 
-                ht+=`<td>${miembro.User.Employee.name}</td>`
+                    if(tarea.description)
+                      ht+=`<td>${tarea.description}</td>`
+                    else
+                      ht+=`<td></td>`
+                    
+                    if(tarea.units)
+                      ht+=`<td>${tarea.units}</td>`
+                    else
+                      ht+=`<td></td>`
+                    
+                    if(tarea.unit)
+                      ht+=`<td>${tarea.unit}</td>`
+                    else
+                      ht+=`<td></td>`
 
-                if(miembro.role)
-                  ht+=`<td>${miembro.role}</td>`
-                else
-                  ht+=`<td>Sin rol</td>`
+                    if(tarea.price)
+                      ht+=`<td>$${new Intl.NumberFormat("en-IN").format(tarea.price)}</td>`
+                    else
+                      ht+=`<td></td>`
 
-                if(miembro.profit)
-                  ht+=`<td>${miembro.profit}%</td>`
-                else
-                  ht+=`<td>Sin porcentaje</td>`
+                    if(tarea.price * tarea.units > 0){
+                      precio2 = (tarea.price*tarea.units).toFixed(2)
+                      precio = new Intl.NumberFormat("en-IN").format(precio2)
+                      ht+=`<td>$${precio}</td>`
+                    }
+                    else
+                      ht+=`<td></td>`
+
+                    if(tarea.check)
+                      ht+=`<td>Sí</td>`
+                    else
+                      ht+=`<td>No</td>`
                     
                   ht+=`
                     </tr>
                 `;
+                contador++
             });
-    ht += `
-                  </tbody>
-                </table>
-                `
-  }
-  else{
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MIEMBROS</h5>
-                `
-  }
-  if(proyecto.Tasks && proyecto.Tasks.length > 0){
-    var contador = 1
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">TAREAS</h5>
+
+            ht += `
+                      </tbody>
+                    </table>`
+      }     
+      else{
+        ht += `
+                    <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN TAREAS</h5>
+                    `
+      }
+
+      if(movimientos && movimientos.length > 0){          
+        ht+=`
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MOVIMIENTOS</h5>
                 <table class="blueTable" style="margin-top: 20px">
                   <thead>
                     <tr>
-                      <th>#</th>
+                      <th>ID</th>
+                      <th>MIEMBRO</th>
                       <th>CONCEPTO</th>
-                      <th>DESCRIPCIÓN</th>
-                      <th>CANTIDAD</th>
-                      <th>UNIDAD</th>
-                      <th>COSTO/U</th>
-                      <th>COSTO/T</th>
-                      <th>REALIZADO</th>
+                      <th>DESCRIPCION</th>
+                      <th>MONTO</th>
+                      <th>PAGO</th>
+                      <th>MOVIMIENTO</th>
+                      <th>DEDUCIBLE</th>
+                      <th>FECHA</th>
                     </tr>
                   </thead>
                   <tbody>
-                `;
+        `;
 
-        proyecto.Tasks.forEach(tarea => {
-            ht += `
-                <tr>
-                <td>${contador}</td>
-                <td>${tarea.concept}</td>`
-
-                if(tarea.description)
-                  ht+=`<td>${tarea.description}</td>`
-                else
-                  ht+=`<td></td>`
-                
-                if(tarea.units)
-                  ht+=`<td>${tarea.units}</td>`
-                else
-                  ht+=`<td></td>`
-                
-                if(tarea.unit)
-                  ht+=`<td>${tarea.unit}</td>`
-                else
-                  ht+=`<td></td>`
-
-                if(tarea.price)
-                  ht+=`<td>$${new Intl.NumberFormat("en-IN").format(tarea.price)}</td>`
-                else
-                  ht+=`<td></td>`
-
-                if(tarea.price * tarea.units > 0){
-                  precio2 = (tarea.price*tarea.units).toFixed(2)
-                  precio = new Intl.NumberFormat("en-IN").format(precio2)
-                  ht+=`<td>$${precio}</td>`
-                }
-                else
-                  ht+=`<td></td>`
-
-                if(tarea.check)
-                  ht+=`<td>Sí</td>`
-                else
-                  ht+=`<td>No</td>`
-                
-              ht+=`
-                </tr>
-            `;
-            contador++
+        movimientos.forEach(movimiento => {
+          precio = new Intl.NumberFormat("en-IN").format(movimiento.amount)
+          ht += `
+              <tr>
+              <td>${movimiento.id}</td>
+              <td>${movimiento.User.Employee.name}</td>
+              <td>${movimiento.Concept.name}</td>
+              <td>${movimiento.description}</td>
+              <td>$${precio}</td>
+              <td>${movimiento.Pa_Type.name}</td>
+              <td>${movimiento.T_type.replace(/\b\w/g, function (l) { return l.toUpperCase() })}</td>
+              <td>${movimiento.invoice == true ? 'Sí' : 'No'}</td>
+              <td>${movimiento.date}</td>
+              </tr>
+          `;
         });
 
         ht += `
                   </tbody>
                 </table>`
-  }     
-  else{
-    ht += `
-                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN TAREAS</h5>
-                `
-  }
-
-  if(movimientos && movimientos.length > 0){          
-    ht+=`
-            <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">MOVIMIENTOS</h5>
-            <table class="blueTable" style="margin-top: 20px">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>MIEMBRO</th>
-                  <th>CONCEPTO</th>
-                  <th>DESCRIPCION</th>
-                  <th>MONTO</th>
-                  <th>PAGO</th>
-                  <th>MOVIMIENTO</th>
-                  <th>DEDUCIBLE</th>
-                  <th>FECHA</th>
-                </tr>
-              </thead>
-              <tbody>
-    `;
-
-    movimientos.forEach(movimiento => {
-      precio = new Intl.NumberFormat("en-IN").format(movimiento.amount)
+      }
+      else{
       ht += `
-          <tr>
-          <td>${movimiento.id}</td>
-          <td>${movimiento.User.Employee.name}</td>
-          <td>${movimiento.Concept.name}</td>
-          <td>${movimiento.description}</td>
-          <td>$${precio}</td>
-          <td>${movimiento.Pa_Type.name}</td>
-          <td>${movimiento.T_type.replace(/\b\w/g, function (l) { return l.toUpperCase() })}</td>
-          <td>${movimiento.invoice == true ? 'Sí' : 'No'}</td>
-          <td>${movimiento.date}</td>
-          </tr>
-      `;
-    });
+                  <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MOVIMIENTOS</h5>
+                  `
+      }
 
-    ht += `
-              </tbody>
-            </table>`
-  }
-  else{
-  ht += `
-              <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN MOVIMIENTOS</h5>
-              `
-  }
+      if(proyecto.Providers && proyecto.Providers.length > 0){          
+        ht+=`
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PRESTADORES EXTERNOS</h5>
+                <table class="blueTable" style="margin-top: 20px">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>NOMBRE</th>
+                      <th>ÁREA</th>
+                      <th>TELÉFONO</th>
+                      <th>CORREO ELECTRÓNICO</th>
+                      <th>NÚMERO DE DRO</th>
+                      <th>ESTATUS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+        `;
 
-  if(proyecto.Providers && proyecto.Providers.length > 0){          
-    ht+=`
-            <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">PRESTADORES EXTERNOS</h5>
-            <table class="blueTable" style="margin-top: 20px">
-              <thead>
+        proyecto.Providers.forEach(proveedor => {
+            ht += `
                 <tr>
-                  <th>ID</th>
-                  <th>NOMBRE</th>
-                  <th>ÁREA</th>
-                  <th>TELÉFONO</th>
-                  <th>CORREO ELECTRÓNICO</th>
-                  <th>NÚMERO DE DRO</th>
-                  <th>ESTATUS</th>
-                </tr>
-              </thead>
-              <tbody>
-    `;
-
-    proyecto.Providers.forEach(proveedor => {
-        ht += `
-            <tr>
-            <td>${proveedor.id}</td>
-            <td>${proveedor.name}</td>`
-            if(proveedor.Provider_Area)
-              ht+=`<td>${proveedor.Provider_Area.name}</td>`
-            else
-              ht+=`<td>Sin Área</td>`
-            
-        ht+=`
-            <td>${proveedor.phone_number}</td>
-            <td>${proveedor.email}</td>
-            <td>${proveedor.dro}</td>`
-
-            if(proveedor.status == 'active')
-              ht+=`<td>ACTIVO</td>`
-            else
-              ht+=`<td>INACTIVO</td>`
-            
-        ht+=`
-            </tr>
-        `;
-    });
-
-    ht += `
-              </tbody>
-            </table>`
-  }
-  else{
-  ht += `
-            <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN PRESTADORES EXTERNOS</h5>
-            `
-  }
+                <td>${proveedor.id}</td>
+                <td>${proveedor.name}</td>`
+                if(proveedor.Provider_Area)
+                  ht+=`<td>${proveedor.Provider_Area.name}</td>`
+                else
+                  ht+=`<td>Sin Área</td>`
                 
-        ht+= `
-            </body>
-        </html>
-        `;
+            ht+=`
+                <td>${proveedor.phone_number}</td>
+                <td>${proveedor.email}</td>
+                <td>${proveedor.dro}</td>`
 
-  let file = { content: ht };
+                if(proveedor.status == 'active')
+                  ht+=`<td>ACTIVO</td>`
+                else
+                  ht+=`<td>INACTIVO</td>`
+                
+            ht+=`
+                </tr>
+            `;
+        });
 
-  html_to_pdf.generatePdf(file, options).then(output => {
-    console.log(output);
+        ht += `
+                  </tbody>
+                </table>`
+      }
+      else{
+      ht += `
+                <h5 style="font-family: Montserrat,Tahoma;text-transform: uppercase;">SIN PRESTADORES EXTERNOS</h5>
+                `
+      }
+                    
+            ht+= `
+                </body>
+            </html>
+            `;
 
-    fs.writeFileSync('public/uploads/pdfs/proyecto'+req.params.id+'.pdf', output)
+      let file = { content: ht };
 
-    fs.readFile('./public/uploads/pdfs/proyecto'+req.params.id+'.pdf', {root: __dirname} , function (err,data){
-      res.contentType("application/pdf");
-      res.send(data);
-    });
-  });
+      html_to_pdf.generatePdf(file, options).then(output => {
+        console.log(output);
+
+        fs.writeFileSync('public/uploads/pdfs/proyecto'+req.params.id+'.pdf', output)
+
+        fs.readFile('./public/uploads/pdfs/proyecto'+req.params.id+'.pdf', {root: __dirname} , function (err,data){
+          res.contentType("application/pdf");
+          res.send(data);
+        });
+      });
+    }
+    else {
+        //NO TIENE PERMISOS
+        return res.render('error',{error: 403})
+    }
+  }
+    catch (error) {
+    return res.render('error',{error: 500})
+  }
 });
 
 //AGREGAR COMENTARIO
@@ -812,56 +855,59 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
     });
 
     //si el usuario puede ver y registrar
-    if (usuario && usuario.Role && usuario.Role.Permissions && pR && pC) {
-      //TIENE PERMISO DE DESPLEGAR VISTA
-      //obtiene todos los proyectos y se manda a la vista
-      const proyectos = await models.Project.findAll({
-        include: [{
-          model: models.User,
-          include: models.Employee
-        },{
-          model: models.Pro_Type
-        },
-        {
-          model: models.Project_Employee
-        },
-        {
-          model: models.Task
-        },
-        {
-          model: models.Quotation
-        },
-        {
-          model: models.Comment
-        }
-      ],
-      where: {status : 'activo'},
-      order: [['createdAt','DESC']]
-      })
-      res.render('proyectos', {proyectos});
-    }
-    else if(usuario && usuario.Role && usuario.Role.Permissions && pR){
-      const proyectos = await models.Project.findAll({
-        include: [{
-          model: models.User,
-          include: models.Employee,
-          where: {id: usuario.id}
-        },{
-          model: models.Pro_Type
-        },
-        {
-          model: models.Project_Employee
-        },
-        {
-          model: models.Task
-        },
-        {
-          model: models.Comment
-        }
+    if (usuario && usuario.Role && usuario.Role.Permissions && pR) {
+      if(pR && pC && pD && pU){
+        //TIENE PERMISO DE DESPLEGAR VISTA
+        //obtiene todos los proyectos y se manda a la vista
+        const proyectos = await models.Project.findAll({
+          include: [{
+            model: models.User,
+            include: models.Employee
+          },{
+            model: models.Pro_Type
+          },
+          {
+            model: models.Project_Employee
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Quotation
+          },
+          {
+            model: models.Comment
+          }
         ],
+        where: {status : 'activo'},
         order: [['createdAt','DESC']]
-      })
-      res.render('proyectos', {proyectos});
+        })
+        res.render('proyectos', {proyectos});
+      }
+      else{
+        const proyectos = await models.Project.findAll({
+          include: [{
+            model: models.User,
+            include: models.Employee,
+            where: {id: usuario.id},
+            required: true
+          },{
+            model: models.Pro_Type
+          },
+          {
+            model: models.Project_Employee
+          },
+          {
+            model: models.Task
+          },
+          {
+            model: models.Comment
+          }
+          ],
+          order: [['createdAt','DESC']]
+        })
+        res.render('proyectos', {proyectos});
+      }
     }
     else {
         //NO TIENE PERMISOS
