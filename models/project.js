@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     contract: DataTypes.STRING,
     name: {
       allowNull: false,
+      unique: true,
       type: DataTypes.STRING
     },
     color: {

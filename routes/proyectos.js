@@ -4,6 +4,7 @@ const { check, validationResult, body } = require('express-validator');
 const {isLoggedIn , isNotLoggedIn} = require('../lib/auth');
 var html_to_pdf = require('html-pdf-node');
 require('dotenv').config();
+const { Op } = require("sequelize");
 //autenticacion
 const passport = require('passport');
 
@@ -109,6 +110,20 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
           }
         ],
       })
+
+      if(!(pC && pR && pU && pD)){
+        if(proyecto.Users.length > 0)
+        {
+          validador = false
+          proyecto.Users.forEach(usuarios => {
+            if(usuarios.id == usuario.id)
+              validador = true
+          });
+          if(!validador)
+            //NO TIENE PERMISOS
+            return res.render('error',{error: 403})
+        }
+      }
 
 
       const comentarios = await models.Comment.findAll({
@@ -233,6 +248,20 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
           }
         ],
       })
+
+      if(!(pC && pR && pU && pD)){
+        if(proyecto.Users.length > 0)
+        {
+          validador = false
+          proyecto.Users.forEach(usuarios => {
+            if(usuarios.id == usuario.id)
+              validador = true
+          });
+          if(!validador)
+            //NO TIENE PERMISOS
+            return res.render('error',{error: 403})
+        }
+      }
 
       const movimientos = await models.Transaction.findAll({
         include: [
@@ -535,6 +564,7 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                       <tbody>
                     `;
 
+            sumaTotal = 0
             proyecto.Tasks.forEach(tarea => {
                 ht += `
                     <tr>
@@ -562,6 +592,7 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                       ht+=`<td></td>`
 
                     if(tarea.price * tarea.units > 0){
+                      sumaTotal += tarea.price * tarea.units
                       precio2 = (tarea.price*tarea.units).toFixed(2)
                       precio = new Intl.NumberFormat("en-IN").format(precio2)
                       ht+=`<td>$${precio}</td>`
@@ -579,6 +610,24 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
                 `;
                 contador++
             });
+
+            if(sumaTotal > 0){
+              precio3 = sumaTotal.toFixed(2)
+              precio4 = new Intl.NumberFormat("en-IN").format(precio3)
+
+              ht+=`
+                    <tr>
+                    <td></td>
+                    <td><b>COSTO TOTAL</b></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>$${precio4}</td>
+                    <td></td>
+                    </tr>
+              `
+            }
 
             ht += `
                       </tbody>
@@ -772,8 +821,7 @@ router.post('/proyecto/:id/comment',
             }
         }
         catch (error) {
-          console.log(error)
-            return res.status(403).json([{ msg: 'No estás autorizado para registrar proyectos.' }])
+            return res.status(403).json([{ msg: 'No estás autorizado para comentar.' }])
         }
 
         //TIENE PERMISO
@@ -803,18 +851,45 @@ router.post('/proyecto/:id/comment',
             UserId: req.user.id
           }
 
+          //OBTENEMOS EL PROYECTO
+          const pro = await models.Project.findOne({where: {id: req.params.id}, transaction: t})
+
           //GUARDA EL COMENTARIO
           const newComment = await models.Comment.create(datos, { transaction: t })
 
+          const usuarioC = await models.User.findOne({
+            where: {
+                id: req.user.id
+            },
+            transaction: t
+          })
+
+          var desc ="El usuario " + usuarioC.email + " ha comentado el proyecto "+ pro.name  +" de id "+ pro.id +" con lo siguiente: " + newComment.comment 
+          
+          //guardamos los datos del log
+          var dataLog = {
+            UserId: usuarioC.id,
+            title: "Registro de comentario",
+            description: desc
+          }
+
+          //guarda el log en la base de datos
+          const log = await models.Log.create(dataLog, { transaction: t })
+
+          if(!log)
+            throw new Error()
+          if(!pro)
+            throw new Error()
+          if(!newComment)
+            throw new Error()
           res.status(200).json([{ status: 200 }]);
           // If the execution reaches this line, no errors were thrown.
           // We commit the transaction.
           await t.commit()
         } catch (error) {
-          console.log(error)
-
           // If the execution reaches this line, an error was thrown.
           // We rollback the transaction.
+          console.log(error)
           await t.rollback();
           return res.status(500).json([{ msg: 'No fue posible enviar el comentario, vuelva a intentarlo más tarde.' }])
         }
@@ -888,14 +963,18 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
         const proyectos = await models.Project.findAll({
           include: [{
             model: models.User,
-            include: models.Employee,
-            where: {id: usuario.id},
-            required: true
+            include: models.Employee
           },{
             model: models.Pro_Type
           },
           {
-            model: models.Project_Employee
+            model: models.Project_Employee,
+            include: {
+              model: models.User,
+              where: {id: usuario.id},
+              required: true
+            },
+            required: true
           },
           {
             model: models.Task
@@ -904,6 +983,7 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
             model: models.Comment
           }
           ],
+          where: {status : 'activo'},
           order: [['createdAt','DESC']]
         })
         res.render('proyectos', {proyectos, pC});
@@ -988,14 +1068,18 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
         const proyectos = await models.Project.findAll({
           include: [{
             model: models.User,
-            include: models.Employee,
-            where: {id: usuario.id},
-            required: true
+            include: models.Employee
           },{
             model: models.Pro_Type
           },
           {
-            model: models.Project_Employee
+            model: models.Project_Employee,
+            include: {
+              model: models.User,
+              where: {id: usuario.id},
+              required: true
+            },
+            required: true
           },
           {
             model: models.Task
@@ -1061,6 +1145,7 @@ router.get('/documentacion', isLoggedIn,async function (req, res, next) {
       if(pR && pC && pU && pD){
         const projects =await models.Project.findAll({
           include: models.Task,
+          where: {status : 'activo'},
           order: [['createdAt','DESC']]
         })
         res.render('documentacion',{projects, pC, pU});    
@@ -1076,6 +1161,7 @@ router.get('/documentacion', isLoggedIn,async function (req, res, next) {
             where: {id: usuario.id},
             required: true
           }],
+          where: {status : 'activo'},
           order: [['createdAt','DESC']]
         })
         res.render('documentacion',{projects, pC, pU});    
@@ -1087,7 +1173,6 @@ router.get('/documentacion', isLoggedIn,async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -1099,7 +1184,15 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
         .not().isEmpty().withMessage('Nombre del proyecto es un campo requerido.')
         .isLength({ max: 255 }).withMessage('El nombre del proyecto puede tener un máximo de 255 caracteres.')
         .trim()
-        .escape(),
+        .escape()
+        .custom(async (nombre) => {
+            const proyectN = await models.Project.findOne({where: {name: nombre}})
+            console.log(proyectN)
+            if(proyectN)
+              throw new Error()
+            else
+              return true
+        }).withMessage('Ya existe un proyecto con el mismo nombre.'),
       check('color')
         .not().isEmpty().withMessage('El color es un campo requerido.')
         .isHexColor().withMessage('El color no es válido.'),
@@ -1576,8 +1669,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           // We commit the transaction.
           await t.commit()
         } catch (error) {
-          console.log(error)
-
           if(req.files.contrato && req.files.contrato[0]){
             fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
               if (err) {
@@ -1878,11 +1969,42 @@ router.post('/update/:projectId', upload.fields([{name: 'cotizaciones', maxCount
                   .isNumeric().withMessage('Sólo se aceptan números en el porcentaje.')
                   .trim()
                   .escape().run(req);
+            await check("nombreP")
+                  .custom(async (nombre) => {
+                    console.log(nombre)
+                    console.log(req.params.projectId)
+                    const proyectN = await models.Project.findAll({where: {name: nombre, id: {[Op.ne]: req.params.projectId}}, transaction: t})
+                    console.log(proyectN)
+                    if(proyectN.length > 0)
+                      throw new Error()
+                    else
+                      return true
+                }).withMessage('Ya existe un proyecto con el mismo nombre.').run(req)
           }
 
           const result = validationResult(req);
           if (!result.isEmpty()) {
             await t.rollback();
+            if(req.files.contrato && req.files.contrato[0]){
+              fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
+                if (err) {
+                    console.log("failed to delete local image:" + err);
+                } else {
+                    console.log('successfully deleted local image');
+                }
+              });
+            }
+            if(req.files.cotizaciones && req.files.cotizaciones[0]){
+              req.files.cotizaciones.forEach(cotizacion => {
+                fs.unlink('public/uploads/docs/' + cotizacion.filename, (err) => {
+                  if (err) {
+                      console.log("failed to delete local image:" + err);
+                  } else {
+                      console.log('successfully deleted local image');
+                  }
+                });
+              });
+            }
             return res.status(422).send(result.array());
           }
 
@@ -2211,7 +2333,8 @@ router.get('/agregar', isLoggedIn,async function (req, res, next) {
           
       const miembros = await models.Employee.findAll({
         include: [{
-          model: models.User
+          model: models.User,
+          where: {email: {[Op.ne]: "DragonwareOficial@hotmail.com"}}
         }],
         order: [
           ['name','ASC']
@@ -2230,7 +2353,6 @@ router.get('/agregar', isLoggedIn,async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -2353,7 +2475,8 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
       const clientes=await models.Client.findAll()
       const miembros = await models.Employee.findAll({
         include: [{
-          model: models.User
+          model: models.User,
+          where: {email: {[Op.ne]: "DragonwareOficial@hotmail.com"}}
         }],
         order: [
           ['name','ASC']
@@ -2433,6 +2556,13 @@ router.post('/layout/create',[
         .isLength({ max: 255 }).withMessage('El nombre del layout puede tener un máximo de 255 caracteres.')
         .trim()
         .escape()
+        .custom(async (nombre) => {
+          const proyectN = await models.Pro_Type.findOne({where: {name: nombre}})
+          if(proyectN)
+            throw new Error()
+          else
+            return true
+      }).withMessage('Ya existe un layout con el mismo nombre.')
   ], isLoggedIn, async function (req, res, next) {
   const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -2455,7 +2585,7 @@ router.post('/layout/create',[
         }
     })
 
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         //NO TIENE PERMISO DE AGREGAR 
         return res.status(403).json([{ msg: 'No estás autorizado para registrar layouts de proyectos.' }])
     }
@@ -2600,7 +2730,7 @@ router.post('/layout/:idLayout/editar',[
         }
     })
 
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         //NO TIENE PERMISO DE AGREGAR 
         return res.status(403).json([{ msg: 'No estás autorizado para editar layouts de proyectos.' }])
     }
@@ -2608,6 +2738,21 @@ router.post('/layout/:idLayout/editar',[
   catch (error) {
     return res.status(403).json([{ msg: 'No estás autorizado para editar layouts de proyectos.' }])
   }
+  await check("titulo")
+                  .custom(async (nombre) => {
+                    const proyectN = await models.Pro_Type.findAll({where: {name: nombre, id: {[Op.ne]: req.params.idLayout}}})
+                    if(proyectN.length > 0)
+                      throw new Error()
+                    else
+                      return true
+                }).withMessage('Ya existe un layout con el mismo nombre.').run(req)
+    
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    console.log(result)
+    return res.status(422).send(result.array());
+  }
+
   //VAMOS A GUARDAR LOS DATOS
   const t = await models.sequelize.transaction()
   try{
@@ -2701,7 +2846,7 @@ router.post('/layout/:layoutId/tarea/agregar',[
         }
     })
 
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         //NO TIENE PERMISO DE AGREGAR 
         return res.status(403).json([{ msg: 'No estás autorizado para registrar tareas en layouts de proyectos.' }])
     }
@@ -2815,7 +2960,7 @@ router.post('/layout/:layoutId/tarea/editar/:taskId',[
         }
     })
 
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         //NO TIENE PERMISO DE AGREGAR 
         return res.status(403).json([{ msg: 'No estás autorizado para editar tareas en layouts de proyectos.' }])
     }
@@ -2919,7 +3064,7 @@ router.post('/layout/:layoutId/tarea/eliminar/:taskId', isLoggedIn, async (req, 
           }
       })
 
-      if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+      if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
           //NO TIENE PERMISOS
           return res.status(403).json([{ msg: 'No tienes permiso de eliminar tareas de layouts.' }])
       }
@@ -2997,7 +3142,7 @@ router.post('/layout/:layoutId/eliminar', isLoggedIn, async (req, res, next) => 
               }
           }
       })
-      if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+      if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
           return res.status(403).json([{ msg: 'No tienes permiso de eliminar layouts.' }])
       }
   }
@@ -3066,7 +3211,7 @@ router.post('/documentacion/:idProject/editar',[
         }
     })
 
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         //NO TIENE PERMISO DE AGREGAR 
         return res.status(403).json([{ msg: 'No estás autorizado para editar proyectos.' }])
     }
@@ -3179,7 +3324,7 @@ router.post('/documentacion/:projectId/tarea/agregar',[
             }
         }
     })
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         return res.status(403).json([{ msg: 'No estás autorizado para registrar tareas en proyectos.' }])
     }
   }
@@ -3296,7 +3441,7 @@ router.post('/documentacion/:projectId/tarea/editar/:taskId',[
             }
         }
     })
-    if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+    if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
         return res.status(403).json([{ msg: 'No estás autorizado para editar tareas de proyectos.' }])
     }
   }
@@ -3393,7 +3538,7 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
               }
           }
       })
-      if (!(usuario && usuario.Role && usuario.Role.Permissions)) {
+      if (!(usuario && usuario.Role && usuario.Role.Permissions && usuario.Role.Permissions.length > 0)) {
           //NO TIENE PERMISOS
           return res.status(403).json([{ msg: 'No tienes permiso de eliminar tareas de proyectos.' }])
       }

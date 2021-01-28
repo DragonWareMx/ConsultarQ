@@ -19,7 +19,7 @@ block content
         div(class="uk-flex uk-flex-between uk-margin-top uk-flex-middle uk-flex-wrap")
                 div(class="uk-text-left   uk-text-large   uk-text-bold uk-text-primary uk-margin-bottom") Proyecto 
                 div(class="uk-animation-toggle uk-margin-bottom" tabindex="0")
-                a(href="javascript:history.back(-1);" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading " style="color:#6B6B72 !important")
+                a(href="/proyectos/activos" class="uk-text-right uk-flex-inline uk-flex uk-flex-middle uk-link-muted uk-link-heading " style="color:#6B6B72 !important")
                     img(src="/icons/netGray.png" style="width:20px;height:20px;margin-top:3px" class="uk-margin-small-right")
                     div Regresar
         div(class="uk-grid-collapse uk-child-width-1-1 uk-grid-row-large" uk-grid)
@@ -321,6 +321,8 @@ block content
                                 th(class="uk-text-truncate uk-width-small") Costo/T
                                 th(class="uk-text-truncate uk-width-small") Realizado
                         tbody
+                            -
+                                sumaTotal = 0
                             each task, index in proyecto.Tasks
                                 tr(class="editar" data-id=1) 
                                     td #{index+1}
@@ -334,6 +336,7 @@ block content
                                         td 
                                     if task.price*task.units > 0
                                         -
+                                            sumaTotal += task.price*task.units
                                             precio2 = (task.price*task.units).toFixed(2)
                                             precio = new Intl.NumberFormat("en-IN").format(precio2)
                                         td $#{precio}
@@ -343,6 +346,20 @@ block content
                                         td Sí 
                                     else
                                         td No
+                            if proyecto.Tasks.length > 0 && sumaTotal > 0
+                                -
+                                    precio3 = sumaTotal.toFixed(2)
+                                    precio4 = new Intl.NumberFormat("en-IN").format(precio3)
+                                tr
+                                    td
+                                    td 
+                                        b COSTO TOTAL
+                                    td
+                                    td
+                                    td
+                                    td
+                                    td $#{precio4}
+                                    td
             div(class="uk-flex uk-flex-left uk-text-small uk-flex-middle uk-width-1 uk-margin-top uk-margin-small-bottom")
                 if pU
                     a(href="/proyectos/documentacion/editar/"+proyecto.id)
