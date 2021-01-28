@@ -163,7 +163,6 @@ router.get('/proyecto/:id', isLoggedIn, async function(req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -341,7 +340,6 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
       }
 
       const url = process.env.CLIENT_URL
-      console.log(url)
       var ht = `
             <!doctype html>
             <html>
@@ -747,8 +745,6 @@ router.get('/proyecto/:id/pdf', isLoggedIn, async function(req, res, next) {
       let file = { content: ht };
 
       html_to_pdf.generatePdf(file, options).then(output => {
-        console.log(output);
-
         fs.writeFileSync('public/uploads/pdfs/proyecto'+req.params.id+'.pdf', output)
 
         fs.readFile('./public/uploads/pdfs/proyecto'+req.params.id+'.pdf', {root: __dirname} , function (err,data){
@@ -889,7 +885,6 @@ router.post('/proyecto/:id/comment',
         } catch (error) {
           // If the execution reaches this line, an error was thrown.
           // We rollback the transaction.
-          console.log(error)
           await t.rollback();
           return res.status(500).json([{ msg: 'No fue posible enviar el comentario, vuelva a intentarlo más tarde.' }])
         }
@@ -995,7 +990,6 @@ router.get('/activos', isLoggedIn,async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -1100,7 +1094,6 @@ router.get('/inactivos', isLoggedIn,async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -1187,7 +1180,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
         .escape()
         .custom(async (nombre) => {
             const proyectN = await models.Project.findOne({where: {name: nombre}})
-            console.log(proyectN)
             if(proyectN)
               throw new Error()
             else
@@ -1430,8 +1422,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
           var proveedores = req.body.input_proveedores.split(",")
           var proveedoresID = []
 
-          console.log(proveedores)
-
           //Guarda los ids de los usuarios empleados en un arreglo
           for(var i in miembros){
             const employee = await models.User.findOne({ attributes: ['id'], where: { id: miembros[i] }, raw: true, transaction: t });
@@ -1661,8 +1651,6 @@ router.post('/create', upload.fields([{name: 'cotizaciones', maxCount: 10}, {nam
               throw new Error()
           if (!newProject)
               throw new Error()
-
-          console.log(req.body)
 
           res.status(200).json([{ status: 200 }]);
           // If the execution reaches this line, no errors were thrown.
@@ -1971,10 +1959,7 @@ router.post('/update/:projectId', upload.fields([{name: 'cotizaciones', maxCount
                   .escape().run(req);
             await check("nombreP")
                   .custom(async (nombre) => {
-                    console.log(nombre)
-                    console.log(req.params.projectId)
                     const proyectN = await models.Project.findAll({where: {name: nombre, id: {[Op.ne]: req.params.projectId}}, transaction: t})
-                    console.log(proyectN)
                     if(proyectN.length > 0)
                       throw new Error()
                     else
@@ -2254,7 +2239,6 @@ router.post('/update/:projectId', upload.fields([{name: 'cotizaciones', maxCount
           // We commit the transaction.
           await t.commit()
         } catch (error) {
-          console.log(error)
 
           if(req.files.contrato && req.files.contrato[0]){
             fs.unlink('public/uploads/docs/' + req.files.contrato[0].filename, (err) => {
@@ -2414,7 +2398,6 @@ router.get('/documentacion/editar/:id', isLoggedIn,async function (req, res, nex
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -2490,7 +2473,6 @@ router.get('/editar/:id', isLoggedIn, async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -2544,7 +2526,6 @@ router.get('/layouts', isLoggedIn,async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -2695,7 +2676,6 @@ router.get('/layout/editar/:id', isLoggedIn,async function (req, res, next) {
     }
   }
   catch (error) {
-    console.log(error)
     return res.render('error',{error: 500})
   }
 });
@@ -2749,7 +2729,6 @@ router.post('/layout/:idLayout/editar',[
     
   const result = validationResult(req);
   if (!result.isEmpty()) {
-    console.log(result)
     return res.status(422).send(result.array());
   }
 
@@ -3573,7 +3552,6 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
       await t.commit()
       res.status(200).json([{ status: 200 }]);
   } catch (error) {
-      console.log(error)
       await t.rollback();
       return res.status(500).json([{ msg: 'No fue posible eliminar la tarea, vuelva a intentarlo más tarde.' }])
   }
