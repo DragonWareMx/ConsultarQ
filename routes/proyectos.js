@@ -2868,7 +2868,7 @@ router.post('/layout/:layoutId/tarea/agregar',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el layout de "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
+    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el layout de nombre: "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
 
     //guardamos los datos del log
     var dataLog = {
@@ -2997,7 +2997,7 @@ router.post('/layout/:layoutId/tarea/editar/:taskId',[
     })
 
     //descripcion del log
-    var desc = "El usuario " + usuario.email + " ha editado una tarea para el layout de "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
+    var desc = "El usuario " + usuario.email + " ha editado una tarea para el layout de nombre: "+layout.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price 
 
     //guardamos los datos del log
     var dataLog = {
@@ -3079,7 +3079,7 @@ router.post('/layout/:layoutId/tarea/eliminar/:taskId', isLoggedIn, async (req, 
       var dataLog = {
           UserId: usuario.id,
           title: "Eliminación de tarea de layout",
-          description: "El usuario " + usuario.email + " ha eliminado la tarea " + task.concept+" del layout de "+layout.name
+          description: "El usuario " + usuario.email + " ha eliminado la tarea de id: "+task.id+" con el concepto: " + task.concept+" del layout de nombre: "+layout.name
       }
 
       //guarda el log en la base de datos
@@ -3139,8 +3139,8 @@ router.post('/layout/:layoutId/eliminar', isLoggedIn, async (req, res, next) => 
       const usuario = await models.User.findOne({where: {id: req.user.id},transaction: t})
       var dataLog = {
           UserId: usuario.id,
-          title: "Eliminación de usuario",
-          description: "El usuario " + usuario.email + " ha eliminado el layout de "+layout.name
+          title: "Eliminación de layout",
+          description: "El usuario " + usuario.email + " ha eliminado el layout de nombre: "+layout.name
       }
       const log = await models.Log.create(dataLog, { transaction: t })
       const verLayout = await models.Pro_Type.findOne({ where: { id: layout.id }, transaction: t })
@@ -3346,7 +3346,7 @@ router.post('/documentacion/:projectId/tarea/agregar',[
       },
       transaction: t
     })
-    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el proyecto de "+project.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price+"\nCantidad: "+task.units+"\nRealizado: "+task.check 
+    var desc = "El usuario " + usuario.email + " ha registrado una tarea nueva en el proyecto: "+project.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: " + task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price+"\nCantidad: "+task.units+"\nRealizado: "+task.check 
 
     var dataLog = {
       UserId: usuario.id,
@@ -3481,7 +3481,7 @@ router.post('/documentacion/:projectId/tarea/editar/:taskId',[
       transaction: t
     })
 
-    var desc = "El usuario " + usuario.email + " ha editado una tarea del proyecto "+project.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price+"\nCantidad: "+task.units+"\nRealizado: "+task.check
+    var desc = "El usuario " + usuario.email + " ha editado una tarea del proyecto: "+project.name+" con los siguientes datos:\nConcepto: "+task.concept+"\nDescripción: "+ task.description+"\nUnidad: "+task.unit+"\nCosto: "+task.price+"\nCantidad: "+task.units+"\nRealizado: "+task.check
 
     var dataLog = {
       UserId: usuario.id,
@@ -3538,7 +3538,7 @@ router.post('/documentacion/:projectId/tarea/eliminar/:taskId', isLoggedIn, asyn
       var dataLog = {
           UserId: usuario.id,
           title: "Eliminación de tarea de proyecto",
-          description: "El usuario " + usuario.email + " ha eliminado la tarea " + task.concept+" del proyecto "+project.name
+          description: "El usuario " + usuario.email + " ha eliminado la tarea de id: "+task.id+" con el concepto: " + task.concept+" del proyecto: "+project.name
       }
       const log = await models.Log.create(dataLog, { transaction: t })
 
